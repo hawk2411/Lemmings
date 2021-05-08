@@ -1,4 +1,4 @@
-# Lemmings ![LemmingGif](https://github.com/carlotacb/Lemmings/blob/master/Game/images/readme/lemming.gif)
+# Lemmings ![LemmingGif](https://github.com/hawk2411/Lemmings/blob/main/Game/images/readme/lemming.gif)
 
 This is a fork from origin [arlotacb/Lemmings](https://github.com/carlotacb/Lemmings)
 
