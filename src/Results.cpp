@@ -152,13 +152,13 @@ void Results::renderButtons()
 		switch (buttonName)
 		{
 			case RETRY:
-				currentButton = retryButton;
+				currentButton = retryButton.get();
 				break;
 			case CONTINUE:
-				currentButton = continueButton;
+				currentButton = continueButton.get();
 				break;
 			case MENU:
-				currentButton = menuButton;
+				currentButton = menuButton.get();
 				break;
 			default:
 				break;

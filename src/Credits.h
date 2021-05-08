@@ -28,7 +28,7 @@ private:
 
 	// Parametres
 	Texture creditsLevelTexture;
-	Sprite* creditsLevelSprite;
+    std::unique_ptr<Sprite> creditsLevelSprite;
 
 	const SoundManager* soundManager;
 	FMOD::Sound* music;

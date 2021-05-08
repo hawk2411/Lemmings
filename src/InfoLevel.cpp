@@ -77,13 +77,13 @@ void InfoLevel::initSprites()
 	leftKey->position() = glm::vec2(5, 173);
 	
 	menuWord = new Word("MENU");
-	menuWord->setPosititon(glm::vec2(36, 173));
+    menuWord->setPosition(glm::vec2(36, 173));
 
 	rightKey = KeyFactory::instance().createRightKey(glm::vec2(25, 15));
 	rightKey->position() = glm::vec2(280, 173);
 
 	playWord = new Word("PLAY");
-	playWord->setPosititon(glm::vec2(240, 173));
+    playWord->setPosition(glm::vec2(240, 173));
 
 
 	

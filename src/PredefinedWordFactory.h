@@ -29,8 +29,8 @@ public:
 		return instance;
 	};
 
-	Sprite *createJobWord();
-	Sprite *createInfoWord(string infoWord);
+    std::unique_ptr<Sprite> createJobWord();
+    std::unique_ptr<Sprite> createInfoWord(string infoWord);
 
 };
 

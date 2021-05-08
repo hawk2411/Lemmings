@@ -21,18 +21,18 @@ public:
 	void update(int deltaTime);
 	void render();
 	void changeJob(Job *nextJob);
-	bool isWalkingRight();
+	bool isWalkingRight() const;
 	void setWalkingRight(bool value);
 	glm::vec2 &getPosition();
-	bool dead();
-	bool saved();
+	bool dead() const;
+	bool saved() const;
 	Job *getJob();
 
 	void writeDestiny();
 
 private:
 	Job *job;
-	Sprite *sprite;
+	//Sprite *sprite;
 	Countdown *countdown;
 	ShaderProgram *shaderProgram;
 	bool walkingRight = true; // is marked true when the lemmings walks in right direction

@@ -13,10 +13,10 @@ public:
 
 private:
 	glm::vec2 position;
-	Sprite *firstNum;
-	Sprite *secondNum;
-	Sprite *thirdNum;
-	Sprite *percentage;
+	std::unique_ptr<Sprite> firstNum;
+	std::unique_ptr<Sprite> secondNum;
+	std::unique_ptr<Sprite> thirdNum;
+	std::unique_ptr<Sprite> percentage;
 
 };
 

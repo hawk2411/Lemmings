@@ -106,7 +106,7 @@ void UIAdapter::activateButton(int buttonIndex)
 
 }
 
-void UIAdapter::changeJobName(Sprite *jobNameSprite, string jobName)
+void UIAdapter::changeJobName(Sprite *jobNameSprite, const string &jobName)
 {
 	if (jobName == "WALKER") {
 		jobNameSprite->changeAnimation(PredefinedWordFactory::JobNames::WALKER);

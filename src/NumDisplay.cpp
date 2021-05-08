@@ -20,11 +20,11 @@ void NumDisplay::displayNum(int num) {
 }
 
 void NumDisplay::render() {
-	if (leftNum != NULL) {
+	if (leftNum) {
 		leftNum->render();
 	}
 
-	if (rightNum != NULL) {
+	if (rightNum) {
 		rightNum->render();
 	}
 }

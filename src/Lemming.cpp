@@ -16,18 +16,17 @@
 Lemming::Lemming(const glm::vec2 &initialPosition)
 {
 	this->shaderProgram = &ShaderManager::getInstance().getShaderProgram();
-	this->job = JobFactory::instance().createFallerJob();
-	this->job->initAnims(*shaderProgram);
-	sprite = this->job->getJobSprite();
-	sprite->setPosition(initialPosition);
-	countdown = NULL;
+	job = JobFactory::instance().createFallerJob();
+	job->initAnims(*shaderProgram);
+    job->sprite()->setPosition(initialPosition);
+	countdown = nullptr;
 	alive = true;
 	isSaved = false;
 }
 
 void Lemming::update(int deltaTime)
 {
-	if (sprite->update(deltaTime) == 0) {
+	if (job->sprite()->update(deltaTime) == 0) {
 		return;
 	}
 
@@ -37,21 +36,21 @@ void Lemming::update(int deltaTime)
 
 	}
 	else {
-		if (countdown != NULL && countdown->isOver()) {
+		if (countdown != nullptr && countdown->isOver()) {
 			changeJob(JobFactory::instance().createExploderJob());
 			delete countdown;
-			countdown = NULL;
+			countdown = nullptr;
 		}
 		else {
 			job->updateStateMachine(deltaTime);
 
-			if (countdown != NULL) {
-				countdown->setPosition(glm::vec2(6, -8) + sprite->position());
+			if (countdown != nullptr) {
+				countdown->setPosition(glm::vec2(6, -8) + this->job->sprite()->position());
 				countdown->update(deltaTime);
 			}
 
 			if (job->finished()) {
-				if (job->getNextJob() == NULL) {
+				if (job->getNextJob() == nullptr) {
 					if (job->getName() == "ESCAPER") {
 						isSaved = true;
 					}
@@ -70,12 +69,12 @@ void Lemming::update(int deltaTime)
 
 void Lemming::render()
 {
-	glm::vec2 oldPosition = sprite->position();
-	sprite->setPosition(sprite->position() - Level::currentLevel().getLevelAttributes()->cameraPos);
-	sprite->render();
-	sprite->setPosition(oldPosition);
+	glm::vec2 oldPosition = this->job->sprite()->position();
+    this->job->sprite()->setPosition(this->job->sprite()->position() - Level::currentLevel().getLevelAttributes()->cameraPos);
+    this->job->sprite()->render();
+    this->job->sprite()->setPosition(oldPosition);
 
-	if (countdown != NULL) {
+	if (countdown != nullptr) {
 		countdown->render();
 	}
 }
@@ -83,21 +82,17 @@ void Lemming::render()
 void Lemming::changeJob(Job *nextJob)
 {
 	walkingRight = job->isWalkingRight();
+    glm::ivec2 oldPosition = this->job->sprite()->position();
 	delete this->job;
 	this->job = nextJob;
 	this->job->initAnims(*shaderProgram);
 	nextJob->setWalkingRight(walkingRight);
-
-	glm::ivec2 oldPosition = sprite->position();
-
-	delete sprite;
-	sprite = this->job->getJobSprite();
-	sprite->setPosition(oldPosition);
+    this->job->sprite()->setPosition(oldPosition);
 }
 
 glm::vec2& Lemming::getPosition()
 {
-	return sprite->position();
+	return this->job->sprite()->position();
 }
 
 Job* Lemming::getJob()
@@ -105,17 +100,17 @@ Job* Lemming::getJob()
 	return job;
 }
 
-bool Lemming::dead()
+bool Lemming::dead() const
 {
 	return !alive;
 }
 
-bool Lemming::saved()
+bool Lemming::saved() const
 {
 	return isSaved;
 }
 
-bool Lemming::isWalkingRight() 
+bool Lemming::isWalkingRight() const
 {
 	return walkingRight;
 }
@@ -133,5 +128,5 @@ void Lemming::writeDestiny()
 
 bool Lemming::outOfMap()
 {
-	return !Utils::insideRectangle(sprite->position(), glm::vec2(0, 0), glm::vec2(Level::currentLevel().getLevelAttributes()->levelSize.x, Level::currentLevel().getLevelAttributes()->levelSize.y));
+	return !Utils::insideRectangle(this->job->sprite()->position(), glm::vec2(0, 0), glm::vec2(Level::currentLevel().getLevelAttributes()->levelSize.x, Level::currentLevel().getLevelAttributes()->levelSize.y));
 }

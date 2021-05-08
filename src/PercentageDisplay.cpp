@@ -42,8 +42,8 @@ void PercentageDisplay::render() {
 	
 }
 
-void PercentageDisplay::setPosition(glm::vec2 position) {
-	this->position = position;
+void PercentageDisplay::setPosition(glm::vec2 newPosition) {
+	position = newPosition;
 	firstNum->setPosition(this->position + glm::vec2(4, 0));
 	secondNum->setPosition(this->position + glm::vec2(12, 0));
 	thirdNum->setPosition(this->position + glm::vec2(20, 0));

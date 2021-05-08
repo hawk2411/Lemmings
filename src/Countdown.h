@@ -16,7 +16,7 @@ public:
 	bool isOver();
 
 private:
-	Sprite *countNum;
+    std::unique_ptr<Sprite> countNum;
 	int goalTime;
 	bool over;
 

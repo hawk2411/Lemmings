@@ -2,9 +2,9 @@
 #include "PurpleNumFactory.h"
 #include "ShaderManager.h"
 
-Sprite* PurpleNumFactory::createNum()
+std::unique_ptr<Sprite>  PurpleNumFactory::createNum()
 {
-	Sprite *numSprite = Sprite::createSprite(glm::ivec2(6, 9), glm::vec2(18./128, 24./64), &ShaderManager::getInstance().getShaderProgram(), &Game::spriteSheets().purpleNumSprites);
+	auto numSprite = Sprite::createSprite(glm::ivec2(6, 9), glm::vec2(18./128, 24./64), &ShaderManager::getInstance().getShaderProgram(), &Game::spriteSheets().purpleNumSprites);
 	numSprite->setNumberAnimations(11);
 	for (int i = 0; i < 11; ++i) {
 		numSprite->addKeyframe(i, this->numPositions[i]);
@@ -14,9 +14,9 @@ Sprite* PurpleNumFactory::createNum()
 	return numSprite;
 }
 
-Sprite* PurpleNumFactory::createSymbol(char symbol)
+std::unique_ptr<Sprite> PurpleNumFactory::createSymbol(char symbol)
 {
-	Sprite *numSprite = Sprite::createSprite(glm::ivec2(6, 9), glm::vec2(18. / 128, 24. / 64), &ShaderManager::getInstance().getShaderProgram(), &Game::spriteSheets().purpleNumSprites);
+    auto numSprite = Sprite::createSprite(glm::ivec2(6, 9), glm::vec2(18. / 128, 24. / 64), &ShaderManager::getInstance().getShaderProgram(), &Game::spriteSheets().purpleNumSprites);
 	numSprite->setNumberAnimations(1);
 
 	if (symbol == '%') {
@@ -24,9 +24,8 @@ Sprite* PurpleNumFactory::createSymbol(char symbol)
 		numSprite->changeAnimation(0);
 	}
 	else {
-		delete numSprite;
+		numSprite.reset();
 	}
-
 
 	return numSprite;
 }

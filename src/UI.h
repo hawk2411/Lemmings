@@ -40,24 +40,24 @@ private:
 	Button buttons[NUM_BUTTONS];
 
 	Texture backgroundTexture;
-	Sprite *background;
-	
-	Sprite *jobName;
+    std::unique_ptr<Sprite> background;
 
-	Sprite *outWord;
+    std::unique_ptr<Sprite> jobName;
+
+    std::unique_ptr<Sprite> outWord;
 	NumDisplayGreen numberOutLemmings;
 
-	Sprite *inWord;
+    std::unique_ptr<Sprite> inWord;
 	PercentageDisplay numberInLemmings;
-	
-	Sprite *timeWord;
+
+    std::unique_ptr<Sprite> timeWord;
 	TimeDisplay time;
 	
 
 
 	int selectedButton;
 	Texture selectFrameTexture;
-	Sprite *selectFrame;
+	std::unique_ptr<Sprite> selectFrame;
 };
 
 #endif // _UI_INCLUDE

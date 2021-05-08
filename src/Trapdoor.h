@@ -19,7 +19,7 @@ public:
 	bool isOpened();
 
 protected:
-	Sprite *trapdoorSprite;
+    std::unique_ptr<Sprite> trapdoorSprite;
 	glm::vec2 enterOffset;
 
 	bool opened = false;

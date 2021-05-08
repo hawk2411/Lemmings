@@ -13,10 +13,10 @@ public:
 
 private:
 	glm::vec2 position;
-	Sprite *minutes;
-	Sprite *firstDigitSeconds;
-	Sprite *secondDigitSeconds;
-	Sprite *hyphen;
+	std::unique_ptr<Sprite> minutes;
+	std::unique_ptr<Sprite> firstDigitSeconds;
+	std::unique_ptr<Sprite> secondDigitSeconds;
+	std::unique_ptr<Sprite> hyphen;
 
 };
 

@@ -16,7 +16,7 @@ public:
 		return instance;
 	};
 
-	Sprite *createLetter(char c);
+    std::unique_ptr<Sprite> createLetter(char c);
 
 };
 

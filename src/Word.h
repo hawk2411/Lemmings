@@ -9,20 +9,18 @@ class Word
 {
 
 public:
-	Word() {};
-	Word(string word);
+	explicit Word(const string &word);
 	~Word();
 	void render();
-	void setPosititon(glm::vec2 position);
-	int getLenght();
+	void setPosition(glm::vec2 position);
 
 
 private:
 	glm::vec2 position;
-	vector<Sprite*> letters;
+	vector<std::unique_ptr<Sprite>> letters;
 
-	int lenght;
-	int wordLenght;
+	int length;
+	int wordLength;
 
 };
 

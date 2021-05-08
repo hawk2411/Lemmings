@@ -16,7 +16,7 @@ public:
 
 	void changeFocusedLemming(int lemmingIndex);
 	void changeSelectedButton(int buttonIndex);
-	void changeJobName(Sprite *jobNameSprite, string jobName);
+	static void changeJobName(Sprite *jobNameSprite, const string &jobName);
 
 private:
 	void activateButton(int buttonIndex);

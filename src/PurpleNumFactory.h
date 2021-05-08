@@ -15,8 +15,8 @@ public:
 		return instance;
 	};
 
-	Sprite *createNum();
-	Sprite *createSymbol(char symbol);
+	std::unique_ptr<Sprite> createNum();
+	static std::unique_ptr<Sprite> createSymbol(char symbol);
 
 private:
 	glm::vec2 numPositions[11] = {

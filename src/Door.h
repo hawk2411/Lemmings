@@ -17,10 +17,10 @@ public:
 	glm::vec2 getEscapePosition();
 
 protected:
-	Sprite *doorSprite;
+    std::unique_ptr<Sprite> doorSprite;
 	glm::vec2 escapeOffset;
 };
 
 
-#endif // _DOORSTANDARD_INCLUDE
+#endif // _DOOR_INCLUDE
 

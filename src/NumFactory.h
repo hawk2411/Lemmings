@@ -11,7 +11,7 @@ class NumFactory
 
 public:
 
-	virtual Sprite *createNum() = 0;
+	virtual std::unique_ptr<Sprite> createNum() = 0;
 
 };
 

@@ -24,8 +24,8 @@ public:
 	void loadFromGlyphBuffer(unsigned char *buffer, int width, int height);
 
 	void createEmptyTexture(int width, int height);
-	void loadSubtextureFromGlyphBuffer(unsigned char *buffer, int x, int y, int width, int height);
-	void generateMipmap();
+	void loadSubtextureFromGlyphBuffer(unsigned char *buffer, int x, int y, int width, int height) const;
+	void generateMipmap() const;
 	
 	void setWrapS(GLint value);
 	void setWrapT(GLint value);
@@ -37,7 +37,7 @@ public:
 	int width() const { return widthTex; }
 	int height() const { return heightTex; }
 
-	GLuint getId();
+	GLuint getId() const;
 
 private:
 	int widthTex, heightTex;

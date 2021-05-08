@@ -4,9 +4,9 @@
 #include "Sprite.h"
 #include "ShaderManager.h"
 
-Sprite* PredefinedWordFactory::createJobWord()
+std::unique_ptr<Sprite>  PredefinedWordFactory::createJobWord()
 {
-	Sprite *jobNameSprite = Sprite::createSprite(glm::ivec2(60, 10), glm::vec2(297. / 512, 81. / 1024), &ShaderManager::getInstance().getShaderProgram(), &Game::spriteSheets().jobNamesSprites);
+	auto jobNameSprite = Sprite::createSprite(glm::ivec2(60, 10), glm::vec2(297. / 512, 81. / 1024), &ShaderManager::getInstance().getShaderProgram(), &Game::spriteSheets().jobNamesSprites);
 	jobNameSprite->setNumberAnimations(10);
 
 	jobNameSprite->addKeyframe(WALKER, glm::vec2(0, 0));
@@ -25,9 +25,9 @@ Sprite* PredefinedWordFactory::createJobWord()
 	return jobNameSprite;
 }
 
-Sprite* PredefinedWordFactory::createInfoWord(string infoName)
+std::unique_ptr<Sprite>  PredefinedWordFactory::createInfoWord(string infoName)
 {
-	Sprite *infoWordSprite = Sprite::createSprite(glm::ivec2(30, 10), glm::vec2(168. / 512, 81. / 256), &ShaderManager::getInstance().getShaderProgram(), &Game::spriteSheets().infoWordSprites);
+	auto infoWordSprite = Sprite::createSprite(glm::ivec2(30, 10), glm::vec2(168. / 512, 81. / 256), &ShaderManager::getInstance().getShaderProgram(), &Game::spriteSheets().infoWordSprites);
 	infoWordSprite->setNumberAnimations(1);
 
 	glm::vec2 textureCoord;

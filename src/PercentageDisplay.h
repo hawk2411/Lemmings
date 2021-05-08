@@ -9,14 +9,14 @@ public:
 	void init();
 	void displayPercentage(int num);
 	void render();
-	void setPosition(glm::vec2 position);
+	void setPosition(glm::vec2 newPosition);
 
 private:
 	glm::vec2 position;
-	Sprite *firstNum;
-	Sprite *secondNum;
-	Sprite *thirdNum;
-	Sprite *percentage;
+    std::unique_ptr<Sprite> firstNum;
+    std::unique_ptr<Sprite> secondNum;
+    std::unique_ptr<Sprite> thirdNum;
+    std::unique_ptr<Sprite> percentage;
 
 };
 

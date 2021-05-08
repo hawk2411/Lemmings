@@ -17,7 +17,7 @@ public:
 		return instance;
 	};
 
-	Sprite *createNum();
+	std::unique_ptr<Sprite> createNum();
 
 private:
 	glm::vec2 numPositions[11] = {

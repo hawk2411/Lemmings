@@ -21,7 +21,7 @@ public:
 	void render();
 
 private:
-	Sprite *sprite;
+    std::unique_ptr<Sprite> sprite;
 	glm::vec2 position;
 	glm::vec2 speed;
 };

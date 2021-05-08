@@ -4,6 +4,7 @@
 
 #include <vector>
 #include <glm/glm.hpp>
+#include <memory>
 #include "Texture.h"
 #include "ShaderProgram.h"
 #include "AnimKeyframes.h"
@@ -16,13 +17,17 @@
 class Sprite
 {
 
+    /*
+     * factory functions
+     */
 public:
-	~Sprite();
+    // Textured quads can only be created inside an OpenGL context
+    static std::unique_ptr<Sprite> createSprite(const glm::vec2 &quadSize, const glm::vec2 &sizeInSpritesheet, ShaderProgram *program, Texture *spriteSheet, Texture *rotatedSpriteSheet = nullptr);
 
-	// Textured quads can only be created inside an OpenGL context
-	static Sprite *createSprite(const glm::vec2 &quadSize, const glm::vec2 &sizeInSpritesheet, ShaderProgram *program, Texture *spritesheet, Texture *rotatedSpritesheet = NULL);
+public:
+    Sprite(const glm::vec2 &quadSize, const glm::vec2 &sizeInSpriteSheet, ShaderProgram *program, Texture *spriteSheet, Texture *rotatedSpriteSheet);
 
-	Sprite(const glm::vec2 &quadSize, const glm::vec2 &sizeInSpritesheet, ShaderProgram *program, Texture *spritesheet, Texture *rotatedSpritesheet);
+    ~Sprite();
 
 	int update(int deltaTime);
 	void render() const;
@@ -30,7 +35,7 @@ public:
 
 	void setNumberAnimations(int nAnimations);
 	void setAnimationSpeed(int animId, int keyframesPerSec);
-	void addKeyframe(int animId, const glm::vec2 &frame, bool rotated = false);
+	void addKeyframe(int animId, const glm::vec2 &frame, bool isRotated = false);
 	void changeAnimation(int animId);
 	int animation() const;
 	int getAnimationCurrentFrame() const;
@@ -42,7 +47,7 @@ public:
 	glm::vec2 position() const;
 	glm::vec2 &position();
 
-	void setIterated(bool iterated);
+	void setIterated(bool isIterated);
 
 private:
 	Texture *texture;

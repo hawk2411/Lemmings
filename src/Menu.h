@@ -46,13 +46,13 @@ private:
 	Texture menuModeTexture;
 	Texture menuPlayingTexture;
 	
-	Sprite* menuBackground;
-	Sprite* menuLogo;
-	Sprite* menuAbout;
-	Sprite* menuHelp;
-	Sprite* menuExit;
-	Sprite* menuMode;
-	Sprite* menuPlaying;
+	std::unique_ptr<Sprite> menuBackground;
+	std::unique_ptr<Sprite> menuLogo;
+	std::unique_ptr<Sprite> menuAbout;
+	std::unique_ptr<Sprite> menuHelp;
+	std::unique_ptr<Sprite> menuExit;
+	std::unique_ptr<Sprite> menuMode;
+	std::unique_ptr<Sprite> menuPlaying;
 
 	int mode; // 0 = FUN, 1 = TRICKY, 2 = TAXING
 

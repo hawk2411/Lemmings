@@ -37,13 +37,13 @@ private:
 
 	// Parametres
 	Texture instructionsLevelTexture;
-	Sprite* instructionsLevelSprite;
+    std::unique_ptr<Sprite> instructionsLevelSprite;
 
 	vector<Word*> instructionPages;
 
-	Sprite *leftKey;
-	Sprite *rightKey;
-	Sprite *escapeKey;
+	std::unique_ptr<Sprite> leftKey;
+	std::unique_ptr<Sprite> rightKey;
+	std::unique_ptr<Sprite> escapeKey;
 	Word *instructionsWord;
 
 	bool onlyLeft;

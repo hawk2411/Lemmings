@@ -29,13 +29,13 @@ public:
 	void render();
 	glm::vec2 getPosition();
 	void setPosition(glm::vec2 position);
-	void setSprite(Sprite *sprite);
+	void setSprite(std::unique_ptr<Sprite> sprite);
 	void setNum(int num);
 
 
 private:
 	glm::vec2 position;
-	Sprite *buttonSprite;
+	std::unique_ptr<Sprite> buttonSprite;
 	NumDisplayButton numDisplay;
 
 };

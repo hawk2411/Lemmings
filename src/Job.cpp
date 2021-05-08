@@ -56,7 +56,7 @@ bool Job::collision()
 }
 
 
-bool Job::finished()
+bool Job::finished() const
 {
 	return isFinished;
 }
@@ -67,9 +67,9 @@ Job* Job::getNextJob()
 }
 
 
-Sprite* Job::getJobSprite()
+Sprite* Job::sprite()
 {
-	return jobSprite;
+	return jobSprite.get();
 }
 
 void Job::setWalkingRight(bool value)
@@ -77,7 +77,7 @@ void Job::setWalkingRight(bool value)
 	walkingRight = value;
 }
 
-bool Job::isWalkingRight()
+bool Job::isWalkingRight() const
 {
 	return walkingRight;
 }

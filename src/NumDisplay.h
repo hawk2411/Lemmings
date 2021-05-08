@@ -23,8 +23,8 @@ protected:
 
 protected:
 	glm::vec2 position;
-	Sprite *leftNum;
-	Sprite *rightNum;
+    std::unique_ptr<Sprite> leftNum;
+    std::unique_ptr<Sprite> rightNum;
 
 };
 

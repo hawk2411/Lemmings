@@ -16,9 +16,9 @@ public:
 		return instance;
 	};
 
-	Sprite *createLeftKey(glm::ivec2 size = glm::ivec2(31, 18));
-	Sprite *createRightKey(glm::ivec2 size = glm::ivec2(31, 18));
-	Sprite *createEscapeKey(glm::ivec2 size = glm::ivec2(31, 18));
+	std::unique_ptr<Sprite> createLeftKey(glm::ivec2 size = glm::ivec2(31, 18));
+	std::unique_ptr<Sprite> createRightKey(glm::ivec2 size = glm::ivec2(31, 18));
+	std::unique_ptr<Sprite> createEscapeKey(glm::ivec2 size = glm::ivec2(31, 18));
 
 };
 

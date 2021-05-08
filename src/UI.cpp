@@ -136,5 +136,5 @@ int UI::getSelectedButtonJobCount()
 
 void UI::changeDisplayedJob(string lemmingJobName)
 {
-	UIAdapter::getInstance().changeJobName(jobName, lemmingJobName);
+	UIAdapter::getInstance().changeJobName(jobName.get(), lemmingJobName);
 }

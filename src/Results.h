@@ -39,14 +39,14 @@ private:
 	void renderButtons();
 
 	Texture backgroundTexture;
-	Sprite *background;
+	std::unique_ptr<Sprite> background;
 
 	PurplePercentageDisplay currentPercentageDisplay;
 	PurplePercentageDisplay goalPercentageDisplay;
 
-	Sprite *continueButton;
-	Sprite *retryButton;
-	Sprite *menuButton;
+	std::unique_ptr<Sprite> continueButton;
+	std::unique_ptr<Sprite> retryButton;
+	std::unique_ptr<Sprite> menuButton;
 
 	int selectedButton;
 	bool passedLevel;

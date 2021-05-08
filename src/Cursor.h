@@ -4,31 +4,35 @@
 
 #include "Sprite.h"
 
-class Cursor
-{
+class Cursor {
 public:
-	static Cursor &getInstance()
-	{
-		static Cursor instance; // Guaranteed to be destroyed.
-									   // Instantiated on first use.
-		return instance;
-	};
+    static Cursor &getInstance() {
+        static Cursor instance; // Guaranteed to be destroyed.
+        // Instantiated on first use.
+        return instance;
+    };
 
-	void init();
-	void render();
-	void setPosition(glm::vec2 position);
-	void setScrollLeftCursor();
-	void setScrollRightCursor();
-	void setFocusCursor();
-	void setCrossCursor();
+    void init();
+
+    void render();
+
+    void setPosition(glm::vec2 position);
+
+    void setScrollLeftCursor();
+
+    void setScrollRightCursor();
+
+    void setFocusCursor();
+
+    void setCrossCursor();
 
 private:
-	glm::vec2 position;
-	Sprite *cursorSprite;
+    glm::vec2 position = {};
+    std::unique_ptr<Sprite> cursorSprite = nullptr;
 };
 
 
-#endif // _BLOCKER_INCLUDE
+#endif // _CURSOR_INCLUDE
 
 
 

@@ -41,7 +41,8 @@ private:
 	void initSpriteSheets();
 
 public:
-	Game() {}
+	Game() : bPlay(true), hardMode(false), gameState(nullptr), hardModeIndicator(nullptr)
+    {}
 	
 	
 	static Game &instance()	{
@@ -76,7 +77,7 @@ private:
 	bool hardMode;
 	GameState *gameState;
 
-	Sprite *hardModeIndicator;
+    std::unique_ptr<Sprite> hardModeIndicator;
 };
 
 

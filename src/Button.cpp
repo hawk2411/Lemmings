@@ -13,12 +13,9 @@ void Button::render() {
 	buttonSprite->render();
 }
 
-void Button::setSprite(Sprite *sprite) {
-	if (buttonSprite != NULL) {
-		delete buttonSprite;
-	}
-	
-	buttonSprite = sprite;
+void Button::setSprite( std::unique_ptr<Sprite> sprite) {
+
+	buttonSprite = std::move(sprite);
 	buttonSprite->setPosition(position);
 }
 

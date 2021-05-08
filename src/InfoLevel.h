@@ -32,9 +32,9 @@ private:
 
 	// Parametres
 	Texture InfoLevelTexture;
-	Sprite* InfoLevelSprite;
-	Sprite *leftKey;
-	Sprite *rightKey;
+    std::unique_ptr<Sprite> InfoLevelSprite;
+    std::unique_ptr<Sprite> leftKey;
+    std::unique_ptr<Sprite> rightKey;
 	Word *playWord;
 	Word *menuWord;
 

@@ -10,7 +10,7 @@ Button ButtonFactory::createButton(int buttonName) {
 	Button button = Button();
 	button.init();
 
-	Sprite *buttonSprite = Sprite::createSprite(glm::ivec2(15, 23), glm::vec2(15./128, 23./64), &ShaderManager::getInstance().getShaderProgram(), &Game::spriteSheets().buttonSprites);
+	auto buttonSprite = Sprite::createSprite(glm::ivec2(15, 23), glm::vec2(15./128, 23./64), &ShaderManager::getInstance().getShaderProgram(), &Game::spriteSheets().buttonSprites);
 	buttonSprite->setNumberAnimations(1);
 
 	glm::vec2 textureCoord;
@@ -63,7 +63,7 @@ Button ButtonFactory::createButton(int buttonName) {
 	buttonSprite->addKeyframe(0, textureCoord);
 	buttonSprite->changeAnimation(0);
 
-	button.setSprite(buttonSprite);
+	button.setSprite(std::move(buttonSprite));
 
 	return button;
 }

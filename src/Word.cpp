@@ -1,14 +1,14 @@
 #include "Word.h"
 #include "LetterFactory.h"
 
-Word::Word(string word) 
+Word::Word(const string &word)
 {
-	wordLenght = word.size();
-	lenght = 10 * wordLenght;
-	letters = vector<Sprite*>(wordLenght);
+    wordLength = word.size();
+    length = 10 * wordLength;
+	letters = vector<std::unique_ptr<Sprite>>(wordLength);
 
-	for (int i = 0; i < wordLenght; ++i) {
-		letters[i] = LetterFactory::instance().createLetter(word[i]);
+	for (int i = 0; i < wordLength; ++i) {
+		letters[i] = std::move(LetterFactory::instance().createLetter(word[i]));
 	}
 }
 
@@ -20,24 +20,19 @@ Word::~Word()
 
 void Word::render()
 {
-	for (int i = 0; i < wordLenght; ++i) {
+	for (int i = 0; i < wordLength; ++i) {
 		letters[i]->render();
 	}
 }
 
-void Word::setPosititon(glm::vec2 positiona)
+void Word::setPosition(glm::vec2 position)
 {
-	position = positiona;
+	position = position;
 
-	for (int i = 0; i < wordLenght; ++i) {
+	for (int i = 0; i < wordLength; ++i) {
 		letters[i]->setPosition(position + glm::vec2(10 * i, 0));
 	}
 }
 
-
-int Word::getLenght()
-{
-	return lenght;
-}
 
 

@@ -53,6 +53,6 @@ void Cursor::setCrossCursor() {
 	cursorSprite->changeAnimation(CROSS);
 }
 
-void Cursor::setPosition(glm::vec2 position) {
-	cursorSprite->setPosition(position);
+void Cursor::setPosition(glm::vec2 newPosition) {
+	cursorSprite->setPosition(newPosition);
 }

@@ -11,7 +11,7 @@ public:
 
 
 private:
-	int posX, posY;
+	int posX = {}, posY = {};
 
 };
 #endif // _MOUSEMANAGER_INCLUDE
