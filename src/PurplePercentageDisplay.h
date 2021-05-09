@@ -3,20 +3,22 @@
 
 #include "Sprite.h"
 
-class PurplePercentageDisplay
-{
+class PurplePercentageDisplay {
 public:
-	void init();
-	void displayPercentage(int num);
-	void render();
-	void setPosition(glm::vec2 position);
+    void init();
+
+    void displayPercentage(int num);
+
+    void render();
+
+    void setPosition(glm::vec2 position);
 
 private:
-	glm::vec2 position;
-	std::unique_ptr<Sprite> firstNum;
-	std::unique_ptr<Sprite> secondNum;
-	std::unique_ptr<Sprite> thirdNum;
-	std::unique_ptr<Sprite> percentage;
+    glm::vec2 position;
+    std::unique_ptr<Sprite> firstNum;
+    std::unique_ptr<Sprite> secondNum;
+    std::unique_ptr<Sprite> thirdNum;
+    std::unique_ptr<Sprite> percentage;
 
 };
 

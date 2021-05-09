@@ -8,21 +8,24 @@
 // all properties it needs to track its movement and collisions.
 
 
-class NumDisplay
-{
+class NumDisplay {
 
 public:
-	void init();
-	void displayNum(int num);
-	void render();
-	virtual void setPosition(glm::vec2 position) = 0;
+    void init();
+
+    void displayNum(int num);
+
+    void render();
+
+    virtual void setPosition(glm::vec2 position) = 0;
 
 protected:
-	virtual void initAux() = 0;
-	virtual void displayNumAux(int firstDigit, int secondDigit) = 0;
+    virtual void initAux() = 0;
+
+    virtual void displayNumAux(int firstDigit, int secondDigit) = 0;
 
 protected:
-	glm::vec2 position;
+    glm::vec2 position;
     std::unique_ptr<Sprite> leftNum;
     std::unique_ptr<Sprite> rightNum;
 

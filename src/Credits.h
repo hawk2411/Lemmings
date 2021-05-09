@@ -6,33 +6,34 @@
 #include "Sprite.h"
 #include "SoundManager.h"
 
-class Credits : public GameState
-{
+class Credits : public GameState {
 
 public:
-	static Credits &instance()
-	{
-		static Credits instance;
-		return instance;
-	};
+    static Credits &instance() {
+        static Credits instance;
+        return instance;
+    };
 
-	void init();
-	void update(int deltaTime);
-	void render();
-	void endMusic();
+    void init();
+
+    void update(int deltaTime);
+
+    void render();
+
+    void endMusic();
 
 private:
 
-	// Functions
-	void initTextures();
+    // Functions
+    void initTextures();
 
-	// Parametres
-	Texture creditsLevelTexture;
+    // Parametres
+    Texture creditsLevelTexture;
     std::unique_ptr<Sprite> creditsLevelSprite;
 
-	const SoundManager* soundManager;
-	FMOD::Sound* music;
-	FMOD::Channel* channel;
+    const SoundManager *soundManager;
+    FMOD::Sound *music;
+    FMOD::Channel *channel;
 };
 
 

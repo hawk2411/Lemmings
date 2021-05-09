@@ -9,51 +9,51 @@
 #include "Door.h"
 #include "Trapdoor.h"
 
-class Level
-{
+class Level {
 
 public:
 
-	static Level &currentLevel()
-	{
-		static Level currentLevel;
+    static Level &currentLevel() {
+        static Level currentLevel;
 
-		return currentLevel;
-	}
+        return currentLevel;
+    }
 
-	struct LevelAttributes {
-		int numLemmings;
-		int goalLemmings;
-		int time;
+    struct LevelAttributes {
+        int numLemmings;
+        int goalLemmings;
+        int time;
 
-		int releaseRate;
-		int minReleaseRate;
-		int jobCount[8];
+        int releaseRate;
+        int minReleaseRate;
+        int jobCount[8];
 
-		Door *door;
-		Trapdoor *trapdoor;
+        Door *door;
+        Trapdoor *trapdoor;
 
-		Texture levelTexture;
-		VariableTexture maskedMap;
+        Texture levelTexture;
+        VariableTexture maskedMap;
 
-		glm::vec2 cameraPos;
-		glm::vec2 levelSize;
-	};
+        glm::vec2 cameraPos;
+        glm::vec2 levelSize;
+    };
 
-	void createFromFile(string file);
-	void init();
+    void createFromFile(string file);
 
-	LevelAttributes *getLevelAttributes();
+    void init();
+
+    LevelAttributes *getLevelAttributes();
 
 
 private:
-	LevelAttributes levelAttributes;
+    LevelAttributes levelAttributes;
 
-	glm::vec2 doorPos;
-	glm::vec2 trapdoorPos;
-	
-	string mapTexturePath;
-	string mapMaskPath;
+    glm::vec2 doorPos;
+    glm::vec2 trapdoorPos;
+
+    string mapTexturePath;
+    string mapMaskPath;
 };
+
 #endif // _LEVEL_INCLUDE
 

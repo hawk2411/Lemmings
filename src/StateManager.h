@@ -3,26 +3,29 @@
 
 #include "GameState.h"
 
-class StateManager
-{
+class StateManager {
 
 public:
 
-	static StateManager &instance()
-	{
-		static StateManager instance;
-		return instance;
-	};
+    static StateManager &instance() {
+        static StateManager instance;
+        return instance;
+    };
 
-	void changeMenu();
-	void changeInfo(int levelMode, int levelNum);
-	void changeScene(int levelMode, int levelNum);
-	void changeResults(int goalPercentage, int currentPercentage);
-	void changeCredits();
-	void changeInstructions();
+    void changeMenu();
+
+    void changeInfo(int levelMode, int levelNum);
+
+    void changeScene(int levelMode, int levelNum);
+
+    void changeResults(int goalPercentage, int currentPercentage);
+
+    void changeCredits();
+
+    void changeInstructions();
 
 private:
-	GameState *gameState;
+    GameState *gameState;
 };
 
 

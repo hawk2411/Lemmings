@@ -12,35 +12,44 @@
 // all properties it needs to track its movement and collisions.
 
 
-class Lemming
-{
+class Lemming {
 
 public:
-	Lemming() {};
-	Lemming(const glm::vec2 &initialPosition);
-	void update(int deltaTime);
-	void render();
-	void changeJob(Job *nextJob);
-	bool isWalkingRight() const;
-	void setWalkingRight(bool value);
-	glm::vec2 &getPosition();
-	bool dead() const;
-	bool saved() const;
-	Job *getJob();
+    Lemming() {};
 
-	void writeDestiny();
+    Lemming(const glm::vec2 &initialPosition);
+
+    void update(int deltaTime);
+
+    void render();
+
+    void changeJob(Job *nextJob);
+
+    bool isWalkingRight() const;
+
+    void setWalkingRight(bool value);
+
+    glm::vec2 &getPosition();
+
+    bool dead() const;
+
+    bool saved() const;
+
+    Job *getJob();
+
+    void writeDestiny();
 
 private:
-	Job *job;
-	//Sprite *sprite;
-	Countdown *countdown;
-	ShaderProgram *shaderProgram;
-	bool walkingRight = true; // is marked true when the lemmings walks in right direction
-	bool alive;
-	bool isSaved;
-	glm::vec2 position;
+    Job *job;
+    //Sprite *sprite;
+    Countdown *countdown;
+    ShaderProgram *shaderProgram;
+    bool walkingRight = true; // is marked true when the lemmings walks in right direction
+    bool alive;
+    bool isSaved;
+    glm::vec2 position;
 
-	bool outOfMap();
+    bool outOfMap();
 
 };
 

@@ -6,31 +6,32 @@
 #include "MaskedTexturedQuad.h"
 
 
-class ShaderManager
-{
+class ShaderManager {
 
 public:
-	static ShaderManager &getInstance()
-	{
-		static ShaderManager instance;
+    static ShaderManager &getInstance() {
+        static ShaderManager instance;
 
-		return instance;
-	}
+        return instance;
+    }
 
-	void init();
+    void init();
 
-	ShaderProgram &getShaderProgram();
-	ShaderProgram &getMaskedShaderProgram();
+    ShaderProgram &getShaderProgram();
 
-	void useMaskedShaderProgram();
-	void useShaderProgram();
+    ShaderProgram &getMaskedShaderProgram();
 
-	glm::mat4 getProjectionMatrix();
+    void useMaskedShaderProgram();
+
+    void useShaderProgram();
+
+    glm::mat4 getProjectionMatrix();
 
 private:
-	ShaderProgram simpleTexProgram, maskedTexProgram;
-	glm::mat4 projection;
-	glm::mat4 modelview;
+    ShaderProgram simpleTexProgram, maskedTexProgram;
+    glm::mat4 projection;
+    glm::mat4 modelview;
 };
+
 #endif //_SHADERMANAGER_INCLUDE
 

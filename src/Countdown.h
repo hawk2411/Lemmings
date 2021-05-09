@@ -4,21 +4,24 @@
 #include <glm/glm.hpp>
 #include "Sprite.h"
 
-class Countdown
-{
+class Countdown {
 
 public:
 
-	Countdown();
-	void render();
-	void setPosition(glm::vec2 position);
-	void update(int deltaTime);
-	bool isOver();
+    Countdown();
+
+    void render();
+
+    void setPosition(glm::vec2 position);
+
+    void update(int deltaTime);
+
+    bool isOver();
 
 private:
     std::unique_ptr<Sprite> countNum;
-	int goalTime;
-	bool over;
+    int goalTime;
+    bool over;
 
 };
 

@@ -9,49 +9,54 @@
 
 #define LINESPAGE 20
 
-class Instructions : public GameState
-{
+class Instructions : public GameState {
 
 public:
-	static Instructions &getInstance()
-	{
-		static Instructions instance;
-		return instance;
-	};
+    static Instructions &getInstance() {
+        static Instructions instance;
+        return instance;
+    };
 
-	void init();
-	void update(int deltaTime);
-	void render();
-	void passPageLeft();
-	void passPageRight();
-	void endMusic();
+    void init();
+
+    void update(int deltaTime);
+
+    void render();
+
+    void passPageLeft();
+
+    void passPageRight();
+
+    void endMusic();
 
 private:
 
-	// Functions
-	void initTextures();
-	void initSprites();
-	void initLines();
+    // Functions
+    void initTextures();
 
-	int actualPage;
+    void initSprites();
 
-	// Parametres
-	Texture instructionsLevelTexture;
+    void initLines();
+
+    int actualPage;
+
+    // Parametres
+    Texture instructionsLevelTexture;
     std::unique_ptr<Sprite> instructionsLevelSprite;
 
-	vector<Word*> instructionPages;
+    vector<Word *> instructionPages;
 
-	std::unique_ptr<Sprite> leftKey;
-	std::unique_ptr<Sprite> rightKey;
-	std::unique_ptr<Sprite> escapeKey;
-	Word *instructionsWord;
+    std::unique_ptr<Sprite> leftKey;
+    std::unique_ptr<Sprite> rightKey;
+    std::unique_ptr<Sprite> escapeKey;
+    Word *instructionsWord;
 
-	bool onlyLeft;
-	bool onlyRight;
+    bool onlyLeft;
+    bool onlyRight;
 
-	const SoundManager* soundManager;
-	FMOD::Sound* music;
-	FMOD::Channel* channel;
+    const SoundManager *soundManager;
+    FMOD::Sound *music;
+    FMOD::Channel *channel;
 
 };
 

@@ -16,164 +16,154 @@
 #include "EasyMaskManager.h"
 #include "LevelManager.h"
 
-void Scene::init()
-{	
-	keyboardManager = &SceneKeyboardManager::getInstance();
-	mouseManager = &SceneMouseManager::getInstance();
-	Cursor::getInstance().init();
+void Scene::init() {
+    keyboardManager = &SceneKeyboardManager::getInstance();
+    mouseManager = &SceneMouseManager::getInstance();
+    Cursor::getInstance().init();
 
-	ParticleSystemManager::getInstance().init();
+    ParticleSystemManager::getInstance().init();
 
-	if (Game::instance().isHardMode()) {
-		setMaskManager(&HardMaskManager::getInstance());
-	}
-	else {
-		setMaskManager(&EasyMaskManager::getInstance());
-	}
+    if (Game::instance().isHardMode()) {
+        setMaskManager(&HardMaskManager::getInstance());
+    } else {
+        setMaskManager(&EasyMaskManager::getInstance());
+    }
 
-	initMap();
-	initUI();
+    initMap();
+    initUI();
 
-	paused = false;
-	speedUp = false;
-	
-}
-
-void Scene::update(int deltaTime)
-{
-	((SceneMouseManager*)mouseManager)->update();
-	maskManager->update();
-
-	if (Scroller::getInstance().isScrolled()) {
-		initMap();
-		Scroller::getInstance().iScroll();
-	}
-
-
-	if (paused) {
-		return;
-	}
-
-	if (speedUp) {
-		deltaTime = 4 * deltaTime;
-	}
-
-	LevelManager::getInstance().update(deltaTime);
-	ParticleSystemManager::getInstance().update(deltaTime);
-	updateUI();
-
-	if (LevelManager::getInstance().finished() && ParticleSystemManager::getInstance().finished()) {
-		int goalPercentage = LevelManager::getInstance().getPercentageTotalLemmings();
-		int currentPercentage = LevelManager::getInstance().getPercentageSavedLemmings();
-
-		LevelManager::getInstance().endMusic();
-		StateManager::instance().changeResults(goalPercentage, currentPercentage);
-	}
+    paused = false;
+    speedUp = false;
 
 }
 
-void Scene::render()
-{
-	ShaderManager::getInstance().useMaskedShaderProgram();
-	map->render(ShaderManager::getInstance().getMaskedShaderProgram(), Level::currentLevel().getLevelAttributes()->levelTexture, Level::currentLevel().getLevelAttributes()->maskedMap);
+void Scene::update(int deltaTime) {
+    ((SceneMouseManager *) mouseManager)->update();
+    maskManager->update();
+
+    if (Scroller::getInstance().isScrolled()) {
+        initMap();
+        Scroller::getInstance().iScroll();
+    }
 
 
-	ShaderManager::getInstance().useShaderProgram();
-	LevelManager::getInstance().render();
-	ParticleSystemManager::getInstance().render();
-	UI::getInstance().render();
-	Cursor::getInstance().render();
+    if (paused) {
+        return;
+    }
+
+    if (speedUp) {
+        deltaTime = 4 * deltaTime;
+    }
+
+    LevelManager::getInstance().update(deltaTime);
+    ParticleSystemManager::getInstance().update(deltaTime);
+    updateUI();
+
+    if (LevelManager::getInstance().finished() && ParticleSystemManager::getInstance().finished()) {
+        int goalPercentage = LevelManager::getInstance().getPercentageTotalLemmings();
+        int currentPercentage = LevelManager::getInstance().getPercentageSavedLemmings();
+
+        LevelManager::getInstance().endMusic();
+        StateManager::instance().changeResults(goalPercentage, currentPercentage);
+    }
+
 }
 
-VariableTexture& Scene::getMaskedMap()
-{
-	return Level::currentLevel().getLevelAttributes()->maskedMap;
+void Scene::render() {
+    ShaderManager::getInstance().useMaskedShaderProgram();
+    map->render(ShaderManager::getInstance().getMaskedShaderProgram(),
+                Level::currentLevel().getLevelAttributes()->levelTexture,
+                Level::currentLevel().getLevelAttributes()->maskedMap);
+
+
+    ShaderManager::getInstance().useShaderProgram();
+    LevelManager::getInstance().render();
+    ParticleSystemManager::getInstance().render();
+    UI::getInstance().render();
+    Cursor::getInstance().render();
 }
 
-void Scene::changePauseStatus()
-{
-	paused = !paused;
+VariableTexture &Scene::getMaskedMap() {
+    return Level::currentLevel().getLevelAttributes()->maskedMap;
 }
 
-void Scene::changeSpeedUpStatus()
-{
-	speedUp = !speedUp;
+void Scene::changePauseStatus() {
+    paused = !paused;
 }
 
-bool Scene::isPaused()
-{
-	return paused;
+void Scene::changeSpeedUpStatus() {
+    speedUp = !speedUp;
 }
 
-bool Scene::isSpeedUp()
-{
-	return speedUp;
+bool Scene::isPaused() {
+    return paused;
 }
 
-
-void Scene::initMap()
-{
-	glm::vec2 geom[2] = { glm::vec2(0.f, 0.f), glm::vec2(float(LEVEL_WIDTH), float(LEVEL_HEIGHT)) };
-
-	int levelWidth = Level::currentLevel().getLevelAttributes()->levelTexture.width();
-	int levelHeight = Level::currentLevel().getLevelAttributes()->levelTexture.height();
-	glm::vec2 normalizedTexCoordStart = glm::vec2(
-		Level::currentLevel().getLevelAttributes()->cameraPos.x / levelWidth,
-		Level::currentLevel().getLevelAttributes()->cameraPos.y / levelHeight
-	);
-	glm::vec2 normalizedTexCoordEnd = glm::vec2(
-		(Level::currentLevel().getLevelAttributes()->cameraPos.x + LEVEL_WIDTH) / levelWidth,
-		(Level::currentLevel().getLevelAttributes()->cameraPos.y + LEVEL_HEIGHT) / levelHeight
-	);
-
-	glm::vec2 texCoords[2] = { normalizedTexCoordStart , normalizedTexCoordEnd };
-	map = MaskedTexturedQuad::createTexturedQuad(geom, texCoords, ShaderManager::getInstance().getMaskedShaderProgram());
-}
-
-void Scene::initUI()
-{
-	UI::getInstance().init();
-	UI::getInstance().setPosition(glm::vec2(0, LEVEL_HEIGHT - 1));
-}
-
-void Scene::updateUI()
-{
-	UI::getInstance().update();
+bool Scene::isSpeedUp() {
+    return speedUp;
 }
 
 
-void Scene::setMaskManager(MaskManager* maskM)
-{
-	maskManager = maskM;
+void Scene::initMap() {
+    glm::vec2 geom[2] = {glm::vec2(0.f, 0.f), glm::vec2(float(LEVEL_WIDTH), float(LEVEL_HEIGHT))};
 
-	maskManager->init();
+    int levelWidth = Level::currentLevel().getLevelAttributes()->levelTexture.width();
+    int levelHeight = Level::currentLevel().getLevelAttributes()->levelTexture.height();
+    glm::vec2 normalizedTexCoordStart = glm::vec2(
+            Level::currentLevel().getLevelAttributes()->cameraPos.x / levelWidth,
+            Level::currentLevel().getLevelAttributes()->cameraPos.y / levelHeight
+    );
+    glm::vec2 normalizedTexCoordEnd = glm::vec2(
+            (Level::currentLevel().getLevelAttributes()->cameraPos.x + LEVEL_WIDTH) / levelWidth,
+            (Level::currentLevel().getLevelAttributes()->cameraPos.y + LEVEL_HEIGHT) / levelHeight
+    );
+
+    glm::vec2 texCoords[2] = {normalizedTexCoordStart, normalizedTexCoordEnd};
+    map = MaskedTexturedQuad::createTexturedQuad(geom, texCoords,
+                                                 ShaderManager::getInstance().getMaskedShaderProgram());
+}
+
+void Scene::initUI() {
+    UI::getInstance().init();
+    UI::getInstance().setPosition(glm::vec2(0, LEVEL_HEIGHT - 1));
+}
+
+void Scene::updateUI() {
+    UI::getInstance().update();
+}
+
+
+void Scene::setMaskManager(MaskManager *maskM) {
+    maskManager = maskM;
+
+    maskManager->init();
 }
 
 void Scene::eraseMask(int x, int y) {
-	maskManager->eraseMask(x, y);
+    maskManager->eraseMask(x, y);
 }
 
 void Scene::eraseSpecialMask(int x, int y) {
-	maskManager->eraseSpecialMask(x, y);
+    maskManager->eraseSpecialMask(x, y);
 
 }
 
 char Scene::getPixel(int x, int y) {
-	return maskManager->getPixel(x, y);
+    return maskManager->getPixel(x, y);
 }
 
 void Scene::applyMask(int x, int y) {
-	maskManager->applyMask(x, y);
+    maskManager->applyMask(x, y);
 }
 
 void Scene::applySpecialMask(int x, int y) {
-	maskManager->applySpecialMask(x, y);
+    maskManager->applySpecialMask(x, y);
 }
 
-void Scene::buildStep(glm::vec2 position)
-{
-	for (int i = 0; i < 5; ++i) {
-		Utils::changeTexelColor(Level::currentLevel().getLevelAttributes()->levelTexture.getId(), position.x + i, position.y, 120, 77, 0, 255);
-		applyMask(position.x + i, position.y);
-	}
+void Scene::buildStep(glm::vec2 position) {
+    for (int i = 0; i < 5; ++i) {
+        Utils::changeTexelColor(Level::currentLevel().getLevelAttributes()->levelTexture.getId(), position.x + i,
+                                position.y, 120, 77, 0, 255);
+        applyMask(position.x + i, position.y);
+    }
 }

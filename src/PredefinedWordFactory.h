@@ -5,31 +5,30 @@
 #include "Button.h"
 
 
-class PredefinedWordFactory
-{
+class PredefinedWordFactory {
 
 public:
-	enum JobNames {
-		WALKER,
-		MINER,
-		FLOATER,
-		FALLER,
-		DIGGER,
-		CLIMBER,
-		BUILDER,
-		BLOCKER,
-		BASHER,
-		NONE
-	};
+    enum JobNames {
+        WALKER,
+        MINER,
+        FLOATER,
+        FALLER,
+        DIGGER,
+        CLIMBER,
+        BUILDER,
+        BLOCKER,
+        BASHER,
+        NONE
+    };
 
-	static PredefinedWordFactory &instance()
-	{
-		static PredefinedWordFactory instance; // Guaranteed to be destroyed.
-		// Instantiated on first use.
-		return instance;
-	};
+    static PredefinedWordFactory &instance() {
+        static PredefinedWordFactory instance; // Guaranteed to be destroyed.
+        // Instantiated on first use.
+        return instance;
+    };
 
     std::unique_ptr<Sprite> createJobWord();
+
     std::unique_ptr<Sprite> createInfoWord(string infoWord);
 
 };

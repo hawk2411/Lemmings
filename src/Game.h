@@ -18,64 +18,68 @@
 class Game {
 
 private:
-	struct SpriteSheets {
-		Texture cursorSprites;
-		Texture lemmingAnimations;
-		Texture rotatedLemmingAnimations;
-		Texture doorSprites;
-		Texture trapdoorSprites;
-		Texture numSprites;
-		Texture greenNumSprites;
-		Texture purpleNumSprites;
-		Texture buttonSprites;
-		Texture jobNamesSprites;
-		Texture infoWordSprites;
-		Texture resultsWordSprites;
-		Texture stepSprite;
-		Texture greenNumLetters;
-		Texture keySprites;
-		Texture particleSprites;
-		Texture skullSprite;
-	};
+    struct SpriteSheets {
+        Texture cursorSprites;
+        Texture lemmingAnimations;
+        Texture rotatedLemmingAnimations;
+        Texture doorSprites;
+        Texture trapdoorSprites;
+        Texture numSprites;
+        Texture greenNumSprites;
+        Texture purpleNumSprites;
+        Texture buttonSprites;
+        Texture jobNamesSprites;
+        Texture infoWordSprites;
+        Texture resultsWordSprites;
+        Texture stepSprite;
+        Texture greenNumLetters;
+        Texture keySprites;
+        Texture particleSprites;
+        Texture skullSprite;
+    };
 
-	void initSpriteSheets();
+    void initSpriteSheets();
 
 public:
-	Game() : bPlay(true), hardMode(false), gameState(nullptr), hardModeIndicator(nullptr)
-    {}
-	
-	
-	static Game &instance()	{
-		static Game G;
-	
-		return G;
-	}
-	
+    Game() : bPlay(true), hardMode(false), gameState(nullptr), hardModeIndicator(nullptr) {}
 
-	static SpriteSheets &spriteSheets()
-	{
-		static SpriteSheets spriteSheets;
 
-		return spriteSheets;
-	}
+    static Game &instance() {
+        static Game G;
 
-	void init();
-	bool update(int deltaTime);
-	void render();
-	void changeBplay();
-	bool isHardMode();
-	void swapDifficultyMode();
+        return G;
+    }
 
-	const SoundManager* getSoundManager() const;
 
-	GameState *getGameState();
-	void setGameState(GameState *state);
+    static SpriteSheets &spriteSheets() {
+        static SpriteSheets spriteSheets;
+
+        return spriteSheets;
+    }
+
+    void init();
+
+    bool update(int deltaTime);
+
+    void render();
+
+    void changeBplay();
+
+    bool isHardMode();
+
+    void swapDifficultyMode();
+
+    const SoundManager *getSoundManager() const;
+
+    GameState *getGameState();
+
+    void setGameState(GameState *state);
 
 private:
-	SoundManager soundManager;
-	bool bPlay; // Continue to play game?
-	bool hardMode;
-	GameState *gameState;
+    SoundManager soundManager;
+    bool bPlay; // Continue to play game?
+    bool hardMode;
+    GameState *gameState;
 
     std::unique_ptr<Sprite> hardModeIndicator;
 };

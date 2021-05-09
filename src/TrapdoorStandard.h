@@ -1,3 +1,4 @@
+
 #ifndef _TRAPDOORSTANDARD_INCLUDE
 #define _TRAPDOORSTANDARD_INCLUDE
 
@@ -5,14 +6,13 @@
 #include "Sprite.h"
 
 
-class TrapdoorStandard : public Trapdoor
-{
+class TrapdoorStandard : public Trapdoor {
 
 public:
-	virtual void init();
+    virtual void init();
 
 };
 
 
-#endif // _TRAPDOOR_INCLUDE
+#endif //_TRAPDOORSTANDARD_INCLUDE
 

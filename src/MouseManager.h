@@ -2,17 +2,17 @@
 #define _MOUSEMANAGER_INCLUDE
 
 
-class MouseManager
-{
+class MouseManager {
 
 public:
 
-	virtual void mouseMoved(int mouseX, int mouseY, bool bLeftButton, bool bRightButton) = 0;
+    virtual void mouseMoved(int mouseX, int mouseY, bool bLeftButton, bool bRightButton) = 0;
 
 
 private:
-	int posX = {}, posY = {};
+    int posX = {}, posY = {};
 
 };
+
 #endif // _MOUSEMANAGER_INCLUDE
 

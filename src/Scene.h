@@ -14,52 +14,60 @@
 // It is responsible for updating and render them.
 
 
-class Scene : public GameState
-{
+class Scene : public GameState {
 
 public:
 
-	static Scene &getInstance()
-	{
-		static Scene instance; // Guaranteed to be destroyed.
-		// Instantiated on first use.
-		return instance;
-	};
+    static Scene &getInstance() {
+        static Scene instance; // Guaranteed to be destroyed.
+        // Instantiated on first use.
+        return instance;
+    };
 
-	void init();
-	void update(int deltaTime);
-	void render();
+    void init();
 
-	void eraseMask(int x, int y);
-	void applyMask(int x, int y);
-	void eraseSpecialMask(int x, int y);
-	void applySpecialMask(int x, int y);
-	
-	void buildStep(glm::vec2 position);
-	
-	void changePauseStatus();
-	void changeSpeedUpStatus();
-	bool isPaused();
-	bool isSpeedUp();
-	
-	char getPixel(int x, int y);
+    void update(int deltaTime);
 
-	
-	VariableTexture &getMaskedMap();
+    void render();
 
-	void setMaskManager(MaskManager* maskManager);
+    void eraseMask(int x, int y);
+
+    void applyMask(int x, int y);
+
+    void eraseSpecialMask(int x, int y);
+
+    void applySpecialMask(int x, int y);
+
+    void buildStep(glm::vec2 position);
+
+    void changePauseStatus();
+
+    void changeSpeedUpStatus();
+
+    bool isPaused();
+
+    bool isSpeedUp();
+
+    char getPixel(int x, int y);
+
+
+    VariableTexture &getMaskedMap();
+
+    void setMaskManager(MaskManager *maskManager);
 
 private:
-	void initMap();
-	void initUI();
-	void updateUI();
+    void initMap();
 
-	bool paused = false;
-	bool speedUp = false;
+    void initUI();
+
+    void updateUI();
+
+    bool paused = false;
+    bool speedUp = false;
 
     std::unique_ptr<MaskedTexturedQuad> map;
 
-	MaskManager *maskManager;
+    MaskManager *maskManager;
 
 };
 

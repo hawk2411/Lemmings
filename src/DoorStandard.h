@@ -4,11 +4,10 @@
 #include "Door.h"
 
 
-class DoorStandard : public Door
-{
+class DoorStandard : public Door {
 
 public:
-	virtual void init();
+    virtual void init();
 };
 
 

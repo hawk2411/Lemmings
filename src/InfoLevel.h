@@ -6,40 +6,43 @@
 #include "Sprite.h"
 #include "Word.h"
 
-class InfoLevel : public GameState
-{
+class InfoLevel : public GameState {
 
 public:
-	static InfoLevel &instance()
-	{
-		static InfoLevel instance;
-		return instance;
-	};
+    static InfoLevel &instance() {
+        static InfoLevel instance;
+        return instance;
+    };
 
-	void init();
-	void update(int deltaTime);
-	void render();
+    void init();
 
-	void setLevel(int level, int mode);
-	int getMode();
-	int getLevel();
+    void update(int deltaTime);
+
+    void render();
+
+    void setLevel(int level, int mode);
+
+    int getMode();
+
+    int getLevel();
 
 private:
 
-	// Functions
-	void initTextures();
-	void initSprites();
+    // Functions
+    void initTextures();
 
-	// Parametres
-	Texture InfoLevelTexture;
+    void initSprites();
+
+    // Parametres
+    Texture InfoLevelTexture;
     std::unique_ptr<Sprite> InfoLevelSprite;
     std::unique_ptr<Sprite> leftKey;
     std::unique_ptr<Sprite> rightKey;
-	Word *playWord;
-	Word *menuWord;
+    Word *playWord;
+    Word *menuWord;
 
-	int mode;
-	int level;
+    int mode;
+    int level;
 
 };
 

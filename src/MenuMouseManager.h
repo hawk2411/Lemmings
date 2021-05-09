@@ -3,19 +3,18 @@
 
 #include "MouseManager.h"
 
-class MenuMouseManager : public MouseManager
-{
+class MenuMouseManager : public MouseManager {
 
 public:
-	static MenuMouseManager &getInstance()
-	{
-		static MenuMouseManager instance; // Guaranteed to be destroyed.
-							// Instantiated on first use.
-		return instance;
-	};
+    static MenuMouseManager &getInstance() {
+        static MenuMouseManager instance; // Guaranteed to be destroyed.
+        // Instantiated on first use.
+        return instance;
+    };
 
-	void mouseMoved(int mouseX, int mouseY, bool bLeftButton, bool bRightButton) {};
+    void mouseMoved(int mouseX, int mouseY, bool bLeftButton, bool bRightButton) {};
 
 };
+
 #endif // _MOUSEMANAGER_INCLUDE
 

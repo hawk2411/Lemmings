@@ -7,33 +7,36 @@
 #define MAX_STEPS 12
 
 
-class Builder : public Job
-{
+class Builder : public Job {
 
-	
+
 public:
-	void initAnims(ShaderProgram &shaderProgram);
-	void updateStateMachine(int deltaTime);
-	void setWalkingRight(bool value);
-	string getName();
-	
-private:
-	enum BuilderState
-	{
-		BUILDING_LEFT_STATE, BUILDING_RIGHT_STATE, NOSTEPS_STATE
-	};
+    void initAnims(ShaderProgram &shaderProgram);
+
+    void updateStateMachine(int deltaTime);
+
+    void setWalkingRight(bool value);
+
+    string getName();
 
 private:
-	BuilderState state;
+    enum BuilderState {
+        BUILDING_LEFT_STATE, BUILDING_RIGHT_STATE, NOSTEPS_STATE
+    };
 
-	void buildLeft();
-	void buildRight();
+private:
+    BuilderState state;
 
-	bool cannotBuildRight();
-	bool cannotBuildLeft();
+    void buildLeft();
 
-	int buildedSteps = 0;
-	
+    void buildRight();
+
+    bool cannotBuildRight();
+
+    bool cannotBuildLeft();
+
+    int buildedSteps = 0;
+
 };
 
 #endif // _BUILDER_INCLUDE

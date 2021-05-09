@@ -5,26 +5,34 @@
 #include "Job.h"
 
 
-class Floater: public Job
-{
+class Floater : public Job {
 public:
-	void initAnims(ShaderProgram &shaderProgram);
-	void updateStateMachine(int deltaTime);
-	void setWalkingRight(bool value);
-	string getName();
+    void initAnims(ShaderProgram &shaderProgram);
+
+    void updateStateMachine(int deltaTime);
+
+    void setWalkingRight(bool value);
+
+    string getName();
 
 private:
-	void timeToFloat();
+    void timeToFloat();
 
 private:
-	enum FloaterState
-	{
-		WALKING_RIGHT_STATE, WALKING_LEFT_STATE, FALLING_LEFT_STATE, FALLING_RIGHT_STATE, FLOTATING_RIGHT_STATE, FLOTATING_LEFT_STATE, FLOATER_OPENING_RIGHT_STATE, FLOATER_OPENING_LEFT_STATE
-	};
+    enum FloaterState {
+        WALKING_RIGHT_STATE,
+        WALKING_LEFT_STATE,
+        FALLING_LEFT_STATE,
+        FALLING_RIGHT_STATE,
+        FLOTATING_RIGHT_STATE,
+        FLOTATING_LEFT_STATE,
+        FLOATER_OPENING_RIGHT_STATE,
+        FLOATER_OPENING_LEFT_STATE
+    };
 
 
 private:
-	FloaterState state;
+    FloaterState state;
 };
 
 

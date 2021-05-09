@@ -4,20 +4,18 @@
 #include "Sprite.h"
 #include "Door.h"
 
-class DoorFactory
-{
+class DoorFactory {
 
 public:
 
-	static DoorFactory &instance()
-	{
-		static DoorFactory instance; // Guaranteed to be destroyed.
-		// Instantiated on first use.
-		return instance;
-	};
+    static DoorFactory &instance() {
+        static DoorFactory instance; // Guaranteed to be destroyed.
+        // Instantiated on first use.
+        return instance;
+    };
 
-	Door *createDoor(string type);
-	
+    Door *createDoor(string type);
+
 };
 
 

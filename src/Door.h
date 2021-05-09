@@ -4,21 +4,24 @@
 #include "Sprite.h"
 
 
-class Door
-{
+class Door {
 
 public:
-	virtual void init() = 0;
-	void update(int deltaTime);
-	void render();
-	
-	void setPosition(glm::vec2 position);
-	glm::vec2 getPosition();
-	glm::vec2 getEscapePosition();
+    virtual void init() = 0;
+
+    void update(int deltaTime);
+
+    void render();
+
+    void setPosition(glm::vec2 position);
+
+    glm::vec2 getPosition();
+
+    glm::vec2 getEscapePosition();
 
 protected:
     std::unique_ptr<Sprite> doorSprite;
-	glm::vec2 escapeOffset;
+    glm::vec2 escapeOffset;
 };
 
 

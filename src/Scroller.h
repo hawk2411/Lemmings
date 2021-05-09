@@ -2,25 +2,27 @@
 #define _SCROLLER_INCLUDE
 
 
-class Scroller
-{
+class Scroller {
 
 public:
-	static Scroller &getInstance()
-	{
-		static Scroller instance; // Guaranteed to be destroyed.
-							   // Instantiated on first use.
-		return instance;
-	};
+    static Scroller &getInstance() {
+        static Scroller instance; // Guaranteed to be destroyed.
+        // Instantiated on first use.
+        return instance;
+    };
 
-	void scrollLeft();
-	void scrollRight();
-	bool isScrolled();
-	void iScroll();
+    void scrollLeft();
+
+    void scrollRight();
+
+    bool isScrolled();
+
+    void iScroll();
 
 private:
-	void scroll(int scrollDisplacement);
-	bool scrolled;
+    void scroll(int scrollDisplacement);
+
+    bool scrolled;
 };
 
 #endif // _SCROLLER_INCLUDE

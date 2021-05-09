@@ -4,20 +4,18 @@
 #include "Sprite.h"
 #include "Trapdoor.h"
 
-class TrapdoorFactory
-{
+class TrapdoorFactory {
 
 public:
 
-	static TrapdoorFactory &instance()
-	{
-		static TrapdoorFactory instance; // Guaranteed to be destroyed.
-		// Instantiated on first use.
-		return instance;
-	};
+    static TrapdoorFactory &instance() {
+        static TrapdoorFactory instance; // Guaranteed to be destroyed.
+        // Instantiated on first use.
+        return instance;
+    };
 
-	Trapdoor *createTrapdoor(string type);
-	
+    Trapdoor *createTrapdoor(string type);
+
 };
 
 

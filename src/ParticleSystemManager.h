@@ -5,24 +5,26 @@
 #include "ParticleSystem.h"
 
 
-class ParticleSystemManager 
-{
+class ParticleSystemManager {
 public:
-	static ParticleSystemManager &getInstance()
-	{
-		static ParticleSystemManager instance; // Guaranteed to be destroyed.
-									// Instantiated on first use.
-		return instance;
-	};
+    static ParticleSystemManager &getInstance() {
+        static ParticleSystemManager instance; // Guaranteed to be destroyed.
+        // Instantiated on first use.
+        return instance;
+    };
 
-	void init();
-	void createNewParticleSystem(glm::vec2 position);
-	void update(int deltaTime);
-	void render();
-	bool finished();
+    void init();
+
+    void createNewParticleSystem(glm::vec2 position);
+
+    void update(int deltaTime);
+
+    void render();
+
+    bool finished();
 
 private:
-	vector<ParticleSystem*> particleSystems;
+    vector<ParticleSystem *> particleSystems;
 };
 
 

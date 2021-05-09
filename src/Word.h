@@ -5,22 +5,24 @@
 #include "Sprite.h"
 
 
-class Word
-{
+class Word {
 
 public:
-	explicit Word(const string &word);
-	~Word();
-	void render();
-	void setPosition(glm::vec2 position);
+    explicit Word(const string &word);
+
+    ~Word();
+
+    void render();
+
+    void setPosition(glm::vec2 position);
 
 
 private:
-	glm::vec2 position;
-	vector<std::unique_ptr<Sprite>> letters;
+    glm::vec2 position;
+    vector<std::unique_ptr<Sprite>> letters;
 
-	int length;
-	int wordLength;
+    int length;
+    int wordLength;
 
 };
 

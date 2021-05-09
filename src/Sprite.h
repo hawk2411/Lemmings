@@ -14,56 +14,70 @@
 // able to manage animations stored as a spritesheet. 
 
 
-class Sprite
-{
+class Sprite {
 
     /*
      * factory functions
      */
 public:
     // Textured quads can only be created inside an OpenGL context
-    static std::unique_ptr<Sprite> createSprite(const glm::vec2 &quadSize, const glm::vec2 &sizeInSpritesheet, ShaderProgram *program, Texture *spriteSheet, Texture *rotatedSpriteSheet = nullptr);
+    static std::unique_ptr<Sprite>
+    createSprite(const glm::vec2 &quadSize, const glm::vec2 &sizeInSpritesheet, ShaderProgram *program,
+                 Texture *spriteSheet, Texture *rotatedSpriteSheet = nullptr);
 
 public:
-    Sprite(const glm::vec2 &quadSize, const glm::vec2 &sizeInSpriteSheet, ShaderProgram *program, Texture *spriteSheet, Texture *rotatedSpriteSheet);
+    Sprite(const glm::vec2 &quadSize, const glm::vec2 &sizeInSpriteSheet, ShaderProgram *program, Texture *spriteSheet,
+           Texture *rotatedSpriteSheet);
 
     ~Sprite();
 
-	int update(int deltaTime);
-	void render() const;
-	void free();
+    int update(int deltaTime);
 
-	void setNumberAnimations(int nAnimations);
-	void setAnimationSpeed(int animId, int keyframesPerSec);
-	void addKeyframe(int animId, const glm::vec2 &frame, bool isRotated = false);
-	void changeAnimation(int animId);
-	int animation() const;
-	int getAnimationCurrentFrame() const;
-	bool isInLastFrame() const;
-	bool isInFirstFrame() const;
-	bool hasIterated() const;
+    void render() const;
 
-	void setPosition(const glm::vec2 &newPos);
-	glm::vec2 position() const;
-	glm::vec2 &position();
+    void free();
 
-	void setIterated(bool isIterated);
+    void setNumberAnimations(int nAnimations);
+
+    void setAnimationSpeed(int animId, int keyframesPerSec);
+
+    void addKeyframe(int animId, const glm::vec2 &frame, bool isRotated = false);
+
+    void changeAnimation(int animId);
+
+    int animation() const;
+
+    int getAnimationCurrentFrame() const;
+
+    bool isInLastFrame() const;
+
+    bool isInFirstFrame() const;
+
+    bool hasIterated() const;
+
+    void setPosition(const glm::vec2 &newPos);
+
+    glm::vec2 position() const;
+
+    glm::vec2 &position();
+
+    void setIterated(bool isIterated);
 
 private:
-	Texture *texture;
-	Texture *spriteSheet;
-	Texture *rotatedSpriteSheet;
-	ShaderProgram *shaderProgram;
-	GLuint vao;
-	GLuint vbo;
-	GLint posLocation, texCoordLocation;
-	glm::vec2 pos;
-	int currentAnimation, currentKeyframe;
-	float timeAnimation;
-	glm::vec2 texCoordDispl;
-	vector<AnimKeyframes> animations;
-	vector<bool> rotated;
-	bool iterated;
+    Texture *texture;
+    Texture *spriteSheet;
+    Texture *rotatedSpriteSheet;
+    ShaderProgram *shaderProgram;
+    GLuint vao;
+    GLuint vbo;
+    GLint posLocation, texCoordLocation;
+    glm::vec2 pos;
+    int currentAnimation, currentKeyframe;
+    float timeAnimation;
+    glm::vec2 texCoordDispl;
+    vector<AnimKeyframes> animations;
+    vector<bool> rotated;
+    bool iterated;
 
 };
 

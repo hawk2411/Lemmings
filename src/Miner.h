@@ -5,33 +5,35 @@
 #include "Job.h"
 
 
-
-class Miner : public Job
-{
+class Miner : public Job {
 public:
-	void initAnims(ShaderProgram &shaderProgram);
-	void updateStateMachine(int deltaTime);
-	void setWalkingRight(bool value);
-	string getName();
+    void initAnims(ShaderProgram &shaderProgram);
+
+    void updateStateMachine(int deltaTime);
+
+    void setWalkingRight(bool value);
+
+    string getName();
 
 private:
-	void printMine();
-	
-	void mineRight();
-	bool canMineRight();
+    void printMine();
 
-	void mineLeft();
-	bool canMineLeft();
+    void mineRight();
 
-private:
-	enum MinerState
-	{
-		MINER_RIGHT_STATE, MINER_LEFT_STATE
-	};
+    bool canMineRight();
 
+    void mineLeft();
+
+    bool canMineLeft();
 
 private:
-	MinerState state;
+    enum MinerState {
+        MINER_RIGHT_STATE, MINER_LEFT_STATE
+    };
+
+
+private:
+    MinerState state;
 };
 
 

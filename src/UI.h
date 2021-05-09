@@ -10,54 +10,56 @@
 #include "TimeDisplay.h"
 
 
-class UI
-{
+class UI {
 
 public:
-	static UI &getInstance()
-	{
-		static UI instance; // Guaranteed to be destroyed.
-							   // Instantiated on first use.
-		return instance;
-	};
+    static UI &getInstance() {
+        static UI instance; // Guaranteed to be destroyed.
+        // Instantiated on first use.
+        return instance;
+    };
 
-	void init();
-	void update();
-	void render();
-	void setPosition(glm::vec2 position);
+    void init();
 
-	int getButtonIndexInPos(int posX, int posY);
-	void changeSelectedButton(int selectedButton);
-	int getSelectedButtonJobCount();
+    void update();
 
-	void changeDisplayedJob(string lemmingJobName);
+    void render();
+
+    void setPosition(glm::vec2 position);
+
+    int getButtonIndexInPos(int posX, int posY);
+
+    void changeSelectedButton(int selectedButton);
+
+    int getSelectedButtonJobCount();
+
+    void changeDisplayedJob(string lemmingJobName);
 
 private:
-	static const int NUM_BUTTONS = 13;
+    static const int NUM_BUTTONS = 13;
 
-	glm::vec2 position;
+    glm::vec2 position;
 
-	Button buttons[NUM_BUTTONS];
+    Button buttons[NUM_BUTTONS];
 
-	Texture backgroundTexture;
+    Texture backgroundTexture;
     std::unique_ptr<Sprite> background;
 
     std::unique_ptr<Sprite> jobName;
 
     std::unique_ptr<Sprite> outWord;
-	NumDisplayGreen numberOutLemmings;
+    NumDisplayGreen numberOutLemmings;
 
     std::unique_ptr<Sprite> inWord;
-	PercentageDisplay numberInLemmings;
+    PercentageDisplay numberInLemmings;
 
     std::unique_ptr<Sprite> timeWord;
-	TimeDisplay time;
-	
+    TimeDisplay time;
 
 
-	int selectedButton;
-	Texture selectFrameTexture;
-	std::unique_ptr<Sprite> selectFrame;
+    int selectedButton;
+    Texture selectFrameTexture;
+    std::unique_ptr<Sprite> selectFrame;
 };
 
 #endif // _UI_INCLUDE

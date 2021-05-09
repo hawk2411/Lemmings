@@ -4,19 +4,17 @@
 #include "Particle.h"
 
 
-class ParticleFactory
-{
+class ParticleFactory {
 
 public:
 
-	static ParticleFactory &getInstance()
-	{
-		static ParticleFactory instance; // Guaranteed to be destroyed.
-		// Instantiated on first use.
-		return instance;
-	};
+    static ParticleFactory &getInstance() {
+        static ParticleFactory instance; // Guaranteed to be destroyed.
+        // Instantiated on first use.
+        return instance;
+    };
 
-	Particle *createParticle();
+    Particle *createParticle();
 
 };
 

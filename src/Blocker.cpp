@@ -13,55 +13,53 @@
 #define FALL_STEP 4
 
 
-enum BlockerAnims
-{
-	BLOCKER,
+enum BlockerAnims {
+    BLOCKER,
 };
 
 
 void Blocker::initAnims(ShaderProgram &shaderProgram) {
-	jobSprite = Sprite::createSprite(glm::ivec2(16, 16), glm::vec2(1.f / 16, 1.f / 14), &shaderProgram, &Game::spriteSheets().lemmingAnimations, &Game::spriteSheets().rotatedLemmingAnimations);
-	jobSprite->setNumberAnimations(1);
+    jobSprite = Sprite::createSprite(glm::ivec2(16, 16), glm::vec2(1.f / 16, 1.f / 14), &shaderProgram,
+                                     &Game::spriteSheets().lemmingAnimations,
+                                     &Game::spriteSheets().rotatedLemmingAnimations);
+    jobSprite->setNumberAnimations(1);
 
-	// BLOCKER 
-	jobSprite->setAnimationSpeed(BLOCKER, 12);
-	for (int i = 0; i<16; i++)
-		jobSprite->addKeyframe(BLOCKER, glm::vec2(float(i) / 16, 3.0f / 14));
+    // BLOCKER
+    jobSprite->setAnimationSpeed(BLOCKER, 12);
+    for (int i = 0; i < 16; i++)
+        jobSprite->addKeyframe(BLOCKER, glm::vec2(float(i) / 16, 3.0f / 14));
 
-	state = BLOCKING_STATE;
-	jobSprite->changeAnimation(BLOCKER);
+    state = BLOCKING_STATE;
+    jobSprite->changeAnimation(BLOCKER);
 
 }
 
-void Blocker::setWalkingRight(bool value)
-{
-	walkingRight = value;
+void Blocker::setWalkingRight(bool value) {
+    walkingRight = value;
 }
 
 void Blocker::updateStateMachine(int deltaTime) {
-	
-	switch (state)
-	{
-		case BLOCKING_STATE:
 
-			glm::ivec2 posBase = jobSprite->position();
+    switch (state) {
+        case BLOCKING_STATE:
 
-			posBase += glm::ivec2(3, 1);
+            glm::ivec2 posBase = jobSprite->position();
 
-			int x = posBase.x;
-			int y = posBase.y;
+            posBase += glm::ivec2(3, 1);
 
-			for (int i = 0; i < 10; i+=9) {
-				for (int j = 0; j < 16; ++j) {
-					Scene::getInstance().applySpecialMask(x + i, y + j);
-				}
-			}
+            int x = posBase.x;
+            int y = posBase.y;
 
-			break;
-	}
+            for (int i = 0; i < 10; i += 9) {
+                for (int j = 0; j < 16; ++j) {
+                    Scene::getInstance().applySpecialMask(x + i, y + j);
+                }
+            }
+
+            break;
+    }
 }
 
-string Blocker::getName()
-{
-	return "BLOCKER";
+string Blocker::getName() {
+    return "BLOCKER";
 }

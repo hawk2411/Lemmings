@@ -3,24 +3,26 @@
 
 #include "KeyboardManager.h"
 
-class CreditsKeyboardManager : public KeyboardManager
-{
+class CreditsKeyboardManager : public KeyboardManager {
 
 public:
-	static CreditsKeyboardManager &getInstance()
-	{
-		static CreditsKeyboardManager instance; // Guaranteed to be destroyed.
-									  // Instantiated on first use.
-		return instance;
-	};
+    static CreditsKeyboardManager &getInstance() {
+        static CreditsKeyboardManager instance; // Guaranteed to be destroyed.
+        // Instantiated on first use.
+        return instance;
+    };
 
-	void keyPressed(int key);
-	void keyReleased(int key);
-	void specialKeyPressed(int key);
-	void specialKeyReleased(int key);
+    void keyPressed(int key);
+
+    void keyReleased(int key);
+
+    void specialKeyPressed(int key);
+
+    void specialKeyReleased(int key);
 
 
 private:
-	
+
 };
-#endif // _KEYBOARDMANAGER_INCLUDE
+
+#endif // _CREDITSKEYBOARDMANAGER_INCLUDE

@@ -4,28 +4,24 @@
 #include "Credits.h"
 #include "StateManager.h"
 
-void CreditsKeyboardManager::keyPressed(int key)
-{
-	
-	if (key == 27) // Escape code
-	{
-		StateManager::instance().changeMenu();
-		Credits::instance().endMusic();
-	}
-	
-}
+void CreditsKeyboardManager::keyPressed(int key) {
 
-void CreditsKeyboardManager::keyReleased(int key)
-{
+    if (key == 27) // Escape code
+    {
+        StateManager::instance().changeMenu();
+        Credits::instance().endMusic();
+    }
 
 }
 
-void CreditsKeyboardManager::specialKeyPressed(int key)
-{
+void CreditsKeyboardManager::keyReleased(int key) {
+
 }
 
-void CreditsKeyboardManager::specialKeyReleased(int key)
-{
+void CreditsKeyboardManager::specialKeyPressed(int key) {
+}
+
+void CreditsKeyboardManager::specialKeyReleased(int key) {
 
 }
 

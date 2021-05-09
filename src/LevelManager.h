@@ -8,99 +8,111 @@
 #include "Trapdoor.h"
 #include "SoundManager.h"
 
-class LevelManager
-{
+class LevelManager {
 
 public:
-	static LevelManager &getInstance()
-	{
-		static LevelManager instance;
-		return instance;
-	};
+    static LevelManager &getInstance() {
+        static LevelManager instance;
+        return instance;
+    };
 
-	enum JobPosition {
-		CLIMBER,
-		FLOATER,
-		BOMBER,
-		BLOCKER,
-		BUILDER,
-		BASHER,
-		MINNER,
-		DIGGER
-	};
+    enum JobPosition {
+        CLIMBER,
+        FLOATER,
+        BOMBER,
+        BLOCKER,
+        BUILDER,
+        BASHER,
+        MINNER,
+        DIGGER
+    };
 
-	void init(string levelMode, int levelNum);
-	void update(int deltaTime);
-	void render();
+    void init(string levelMode, int levelNum);
 
-	bool finished();
+    void update(int deltaTime);
 
-	int getNumLemmingsAlive();
-	int getPercentageSavedLemmings();
-	int getPercentageTotalLemmings();
+    void render();
 
-	void stopSpawningLemmings();
+    bool finished();
 
-	bool assignJob(int lemmingIndex, Job *jobToAssign);
-	int getLemmingIndexInPos(int posX, int posY);
-	string getLemmingJobNameIndex(int index);
+    int getNumLemmingsAlive();
 
-	int getCurrentTime();
-	int getRemainingTime();
+    int getPercentageSavedLemmings();
 
-	void apocalypsis();
+    int getPercentageTotalLemmings();
 
-	int getReleaseRate();
-	int getMinReleaseRate();
-	void decreaseReleaseRate();
-	void increaseReleaseRate();
+    void stopSpawningLemmings();
 
-	int getActualLevel();
-	int getActualMode();
+    bool assignJob(int lemmingIndex, Job *jobToAssign);
 
-	int getJobCount(int index);
-	void decreaseJobCount(int index);
+    int getLemmingIndexInPos(int posX, int posY);
 
-	void endMusic();
+    string getLemmingJobNameIndex(int index);
+
+    int getCurrentTime();
+
+    int getRemainingTime();
+
+    void apocalypsis();
+
+    int getReleaseRate();
+
+    int getMinReleaseRate();
+
+    void decreaseReleaseRate();
+
+    void increaseReleaseRate();
+
+    int getActualLevel();
+
+    int getActualMode();
+
+    int getJobCount(int index);
+
+    void decreaseJobCount(int index);
+
+    void endMusic();
 
 
 private:
     void spawnLemmings();
 
 
-	int *jobCount;
-	set<Lemming*> lemmings;
+    int *jobCount;
+    set<Lemming *> lemmings;
 
 
-	int deadLemmings;
-	int savedLemmings;
-	int goalLemmingNum;
-	int releaseRate;
-	int minReleaseRate;
-	int availableLemmings;
+    int deadLemmings;
+    int savedLemmings;
+    int goalLemmingNum;
+    int releaseRate;
+    int minReleaseRate;
+    int availableLemmings;
 
-	int actualLevel;
-	int actualMode;
+    int actualLevel;
+    int actualMode;
 
-	int goalTime;
-	float currentTime;
-	int lastTimeSpawnedLemming;
+    int goalTime;
+    float currentTime;
+    int lastTimeSpawnedLemming;
 
-	bool spawningLemmings;
-	bool finishedLevel;
+    bool spawningLemmings;
+    bool finishedLevel;
 
-	bool exploding;
+    bool exploding;
 
-	Door* door;
-	Trapdoor* trapdoor;
+    Door *door;
+    Trapdoor *trapdoor;
 
-	const SoundManager* soundManager;
-	FMOD::Sound* music, *dooropen;
-	FMOD::Channel* channel;
+    const SoundManager *soundManager;
+    FMOD::Sound *music, *dooropen;
+    FMOD::Channel *channel;
 
-	void finishLevel();
-	void updateLemmings(int deltaTime);
-	void renderLemmings();
+    void finishLevel();
+
+    void updateLemmings(int deltaTime);
+
+    void renderLemmings();
 
 
 };

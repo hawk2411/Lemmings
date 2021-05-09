@@ -5,13 +5,11 @@
 #include "Sprite.h"
 
 
-
-class NumFactory
-{
+class NumFactory {
 
 public:
 
-	virtual std::unique_ptr<Sprite> createNum() = 0;
+    virtual std::unique_ptr<Sprite> createNum() = 0;
 
 };
 

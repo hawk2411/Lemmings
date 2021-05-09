@@ -104,7 +104,6 @@ add_executable(lemmings src/main.cpp
         )
 
 
-
 find_package(OpenGL REQUIRED)
 find_package(GLUT REQUIRED)
 #find_package(SDL2 REQUIRED)
@@ -124,5 +123,5 @@ message("FMOD_OPUS_LIBRARY ${FMOD_OPUS_LIBRARY}")
 
 #-fuse-ld=gold
 #${GLM_INCLUDE_DIRS}
-include_directories( ${OPENGL_INCLUDE_DIRS} ${GLUT_INCLUDE_DIRS} ${GLEW_INCLUDE_DIRS}  ${FMOD_INCLUDE_DIR})
+include_directories(${OPENGL_INCLUDE_DIRS} ${GLUT_INCLUDE_DIRS} ${GLEW_INCLUDE_DIRS} ${FMOD_INCLUDE_DIR})
 target_link_libraries(${CMAKE_PROJECT_NAME} ${GLUT_LIBRARY} ${OPENGL_LIBRARIES} ${GLEW_LIBRARIES} ${GLM_LIBRARIES} ${FMOD_CORE_LIBRARY} ${FMOD_STUDIO_LIBRARY})

@@ -9,23 +9,24 @@
 // all properties it needs to track its movement and collisions.
 
 
-class Blocker : public Job
-{
+class Blocker : public Job {
 public:
-	void initAnims(ShaderProgram &shaderProgram);
-	void updateStateMachine(int deltaTime);
-	void setWalkingRight(bool value);
-	string getName();
+    void initAnims(ShaderProgram &shaderProgram);
+
+    void updateStateMachine(int deltaTime);
+
+    void setWalkingRight(bool value);
+
+    string getName();
 
 private:
-	enum BlockerState
-	{
-		BLOCKING_STATE
-	};
+    enum BlockerState {
+        BLOCKING_STATE
+    };
 
 
 private:
-	BlockerState state;
+    BlockerState state;
 };
 
 

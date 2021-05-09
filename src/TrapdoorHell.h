@@ -5,11 +5,10 @@
 #include "Sprite.h"
 
 
-class TrapdoorHell : public Trapdoor
-{
+class TrapdoorHell : public Trapdoor {
 
 public:
-	virtual void init();
+    virtual void init();
 
 };
 

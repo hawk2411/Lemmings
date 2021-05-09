@@ -5,19 +5,17 @@
 #include "Button.h"
 
 
-class ButtonFactory
-{
+class ButtonFactory {
 
 public:
 
-	static ButtonFactory &instance()
-	{
-		static ButtonFactory instance; // Guaranteed to be destroyed.
-		// Instantiated on first use.
-		return instance;
-	};
+    static ButtonFactory &instance() {
+        static ButtonFactory instance; // Guaranteed to be destroyed.
+        // Instantiated on first use.
+        return instance;
+    };
 
-	Button createButton(int buttonName);
+    Button createButton(int buttonName);
 
 };
 

@@ -5,27 +5,29 @@
 #include "Job.h"
 
 
-class Basher : public Job
-{
+class Basher : public Job {
 public:
-	void initAnims(ShaderProgram &shaderProgram);
-	void updateStateMachine(int deltaTime);
-	void setWalkingRight(bool value);
-	string getName();
+    void initAnims(ShaderProgram &shaderProgram);
+
+    void updateStateMachine(int deltaTime);
+
+    void setWalkingRight(bool value);
+
+    string getName();
 
 private:
-	bool bashRight();
-	bool bashLeft();
+    bool bashRight();
+
+    bool bashLeft();
 
 private:
-	enum BasherState
-	{
-		BASHING_RIGHT_STATE, BASHING_LEFT_STATE
-	};
+    enum BasherState {
+        BASHING_RIGHT_STATE, BASHING_LEFT_STATE
+    };
 
 
 private:
-	BasherState state;
+    BasherState state;
 };
 
 

@@ -14,35 +14,41 @@ using namespace std;
 // storing the returned id so that it may be applied to any drawn primitives
 
 
-class Texture
-{
+class Texture {
 
 public:
-	Texture();
+    Texture();
 
-	bool loadFromFile(const string &filename, PixelFormat format);
-	void loadFromGlyphBuffer(unsigned char *buffer, int width, int height);
+    bool loadFromFile(const string &filename, PixelFormat format);
 
-	void createEmptyTexture(int width, int height);
-	void loadSubtextureFromGlyphBuffer(unsigned char *buffer, int x, int y, int width, int height) const;
-	void generateMipmap() const;
-	
-	void setWrapS(GLint value);
-	void setWrapT(GLint value);
-	void setMinFilter(GLint value);
-	void setMagFilter(GLint value);
-	
-	void use() const;
-	
-	int width() const { return widthTex; }
-	int height() const { return heightTex; }
+    void loadFromGlyphBuffer(unsigned char *buffer, int width, int height);
 
-	GLuint getId() const;
+    void createEmptyTexture(int width, int height);
+
+    void loadSubtextureFromGlyphBuffer(unsigned char *buffer, int x, int y, int width, int height) const;
+
+    void generateMipmap() const;
+
+    void setWrapS(GLint value);
+
+    void setWrapT(GLint value);
+
+    void setMinFilter(GLint value);
+
+    void setMagFilter(GLint value);
+
+    void use() const;
+
+    int width() const { return widthTex; }
+
+    int height() const { return heightTex; }
+
+    GLuint getId() const;
 
 private:
-	int widthTex, heightTex;
-	GLuint texId;
-	GLint wrapS, wrapT, minFilter, magFilter;
+    int widthTex, heightTex;
+    GLuint texId;
+    GLint wrapS, wrapT, minFilter, magFilter;
 
 };
 

@@ -9,24 +9,25 @@
 // all properties it needs to track its movement and collisions.
 
 
-class Walker : public Job
-{
+class Walker : public Job {
 
-	
+
 public:
-	void initAnims(ShaderProgram &shaderProgram);
-	void updateStateMachine(int deltaTime);
-	void setWalkingRight(bool value);
-	string getName();
-	
-private:
-	enum WalkerState
-	{
-		WALKING_LEFT_STATE, WALKING_RIGHT_STATE, FALLING_LEFT_STATE, FALLING_RIGHT_STATE
-	};
+    void initAnims(ShaderProgram &shaderProgram);
+
+    void updateStateMachine(int deltaTime);
+
+    void setWalkingRight(bool value);
+
+    string getName();
 
 private:
-	WalkerState state;
+    enum WalkerState {
+        WALKING_LEFT_STATE, WALKING_RIGHT_STATE, FALLING_LEFT_STATE, FALLING_RIGHT_STATE
+    };
+
+private:
+    WalkerState state;
 };
 
 #endif // _WALKER_INCLUDE

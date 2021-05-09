@@ -5,25 +5,27 @@
 #include "Job.h"
 
 
-class Exploder : public Job
-{
+class Exploder : public Job {
 public:
-	void initAnims(ShaderProgram &shaderProgram);
-	void updateStateMachine(int deltaTime);
-	void setWalkingRight(bool value);
-	string getName();
+    void initAnims(ShaderProgram &shaderProgram);
+
+    void updateStateMachine(int deltaTime);
+
+    void setWalkingRight(bool value);
+
+    string getName();
 
 private:
-	enum ExploderState
-	{
-		EXPLODER_STATE,
-		BURNING_DEATH_STATE
-	};
+    enum ExploderState {
+        EXPLODER_STATE,
+        BURNING_DEATH_STATE
+    };
 
 
 private:
-	ExploderState state;
-	void explode();
+    ExploderState state;
+
+    void explode();
 };
 
 

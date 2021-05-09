@@ -7,66 +7,71 @@
 #include "SoundManager.h"
 #include "Sprite.h"
 
-class Menu : public GameState 
-{
+class Menu : public GameState {
 
 public:
-	static Menu &getInstance()
-	{
-		static Menu instance;
-		return instance;
-	};
+    static Menu &getInstance() {
+        static Menu instance;
+        return instance;
+    };
 
-	Menu();
-	~Menu();
-	void init();
-	void update(int deltaTime);
-	void render();
-	
-	void changeModeUp();
-	void changeModeDown();
+    Menu();
 
-	int getMode();
-	void endMusic();
+    ~Menu();
+
+    void init();
+
+    void update(int deltaTime);
+
+    void render();
+
+    void changeModeUp();
+
+    void changeModeDown();
+
+    int getMode();
+
+    void endMusic();
 
 private:
 
-	// Functions
+    // Functions
 
-	void initTextures();
-	void changeMode();
+    void initTextures();
 
-	// Parametres
+    void changeMode();
 
-	Texture menuTexture; 
-	Texture menuLogoTexture;
-	Texture menuAboutTexture;
-	Texture menuHelpTexture;
-	Texture menuExitTexture;
-	Texture menuModeTexture;
-	Texture menuPlayingTexture;
-	
-	std::unique_ptr<Sprite> menuBackground;
-	std::unique_ptr<Sprite> menuLogo;
-	std::unique_ptr<Sprite> menuAbout;
-	std::unique_ptr<Sprite> menuHelp;
-	std::unique_ptr<Sprite> menuExit;
-	std::unique_ptr<Sprite> menuMode;
-	std::unique_ptr<Sprite> menuPlaying;
+    // Parametres
 
-	int mode; // 0 = FUN, 1 = TRICKY, 2 = TAXING
+    Texture menuTexture;
+    Texture menuLogoTexture;
+    Texture menuAboutTexture;
+    Texture menuHelpTexture;
+    Texture menuExitTexture;
+    Texture menuModeTexture;
+    Texture menuPlayingTexture;
 
-	float currentTime;
+    std::unique_ptr<Sprite> menuBackground;
+    std::unique_ptr<Sprite> menuLogo;
+    std::unique_ptr<Sprite> menuAbout;
+    std::unique_ptr<Sprite> menuHelp;
+    std::unique_ptr<Sprite> menuExit;
+    std::unique_ptr<Sprite> menuMode;
+    std::unique_ptr<Sprite> menuPlaying;
 
-	glm::vec2 modePositions[3] = {
-		glm::vec2(0,0),
-		glm::vec2(0,0.25),
-		glm::vec2(0,0.5)
-	};
+    int mode; // 0 = FUN, 1 = TRICKY, 2 = TAXING
 
-	const SoundManager* soundManager;
-	FMOD::Sound* music;
-	FMOD::Channel* channel;
+    float currentTime;
+
+    glm::vec2 modePositions[3] = {
+            glm::vec2(0, 0),
+            glm::vec2(0, 0.25),
+            glm::vec2(0, 0.5)
+    };
+
+    const SoundManager *soundManager;
+    FMOD::Sound *music;
+    FMOD::Channel *channel;
 };
 
 
