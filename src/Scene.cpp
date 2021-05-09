@@ -16,17 +16,6 @@
 #include "EasyMaskManager.h"
 #include "LevelManager.h"
 
-Scene::Scene()
-{
-	map = NULL;
-}
-
-Scene::~Scene()
-{
-	if (map != NULL)
-		delete map;
-}
-
 void Scene::init()
 {	
 	keyboardManager = &SceneKeyboardManager::getInstance();
@@ -56,7 +45,6 @@ void Scene::update(int deltaTime)
 	maskManager->update();
 
 	if (Scroller::getInstance().isScrolled()) {
-		delete map;
 		initMap();
 		Scroller::getInstance().iScroll();
 	}

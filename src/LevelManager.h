@@ -35,7 +35,6 @@ public:
 
 	bool finished();
 
-	void spawnLemmings();
 	int getNumLemmingsAlive();
 	int getPercentageSavedLemmings();
 	int getPercentageTotalLemmings();
@@ -66,8 +65,12 @@ public:
 
 
 private:
+    void spawnLemmings();
+
+
 	int *jobCount;
 	set<Lemming*> lemmings;
+
 
 	int deadLemmings;
 	int savedLemmings;

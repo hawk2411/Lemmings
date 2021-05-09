@@ -3,6 +3,8 @@
 
 
 #include <glm/glm.hpp>
+#include <memory>
+#include <iostream>
 #include "Texture.h"
 #include "VariableTexture.h"
 #include "ShaderProgram.h"
@@ -13,12 +15,12 @@ class MaskedTexturedQuad
 
 public:
 	// Textured quads can only be created inside an OpenGL context
-	static MaskedTexturedQuad *createTexturedQuad(glm::vec2 geom[2], glm::vec2 texCoords[2], ShaderProgram &program);
+	static unique_ptr<MaskedTexturedQuad> createTexturedQuad(glm::vec2 geom[2], glm::vec2 texCoords[2], ShaderProgram &program);
 
 	MaskedTexturedQuad(glm::vec2 geom[2], glm::vec2 texCoords[2], ShaderProgram &program);
 
 	void render(ShaderProgram &program, const Texture &tex, const VariableTexture &mask) const;
-	void free();
+	void free();    //TODO never called
 
 private:
 	GLuint vao;

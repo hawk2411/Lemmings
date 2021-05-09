@@ -26,9 +26,6 @@ public:
 		return instance;
 	};
 
-	Scene();
-	~Scene();
-
 	void init();
 	void update(int deltaTime);
 	void render();
@@ -60,7 +57,7 @@ private:
 	bool paused = false;
 	bool speedUp = false;
 
-	MaskedTexturedQuad *map;
+    std::unique_ptr<MaskedTexturedQuad> map;
 
 	MaskManager *maskManager;
 

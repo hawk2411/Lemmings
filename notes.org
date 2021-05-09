@@ -1,0 +1,17 @@
+Each Lemming instance owns a Job instance per pointer.
+The Job instance is generated at constructor and is responsible for animation, position and so on.
+
+Each job has a member named NextJob, NextJob is responsible to show the next state of the Lemming. A Faller Lamming can become a Walker Lemming or
+something like this.
+
+So the life period of Lemming in the first level starts with a Faller, change to Walker, change to Digger then again Walker. For each change
+the current instance of the job is deleted and the NextJob instance becomes the current.
+The problem is the borders for the responsibility between Job a Lemming is not clear. The Job in Lemming is deleting and its own NextJob instance
+became the current Job instance inside of Lemming.
+
+How to change this?
+Should I change this?
+
+What I dislike that I each state change caused a new Job(). Why I cannot create a vector of all Jobs in the Init function the Lemming instance copy
+the required Job?
+It
