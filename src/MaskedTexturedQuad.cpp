@@ -40,8 +40,3 @@ void MaskedTexturedQuad::render(ShaderProgram &program, const Texture &tex, cons
     glDrawArrays(GL_TRIANGLES, 0, 6);
     glDisable(GL_TEXTURE_2D);
 }
-
-void MaskedTexturedQuad::free() {
-    glDeleteBuffers(1, &vbo);
-}
-
