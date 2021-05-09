@@ -14,16 +14,14 @@ void Credits::init() {
     mouseManager = &CreditsMouseManager::getInstance();
     keyboardManager = &CreditsKeyboardManager::getInstance();
 
-    soundManager = Game::instance().getSoundManager();
-    music = soundManager->loadSound("sounds/CreditsSong.ogg", FMOD_LOOP_NORMAL | FMOD_CREATESTREAM);
+    music = Game::instance().getSoundManager()->loadSound("sounds/CreditsSong.ogg", FMOD_LOOP_NORMAL | FMOD_CREATESTREAM);
 
-    channel = soundManager->playSound(music);
+    channel = Game::instance().getSoundManager()->playSound(music);
     channel->setVolume(1.f);
 }
 
 void Credits::update(int deltaTime) {
-    currentTime += deltaTime;
-
+    currentTime += static_cast<float>(deltaTime);
 }
 
 void Credits::render() {

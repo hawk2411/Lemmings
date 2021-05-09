@@ -54,7 +54,6 @@ private:
     bool onlyLeft;
     bool onlyRight;
 
-    const SoundManager *soundManager;
     FMOD::Sound *music;
     FMOD::Channel *channel;
 

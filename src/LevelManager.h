@@ -104,7 +104,6 @@ private:
     Door *door;
     Trapdoor *trapdoor;
 
-    const SoundManager *soundManager;
     FMOD::Sound *music, *dooropen;
     FMOD::Channel *channel;
 

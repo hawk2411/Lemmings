@@ -40,12 +40,11 @@ void LevelManager::init(string levelMode, int levelNum) {
     finishedLevel = false;
     exploding = false;
 
-    soundManager = Game::instance().getSoundManager();
     string musicPath = "sounds/Lemming" + to_string(levelNum) + ".ogg";
-    music = soundManager->loadSound(musicPath, FMOD_LOOP_NORMAL | FMOD_CREATESTREAM);
-    dooropen = soundManager->loadSound("sounds/lemmingsEffects/Letsgo.ogg", FMOD_DEFAULT | FMOD_UNIQUE);
+    music = Game::instance().getSoundManager()->loadSound(musicPath, FMOD_LOOP_NORMAL | FMOD_CREATESTREAM);
+    dooropen = Game::instance().getSoundManager()->loadSound("sounds/lemmingsEffects/Letsgo.ogg", FMOD_DEFAULT | FMOD_UNIQUE);
 
-    channel = soundManager->playSound(dooropen);
+    channel = Game::instance().getSoundManager()->playSound(dooropen);
     channel->setVolume(1.);
 }
 
@@ -60,7 +59,7 @@ void LevelManager::update(int deltaTime) {
         trapdoor->update(deltaTime);
         if (trapdoor->isOpened()) {
             currentTime = 0;
-            channel = soundManager->playSound(music);
+            channel = Game::instance().getSoundManager()->playSound(music);
             channel->setVolume(1.f);
         }
         return;

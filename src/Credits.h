@@ -31,7 +31,6 @@ private:
     Texture creditsLevelTexture;
     std::unique_ptr<Sprite> creditsLevelSprite;
 
-    const SoundManager *soundManager;
     FMOD::Sound *music;
     FMOD::Channel *channel;
 };

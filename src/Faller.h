@@ -26,8 +26,6 @@ private:
     FallerState state;
     int currentDistance = 0;
     bool dead = false;
-
-    const SoundManager *soundManager;
     FMOD::Sound *deathEffect;
 };
 

@@ -34,8 +34,7 @@ void Faller::initAnims(ShaderProgram &shaderProgram) {
     state = FALLING_RIGHT_STATE;
     jobSprite->changeAnimation(FALLING_RIGHT);
 
-    soundManager = Game::instance().getSoundManager();
-    deathEffect = soundManager->loadSound("sounds/lemmingsEffects/SPLAT.WAV",
+    deathEffect = Game::instance().getSoundManager()->loadSound("sounds/lemmingsEffects/SPLAT.WAV",
                                           FMOD_DEFAULT | FMOD_CREATESTREAM | FMOD_UNIQUE);
 
 }
@@ -69,7 +68,7 @@ void Faller::updateStateMachine(int deltaTime) {
                 if (dead) {
                     state = FALLING_DEATH_STATE;
                     jobSprite->changeAnimation(FALLING_DEATH);
-                    FMOD::Channel *channeled = soundManager->playSound(deathEffect);
+                    FMOD::Channel *channeled = Game::instance().getSoundManager()->playSound(deathEffect);
                     channeled->setVolume(0.8f);
                 } else {
                     isFinished = true;
@@ -81,7 +80,7 @@ void Faller::updateStateMachine(int deltaTime) {
         case FALLING_DEATH_STATE:
             if (jobSprite->isInLastFrame()) {
                 isFinished = true;
-                nextJob = NULL;
+                nextJob = nullptr;
             }
             break;
     }

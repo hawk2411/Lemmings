@@ -24,7 +24,6 @@ private:
 
 private:
     EscaperState state;
-    const SoundManager *soundManager;
     FMOD::Sound *escapeEfect;
 };
 

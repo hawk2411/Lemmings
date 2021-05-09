@@ -116,7 +116,7 @@ void Game::changeBplay() {
     bPlay = !bPlay;
 }
 
-bool Game::isHardMode() {
+bool Game::isHardMode() const {
     return hardMode;
 }
 
@@ -126,4 +126,18 @@ void Game::swapDifficultyMode() {
 
 const SoundManager *Game::getSoundManager() const {
     return &soundManager;
+}
+
+// Same for mouse button presses or releases
+void Game::mouseCallback(int button, int state, int x, int y) {
+    switch(state) {
+        case GLUT_DOWN:
+            Game::instance().getGameState()->mousePress(button);
+            break;
+        case GLUT_UP:
+            Game::instance().getGameState()->mouseRelease(button);
+            break;
+        default:
+            break;
+    }
 }

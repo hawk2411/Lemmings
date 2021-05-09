@@ -18,10 +18,8 @@ void Instructions::init() {
     mouseManager = &InstructionsMouseManager::getInstance();
     keyboardManager = &InstructionsKeyboardManager::getInstance();
 
-    soundManager = Game::instance().getSoundManager();
-    music = soundManager->loadSound("sounds/InstructionsSong.ogg", FMOD_LOOP_NORMAL | FMOD_CREATESTREAM);
-
-    channel = soundManager->playSound(music);
+    music = Game::instance().getSoundManager()->loadSound("sounds/InstructionsSong.ogg", FMOD_LOOP_NORMAL | FMOD_CREATESTREAM);
+    channel = Game::instance().getSoundManager()->playSound(music);
     channel->setVolume(1.f);
 }
 

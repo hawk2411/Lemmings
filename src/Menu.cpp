@@ -49,10 +49,8 @@ void Menu::init() {
     menuAbout->setPosition(glm::vec2(80, 130));
     menuExit->setPosition(glm::vec2(171, 130));
 
-    soundManager = Game::instance().getSoundManager();
-    music = soundManager->loadSound("sounds/MenuSong.ogg", FMOD_LOOP_NORMAL | FMOD_CREATESTREAM);
-
-    channel = soundManager->playSound(music);
+    music = Game::instance().getSoundManager()->loadSound("sounds/MenuSong.ogg", FMOD_LOOP_NORMAL | FMOD_CREATESTREAM);
+    channel = Game::instance().getSoundManager()->playSound(music);
     channel->setVolume(1.0f);
 
 }
