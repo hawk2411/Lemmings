@@ -84,7 +84,7 @@ void Lemming::changeJob(Job *nextJob) {
     this->job->sprite()->setPosition(oldPosition);
 }
 
-glm::vec2 &Lemming::getPosition() {
+glm::vec2 Lemming::getPosition() const {
     return this->job->sprite()->position();
 }
 

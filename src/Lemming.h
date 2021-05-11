@@ -29,7 +29,7 @@ public:
 
     void setWalkingRight(bool value);
 
-    glm::vec2 &getPosition();
+    glm::vec2 getPosition() const;
 
     bool dead() const;
 
