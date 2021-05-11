@@ -1,4 +1,5 @@
 #include <SOIL/SOIL.h>
+#include <memory>
 #include "Texture.h"
 
 
@@ -16,35 +17,35 @@ Texture::Texture() :
 
 
 bool Texture::loadFromFile(const string &filename, PixelFormat format) {
-    unsigned char *image = nullptr;
+    //unsigned char *image = nullptr;
+    std::unique_ptr<unsigned char> image;
 
     switch (format) {
         case TEXTURE_PIXEL_FORMAT_RGB:
-            image = SOIL_load_image(filename.c_str(), &widthTex, &heightTex, 0, SOIL_LOAD_RGB);
+            image = std::unique_ptr<unsigned char >(SOIL_load_image(filename.c_str(), &widthTex, &heightTex, nullptr, SOIL_LOAD_RGB));
             break;
         case TEXTURE_PIXEL_FORMAT_RGBA:
-            image = SOIL_load_image(filename.c_str(), &widthTex, &heightTex, 0, SOIL_LOAD_RGBA);
+            image = std::unique_ptr<unsigned char >(SOIL_load_image(filename.c_str(), &widthTex, &heightTex, nullptr, SOIL_LOAD_RGBA));
             break;
         case TEXTURE_PIXEL_FORMAT_L:
             break;
     }
-    if (image == nullptr)
+    if (!image)
         return false;
 
     glGenTextures(1, &texId);
     glBindTexture(GL_TEXTURE_2D, texId);
     switch (format) {
         case TEXTURE_PIXEL_FORMAT_RGB:
-            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, widthTex, heightTex, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, widthTex, heightTex, 0, GL_RGB, GL_UNSIGNED_BYTE, image.get());
             break;
         case TEXTURE_PIXEL_FORMAT_RGBA:
-            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, widthTex, heightTex, 0, GL_RGBA, GL_UNSIGNED_BYTE, image);
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, widthTex, heightTex, 0, GL_RGBA, GL_UNSIGNED_BYTE, image.get());
             break;
         case TEXTURE_PIXEL_FORMAT_L:
             break;
     }
     glGenerateMipmap(GL_TEXTURE_2D);
-    delete[] image;
 
     return true;
 }
