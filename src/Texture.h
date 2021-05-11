@@ -10,7 +10,7 @@
 using namespace std;
 
 
-// The texture class loads images an passes them to OpenGL
+// The _texture class loads images an passes them to OpenGL
 // storing the returned id so that it may be applied to any drawn primitives
 
 
@@ -18,7 +18,7 @@ class Texture {
 
 public:
     Texture();
-
+    ~Texture();
     bool loadFromFile(const string &filename, PixelFormat format);
 
     void loadFromGlyphBuffer(unsigned char *buffer, int width, int height);
@@ -39,16 +39,16 @@ public:
 
     void use() const;
 
-    int width() const { return widthTex; }
+    int width() const { return _widthTex; }
 
-    int height() const { return heightTex; }
+    int height() const { return _heightTex; }
 
     GLuint getId() const;
 
 private:
-    int widthTex, heightTex;
-    GLuint texId;
-    GLint wrapS, wrapT, minFilter, magFilter;
+    int _widthTex, _heightTex;
+    GLuint _texId;
+    GLint _wrapS, _wrapT, _minFilter, _magFilter;
 
 };
 
