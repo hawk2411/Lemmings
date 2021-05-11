@@ -7,7 +7,7 @@
 
 Sprite::~Sprite() {
     animations.clear();
-    rotated.clear();
+    _rotated.clear();
 }
 
 std::unique_ptr<Sprite>
@@ -25,9 +25,8 @@ Sprite::Sprite(const glm::vec2 &quadSize, const glm::vec2 &sizeInSpriteSheet, Sh
         vbo(0),
         pos(glm::vec2(0.f)),
         texCoordDispl(glm::vec2(0.f)),
-        texture(spriteSheetPar),
-        spriteSheet(spriteSheetPar),
-        rotatedSpriteSheet(rotatedSpriteSheet),
+        _spriteSheet(spriteSheetPar),
+        _rotatedSpriteSheet(rotatedSpriteSheet),
         shaderProgram(program),
         currentAnimation(-1),
         iterated(false),
@@ -79,7 +78,12 @@ void Sprite::render() const {
     glEnable(GL_TEXTURE_2D);
     shaderProgram->setTextureUnit("tex", 0);
     glActiveTexture(GL_TEXTURE0);
-    texture->use();
+    const Texture* current = _spriteSheet;
+    if(currentAnimation < 0 || currentAnimation >= _rotated.size()) {
+        _spriteSheet->use();
+    } else {
+        _rotated[currentAnimation]?_rotatedSpriteSheet->use():_spriteSheet->use();
+    }
     glBindVertexArray(vao);
     glEnableVertexAttribArray(posLocation);
     glEnableVertexAttribArray(texCoordLocation);
@@ -95,8 +99,8 @@ void Sprite::setNumberAnimations(int nAnimations) {
     animations.clear();
     animations.resize(nAnimations);
 
-    rotated.clear();
-    rotated.resize(nAnimations);
+    _rotated.clear();
+    _rotated.resize(nAnimations);
 }
 
 void Sprite::setAnimationSpeed(int animId, int keyframesPerSec) {
@@ -107,7 +111,7 @@ void Sprite::setAnimationSpeed(int animId, int keyframesPerSec) {
 void Sprite::addKeyframe(int animId, const glm::vec2 &displacement, bool isRotated) {
     if (animId < int(animations.size())) {
         animations[animId].keyframeDispl.push_back(displacement);
-        this->rotated[animId] = isRotated;
+        _rotated[animId] = isRotated;
     }
 
 }
@@ -119,12 +123,6 @@ void Sprite::changeAnimation(int animId) {
         iterated = false;
         timeAnimation = 0.f;
         texCoordDispl = animations[animId].keyframeDispl[0];
-
-        if (rotated[currentAnimation]) {
-            texture = rotatedSpriteSheet;
-        } else {
-            texture = spriteSheet;
-        }
     }
 }
 

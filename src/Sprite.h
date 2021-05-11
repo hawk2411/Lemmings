@@ -64,9 +64,8 @@ public:
     void setIterated(bool isIterated);
 
 private:
-    Texture *texture;
-    Texture *spriteSheet;
-    Texture *rotatedSpriteSheet;
+    const Texture *const _spriteSheet;
+    const Texture *const _rotatedSpriteSheet;
     ShaderProgram *shaderProgram;
     GLuint vao;
     GLuint vbo;
@@ -76,7 +75,7 @@ private:
     float timeAnimation;
     glm::vec2 texCoordDispl;
     vector<AnimKeyframes> animations;
-    vector<bool> rotated;
+    vector<bool> _rotated;
     bool iterated;
 
 };
