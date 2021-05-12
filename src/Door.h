@@ -15,9 +15,9 @@ public:
 
     void setPosition(glm::vec2 position);
 
-    glm::vec2 getPosition();
+    glm::vec2 getPosition() const;
 
-    glm::vec2 getEscapePosition();
+    glm::vec2 getEscapePosition() const;
 
 protected:
     std::unique_ptr<Sprite> doorSprite;
