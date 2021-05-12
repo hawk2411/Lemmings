@@ -75,7 +75,7 @@ void Basher::updateStateMachine(int deltaTime) {
 }
 
 bool Basher::bashRight() {
-    glm::ivec2 posBase = jobSprite->position();
+    glm::ivec2 posBase = jobSprite->getPosition();
     posBase += glm::ivec2(8, 16);
     int y = posBase.y;
     int x = posBase.x;
@@ -115,7 +115,7 @@ bool Basher::bashRight() {
     }
 
     if (!((7 <= currentFrame && currentFrame <= 15) || (23 <= currentFrame && currentFrame <= 31))) {
-        jobSprite->position() += glm::vec2(1, 0);
+        jobSprite->incPosition(glm::vec2(1, 0));
     }
 
 
@@ -124,7 +124,7 @@ bool Basher::bashRight() {
 
 
 bool Basher::bashLeft() {
-    glm::ivec2 posBase = jobSprite->position();
+    glm::ivec2 posBase = jobSprite->getPosition();
     posBase += glm::ivec2(7, 16);
     int y = posBase.y;
     int x = posBase.x;
@@ -164,7 +164,7 @@ bool Basher::bashLeft() {
     }
 
     if (!((7 <= currentFrame && currentFrame <= 15) || (23 <= currentFrame && currentFrame <= 31))) {
-        jobSprite->position() += glm::vec2(-1, 0);
+        jobSprite->incPosition(glm::vec2(-1, 0));
     }
 
 

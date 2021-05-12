@@ -77,9 +77,9 @@ void Builder::updateStateMachine(int deltaTime) {
 
 void Builder::buildLeft() {
     if (jobSprite->hasIterated()) {
-        glm::vec2 posBase = jobSprite->position() + glm::vec2(3, 15);
+        glm::vec2 posBase = jobSprite->getPosition() + glm::vec2(3, 15);
         Scene::getInstance().buildStep(posBase);
-        jobSprite->position() += glm::vec2(-2, -1);
+        jobSprite->incPosition(glm::vec2(-2, -1));
         ++buildedSteps;
         jobSprite->setIterated(false);
     }
@@ -87,9 +87,9 @@ void Builder::buildLeft() {
 
 void Builder::buildRight() {
     if (jobSprite->hasIterated()) {
-        glm::vec2 posBase = jobSprite->position() + glm::vec2(8, 15);
+        glm::vec2 posBase = jobSprite->getPosition() + glm::vec2(8, 15);
         Scene::getInstance().buildStep(posBase);
-        jobSprite->position() += glm::vec2(2, -1);
+        jobSprite->incPosition(glm::vec2(2, -1));
         ++buildedSteps;
         jobSprite->setIterated(false);
     }
@@ -99,7 +99,7 @@ bool Builder::cannotBuildRight() {
 
     bool obtured = false;
 
-    glm::vec2 posBase = jobSprite->position() + glm::vec2(9, 15);
+    glm::vec2 posBase = jobSprite->getPosition() + glm::vec2(9, 15);
     for (int i = 0; i < 4; ++i) {
         if (Scene::getInstance().getPixel(posBase.x + i, posBase.y) != 0) {
             obtured = true;
@@ -112,7 +112,7 @@ bool Builder::cannotBuildLeft() {
 
     bool obtured = false;
 
-    glm::vec2 posBase = jobSprite->position() + glm::vec2(3, 15);
+    glm::vec2 posBase = jobSprite->getPosition() + glm::vec2(3, 15);
     for (int i = 0; i < 4; ++i) {
         if (Scene::getInstance().getPixel(posBase.x + i, posBase.y) != 0) {
             obtured = true;

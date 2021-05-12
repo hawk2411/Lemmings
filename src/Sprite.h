@@ -57,7 +57,7 @@ public:
 
     void setPosition(const glm::vec2 &newPos);
 
-    glm::vec2 position() const;
+    //glm::vec2 position() const;
     glm::vec2 getPosition() const {return _pos;}
     glm::vec2 incPosition(glm::vec2 v){
         _pos += v;
@@ -68,7 +68,7 @@ public:
         return _pos;
     }
 
-    glm::vec2 &position();
+    //glm::vec2 &position();
 
     void setIterated(bool isIterated);
 

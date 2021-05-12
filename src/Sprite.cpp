@@ -150,13 +150,13 @@ void Sprite::setPosition(const glm::vec2 &newPos) {
     _pos = newPos;
 }
 
-glm::vec2 Sprite::position() const {
-    return _pos;
-}
+//glm::vec2 Sprite::position() const {
+//    return _pos;
+//}
 
-glm::vec2 &Sprite::position() {
-    return _pos;
-}
+//glm::vec2 &Sprite::position() {
+//    return _pos;
+//}
 
 void Sprite::setIterated(bool isIterated) {
     iterated = isIterated;
