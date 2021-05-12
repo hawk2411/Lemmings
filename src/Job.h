@@ -30,9 +30,9 @@ public:
 
 
 protected:
-    int collisionFloor(int maxFall);
+    int collisionFloor(int maxFall) const;
 
-    bool collision();
+    bool collision() const;
 
     std::unique_ptr<Sprite> jobSprite;
     bool isFinished;

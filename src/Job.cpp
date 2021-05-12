@@ -26,10 +26,10 @@ enum LemmingAnims
 */
 
 
-int Job::collisionFloor(int maxFall) {
+int Job::collisionFloor(int maxFall) const {
     bool bContact = false;
     int fall = 0;
-    glm::ivec2 posBase = jobSprite->position();
+    glm::ivec2 posBase = jobSprite->getPosition();
 
     posBase += glm::ivec2(7, 16);
     while ((fall < maxFall) && !bContact) {
@@ -43,8 +43,8 @@ int Job::collisionFloor(int maxFall) {
     return fall;
 }
 
-bool Job::collision() {
-    glm::ivec2 posBase = jobSprite->position();
+bool Job::collision() const {
+    glm::ivec2 posBase = jobSprite->getPosition();
 
     posBase += glm::ivec2(7, 15);
     if ((Scene::getInstance().getMaskedMap().pixel(posBase.x, posBase.y) == 0) &&
