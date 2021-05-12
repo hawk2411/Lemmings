@@ -12,8 +12,8 @@ void Trapdoor::update(int deltaTime) {
 }
 
 void Trapdoor::render() {
-    glm::vec2 oldPosition = trapdoorSprite->position();
-    trapdoorSprite->setPosition(trapdoorSprite->position() - Level::currentLevel().getLevelAttributes()->cameraPos);
+    glm::vec2 oldPosition = trapdoorSprite->getPosition();
+    trapdoorSprite->setPosition(oldPosition - Level::currentLevel().getLevelAttributes()->cameraPos);
     trapdoorSprite->render();
     trapdoorSprite->setPosition(oldPosition);
 }
@@ -28,9 +28,9 @@ void Trapdoor::setPosition(glm::vec2 position) {
 
 
 glm::vec2 Trapdoor::getPosition() {
-    return trapdoorSprite->position();
+    return trapdoorSprite->getPosition();
 }
 
 glm::vec2 Trapdoor::getEnterPosition() {
-    return trapdoorSprite->position() + enterOffset;
+    return trapdoorSprite->getPosition() + enterOffset;
 }
