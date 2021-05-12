@@ -99,7 +99,7 @@ void Miner::updateStateMachine(int deltaTime) {
 }
 
 void Miner::printMine() {
-    glm::ivec2 posBase = jobSprite->position();
+    glm::ivec2 posBase = jobSprite->getPosition();
 
     posBase += glm::ivec2(10, 16);
 
@@ -142,7 +142,7 @@ void Miner::printMine() {
 
 void Miner::mineRight() {
     //printMine();
-    glm::ivec2 posBase = jobSprite->position();
+    glm::ivec2 posBase = jobSprite->getPosition();
 
     posBase += glm::ivec2(10, 16);
 
@@ -168,14 +168,14 @@ void Miner::mineRight() {
         }
     }
     if (jobSprite->getAnimationCurrentFrame() == 17) {
-        jobSprite->position() += glm::vec2(2, 1);
+        jobSprite->incPosition(glm::vec2(2, 1));
 
     }
 
 }
 
 bool Miner::canMineRight() {
-    glm::ivec2 posBase = jobSprite->position();
+    glm::ivec2 posBase = jobSprite->getPosition();
 
     posBase += glm::ivec2(10, 17);
 
@@ -230,7 +230,7 @@ bool Miner::canMineRight() {
 
 
 bool Miner::canMineLeft() {
-    glm::ivec2 posBase = jobSprite->position();
+    glm::ivec2 posBase = jobSprite->getPosition();
 
     posBase += glm::ivec2(0, 17);
 
@@ -269,11 +269,11 @@ bool Miner::canMineLeft() {
             }
         }
     }
-
+    return false;
 }
 
 void Miner::mineLeft() {
-    glm::ivec2 posBase = jobSprite->position();
+    glm::ivec2 posBase = jobSprite->getPosition();
     posBase += glm::ivec2(0, 16);
 
     if (jobSprite->getAnimationCurrentFrame() == 2) {
@@ -302,7 +302,7 @@ void Miner::mineLeft() {
     }
 
     if (jobSprite->getAnimationCurrentFrame() == 17) {
-        jobSprite->position() += glm::vec2(-2, 1);
+        jobSprite->incPosition(glm::vec2(-2, 1));
 
     }
 }

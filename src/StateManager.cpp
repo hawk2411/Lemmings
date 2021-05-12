@@ -32,6 +32,8 @@ void StateManager::changeScene(int levelMode, int levelNum) {
             modeName = "taxing";
             break;
     }
+//    modeName="fun";
+//    levelNum=4;
 
     LevelManager::getInstance().init(modeName, levelNum);
     Scene::getInstance().init();
