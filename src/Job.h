@@ -26,7 +26,7 @@ public:
 
     virtual void setWalkingRight(bool value) = 0;
 
-    virtual string getName() = 0;
+    virtual string getName() const = 0;
 
 
 protected:

@@ -98,10 +98,6 @@ void Miner::updateStateMachine(int deltaTime) {
     }
 }
 
-string Miner::getName() {
-    return "MINER";
-}
-
 void Miner::printMine() {
     glm::ivec2 posBase = jobSprite->position();
 

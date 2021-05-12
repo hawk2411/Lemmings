@@ -11,13 +11,13 @@ class Builder : public Job {
 
 
 public:
-    void initAnims(ShaderProgram &shaderProgram);
+    void initAnims(ShaderProgram &shaderProgram) override;
 
-    void updateStateMachine(int deltaTime);
+    void updateStateMachine(int deltaTime) override;
 
-    void setWalkingRight(bool value);
+    void setWalkingRight(bool value) override;
 
-    string getName();
+    string getName() const override { return "BUILDER"; }
 
 private:
     enum BuilderState {

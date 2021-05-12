@@ -75,11 +75,6 @@ void Builder::updateStateMachine(int deltaTime) {
     }
 }
 
-string Builder::getName() {
-    return "BUILDER";
-}
-
-
 void Builder::buildLeft() {
     if (jobSprite->hasIterated()) {
         glm::vec2 posBase = jobSprite->position() + glm::vec2(3, 15);

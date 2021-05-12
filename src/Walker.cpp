@@ -104,8 +104,5 @@ void Walker::updateStateMachine(int deltaTime) {
     }
 }
 
-string Walker::getName() {
-    return "WALKER";
-}
 
 

@@ -13,7 +13,7 @@ public:
 
     void setWalkingRight(bool value);
 
-    string getName();
+    string getName() const override { return "BOMBER"; }
 
 private:
     enum ExploderState {

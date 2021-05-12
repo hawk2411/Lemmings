@@ -13,7 +13,8 @@ public:
 
     void setWalkingRight(bool value);
 
-    string getName();
+    string getName()  const override {return "DIGGER";}
+
 
 private:
     void dig();

@@ -19,11 +19,12 @@ public:
 
     void setWalkingRight(bool value);
 
-    string getName();
+    string getName() const {return "WALKER"; }
+
 
 private:
     enum WalkerState {
-        WALKING_LEFT_STATE, WALKING_RIGHT_STATE, FALLING_LEFT_STATE, FALLING_RIGHT_STATE
+        WALKING_LEFT_STATE, WALKING_RIGHT_STATE
     };
 
 private:

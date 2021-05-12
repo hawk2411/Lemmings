@@ -14,7 +14,7 @@ public:
 
     void setWalkingRight(bool value);
 
-    string getName();
+    string getName() const override {return "ESCAPER";}
 
 private:
     enum EscaperState {

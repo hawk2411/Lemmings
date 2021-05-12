@@ -60,10 +60,6 @@ void Exploder::updateStateMachine(int deltaTime) {
     }
 }
 
-string Exploder::getName() {
-    return "BOMBER";
-}
-
 void Exploder::explode() {
     glm::vec2 posBase = jobSprite->position();
 

@@ -59,10 +59,6 @@ void Digger::updateStateMachine(int deltaTime) {
     }
 }
 
-string Digger::getName() {
-    return "DIGGER";
-}
-
 bool Digger::canDig() {
     bool canDig = false;
 

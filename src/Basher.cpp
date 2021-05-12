@@ -74,10 +74,6 @@ void Basher::updateStateMachine(int deltaTime) {
     }
 }
 
-string Basher::getName() {
-    return "BASHER";
-}
-
 bool Basher::bashRight() {
     glm::ivec2 posBase = jobSprite->position();
     posBase += glm::ivec2(8, 16);

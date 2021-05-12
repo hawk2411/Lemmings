@@ -86,9 +86,6 @@ void Faller::updateStateMachine(int deltaTime) {
     }
 }
 
-string Faller::getName() {
-    return "FALLER";
-}
 
 
 

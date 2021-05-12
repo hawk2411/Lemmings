@@ -140,11 +140,6 @@ void Climber::updateStateMachine(int deltaTime) {
     }
 }
 
-string Climber::getName() {
-    return "CLIMBER";
-}
-
-
 void Climber::climbLeft() {
     jobSprite->position() -= glm::vec2(0, 1);
 
