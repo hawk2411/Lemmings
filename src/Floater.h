@@ -19,7 +19,7 @@ public:
 
 
 private:
-    void timeToFloat();
+    void timeToFloat()const;
 
 private:
     enum FloaterState {

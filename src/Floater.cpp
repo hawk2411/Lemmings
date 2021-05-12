@@ -75,20 +75,20 @@ void Floater::updateStateMachine(int deltaTime) {
 
     switch (state) {
         case WALKING_LEFT_STATE:
-            jobSprite->position() += glm::vec2(-1, -1);
+            jobSprite->incPosition( glm::vec2(-1, -1));
 
             if (collision()) {
-                jobSprite->position() -= glm::vec2(-1, -1);
+                jobSprite->decPosition( glm::vec2(-1, -1));
                 walkingRight = true;
                 jobSprite->changeAnimation(WALKING_RIGHT);
                 state = WALKING_RIGHT_STATE;
             } else {
                 fall = collisionFloor(3);
                 if (fall > 0) {
-                    jobSprite->position() += glm::vec2(0, 1);
+                    jobSprite->incPosition( glm::vec2(0, 1));
                 }
                 if (fall > 1) {
-                    jobSprite->position() += glm::vec2(0, 1);
+                    jobSprite->incPosition( glm::vec2(0, 1));
                 }
 
                 if (fall > 2) {
@@ -105,17 +105,17 @@ void Floater::updateStateMachine(int deltaTime) {
             break;
 
         case WALKING_RIGHT_STATE:
-            jobSprite->position() += glm::vec2(1, -1);
+            jobSprite->incPosition( glm::vec2(1, -1));
 
             if (collision()) {
-                jobSprite->position() -= glm::vec2(1, -1);
+                jobSprite->decPosition( glm::vec2(1, -1));
                 walkingRight = false;
                 jobSprite->changeAnimation(WALKING_LEFT);
                 state = WALKING_LEFT_STATE;
             } else {
                 fall = collisionFloor(3);
                 if (fall < 3) {
-                    jobSprite->position() += glm::vec2(0, fall);
+                    jobSprite->incPosition( glm::vec2(0, fall));
 
                     if (jobSprite->position() ==
                         Level::currentLevel().getLevelAttributes()->door->getEscapePosition()) {
@@ -137,7 +137,7 @@ void Floater::updateStateMachine(int deltaTime) {
             } else {
                 fall = collisionFloor(2);
                 if (fall > 0) {
-                    jobSprite->position() += glm::vec2(0, fall);
+                    jobSprite->incPosition( glm::vec2(0, fall));
                 }
             }
             break;
@@ -148,7 +148,7 @@ void Floater::updateStateMachine(int deltaTime) {
             } else {
                 fall = collisionFloor(2);
                 if (fall > 0) {
-                    jobSprite->position() += glm::vec2(0, fall);
+                    jobSprite->incPosition( glm::vec2(0, fall));
                 }
             }
             break;
@@ -170,7 +170,7 @@ void Floater::updateStateMachine(int deltaTime) {
         case FLOTATING_LEFT_STATE:
             fall = collisionFloor(2);
             if (fall > 0)
-                jobSprite->position() += glm::vec2(0, fall);
+                jobSprite->incPosition( glm::vec2(0, fall));
             else {
                 jobSprite->changeAnimation(WALKING_LEFT);
                 state = WALKING_LEFT_STATE;
@@ -180,7 +180,7 @@ void Floater::updateStateMachine(int deltaTime) {
         case FLOTATING_RIGHT_STATE:
             fall = collisionFloor(2);
             if (fall > 0)
-                jobSprite->position() += glm::vec2(0, fall);
+                jobSprite->incPosition( glm::vec2(0, fall));
             else {
                 jobSprite->changeAnimation(WALKING_RIGHT);
                 state = WALKING_RIGHT_STATE;
@@ -191,8 +191,8 @@ void Floater::updateStateMachine(int deltaTime) {
 }
 
 
-void Floater::timeToFloat() {
-    glm::ivec2 posBase = jobSprite->position();
+void Floater::timeToFloat()const {
+    glm::ivec2 posBase = jobSprite->getPosition();
 
     posBase += glm::ivec2(5, 16);
 
@@ -202,7 +202,7 @@ void Floater::timeToFloat() {
         int x = posBase.x + i;
         Scene::getInstance().eraseMask(x, y);
     }
-    jobSprite->position() += glm::vec2(0, -1);
+    jobSprite->incPosition(glm::vec2(0, -1));
 }
 
 
