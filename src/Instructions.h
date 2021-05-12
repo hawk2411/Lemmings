@@ -17,11 +17,11 @@ public:
         return instance;
     };
 
-    void init();
+    void init() override;
 
-    void update(int deltaTime);
+    void update(int deltaTime) override;
 
-    void render();
+    void render() override;
 
     void passPageLeft();
 
@@ -41,21 +41,21 @@ private:
     int actualPage;
 
     // Parametres
-    Texture instructionsLevelTexture;
-    std::unique_ptr<Sprite> instructionsLevelSprite;
+    Texture _instructionsLevelTexture;
+    std::unique_ptr<Sprite> _instructionsLevelSprite;
 
-    vector<Word *> instructionPages;
+    vector<Word *> _instructionPages;
 
-    std::unique_ptr<Sprite> leftKey;
-    std::unique_ptr<Sprite> rightKey;
-    std::unique_ptr<Sprite> escapeKey;
-    Word *instructionsWord;
+    std::unique_ptr<Sprite> _leftKey;
+    std::unique_ptr<Sprite> _rightKey;
+    std::unique_ptr<Sprite> _escapeKey;
+    Word *_instructionsWord;
 
-    bool onlyLeft;
-    bool onlyRight;
+    bool _onlyLeft;
+    bool _onlyRight;
 
-    FMOD::Sound *music;
-    FMOD::Channel *channel;
+    FMOD::Sound *_music;
+    FMOD::Channel *_channel;
 
 };
 
