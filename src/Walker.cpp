@@ -52,19 +52,19 @@ void Walker::updateStateMachine(int deltaTime) {
 
     switch (state) {
         case WALKING_LEFT_STATE:
-            jobSprite->position() += glm::vec2(-1, -2);
+            jobSprite->incPosition(glm::vec2(-1, -2));
 
             if (collision()) {
-                jobSprite->position() -= glm::vec2(-1, -2);
+                jobSprite->decPosition(glm::vec2(-1, -2));
                 jobSprite->changeAnimation(WALKING_RIGHT);
                 state = WALKING_RIGHT_STATE;
                 setWalkingRight(true);
             } else {
                 fall = collisionFloor(4);
                 if (fall < 4) {
-                    jobSprite->position() += glm::vec2(0, fall);
+                    jobSprite->incPosition( glm::vec2(0, fall));
 
-                    if (jobSprite->position() ==
+                    if (jobSprite->getPosition() ==
                         Level::currentLevel().getLevelAttributes()->door->getEscapePosition()) {
                         isFinished = true;
                         nextJob = JobFactory::instance().createEscaperJob();
@@ -76,10 +76,10 @@ void Walker::updateStateMachine(int deltaTime) {
             }
             break;
         case WALKING_RIGHT_STATE:
-            jobSprite->position() += glm::vec2(1, -2);
+            jobSprite->incPosition(glm::vec2(1, -2));
 
             if (collision()) {
-                jobSprite->position() -= glm::vec2(1, -2);
+                jobSprite->decPosition(glm::vec2(1, -2));
                 jobSprite->changeAnimation(WALKING_LEFT);
                 state = WALKING_LEFT_STATE;
                 setWalkingRight(false);
@@ -87,9 +87,9 @@ void Walker::updateStateMachine(int deltaTime) {
             } else {
                 fall = collisionFloor(4);
                 if (fall < 4) {
-                    jobSprite->position() += glm::vec2(0, fall);
+                    jobSprite->incPosition(glm::vec2(0, fall));
 
-                    if (jobSprite->position() ==
+                    if (jobSprite->getPosition() ==
                         Level::currentLevel().getLevelAttributes()->door->getEscapePosition()) {
                         isFinished = true;
                         nextJob = JobFactory::instance().createEscaperJob();

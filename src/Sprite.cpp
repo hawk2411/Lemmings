@@ -23,7 +23,7 @@ Sprite::Sprite(const glm::vec2 &quadSize, const glm::vec2 &sizeInSpriteSheet, Sh
                Texture *spriteSheetPar, Texture *rotatedSpriteSheet) :
         vao(0),
         vbo(0),
-        pos(glm::vec2(0.f)),
+        _pos(glm::vec2(0.f)),
         texCoordDispl(glm::vec2(0.f)),
         _spriteSheet(spriteSheetPar),
         _rotatedSpriteSheet(rotatedSpriteSheet),
@@ -72,7 +72,7 @@ int Sprite::update(int deltaTime) {
 }
 
 void Sprite::render() const {
-    glm::mat4 modelview = glm::translate(glm::mat4(1.0f), glm::vec3(pos.x, pos.y, 0.f));
+    glm::mat4 modelview = glm::translate(glm::mat4(1.0f), glm::vec3(_pos.x, _pos.y, 0.f));
     shaderProgram->setUniformMatrix4f("modelview", modelview);
     shaderProgram->setUniform2f("texCoordDispl", texCoordDispl.x, texCoordDispl.y);
     glEnable(GL_TEXTURE_2D);
@@ -147,15 +147,15 @@ int Sprite::getAnimationCurrentFrame() const {
 }
 
 void Sprite::setPosition(const glm::vec2 &newPos) {
-    pos = newPos;
+    _pos = newPos;
 }
 
 glm::vec2 Sprite::position() const {
-    return pos;
+    return _pos;
 }
 
 glm::vec2 &Sprite::position() {
-    return pos;
+    return _pos;
 }
 
 void Sprite::setIterated(bool isIterated) {

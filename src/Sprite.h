@@ -58,6 +58,15 @@ public:
     void setPosition(const glm::vec2 &newPos);
 
     glm::vec2 position() const;
+    glm::vec2 getPosition() const {return _pos;}
+    glm::vec2 incPosition(glm::vec2 v){
+        _pos += v;
+        return _pos;
+    }
+    glm::vec2 decPosition(glm::vec2 v){
+        _pos -= v;
+        return _pos;
+    }
 
     glm::vec2 &position();
 
@@ -70,7 +79,7 @@ private:
     GLuint vao;
     GLuint vbo;
     GLint posLocation, texCoordLocation;
-    glm::vec2 pos;
+    glm::vec2 _pos;
     int currentAnimation, currentKeyframe;
     float timeAnimation;
     glm::vec2 texCoordDispl;

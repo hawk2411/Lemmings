@@ -59,7 +59,7 @@ void Faller::updateStateMachine(int deltaTime) {
         case FALLING_RIGHT_STATE:
             fall = collisionFloor(2);
             if (fall > 0) {
-                jobSprite->position() += glm::vec2(0, fall);
+                jobSprite->incPosition(glm::vec2(0, fall));
                 currentDistance += fall;
                 if (currentDistance >= FATAL_FALLING_DISTANCE) {
                     dead = true;
