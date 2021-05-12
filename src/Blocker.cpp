@@ -43,7 +43,7 @@ void Blocker::updateStateMachine(int deltaTime) {
     switch (state) {
         case BLOCKING_STATE:
 
-            glm::ivec2 posBase = jobSprite->position();
+            glm::ivec2 posBase = jobSprite->getPosition();
 
             posBase += glm::ivec2(3, 1);
 
