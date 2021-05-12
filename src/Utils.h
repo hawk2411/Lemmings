@@ -9,7 +9,7 @@
 class Utils {
 
 public:
-    static bool insideRectangle(glm::vec2 point, glm::vec2 rectangleOrigin, glm::vec2 rectangleSize);
+    static bool insideRectangle(const glm::vec2 &point, const glm::vec2 &rectangleOrigin, const glm::vec2 &rectangleSize);
 
     static void changeTexelColor(GLuint id, GLint x, GLint y, uint8_t r, uint8_t g, uint8_t b, uint8_t a);
 

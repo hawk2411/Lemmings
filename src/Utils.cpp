@@ -1,6 +1,6 @@
 #include "Utils.h"
 
-bool Utils::insideRectangle(glm::vec2 point, glm::vec2 rectangleOrigin, glm::vec2 rectangleSize) {
+bool Utils::insideRectangle(const glm::vec2 &point, const glm::vec2 &rectangleOrigin, const glm::vec2 &rectangleSize) {
     return (
             rectangleOrigin.x <= point.x
             && point.x < rectangleOrigin.x + rectangleSize.x
