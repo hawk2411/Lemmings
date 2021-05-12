@@ -11,13 +11,13 @@ void InfoLevel::init() {
 }
 
 void InfoLevel::setLevel(int numLevel, int levelMode) {
-    level = numLevel;
-    mode = levelMode;
+    _level = numLevel;
+    _mode = levelMode;
 
     initTextures();
 
-    InfoLevelSprite = Sprite::createSprite(glm::vec2(CAMERA_WIDTH, CAMERA_HEIGHT), glm::vec2(1.f, 1.f),
-                                           &ShaderManager::getInstance().getShaderProgram(), &InfoLevelTexture);
+    _InfoLevelSprite = Sprite::createSprite(glm::vec2(CAMERA_WIDTH, CAMERA_HEIGHT), glm::vec2(1.f, 1.f),
+                                            &ShaderManager::getInstance().getShaderProgram(), &_InfoLevelTexture);
     initSprites();
 }
 
@@ -28,17 +28,17 @@ void InfoLevel::update(int deltaTime) {
 void InfoLevel::render() {
     ShaderManager::getInstance().useShaderProgram();
 
-    InfoLevelSprite->render();
-    menuWord->render();
-    rightKey->render();
-    playWord->render();
-    leftKey->render();
+    _InfoLevelSprite->render();
+    _menuWord->render();
+    _rightKey->render();
+    _playWord->render();
+    _leftKey->render();
 }
 
 void InfoLevel::initTextures() {
 
     string levelType;
-    switch (mode) {
+    switch (_mode) {
         case FUN_MODE:
             levelType = "fun";
             break;
@@ -50,34 +50,34 @@ void InfoLevel::initTextures() {
             break;
     }
 
-    string levelName = levelType + to_string(level);
+    string levelName = levelType + to_string(_level);
 
-    InfoLevelTexture.loadFromFile("images/levels/" + levelName + "/info.png", TEXTURE_PIXEL_FORMAT_RGBA);
-    InfoLevelTexture.setMinFilter(GL_NEAREST);
-    InfoLevelTexture.setMagFilter(GL_NEAREST);
+    _InfoLevelTexture.loadFromFile("images/levels/" + levelName + "/info.png", TEXTURE_PIXEL_FORMAT_RGBA);
+    _InfoLevelTexture.setMinFilter(GL_NEAREST);
+    _InfoLevelTexture.setMagFilter(GL_NEAREST);
 
 }
 
 int InfoLevel::getMode() {
-    return mode;
+    return _mode;
 }
 
 int InfoLevel::getLevel() {
-    return level;
+    return _level;
 }
 
 void InfoLevel::initSprites() {
-    leftKey = KeyFactory::instance().createLeftKey(glm::vec2(25, 15));
-    leftKey->position() = glm::vec2(5, 173);
+    _leftKey = KeyFactory::instance().createLeftKey(glm::vec2(25, 15));
+    _leftKey->setPosition(glm::vec2(5, 173));
 
-    menuWord = new Word("MENU");
-    menuWord->setPosition(glm::vec2(36, 173));
+    _menuWord = new Word("MENU");
+    _menuWord->setPosition(glm::vec2(36, 173));
 
-    rightKey = KeyFactory::instance().createRightKey(glm::vec2(25, 15));
-    rightKey->position() = glm::vec2(280, 173);
+    _rightKey = KeyFactory::instance().createRightKey(glm::vec2(25, 15));
+    _rightKey->setPosition(glm::vec2(280, 173));
 
-    playWord = new Word("PLAY");
-    playWord->setPosition(glm::vec2(240, 173));
+    _playWord = new Word("PLAY");
+    _playWord->setPosition(glm::vec2(240, 173));
 
 
 }

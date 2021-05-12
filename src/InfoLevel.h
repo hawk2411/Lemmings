@@ -14,11 +14,11 @@ public:
         return instance;
     };
 
-    void init();
+    void init() override;
 
-    void update(int deltaTime);
+    void update(int deltaTime)override;
 
-    void render();
+    void render()override;
 
     void setLevel(int level, int mode);
 
@@ -34,15 +34,15 @@ private:
     void initSprites();
 
     // Parametres
-    Texture InfoLevelTexture;
-    std::unique_ptr<Sprite> InfoLevelSprite;
-    std::unique_ptr<Sprite> leftKey;
-    std::unique_ptr<Sprite> rightKey;
-    Word *playWord;
-    Word *menuWord;
+    Texture _InfoLevelTexture;
+    std::unique_ptr<Sprite> _InfoLevelSprite;
+    std::unique_ptr<Sprite> _leftKey;
+    std::unique_ptr<Sprite> _rightKey;
+    Word *_playWord;
+    Word *_menuWord;
 
-    int mode;
-    int level;
+    int _mode;
+    int _level;
 
 };
 
