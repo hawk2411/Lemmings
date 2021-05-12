@@ -59,14 +59,10 @@ void Digger::updateStateMachine(int deltaTime) {
     }
 }
 
-bool Digger::canDig() {
-    bool canDig = false;
+bool Digger::canDig() const {
+    glm::ivec2 posBase = jobSprite->getPosition();
 
-    glm::ivec2 posBase = jobSprite->position();
-
-    posBase += glm::ivec2(4, 14);
-
-
+    posBase +=  glm::ivec2(4, 14);
     for (int j = 0; j < 3; ++j) {
         for (int i = 0; i < 9; ++i) {
             int x = posBase.x + i;
@@ -76,13 +72,12 @@ bool Digger::canDig() {
             }
         }
     }
-
     return false;
 }
 
 void Digger::dig() {
 
-    glm::ivec2 posBase = jobSprite->position();
+    glm::ivec2 posBase = jobSprite->getPosition();
 
     posBase += glm::ivec2(4, 14);
 
@@ -93,9 +88,7 @@ void Digger::dig() {
         Scene::getInstance().eraseMask(x, y);
     }
 
-    jobSprite->position() += glm::ivec2(0, 1);
-
-
+    jobSprite->incPosition(glm::ivec2(0, 1));
 }
 
 

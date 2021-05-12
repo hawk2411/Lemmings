@@ -19,7 +19,7 @@ public:
 private:
     void dig();
 
-    bool canDig();
+    bool canDig()const;
 
 private:
     enum DiggerState {
