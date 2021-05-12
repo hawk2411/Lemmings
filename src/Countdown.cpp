@@ -13,8 +13,8 @@ Countdown::Countdown() {
 }
 
 void Countdown::render() {
-    glm::vec2 oldPosition = countNum->position();
-    countNum->setPosition(countNum->position() - Level::currentLevel().getLevelAttributes()->cameraPos);
+    glm::vec2 oldPosition = countNum->getPosition();
+    countNum->setPosition(oldPosition - Level::currentLevel().getLevelAttributes()->cameraPos);
     countNum->render();
     countNum->setPosition(oldPosition);
 
