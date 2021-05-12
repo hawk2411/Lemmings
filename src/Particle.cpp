@@ -7,7 +7,7 @@
 
 #define PI 3.14159265359
 
-Particle::Particle(ParticleColor color) {
+Particle::Particle(ParticleColor color):_position(0,0), _speed(0,0) {
     glm::vec2 coordTex;
     switch (color) {
         case PINK:
@@ -22,30 +22,30 @@ Particle::Particle(ParticleColor color) {
         default:
             coordTex = glm::vec2(0, 0);
     }
-    sprite = Sprite::createSprite(glm::ivec2(1, 1), glm::vec2(0.25, 1.),
-                                  &ShaderManager::getInstance().getShaderProgram(),
-                                  &Game::spriteSheets().particleSprites);
-    sprite->setNumberAnimations(1);
-    sprite->addKeyframe(0, coordTex);
-    sprite->changeAnimation(0);
+    _sprite = Sprite::createSprite(glm::ivec2(1, 1), glm::vec2(0.25, 1.),
+                                   &ShaderManager::getInstance().getShaderProgram(),
+                                   &Game::spriteSheets().particleSprites);
+    _sprite->setNumberAnimations(1);
+    _sprite->addKeyframe(0, coordTex);
+    _sprite->changeAnimation(0);
 
     float angle = (rand() % 180) * PI / 180;
-    speed = glm::vec2(2.5 * cos(angle), -5 * sin(angle));
+    _speed = glm::vec2(2.5 * cos(angle), -5 * sin(angle));
 }
 
-void Particle::setPosition(glm::vec2 positiona) {
-    position = positiona;
+void Particle::setPosition(glm::vec2 position) {
+    _position = position;
 }
 
 void Particle::update(int deltaTime) {
-    position += speed;
-    sprite->position() = position;
-    speed += glm::vec2(0, 0.25);
+    _position += _speed;
+    _sprite->setPosition(_position);
+    _speed += glm::vec2(0, 0.25);
 }
 
 void Particle::render() {
-    glm::vec2 oldPosition = sprite->getPosition();
-    sprite->setPosition(oldPosition - Level::currentLevel().getLevelAttributes()->cameraPos);
-    sprite->render();
-    sprite->setPosition(oldPosition);
+    glm::vec2 oldPosition = _sprite->getPosition();
+    _sprite->setPosition(oldPosition - Level::currentLevel().getLevelAttributes()->cameraPos);
+    _sprite->render();
+    _sprite->setPosition(oldPosition);
 }

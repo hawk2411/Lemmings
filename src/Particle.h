@@ -14,9 +14,9 @@ public:
         PINK
     };
 
-    Particle() {};
+    //Particle():_position(0,0), _speed(0,0) {};
 
-    Particle(ParticleColor color);
+    explicit Particle(ParticleColor color);
 
     void setPosition(glm::vec2 position);
 
@@ -25,9 +25,9 @@ public:
     void render();
 
 private:
-    std::unique_ptr<Sprite> sprite;
-    glm::vec2 position;
-    glm::vec2 speed;
+    std::unique_ptr<Sprite> _sprite;
+    glm::vec2 _position;
+    glm::vec2 _speed;
 };
 
 
