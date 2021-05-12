@@ -61,7 +61,7 @@ void Exploder::updateStateMachine(int deltaTime) {
 }
 
 void Exploder::explode() {
-    glm::vec2 posBase = jobSprite->position();
+    glm::vec2 posBase = jobSprite->getPosition();
 
     for (int i = 0; i < 16; ++i) {
         for (int j = 0; j < 22; ++j) {
