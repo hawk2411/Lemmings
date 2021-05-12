@@ -63,19 +63,19 @@ void Climber::updateStateMachine(int deltaTime) {
 
     switch (state) {
         case WALKING_LEFT_STATE:
-            jobSprite->position() += glm::vec2(-1, -1);
+            jobSprite->incPosition( glm::vec2(-1, -1));
 
             if (collision()) {
-                jobSprite->position() -= glm::vec2(-1, -1);
+                jobSprite->decPosition( glm::vec2(-1, -1));
                 jobSprite->changeAnimation(CLIMBING_LEFT);
                 state = CLIMBING_LEFT_STATE;
             } else {
                 fall = collisionFloor(3);
                 if (fall > 0) {
-                    jobSprite->position() += glm::vec2(0, 1);
+                    jobSprite->incPosition( glm::vec2(0, 1));
                 }
                 if (fall > 1) {
-                    jobSprite->position() += glm::vec2(0, 1);
+                    jobSprite->incPosition( glm::vec2(0, 1));
                 }
 
                 if (fall > 2) {
@@ -83,7 +83,7 @@ void Climber::updateStateMachine(int deltaTime) {
                     isFinished = true;
                     nextJob = JobFactory::instance().createFallerJob();
                 } else {
-                    if (jobSprite->position() ==
+                    if (jobSprite->getPosition() ==
                         Level::currentLevel().getLevelAttributes()->door->getEscapePosition()) {
                         isFinished = true;
                         nextJob = JobFactory::instance().createEscaperJob();
@@ -92,19 +92,19 @@ void Climber::updateStateMachine(int deltaTime) {
             }
             break;
         case WALKING_RIGHT_STATE:
-            jobSprite->position() += glm::vec2(1, -1);
+            jobSprite->incPosition( glm::vec2(1, -1));
 
             if (collision()) {
-                jobSprite->position() -= glm::vec2(1, -1);
+                jobSprite->decPosition( glm::vec2(1, -1));
                 jobSprite->changeAnimation(CLIMBING_RIGHT);
                 state = CLIMBING_RIGHT_STATE;
 
             } else {
                 fall = collisionFloor(3);
                 if (fall < 3) {
-                    jobSprite->position() += glm::vec2(0, fall);
+                    jobSprite->incPosition( glm::vec2(0, fall));
 
-                    if (jobSprite->position() ==
+                    if (jobSprite->getPosition() ==
                         Level::currentLevel().getLevelAttributes()->door->getEscapePosition()) {
                         isFinished = true;
                         nextJob = JobFactory::instance().createEscaperJob();
@@ -124,14 +124,14 @@ void Climber::updateStateMachine(int deltaTime) {
             break;
         case LEDGING_LEFT_STATE:
             if (jobSprite->isInLastFrame()) {
-                jobSprite->position() += glm::vec2(-2, -3);
+                jobSprite->incPosition( glm::vec2(-2, -3));
                 jobSprite->changeAnimation(WALKING_LEFT);
                 state = WALKING_LEFT_STATE;
             }
             break;
         case LEDGING_RIGHT_STATE:
             if (jobSprite->hasIterated()) {
-                jobSprite->position() += glm::vec2(3, -3);
+                jobSprite->incPosition( glm::vec2(3, -3));
                 jobSprite->changeAnimation(WALKING_RIGHT);
                 state = WALKING_RIGHT_STATE;
             }
@@ -141,13 +141,13 @@ void Climber::updateStateMachine(int deltaTime) {
 }
 
 void Climber::climbLeft() {
-    jobSprite->position() -= glm::vec2(0, 1);
+    glm::vec2 posBase = jobSprite->decPosition(glm::vec2(0, 1));
 
 
-    glm::vec2 posBase = jobSprite->position() + glm::vec2(7, 15);
+    posBase += glm::vec2(7, 15);
 
-    if (Scene::getInstance().getMaskedMap().pixel(jobSprite->position().x + 7, jobSprite->position().y + 1) != 0) {
-        jobSprite->position() += glm::vec2(2, 0);
+    if (Scene::getInstance().getMaskedMap().pixel(jobSprite->getPosition().x + 7, jobSprite->getPosition().y + 1) != 0) {
+        jobSprite->incPosition(glm::vec2(2, 0));
         isFinished = true;
         nextJob = JobFactory::instance().createFallerJob();
     } else if (Scene::getInstance().getMaskedMap().pixel(posBase.x - 1, posBase.y - 3) == 0) {
@@ -158,12 +158,12 @@ void Climber::climbLeft() {
 }
 
 void Climber::climbRight() {
-    jobSprite->position() -= glm::vec2(0, 1);
+    glm::vec2 posBase = jobSprite->decPosition(glm::vec2(0, 1));
 
 
-    glm::vec2 posBase = jobSprite->position() + glm::vec2(8, 15);
-    if (Scene::getInstance().getMaskedMap().pixel(jobSprite->position().x + 8, jobSprite->position().y + 1) != 0) {
-        jobSprite->position() += glm::vec2(-2, 0);
+    posBase += glm::vec2(8, 15);
+    if (Scene::getInstance().getMaskedMap().pixel(jobSprite->getPosition().x + 8, jobSprite->getPosition().y + 1) != 0) {
+        jobSprite->incPosition(glm::vec2(-2, 0));
         isFinished = true;
         nextJob = JobFactory::instance().createFallerJob();
     } else if (Scene::getInstance().getMaskedMap().pixel(posBase.x + 1, posBase.y - 3) == 0) {
