@@ -42,9 +42,9 @@ public:
 
     void use() const;
 
-    int width() const { return widthTex; }
+    int width() const { return _widthTex; }
 
-    int height() const { return heightTex; }
+    int height() const { return _heightTex; }
 
     unsigned char pixel(unsigned int x, unsigned int y) const;
 
@@ -57,11 +57,11 @@ public:
     void saveBMP(const string &filename);
 
 private:
-    PixelFormat format;
-    int widthTex, heightTex;
-    unsigned char *image;
-    GLuint texId;
-    GLint wrapS, wrapT, minFilter, magFilter;
+    PixelFormat _format;
+    int _widthTex, _heightTex;
+    unsigned char *_image;
+    GLuint _texId;
+    GLint _wrapS, _wrapT, _minFilter, _magFilter;
 
 };
 

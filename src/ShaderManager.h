@@ -28,9 +28,9 @@ public:
     glm::mat4 getProjectionMatrix();
 
 private:
-    ShaderProgram simpleTexProgram, maskedTexProgram;
-    glm::mat4 projection;
-    glm::mat4 modelview;
+    ShaderProgram _simpleTexProgram, _maskedTexProgram;
+    glm::mat4 _projection;
+    glm::mat4 _modelView;
 };
 
 #endif //_SHADERMANAGER_INCLUDE

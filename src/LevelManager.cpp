@@ -31,7 +31,7 @@ void LevelManager::init(string levelMode, int levelNum) {
     availableLemmings = Level::currentLevel().getLevelAttributes()->numLemmings;
     spawningLemmings = true;
 
-    door = Level::currentLevel().getLevelAttributes()->door;
+    door = Level::currentLevel().getLevelAttributes()->_door.get();
     trapdoor = Level::currentLevel().getLevelAttributes()->trapdoor;
 
     deadLemmings = 0;
@@ -80,7 +80,7 @@ void LevelManager::update(int deltaTime) {
 
 void LevelManager::render() {
     Level::currentLevel().getLevelAttributes()->trapdoor->render();
-    Level::currentLevel().getLevelAttributes()->door->render();
+    Level::currentLevel().getLevelAttributes()->_door->render();
     renderLemmings();
 }
 

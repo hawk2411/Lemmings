@@ -96,7 +96,7 @@ void Floater::updateStateMachine(int deltaTime) {
                     state = FALLING_LEFT_STATE;
                 } else {
                     if (jobSprite->getPosition() ==
-                        Level::currentLevel().getLevelAttributes()->door->getEscapePosition()) {
+                        Level::currentLevel().getLevelAttributes()->_door->getEscapePosition()) {
                         isFinished = true;
                         nextJob = JobFactory::instance().createEscaperJob();
                     }
@@ -118,7 +118,7 @@ void Floater::updateStateMachine(int deltaTime) {
                     jobSprite->incPosition( glm::vec2(0, fall));
 
                     if (jobSprite->getPosition() ==
-                        Level::currentLevel().getLevelAttributes()->door->getEscapePosition()) {
+                        Level::currentLevel().getLevelAttributes()->_door->getEscapePosition()) {
                         isFinished = true;
                         nextJob = JobFactory::instance().createEscaperJob();
                     }

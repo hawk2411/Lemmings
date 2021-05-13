@@ -4,7 +4,7 @@
 #include "DoorFactory.h"
 #include "TrapdoorFactory.h"
 
-void Level::createFromFile(string file) {
+void Level::createFromFile(const string &file) {
     ifstream infile(file);
 
     int lineCount = 0;
@@ -55,7 +55,7 @@ void Level::createFromFile(string file) {
                 iss >> doorPosX >> doorPosY >> doorType;
 
                 doorPos = glm::vec2(doorPosX, doorPosY);
-                levelAttributes.door = DoorFactory::instance().createDoor(doorType);
+                levelAttributes._door = unique_ptr<Door>(DoorFactory::createDoor(doorType));
                 break;
             }
             case 5: // LEVEL CAMERA POS
@@ -93,6 +93,6 @@ void Level::init() {
     levelAttributes.trapdoor->init();
     levelAttributes.trapdoor->setPosition(trapdoorPos);
 
-    levelAttributes.door->init();
-    levelAttributes.door->setPosition(doorPos);
+    levelAttributes._door->init();
+    levelAttributes._door->setPosition(doorPos);
 }

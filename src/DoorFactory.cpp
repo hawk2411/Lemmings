@@ -7,19 +7,18 @@
 #include "DoorHell.h"
 
 
-Door *DoorFactory::createDoor(string type) {
-    Door *door;
+Door *DoorFactory::createDoor(const string &type) {
     if (type == "standard") {
-        door = new DoorStandard();
-    } else if (type == "egypt") {
-        door = new DoorEgypt();
-
-    } else if (type == "maya") {
-        door = new DoorMaya();
-
-    } else if (type == "hell") {
-        door = new DoorHell();
-
+        return new DoorStandard();
+    };
+    if (type == "egypt") {
+        return new DoorEgypt();
     }
-    return door;
+    if (type == "maya") {
+        return new DoorMaya();
+    }
+    if (type == "hell") {
+        return new DoorHell();
+    }
+    return nullptr;
 }

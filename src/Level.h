@@ -2,7 +2,7 @@
 #define _LEVEL_INCLUDE
 
 
-#include <string.h>
+#include <string>
 #include "Texture.h"
 #include "Sprite.h"
 #include "VariableTexture.h"
@@ -28,7 +28,7 @@ public:
         int minReleaseRate;
         int jobCount[8];
 
-        Door *door;
+        unique_ptr<Door> _door;
         Trapdoor *trapdoor;
 
         Texture levelTexture;
@@ -38,7 +38,7 @@ public:
         glm::vec2 levelSize;
     };
 
-    void createFromFile(string file);
+    void createFromFile(const string &file);
 
     void init();
 

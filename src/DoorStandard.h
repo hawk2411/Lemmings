@@ -7,7 +7,7 @@
 class DoorStandard : public Door {
 
 public:
-    virtual void init();
+    void init() override;
 };
 
 

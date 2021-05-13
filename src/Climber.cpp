@@ -84,7 +84,7 @@ void Climber::updateStateMachine(int deltaTime) {
                     nextJob = JobFactory::instance().createFallerJob();
                 } else {
                     if (jobSprite->getPosition() ==
-                        Level::currentLevel().getLevelAttributes()->door->getEscapePosition()) {
+                        Level::currentLevel().getLevelAttributes()->_door->getEscapePosition()) {
                         isFinished = true;
                         nextJob = JobFactory::instance().createEscaperJob();
                     }
@@ -105,7 +105,7 @@ void Climber::updateStateMachine(int deltaTime) {
                     jobSprite->incPosition( glm::vec2(0, fall));
 
                     if (jobSprite->getPosition() ==
-                        Level::currentLevel().getLevelAttributes()->door->getEscapePosition()) {
+                        Level::currentLevel().getLevelAttributes()->_door->getEscapePosition()) {
                         isFinished = true;
                         nextJob = JobFactory::instance().createEscaperJob();
                     }

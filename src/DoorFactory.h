@@ -14,7 +14,7 @@ public:
         return instance;
     };
 
-    Door *createDoor(string type);
+    static Door *createDoor(const string &type);
 
 };
 
