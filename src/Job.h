@@ -36,7 +36,7 @@ protected:
 
     std::unique_ptr<Sprite> jobSprite;
     bool isFinished;
-    Job *nextJob;
+    Job *nextJob = nullptr;
     bool walkingRight;
 
 

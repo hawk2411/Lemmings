@@ -80,7 +80,11 @@ void Faller::updateStateMachine(int deltaTime) {
         case FALLING_DEATH_STATE:
             if (jobSprite->isInLastFrame()) {
                 isFinished = true;
-                nextJob = nullptr;
+                if(nextJob){
+                    delete nextJob;
+                    nextJob = nullptr;
+                }
+
             }
             break;
     }

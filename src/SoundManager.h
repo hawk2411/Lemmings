@@ -14,10 +14,12 @@ public:
     FMOD::Channel *playSound(FMOD::Sound *sound) const;
 
     void update();
-
+    FMOD::System* getLowLevelSystem()const{return lowLevelSystem;}
     SoundManager();
 
     ~SoundManager();
+
+    static std::string getFMODExceptionText(FMOD_RESULT result);
 };
 
 #endif // _SOUNDMANAGER_INCLUDE

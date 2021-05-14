@@ -1,6 +1,6 @@
-#include "SoundManager.h"
-#include <stdio.h>
 #include <fmod_errors.h>
+#include <sstream>
+#include "SoundManager.h"
 
 FMOD::Sound *SoundManager::loadSound(const std::string &file, FMOD_MODE mode) const {
     FMOD::Sound *pSound;
@@ -38,4 +38,10 @@ SoundManager::SoundManager() : system(NULL) {
 SoundManager::~SoundManager() {
     system->unloadAll();
     system->release();
+}
+
+std::string SoundManager::getFMODExceptionText(FMOD_RESULT result) {
+    std::stringstream ss;
+    ss << "FMOD error! "<<  result << " " << FMOD_ErrorString(result) << std::endl;
+    return ss.str();
 }

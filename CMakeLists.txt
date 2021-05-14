@@ -90,6 +90,8 @@ add_executable(lemmings src/main.cpp
         src/ButtonNumFactory.cpp
         src/Word.cpp
         src/SoundManager.cpp
+        src/Sound.cpp
+        src/LemmingsException.cpp
         libs/SOIL/src/image_helper.c
         libs/SOIL/src/image_helper.h
         libs/SOIL/src/image_DXT.h
