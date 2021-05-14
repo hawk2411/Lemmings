@@ -6,6 +6,20 @@
 // Lemming is basically a Sprite that represents one lemming. As such it has
 // all properties it needs to track its movement and collisions.
 
+enum class Jobs{
+    WALKER,
+    DIGGER,
+    ESCAPER,
+    EXPLODER,
+    MINER,
+    FLOATER,
+    BASHER,
+    BLOCKER,
+    FALLER,
+    CLIMBER,
+    BUILDER
+};
+
 
 class Job {
 

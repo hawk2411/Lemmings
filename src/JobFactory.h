@@ -3,20 +3,6 @@
 
 #include "Job.h"
 
-enum class Jobs{
-    WALKER,
-    DIGGER,
-    FINISHER,
-    EXPLODER,
-    MINER,
-    FLOATER,
-    BASHER,
-    BLOCKER,
-    FALLER,
-    CLIMBER,
-    BUILDER
-};
-
 class JobFactory {
 
 public:

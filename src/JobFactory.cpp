@@ -74,7 +74,7 @@ Job *JobFactory::createJob(Jobs jobToCreate) {
             return createWalkerJob();
         case Jobs::DIGGER:
             return createDiggerJob();
-        case Jobs::FINISHER:
+        case Jobs::ESCAPER:
             return createEscaperJob();
         case Jobs::EXPLODER:
             return createExploderJob();
