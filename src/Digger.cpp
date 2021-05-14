@@ -13,11 +13,6 @@
 #define FALL_STEP 4
 
 
-enum DiggerAnims {
-    DIGGER
-};
-
-
 void Digger::initAnims(ShaderProgram &shaderProgram) {
     jobSprite = Sprite::createSprite(glm::ivec2(16, 16), glm::vec2(1.f / 16, 1.f / 14), &shaderProgram,
                                      &Game::spriteSheets().lemmingAnimations,
@@ -25,13 +20,13 @@ void Digger::initAnims(ShaderProgram &shaderProgram) {
     jobSprite->setNumberAnimations(1);
 
     // DIGGER
-    jobSprite->setAnimationSpeed(DIGGER, 12);
+    jobSprite->setAnimationSpeed(0, 12);
     for (int i = 0; i < 8; i++)
-        jobSprite->addKeyframe(DIGGER, glm::vec2(float(i) / 16, 8.0f / 14));
+        jobSprite->addKeyframe(0, glm::vec2(float(i) / 16, 8.0f / 14));
 
 
     state = DIGGING_STATE;
-    jobSprite->changeAnimation(DIGGER);
+    jobSprite->changeAnimation(0);
 }
 
 void Digger::setWalkingRight(bool value) {

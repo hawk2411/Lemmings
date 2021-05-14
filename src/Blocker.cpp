@@ -13,11 +13,6 @@
 #define FALL_STEP 4
 
 
-enum BlockerAnims {
-    BLOCKER,
-};
-
-
 void Blocker::initAnims(ShaderProgram &shaderProgram) {
     jobSprite = Sprite::createSprite(glm::ivec2(16, 16), glm::vec2(1.f / 16, 1.f / 14), &shaderProgram,
                                      &Game::spriteSheets().lemmingAnimations,
@@ -25,12 +20,12 @@ void Blocker::initAnims(ShaderProgram &shaderProgram) {
     jobSprite->setNumberAnimations(1);
 
     // BLOCKER
-    jobSprite->setAnimationSpeed(BLOCKER, 12);
+    jobSprite->setAnimationSpeed( 0, 12);
     for (int i = 0; i < 16; i++)
-        jobSprite->addKeyframe(BLOCKER, glm::vec2(float(i) / 16, 3.0f / 14));
+        jobSprite->addKeyframe(0, glm::vec2(float(i) / 16, 3.0f / 14));
 
     state = BLOCKING_STATE;
-    jobSprite->changeAnimation(BLOCKER);
+    jobSprite->changeAnimation(0);
 
 }
 

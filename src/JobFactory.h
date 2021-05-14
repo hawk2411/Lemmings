@@ -3,6 +3,19 @@
 
 #include "Job.h"
 
+enum class Jobs{
+    WALKER,
+    DIGGER,
+    FINISHER,
+    EXPLODER,
+    MINER,
+    FLOATER,
+    BASHER,
+    BLOCKER,
+    FALLER,
+    CLIMBER,
+    BUILDER
+};
 
 class JobFactory {
 
@@ -14,6 +27,7 @@ public:
         return instance;
     };
 
+    Job* createJob(Jobs jobToCreate);
     Job *createWalkerJob();
 
     Job *createDiggerJob();

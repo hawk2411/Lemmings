@@ -51,7 +51,6 @@ void Basher::setWalkingRight(bool value) {
 }
 
 void Basher::updateStateMachine(int deltaTime) {
-    int fall = collisionFloor(3);
     switch (state) {
         case BASHING_RIGHT_STATE:
 
@@ -69,8 +68,6 @@ void Basher::updateStateMachine(int deltaTime) {
                 isFinished = true;
                 nextJob = JobFactory::instance().createWalkerJob();
             }
-
-
     }
 }
 

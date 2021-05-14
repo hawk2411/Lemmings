@@ -66,3 +66,34 @@ Job *JobFactory::createBuilderJob() {
     Builder *builderJob = new Builder();
     return builderJob;
 }
+
+Job *JobFactory::createJob(Jobs jobToCreate) {
+    switch(jobToCreate)
+    {
+        case Jobs::WALKER:
+            return createWalkerJob();
+        case Jobs::DIGGER:
+            return createDiggerJob();
+        case Jobs::FINISHER:
+            return createEscaperJob();
+        case Jobs::EXPLODER:
+            return createExploderJob();
+        case Jobs::MINER:
+            return createMinerJob();
+        case Jobs::FLOATER:
+            return createFloaterJob();
+        case Jobs::BASHER:
+            return createBasherJob();
+        case Jobs::BLOCKER:
+            return createBlockerJob();
+        case Jobs::FALLER:
+            return createFallerJob();
+        case Jobs::CLIMBER:
+            return createClimberJob();
+        case Jobs::BUILDER:
+            return createBuilderJob();
+        default:
+            return nullptr;
+    }
+    return nullptr;
+}
