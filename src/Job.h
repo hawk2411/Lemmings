@@ -35,7 +35,7 @@ public:
 
     bool finished() const;
 
-    Job *getNextJob();
+    Jobs getNextJob()const;
 
     Jobs getCurrentJob()const{return _currentJob;}
 
@@ -56,7 +56,7 @@ protected:
     unique_ptr<Sprite> jobSprite;
     bool isFinished;
     Jobs _currentJob;
-    Job* nextJob = nullptr;
+    Jobs _nextJob;
     bool walkingRight;
 
 

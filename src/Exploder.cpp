@@ -57,7 +57,7 @@ void Exploder::updateStateMachine(int deltaTime) {
             if (jobSprite->isInLastFrame()) {
                 explode();
                 isFinished = true;
-                nextJob = NULL;
+                _nextJob = Jobs::UNKNOWN;
             }
 
             break;

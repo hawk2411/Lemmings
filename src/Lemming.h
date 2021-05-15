@@ -23,7 +23,7 @@ public:
 
     void render();
 
-    void changeJob(Job *nextJob);
+    void changeJob(Jobs nextJob);
 
     bool isWalkingRight() const;
 
@@ -40,7 +40,7 @@ public:
     void writeDestiny();
 
 private:
-    Job *job;
+    Job *_job;
     //Sprite *sprite;
     Countdown *countdown;
     ShaderProgram *shaderProgram;

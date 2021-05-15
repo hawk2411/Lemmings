@@ -43,7 +43,7 @@ private:
 
     int jobNameToIndex(JobNames jobName);
 
-    Job *jobToAssign = NULL;
+    Jobs jobToAssign = Jobs::UNKNOWN;
     JobNames lastOfferedJob = NONE;
 };
 

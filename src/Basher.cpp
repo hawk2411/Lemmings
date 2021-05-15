@@ -60,7 +60,7 @@ void Basher::updateStateMachine(int deltaTime) {
 
             if (!bashRight()) {
                 isFinished = true;
-                nextJob = JobFactory::instance().createWalkerJob();
+                _nextJob = Jobs::WALKER;
             }
 
             break;
@@ -70,7 +70,7 @@ void Basher::updateStateMachine(int deltaTime) {
 
             if (!bashLeft()) {
                 isFinished = true;
-                nextJob = JobFactory::instance().createWalkerJob();
+                _nextJob = Jobs::WALKER;
             }
     }
 }

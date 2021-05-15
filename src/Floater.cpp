@@ -101,7 +101,7 @@ void Floater::updateStateMachine(int deltaTime) {
                     if (jobSprite->getPosition() ==
                         Level::currentLevel().getLevelAttributes()->_door->getEscapePosition()) {
                         isFinished = true;
-                        nextJob = JobFactory::instance().createEscaperJob();
+                        _nextJob = Jobs::ESCAPER;
                     }
                 }
             }
@@ -123,7 +123,7 @@ void Floater::updateStateMachine(int deltaTime) {
                     if (jobSprite->getPosition() ==
                         Level::currentLevel().getLevelAttributes()->_door->getEscapePosition()) {
                         isFinished = true;
-                        nextJob = JobFactory::instance().createEscaperJob();
+                        _nextJob = Jobs::ESCAPER;
                     }
                 } else {
                     jobSprite->changeAnimation(FALLING_RIGHT);

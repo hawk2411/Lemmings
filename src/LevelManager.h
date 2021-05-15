@@ -32,7 +32,7 @@ public:
 
     void stopSpawningLemmings();
 
-    bool assignJob(int lemmingIndex, Job *jobToAssign);
+    bool assignJob(int lemmingIndex, Jobs jobToAssign);
 
     int getLemmingIndexInPos(int posX, int posY);
 

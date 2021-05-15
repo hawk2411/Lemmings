@@ -73,7 +73,7 @@ void Builder::updateStateMachine(int deltaTime) {
         case NOSTEPS_STATE:
             if (jobSprite->isInLastFrame()) {
                 isFinished = true;
-                nextJob = JobFactory::instance().createWalkerJob();
+                _nextJob = Jobs::WALKER;
             }
             break;
     }

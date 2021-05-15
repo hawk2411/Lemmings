@@ -47,9 +47,9 @@ void Digger::updateStateMachine(int deltaTime) {
 
                 int fall = collisionFloor(3);
                 if (fall >= 3) {
-                    nextJob = JobFactory::instance().createFallerJob();
+                    _nextJob = Jobs::FALLER;;
                 } else {
-                    nextJob = JobFactory::instance().createWalkerJob();
+                    _nextJob = Jobs::WALKER;
                 }
             } else if (jobSprite->isInFirstFrame() || jobSprite->getAnimationCurrentFrame() == 4) {
                 dig();

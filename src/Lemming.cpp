@@ -15,43 +15,43 @@
 
 Lemming::Lemming(const glm::vec2 &initialPosition) {
     this->shaderProgram = &ShaderManager::getInstance().getShaderProgram();
-    job = JobFactory::instance().createFallerJob();
-    job->initAnims(*shaderProgram);
-    job->sprite()->setPosition(initialPosition);
+    _job = JobFactory::instance().createFallerJob();
+    _job->initAnims(*shaderProgram);
+    _job->sprite()->setPosition(initialPosition);
     countdown = nullptr;
     alive = true;
     isSaved = false;
 }
 
 void Lemming::update(int deltaTime) {
-    if (job->sprite()->update(deltaTime) == 0) {
+    if (_job->sprite()->update(deltaTime) == 0) {
         return;
     }
 
     if (outOfMap()) {
         alive = false;
-        delete this->job;
+        delete _job;
         //lemming no longer has a job
         return;
     }
     if (countdown != nullptr && countdown->isOver()) {
-        changeJob(JobFactory::instance().createExploderJob());
+        changeJob(Jobs::EXPLODER);
         delete countdown;
         countdown = nullptr;
         return;
     }
     //still not nuked
-    job->updateStateMachine(deltaTime);
+    _job->updateStateMachine(deltaTime);
 
     if (countdown != nullptr) {
         //countdown for nuke is running
-        countdown->setPosition(glm::vec2(6, -8) + this->job->sprite()->getPosition());
+        countdown->setPosition(glm::vec2(6, -8) + _job->sprite()->getPosition());
         countdown->update(deltaTime);
     }
 
-    if (job->finished()) {
-        if (job->getNextJob() == nullptr) {
-            if (job->getCurrentJob() == Jobs::ESCAPER) {
+    if (_job->finished()) {
+        if (_job->getNextJob() == Jobs::UNKNOWN) {
+            if (_job->getCurrentJob() == Jobs::ESCAPER) {
                 isSaved = true;
             } else {
                 cout << "is finished but not alive" << endl;
@@ -59,39 +59,46 @@ void Lemming::update(int deltaTime) {
             }
         }
         if (alive && !isSaved) {
-            changeJob(job->getNextJob());
+            changeJob(_job->getNextJob());
         }
+
     }
 
 }
 
 void Lemming::render() {
-    glm::vec2 oldPosition = this->job->sprite()->getPosition();
-    this->job->sprite()->setPosition(oldPosition - Level::currentLevel().getLevelAttributes()->cameraPos);
-    this->job->sprite()->render();
-    this->job->sprite()->setPosition(oldPosition);
+    glm::vec2 oldPosition = _job->sprite()->getPosition();
+    _job->sprite()->setPosition(oldPosition - Level::currentLevel().getLevelAttributes()->cameraPos);
+    _job->sprite()->render();
+    _job->sprite()->setPosition(oldPosition);
 
     if (countdown != nullptr) {
         countdown->render();
     }
 }
 
-void Lemming::changeJob(Job *nextJob) {
-    walkingRight = job->isWalkingRight();
-    glm::ivec2 oldPosition = this->job->sprite()->getPosition();
-    delete this->job;
-    this->job = nextJob;
-    this->job->initAnims(*shaderProgram);
-    nextJob->setWalkingRight(walkingRight);
-    this->job->sprite()->setPosition(oldPosition);
+void Lemming::changeJob(Jobs nextJob) {
+    glm::ivec2 oldPosition;
+    if(_job) {
+        walkingRight = _job->isWalkingRight();
+        oldPosition = _job->sprite()->getPosition();
+        delete _job;
+    }
+    _job = JobFactory::instance().createJob(nextJob);
+    if(_job == nullptr)
+        return;
+
+    _job->initAnims(*shaderProgram);
+    _job->setWalkingRight(walkingRight);
+    _job->sprite()->setPosition(oldPosition);
 }
 
 glm::vec2 Lemming::getPosition() const {
-    return this->job->sprite()->getPosition();
+    return _job->sprite()->getPosition();
 }
 
 Job *Lemming::getJob() {
-    return job;
+    return _job;
 }
 
 bool Lemming::dead() const {
@@ -108,7 +115,7 @@ bool Lemming::isWalkingRight() const {
 
 void Lemming::setWalkingRight(bool value) {
     walkingRight = value;
-    job->setWalkingRight(value);
+    _job->setWalkingRight(value);
 }
 
 void Lemming::writeDestiny() {
@@ -116,7 +123,7 @@ void Lemming::writeDestiny() {
 }
 
 bool Lemming::outOfMap() {
-    return !Utils::insideRectangle(this->job->sprite()->getPosition(), glm::vec2(0, 0),
+    return !Utils::insideRectangle(_job->sprite()->getPosition(), glm::vec2(0, 0),
                                    glm::vec2(Level::currentLevel().getLevelAttributes()->levelSize.x,
                                              Level::currentLevel().getLevelAttributes()->levelSize.y));
 }

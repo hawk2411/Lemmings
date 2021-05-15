@@ -4,10 +4,8 @@
 #include "LevelManager.h"
 
 void JobAssigner::deleteJobToAssign() {
-    delete jobToAssign;
-    jobToAssign = NULL;
+    jobToAssign = Jobs::UNKNOWN;
     lastOfferedJob = NONE;
-
 }
 
 void JobAssigner::offerJob(JobNames jobName) {
@@ -16,34 +14,34 @@ void JobAssigner::offerJob(JobNames jobName) {
 
     switch (jobName) {
         case JobAssigner::BASHER:
-            jobToAssign = JobFactory::instance().createBasherJob();
+            jobToAssign = Jobs::BASHER;
             break;
         case JobAssigner::BLOCKER:
-            jobToAssign = JobFactory::instance().createBlockerJob();
+            jobToAssign = Jobs::BLOCKER;
             break;
         case JobAssigner::BOMBER:
-            jobToAssign = JobFactory::instance().createExploderJob();
+            jobToAssign = Jobs::EXPLODER;
             break;
         case JobAssigner::BUILDER:
-            jobToAssign = JobFactory::instance().createBuilderJob();
+            jobToAssign = Jobs::BUILDER;
             break;
         case JobAssigner::CLIMBER:
-            jobToAssign = JobFactory::instance().createClimberJob();
+            jobToAssign = Jobs::CLIMBER;
             break;
         case JobAssigner::DIGGER:
-            jobToAssign = JobFactory::instance().createDiggerJob();
+            jobToAssign = Jobs::DIGGER;
             break;
         case JobAssigner::FALLER:
-            jobToAssign = JobFactory::instance().createBasherJob();
+            jobToAssign = Jobs::FALLER;
             break;
         case JobAssigner::FLOATER:
-            jobToAssign = JobFactory::instance().createFloaterJob();
+            jobToAssign = Jobs::FLOATER;
             break;
         case JobAssigner::MINER:
-            jobToAssign = JobFactory::instance().createMinerJob();
+            jobToAssign = Jobs::MINER;
             break;
         case JobAssigner::WALKER:
-            jobToAssign = JobFactory::instance().createWalkerJob();
+            jobToAssign = Jobs::WALKER;
             break;
         default:
             break;
@@ -59,7 +57,7 @@ bool JobAssigner::hasJobToAssign() {
 void JobAssigner::assigJobLemming(int lemmingIndex) {
     if (lemmingIndex != -1) {
         if (LevelManager::getInstance().assignJob(lemmingIndex, jobToAssign)) {
-            jobToAssign = NULL;
+            jobToAssign = Jobs::UNKNOWN;
 
             decreaseOfferedJobCount();
 

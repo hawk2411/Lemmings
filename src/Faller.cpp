@@ -84,7 +84,7 @@ void Faller::updateStateMachine(int deltaTime) {
                 } else {
                     cout << "Faller is finished" << endl;
                     isFinished = true;
-                    nextJob = JobFactory::instance().createWalkerJob();
+                    _nextJob = Jobs::WALKER;
                 }
             }
             break;
@@ -93,9 +93,8 @@ void Faller::updateStateMachine(int deltaTime) {
             cout << "Faller FALLING_DEATH_STATE" << endl;
             if (jobSprite->isInLastFrame()) {
                 isFinished = true;
-                if(nextJob){
-                    delete nextJob;
-                    nextJob = nullptr;
+                if(_nextJob != Jobs::UNKNOWN){
+                    _nextJob = Jobs::UNKNOWN;
                 }
 
             }

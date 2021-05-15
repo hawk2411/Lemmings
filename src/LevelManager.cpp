@@ -194,23 +194,21 @@ string LevelManager::getLemmingJobNameIndex(int index) {
     return currentLemming->getJob()->getName();
 }
 
-bool LevelManager::assignJob(int lemmingIndex, Job *jobToAssign) {
+bool LevelManager::assignJob(int lemmingIndex, Jobs jobToAssign) {
     auto it = _lemmings.begin();
     std::advance(it, lemmingIndex);
     Lemming *currentLemming = *it;
 
-    string lemmingActualJob = currentLemming->getJob()->getName();
-    string jobToAssignName = jobToAssign->getName();
-
-    if (jobToAssignName == lemmingActualJob) {
+    Jobs lemmingActualJob = currentLemming->getJob()->getCurrentJob();
+    if (jobToAssign == lemmingActualJob) {
         return false;
     }
 
-    if (lemmingActualJob == "FALLER" && jobToAssignName != "FLOATER") {
+    if (lemmingActualJob == Jobs::FALLER && jobToAssign != Jobs::FLOATER) {
         return false;
     }
 
-    if (jobToAssignName == "BOMBER") {
+    if (jobToAssign == Jobs::EXPLODER) {
         currentLemming->writeDestiny();
     } else {
         currentLemming->changeJob(jobToAssign);

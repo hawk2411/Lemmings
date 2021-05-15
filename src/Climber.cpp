@@ -85,12 +85,12 @@ void Climber::updateStateMachine(int deltaTime) {
                 if (fall > 2) {
 
                     isFinished = true;
-                    nextJob = JobFactory::instance().createFallerJob();
+                    _nextJob = Jobs::FALLER;
                 } else {
                     if (jobSprite->getPosition() ==
                         Level::currentLevel().getLevelAttributes()->_door->getEscapePosition()) {
                         isFinished = true;
-                        nextJob = JobFactory::instance().createEscaperJob();
+                        _nextJob = Jobs::ESCAPER;
                     }
                 }
             }
@@ -111,11 +111,11 @@ void Climber::updateStateMachine(int deltaTime) {
                     if (jobSprite->getPosition() ==
                         Level::currentLevel().getLevelAttributes()->_door->getEscapePosition()) {
                         isFinished = true;
-                        nextJob = JobFactory::instance().createEscaperJob();
+                        _nextJob = Jobs::ESCAPER;
                     }
                 } else {
                     isFinished = true;
-                    nextJob = JobFactory::instance().createFallerJob();
+                    _nextJob = Jobs::FALLER;
                 }
 
             }
@@ -153,7 +153,7 @@ void Climber::climbLeft() {
     if (Scene::getInstance().getMaskedMap().pixel(jobSprite->getPosition().x + 7, jobSprite->getPosition().y + 1) != 0) {
         jobSprite->incPosition(glm::vec2(2, 0));
         isFinished = true;
-        nextJob = JobFactory::instance().createFallerJob();
+        _nextJob = Jobs::FALLER;
     } else if (Scene::getInstance().getMaskedMap().pixel(posBase.x - 1, posBase.y - 3) == 0) {
         jobSprite->changeAnimation(LEDGING_LEFT);
         state = LEDGING_LEFT_STATE;
@@ -169,7 +169,7 @@ void Climber::climbRight() {
     if (Scene::getInstance().getMaskedMap().pixel(jobSprite->getPosition().x + 8, jobSprite->getPosition().y + 1) != 0) {
         jobSprite->incPosition(glm::vec2(-2, 0));
         isFinished = true;
-        nextJob = JobFactory::instance().createFallerJob();
+        _nextJob = Jobs::FALLER;
     } else if (Scene::getInstance().getMaskedMap().pixel(posBase.x + 1, posBase.y - 3) == 0) {
         jobSprite->changeAnimation(LEDGING_RIGHT);
         state = LEDGING_RIGHT_STATE;

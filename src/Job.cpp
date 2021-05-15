@@ -25,11 +25,11 @@ enum LemmingAnims
 };
 */
 
-Job::Job(Jobs currentJob):isFinished(false), _currentJob(currentJob), nextJob(nullptr),walkingRight(true){
+Job::Job(Jobs currentJob): isFinished(false), _currentJob(currentJob), _nextJob(Jobs::UNKNOWN), walkingRight(true){
 }
 
 Job::~Job() {
-    cout << "~Job:  " << (int)_currentJob << endl;
+
 }
 
 int Job::collisionFloor(int maxFall) const {
@@ -65,8 +65,8 @@ bool Job::finished() const {
     return isFinished;
 }
 
-Job* Job::getNextJob() {
-    return nextJob;
+Jobs Job::getNextJob()const {
+    return _nextJob;
 }
 
 

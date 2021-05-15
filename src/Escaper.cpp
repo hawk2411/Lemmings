@@ -44,7 +44,7 @@ void Escaper::updateStateMachine(int deltaTime) {
 
             if (jobSprite->isInLastFrame()) {
                 isFinished = true;
-                nextJob = NULL;
+                _nextJob = Jobs::UNKNOWN;
 
             }
     }

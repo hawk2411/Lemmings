@@ -67,11 +67,11 @@ void Walker::updateStateMachine(int deltaTime) {
                     if (jobSprite->getPosition() ==
                         Level::currentLevel().getLevelAttributes()->_door->getEscapePosition()) {
                         isFinished = true;
-                        nextJob = JobFactory::instance().createEscaperJob();
+                        _nextJob = Jobs::ESCAPER;
                     }
                 } else {
                     isFinished = true;
-                    nextJob = JobFactory::instance().createFallerJob();
+                    _nextJob = Jobs::FALLER;
                 }
             }
             break;
@@ -92,11 +92,11 @@ void Walker::updateStateMachine(int deltaTime) {
                     if (jobSprite->getPosition() ==
                         Level::currentLevel().getLevelAttributes()->_door->getEscapePosition()) {
                         isFinished = true;
-                        nextJob = JobFactory::instance().createEscaperJob();
+                        _nextJob = Jobs::ESCAPER;
                     }
                 } else {
                     isFinished = true;
-                    nextJob = JobFactory::instance().createFallerJob();
+                    _nextJob = Jobs::FALLER;
                 }
 
             }
