@@ -9,6 +9,10 @@ enum BuilderAnims {
     NOSTEPS
 };
 
+Builder::Builder(Jobs jobs) : Job(jobs) {
+
+}
+
 
 void Builder::initAnims(ShaderProgram &shaderProgram) {
     jobSprite = Sprite::createSprite(glm::ivec2(16, 16), glm::vec2(1.f / 16, 1.f / 14), &shaderProgram,

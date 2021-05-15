@@ -13,58 +13,47 @@
 #include "Builder.h"
 
 Job *JobFactory::createWalkerJob() {
-    Walker *walkerJob = new Walker();
-    return walkerJob;
+    return new Walker(Jobs::WALKER);
 }
 
 Job *JobFactory::createDiggerJob() {
-    Digger *diggerJob = new Digger();
-    return diggerJob;
+    return new Digger(Jobs::DIGGER);
 }
 
 Job *JobFactory::createEscaperJob() {
-    Escaper *escaperJob = new Escaper();
-    return escaperJob;
-}
+    return new Escaper(Jobs::ESCAPER);
+    }
 
 Job *JobFactory::createExploderJob() {
-    Exploder *exploderJob = new Exploder();
-    return exploderJob;
-}
+    return new Exploder(Jobs::EXPLODER);
+    }
 
 Job *JobFactory::createMinerJob() {
-    Miner *minerJob = new Miner();
-    return minerJob;
-}
+    return new Miner(Jobs::MINER);
+    }
 
 Job *JobFactory::createFloaterJob() {
-    Floater *floaterJob = new Floater();
-    return floaterJob;
+    return new Floater(Jobs::FLOATER);
 }
 
 Job *JobFactory::createBasherJob() {
-    Basher *basherJob = new Basher();
-    return basherJob;
+    return new Basher(Jobs::BASHER);
 }
 
 Job *JobFactory::createBlockerJob() {
-    Blocker *blockerJob = new Blocker();
-    return blockerJob;
+    return new Blocker(Jobs::BLOCKER);
 }
 
 Job *JobFactory::createFallerJob() {
-    Faller *fallerJob = new Faller();
-    return fallerJob;
+    return new Faller(Jobs::FALLER);
 }
 
 Job *JobFactory::createClimberJob() {
-    Climber *climberJob = new Climber();
-    return climberJob;
+    return new Climber(Jobs::CLIMBER);
 }
 
 Job *JobFactory::createBuilderJob() {
-    Builder *builderJob = new Builder();
-    return builderJob;
+    return new Builder(Jobs::BUILDER);
 }
 
 Job *JobFactory::createJob(Jobs jobToCreate) {

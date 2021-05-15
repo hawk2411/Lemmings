@@ -7,6 +7,8 @@
 
 class Floater : public Job {
 public:
+    Floater(Jobs jobs);
+
     void initAnims(ShaderProgram &shaderProgram) override;
 
     void updateStateMachine(int deltaTime) override;

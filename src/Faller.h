@@ -7,6 +7,8 @@
 
 class Faller : public Job {
 public:
+    Faller(Jobs jobs);
+    ~Faller() override;
     void initAnims(ShaderProgram &shaderProgram) override;
 
     void updateStateMachine(int deltaTime) override;
@@ -17,7 +19,7 @@ public:
 
 
 private:
-    enum FallerState {
+    enum class FallerState {
         FALLING_LEFT_STATE, FALLING_RIGHT_STATE, FALLING_DEATH_STATE
     };
 

@@ -11,6 +11,8 @@ class Builder : public Job {
 
 
 public:
+    Builder(Jobs jobs);
+
     void initAnims(ShaderProgram &shaderProgram) override;
 
     void updateStateMachine(int deltaTime) override;

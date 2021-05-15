@@ -6,7 +6,7 @@
 #include "KeyFactory.h"
 #include "Game.h"
 
-#define LINESPAGE 6
+//#define LINESPAGE 6
 
 void Instructions::init() {
     currentTime = 0.0f;

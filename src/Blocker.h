@@ -11,6 +11,8 @@
 
 class Blocker : public Job {
 public:
+    Blocker(Jobs jobs);
+
     void initAnims(ShaderProgram &shaderProgram) override;
 
     void updateStateMachine(int deltaTime) override;

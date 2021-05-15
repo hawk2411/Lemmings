@@ -9,6 +9,8 @@ class Climber : public Job {
 
 
 public:
+    Climber(Jobs jobs);
+
     void initAnims(ShaderProgram &shaderProgram) override;
 
     void updateStateMachine(int deltaTime) override;

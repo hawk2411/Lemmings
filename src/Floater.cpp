@@ -19,6 +19,9 @@ enum FloaterAnims {
     FLOATER_OPENING_RIGHT, FLOATER_OPENING_LEFT, FLOATER_FALLING_RIGHT, FLOATER_FALLING_LEFT
 };
 
+Floater::Floater(Jobs jobs) : Job(jobs) {
+
+}
 
 void Floater::initAnims(ShaderProgram &shaderProgram) {
     jobSprite = Sprite::createSprite(glm::ivec2(16, 16), glm::vec2(1.f / 16, 1.f / 14), &shaderProgram,
@@ -189,7 +192,6 @@ void Floater::updateStateMachine(int deltaTime) {
 
     }
 }
-
 
 void Floater::timeToFloat()const {
     glm::ivec2 posBase = jobSprite->getPosition();

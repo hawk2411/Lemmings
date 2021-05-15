@@ -12,6 +12,10 @@
 #define JUMP_HEIGHT 96
 #define FALL_STEP 4
 
+Digger::Digger(Jobs jobs) : Job(jobs) {
+
+}
+
 
 void Digger::initAnims(ShaderProgram &shaderProgram) {
     jobSprite = Sprite::createSprite(glm::ivec2(16, 16), glm::vec2(1.f / 16, 1.f / 14), &shaderProgram,
@@ -85,6 +89,7 @@ void Digger::dig() {
 
     jobSprite->incPosition(glm::ivec2(0, 1));
 }
+
 
 
 

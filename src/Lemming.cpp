@@ -31,32 +31,35 @@ void Lemming::update(int deltaTime) {
     if (outOfMap()) {
         alive = false;
         delete this->job;
+        //lemming no longer has a job
+        return;
+    }
+    if (countdown != nullptr && countdown->isOver()) {
+        changeJob(JobFactory::instance().createExploderJob());
+        delete countdown;
+        countdown = nullptr;
+        return;
+    }
+    //still not nuked
+    job->updateStateMachine(deltaTime);
 
-    } else {
-        if (countdown != nullptr && countdown->isOver()) {
-            changeJob(JobFactory::instance().createExploderJob());
-            delete countdown;
-            countdown = nullptr;
-        } else {
-            job->updateStateMachine(deltaTime);
+    if (countdown != nullptr) {
+        //countdown for nuke is running
+        countdown->setPosition(glm::vec2(6, -8) + this->job->sprite()->getPosition());
+        countdown->update(deltaTime);
+    }
 
-            if (countdown != nullptr) {
-                countdown->setPosition(glm::vec2(6, -8) + this->job->sprite()->getPosition());
-                countdown->update(deltaTime);
+    if (job->finished()) {
+        if (job->getNextJob() == nullptr) {
+            if (job->getCurrentJob() == Jobs::ESCAPER) {
+                isSaved = true;
+            } else {
+                cout << "is finished but not alive" << endl;
+                alive = false;
             }
-
-            if (job->finished()) {
-                if (job->getNextJob() == nullptr) {
-                    if (job->getName() == "ESCAPER") {
-                        isSaved = true;
-                    } else {
-                        alive = false;
-                    }
-                }
-                if (alive && !isSaved) {
-                    changeJob(job->getNextJob());
-                }
-            }
+        }
+        if (alive && !isSaved) {
+            changeJob(job->getNextJob());
         }
     }
 
@@ -64,7 +67,7 @@ void Lemming::update(int deltaTime) {
 
 void Lemming::render() {
     glm::vec2 oldPosition = this->job->sprite()->getPosition();
-    this->job->sprite()->setPosition( oldPosition  - Level::currentLevel().getLevelAttributes()->cameraPos);
+    this->job->sprite()->setPosition(oldPosition - Level::currentLevel().getLevelAttributes()->cameraPos);
     this->job->sprite()->render();
     this->job->sprite()->setPosition(oldPosition);
 

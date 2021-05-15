@@ -12,6 +12,9 @@
 #define JUMP_HEIGHT 96
 #define FALL_STEP 4
 
+Blocker::Blocker(Jobs jobs) : Job(jobs) {
+
+}
 
 void Blocker::initAnims(ShaderProgram &shaderProgram) {
     jobSprite = Sprite::createSprite(glm::ivec2(16, 16), glm::vec2(1.f / 16, 1.f / 14), &shaderProgram,
@@ -54,3 +57,4 @@ void Blocker::updateStateMachine(int deltaTime) {
             break;
     }
 }
+

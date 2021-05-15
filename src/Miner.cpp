@@ -18,6 +18,9 @@ enum MinerAnims {
     MINER_RIGHT, MINER_LEFT
 };
 
+Miner::Miner(Jobs jobs) : Job(jobs) {
+
+}
 
 void Miner::initAnims(ShaderProgram &shaderProgram) {
     jobSprite = Sprite::createSprite(glm::ivec2(16, 16), glm::vec2(1.f / 16, 1.f / 14), &shaderProgram,
@@ -97,6 +100,7 @@ void Miner::updateStateMachine(int deltaTime) {
             }
     }
 }
+
 
 void Miner::printMine() {
     glm::ivec2 posBase = jobSprite->getPosition();

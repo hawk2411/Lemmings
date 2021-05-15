@@ -5,75 +5,74 @@
 #include "Utils.h"
 
 void LevelManager::init(string levelMode, int levelNum) {
-    currentTime = 0.0f;
+    _currentTime = 0.0f;
 
     string levelName = levelMode + "-" + to_string(levelNum);
-    actualLevel = levelNum;
-    if (levelMode == "fun") actualMode = FUN_MODE;
-    if (levelMode == "tricky") actualMode = TRICKY_MODE;
-    if (levelMode == "taxing") actualMode = TAXING_MODE;
+    _actualLevel = levelNum;
+    if (levelMode == "fun") _actualMode = FUN_MODE;
+    if (levelMode == "tricky") _actualMode = TRICKY_MODE;
+    if (levelMode == "taxing") _actualMode = TAXING_MODE;
     Level::currentLevel().createFromFile("levels/" + levelName + ".txt");
     Level::currentLevel().init();
 
-    jobCount = Level::currentLevel().getLevelAttributes()->jobCount;
+    _jobCount = Level::currentLevel().getLevelAttributes()->jobCount;
 
-    lemmings.clear();
-    lemmings = set<Lemming *>();
+    clearLemmings();
 
-    goalLemmingNum = Level::currentLevel().getLevelAttributes()->goalLemmings;
-    releaseRate = Level::currentLevel().getLevelAttributes()->releaseRate;
-    minReleaseRate = Level::currentLevel().getLevelAttributes()->minReleaseRate;
+    _goalLemmingNum = Level::currentLevel().getLevelAttributes()->goalLemmings;
+    _releaseRate = Level::currentLevel().getLevelAttributes()->releaseRate;
+    _minReleaseRate = Level::currentLevel().getLevelAttributes()->minReleaseRate;
 
-    goalTime = Level::currentLevel().getLevelAttributes()->time;
-    currentTime = 0.0f;
-    lastTimeSpawnedLemming = -3500;
+    _goalTime = Level::currentLevel().getLevelAttributes()->time;
+    _currentTime = 0.0f;
+    _lastTimeSpawnedLemming = -3500;
 
-    availableLemmings = Level::currentLevel().getLevelAttributes()->numLemmings;
-    spawningLemmings = true;
+    _availableLemmings = Level::currentLevel().getLevelAttributes()->numLemmings;
+    _spawningLemmings = true;
 
-    door = Level::currentLevel().getLevelAttributes()->_door.get();
-    trapdoor = Level::currentLevel().getLevelAttributes()->trapdoor;
+    _door = Level::currentLevel().getLevelAttributes()->_door.get();
+    _trapdoor = Level::currentLevel().getLevelAttributes()->trapdoor;
 
-    deadLemmings = 0;
-    savedLemmings = 0;
+    _deadLemmings = 0;
+    _savedLemmings = 0;
 
-    finishedLevel = false;
-    exploding = false;
+    _finishedLevel = false;
+    _exploding = false;
 
     string musicPath = "sounds/Lemming" + to_string(levelNum) + ".ogg";
-    music = Game::instance().getSoundManager()->loadSound(musicPath, FMOD_LOOP_NORMAL | FMOD_CREATESTREAM);
-    dooropen = Game::instance().getSoundManager()->loadSound("sounds/lemmingsEffects/Letsgo.ogg", FMOD_DEFAULT | FMOD_UNIQUE);
+    _music = Game::instance().getSoundManager()->loadSound(musicPath, FMOD_LOOP_NORMAL | FMOD_CREATESTREAM);
+    _dooropen = Game::instance().getSoundManager()->loadSound("sounds/lemmingsEffects/Letsgo.ogg", FMOD_DEFAULT | FMOD_UNIQUE);
 
-    channel = Game::instance().getSoundManager()->playSound(dooropen);
-    channel->setVolume(1.);
+    _channel = Game::instance().getSoundManager()->playSound(_dooropen);
+    _channel->setVolume(1.);
 }
 
 void LevelManager::update(int deltaTime) {
-    currentTime += deltaTime;
+    _currentTime += deltaTime;
 
-    if (currentTime / 1000 >= goalTime) {
+    if (_currentTime / 1000 >= _goalTime) {
         finishLevel();
     }
 
-    if (!trapdoor->isOpened()) {
-        trapdoor->update(deltaTime);
-        if (trapdoor->isOpened()) {
-            currentTime = 0;
-            channel = Game::instance().getSoundManager()->playSound(music);
-            channel->setVolume(1.f);
+    if (!_trapdoor->isOpened()) {
+        _trapdoor->update(deltaTime);
+        if (_trapdoor->isOpened()) {
+            _currentTime = 0;
+            _channel = Game::instance().getSoundManager()->playSound(_music);
+            _channel->setVolume(1.f);
         }
         return;
     }
 
-    if (spawningLemmings) {
+    if (_spawningLemmings) {
         spawnLemmings();
     }
     updateLemmings(deltaTime);
 
-    door->update(deltaTime);
-    trapdoor->update(deltaTime);
+    _door->update(deltaTime);
+    _trapdoor->update(deltaTime);
 
-    if (savedLemmings + deadLemmings == Level::currentLevel().getLevelAttributes()->numLemmings) {
+    if (_savedLemmings + _deadLemmings == Level::currentLevel().getLevelAttributes()->numLemmings) {
         finishLevel();
     }
 }
@@ -85,69 +84,69 @@ void LevelManager::render() {
 }
 
 bool LevelManager::finished() {
-    return finishedLevel;
+    return _finishedLevel;
 }
 
 void LevelManager::spawnLemmings() {
-    int elapsedTimeSinceLastLemming = currentTime - lastTimeSpawnedLemming;
-    int timeToNextLemming = 3500 * (100 - releaseRate) / 50;
+    int elapsedTimeSinceLastLemming = _currentTime - _lastTimeSpawnedLemming;
+    int timeToNextLemming = 3500 * (100 - _releaseRate) / 50;    //TODO what is that formula?
 
     if (elapsedTimeSinceLastLemming >= timeToNextLemming) {
-        --availableLemmings;
-        lastTimeSpawnedLemming = currentTime;
+        --_availableLemmings;
+        _lastTimeSpawnedLemming = _currentTime;
         Lemming *newLemming = new Lemming(Level::currentLevel().getLevelAttributes()->trapdoor->getEnterPosition());
         newLemming->setWalkingRight(true);
-        lemmings.insert(newLemming);
+        _lemmings.insert(newLemming);
 
     }
 
-    spawningLemmings = availableLemmings != 0;
+    _spawningLemmings = _availableLemmings != 0;
 }
 
 int LevelManager::getNumLemmingsAlive() {
-    return lemmings.size();
+    return _lemmings.size();
 }
 
 int LevelManager::getPercentageSavedLemmings() {
-    return float(savedLemmings) / Level::currentLevel().getLevelAttributes()->numLemmings * 100;
+    return float(_savedLemmings) / Level::currentLevel().getLevelAttributes()->numLemmings * 100;
 }
 
 int LevelManager::getPercentageTotalLemmings() {
-    return goalLemmingNum;
+    return _goalLemmingNum;
 }
 
 void LevelManager::stopSpawningLemmings() {
-    spawningLemmings = false;
+    _spawningLemmings = false;
 }
 
 int LevelManager::getCurrentTime() {
-    return currentTime / 1000;
+    return _currentTime / 1000;
 }
 
 int LevelManager::getRemainingTime() {
-    return goalTime - getCurrentTime();
+    return _goalTime - getCurrentTime();
 }
 
 
 int LevelManager::getActualLevel() {
-    return actualLevel;
+    return _actualLevel;
 }
 
 int LevelManager::getActualMode() {
-    return actualMode;
+    return _actualMode;
 }
 
-void LevelManager::apocalypsis() {
-    if (exploding) {
+void LevelManager::apocalypse() {
+    if (_exploding) {
         return;
     }
 
-    exploding = true;
-    spawningLemmings = false;
-    deadLemmings += availableLemmings;
+    _exploding = true;
+    _spawningLemmings = false;
+    _deadLemmings += _availableLemmings;
 
     std::set<Lemming *>::iterator it;
-    for (it = lemmings.begin(); it != lemmings.end(); ++it) {
+    for (it = _lemmings.begin(); it != _lemmings.end(); ++it) {
         Lemming *currentLemming = *it;
         currentLemming->writeDestiny();
     }
@@ -155,26 +154,26 @@ void LevelManager::apocalypsis() {
 
 
 int LevelManager::getReleaseRate() {
-    return releaseRate;
+    return _releaseRate;
 }
 
 int LevelManager::getMinReleaseRate() {
-    return minReleaseRate;
+    return _minReleaseRate;
 }
 
 
 void LevelManager::decreaseReleaseRate() {
-    releaseRate = Utils::max(minReleaseRate, releaseRate - 5);
+    _releaseRate = Utils::max(_minReleaseRate, _releaseRate - 5);
 }
 
 void LevelManager::increaseReleaseRate() {
-    releaseRate = Utils::min(99, releaseRate + 5);
+    _releaseRate = Utils::min(99, _releaseRate + 5);
 }
 
 int LevelManager::getLemmingIndexInPos(int posX, int posY) {
     int i = -1;
     std::set<Lemming *>::iterator it;
-    for (it = lemmings.begin(); it != lemmings.end(); ++it) {
+    for (it = _lemmings.begin(); it != _lemmings.end(); ++it) {
         ++i;
         Lemming *currentLemming = *it;
         glm::vec2 lemmingPosition = currentLemming->getPosition();
@@ -189,14 +188,14 @@ int LevelManager::getLemmingIndexInPos(int posX, int posY) {
 }
 
 string LevelManager::getLemmingJobNameIndex(int index) {
-    auto it = lemmings.begin();
+    auto it = _lemmings.begin();
     std::advance(it, index);
     Lemming *currentLemming = *it;
     return currentLemming->getJob()->getName();
 }
 
 bool LevelManager::assignJob(int lemmingIndex, Job *jobToAssign) {
-    auto it = lemmings.begin();
+    auto it = _lemmings.begin();
     std::advance(it, lemmingIndex);
     Lemming *currentLemming = *it;
 
@@ -220,12 +219,12 @@ bool LevelManager::assignJob(int lemmingIndex, Job *jobToAssign) {
 }
 
 void LevelManager::finishLevel() {
-    finishedLevel = true;
+    _finishedLevel = true;
 }
 
 void LevelManager::updateLemmings(int deltaTime) {
-    auto it = lemmings.begin();
-    while (it != lemmings.end()) {
+    auto it = _lemmings.begin();
+    while (it != _lemmings.end()) {
         auto current = it++;
         Lemming *currentLemming = *current;
         currentLemming->update(deltaTime);
@@ -234,18 +233,18 @@ void LevelManager::updateLemmings(int deltaTime) {
         bool dead = currentLemming->dead();
 
         if (saved) {
-            lemmings.erase(current);
-            ++savedLemmings;
+            _lemmings.erase(current);
+            ++_savedLemmings;
         } else if (dead) {
-            lemmings.erase(current);
-            ++deadLemmings;
+            _lemmings.erase(current);
+            ++_deadLemmings;
         }
     }
 }
 
 void LevelManager::renderLemmings() {
     std::set<Lemming *>::iterator it;
-    for (it = lemmings.begin(); it != lemmings.end(); ++it) {
+    for (it = _lemmings.begin(); it != _lemmings.end(); ++it) {
         Lemming *currentLemming = *it;
         currentLemming->render();
     }
@@ -253,14 +252,21 @@ void LevelManager::renderLemmings() {
 
 
 int LevelManager::getJobCount(int index) {
-    return jobCount[index];
+    return _jobCount[index];
 }
 
 void LevelManager::decreaseJobCount(int index) {
-    --jobCount[index];
+    --_jobCount[index];
 }
 
 
 void LevelManager::endMusic() {
-    channel->stop();
+    _channel->stop();
+}
+
+void LevelManager::clearLemmings() {
+    for(auto* lemmming: _lemmings) {
+        delete lemmming;
+    }
+    _lemmings.clear();
 }

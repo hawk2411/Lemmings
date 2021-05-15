@@ -7,6 +7,7 @@
 // all properties it needs to track its movement and collisions.
 
 enum class Jobs{
+    UNKNOWN,
     WALKER,
     DIGGER,
     ESCAPER,
@@ -24,7 +25,9 @@ enum class Jobs{
 class Job {
 
 public:
-    virtual ~Job() = default;
+    explicit Job(Jobs currentJob);
+
+    virtual ~Job();
 
     virtual void updateStateMachine(int deltaTime) = 0;
 
@@ -33,6 +36,8 @@ public:
     bool finished() const;
 
     Job *getNextJob();
+
+    Jobs getCurrentJob()const{return _currentJob;}
 
     Sprite *sprite();
 
@@ -48,9 +53,10 @@ protected:
 
     bool collision() const;
 
-    std::unique_ptr<Sprite> jobSprite;
+    unique_ptr<Sprite> jobSprite;
     bool isFinished;
-    Job *nextJob = nullptr;
+    Jobs _currentJob;
+    Job* nextJob = nullptr;
     bool walkingRight;
 
 

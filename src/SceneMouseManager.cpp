@@ -102,6 +102,7 @@ SceneMouseManager::ScreenClickedArea SceneMouseManager::getClickedScreenArea(int
             ) {
         return ScreenClickedArea::UI;
     }
+    throw std::runtime_error("SceneMouseManager::getClickedScreenArea unknown behavior.");
 }
 
 SceneMouseManager::ScreenMovedArea SceneMouseManager::getMovedScreenArea(int mouseX, int mouseY) {

@@ -9,7 +9,7 @@ class NumFactory {
 
 public:
 
-    virtual std::unique_ptr<Sprite> createNum() = 0;
+    virtual unique_ptr<Sprite> createNum() = 0;
 
 };
 

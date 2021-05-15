@@ -17,6 +17,10 @@ enum BasherAnims {
     BASHER_RIGHT, BASHER_LEFT
 };
 
+Basher::Basher(Jobs jobs) : Job(jobs) {
+
+}
+
 void Basher::initAnims(ShaderProgram &shaderProgram) {
     jobSprite = Sprite::createSprite(glm::ivec2(16, 16), glm::vec2(1.f / 16, 1.f / 14), &shaderProgram,
                                      &Game::spriteSheets().lemmingAnimations,
@@ -167,6 +171,7 @@ bool Basher::bashLeft() {
 
     return true;
 }
+
 
 
 

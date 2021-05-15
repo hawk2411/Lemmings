@@ -16,17 +16,6 @@ public:
         return instance;
     };
 
-    enum JobPosition {
-        CLIMBER,
-        FLOATER,
-        BOMBER,
-        BLOCKER,
-        BUILDER,
-        BASHER,
-        MINNER,
-        DIGGER
-    };
-
     void init(string levelMode, int levelNum);
 
     void update(int deltaTime);
@@ -53,7 +42,7 @@ public:
 
     int getRemainingTime();
 
-    void apocalypsis();
+    void apocalypse();
 
     int getReleaseRate();
 
@@ -78,34 +67,34 @@ private:
     void spawnLemmings();
 
 
-    int *jobCount;
-    set<Lemming *> lemmings;
+    int *_jobCount;
+    set<Lemming *> _lemmings;    //TODO why the fuck is this a set? Are they sorted?
 
 
-    int deadLemmings;
-    int savedLemmings;
-    int goalLemmingNum;
-    int releaseRate;
-    int minReleaseRate;
-    int availableLemmings;
+    int _deadLemmings;
+    int _savedLemmings;
+    int _goalLemmingNum;
+    int _releaseRate;
+    int _minReleaseRate;
+    int _availableLemmings;
 
-    int actualLevel;
-    int actualMode;
+    int _actualLevel;
+    int _actualMode;
 
-    int goalTime;
-    float currentTime;
-    int lastTimeSpawnedLemming;
+    int _goalTime;
+    float _currentTime;
+    int _lastTimeSpawnedLemming;
 
-    bool spawningLemmings;
-    bool finishedLevel;
+    bool _spawningLemmings;
+    bool _finishedLevel;
 
-    bool exploding;
+    bool _exploding;
 
-    Door *door;
-    Trapdoor *trapdoor;
+    Door *_door;
+    Trapdoor *_trapdoor;
 
-    FMOD::Sound *music, *dooropen;
-    FMOD::Channel *channel;
+    FMOD::Sound *_music, *_dooropen;
+    FMOD::Channel *_channel;
 
     void finishLevel();
 
@@ -114,6 +103,7 @@ private:
     void renderLemmings();
 
 
+    void clearLemmings();
 };
 
 #endif // _LEVELMANAGER_INCLUDE

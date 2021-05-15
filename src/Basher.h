@@ -7,6 +7,8 @@
 
 class Basher : public Job {
 public:
+    Basher(Jobs jobs);
+
     void initAnims(ShaderProgram &shaderProgram) override;
 
     void updateStateMachine(int deltaTime) override;

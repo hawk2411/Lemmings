@@ -8,6 +8,8 @@
 
 class Escaper : public Job {
 public:
+    Escaper(Jobs jobs);
+
     void initAnims(ShaderProgram &shaderProgram);
 
     void updateStateMachine(int deltaTime);

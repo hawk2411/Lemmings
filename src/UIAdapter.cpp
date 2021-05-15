@@ -87,7 +87,7 @@ void UIAdapter::activateButton(int buttonIndex) {
             }
             break;
         case Button::NUKE_BUTTON:
-            LevelManager::getInstance().apocalypsis();
+            LevelManager::getInstance().apocalypse();
             break;
         case Button::SPEED_BUTTON:
             Scene::getInstance().changeSpeedUpStatus();

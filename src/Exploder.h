@@ -7,6 +7,8 @@
 
 class Exploder : public Job {
 public:
+    Exploder(Jobs jobs);
+
     void initAnims(ShaderProgram &shaderProgram);
 
     void updateStateMachine(int deltaTime);

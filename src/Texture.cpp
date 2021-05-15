@@ -21,14 +21,16 @@ Texture::~Texture() {
 
 bool Texture::loadFromFile(const string &filename, PixelFormat format) {
     //unsigned char *image = nullptr;
-    std::unique_ptr<unsigned char> image;
+    std::unique_ptr<unsigned char, decltype(&SOIL_free_image_data)> image(nullptr, SOIL_free_image_data);
 
     switch (format) {
         case TEXTURE_PIXEL_FORMAT_RGB:
-            image = std::unique_ptr<unsigned char >(SOIL_load_image(filename.c_str(), &_widthTex, &_heightTex, nullptr, SOIL_LOAD_RGB));
+            image = std::unique_ptr<unsigned char, decltype(&SOIL_free_image_data)>(SOIL_load_image(filename.c_str(), &_widthTex, &_heightTex, nullptr, SOIL_LOAD_RGB),
+                                                    SOIL_free_image_data);
             break;
         case TEXTURE_PIXEL_FORMAT_RGBA:
-            image = std::unique_ptr<unsigned char >(SOIL_load_image(filename.c_str(), &_widthTex, &_heightTex, nullptr, SOIL_LOAD_RGBA));
+            image = std::unique_ptr<unsigned char, decltype(&SOIL_free_image_data)>(SOIL_load_image(filename.c_str(), &_widthTex, &_heightTex, nullptr, SOIL_LOAD_RGBA),
+                                                                                    SOIL_free_image_data);
             break;
         case TEXTURE_PIXEL_FORMAT_L:
             break;

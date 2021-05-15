@@ -7,6 +7,8 @@
 
 class Digger : public Job {
 public:
+    Digger(Jobs jobs);
+
     void initAnims(ShaderProgram &shaderProgram);
 
     void updateStateMachine(int deltaTime);

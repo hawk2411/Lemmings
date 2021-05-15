@@ -7,6 +7,8 @@
 
 class Miner : public Job {
 public:
+    Miner(Jobs jobs);
+
     void initAnims(ShaderProgram &shaderProgram) override;
 
     void updateStateMachine(int deltaTime) override;
