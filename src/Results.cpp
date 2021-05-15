@@ -8,11 +8,11 @@
 void Results::init() {
     mouseManager = &ResultsMouseManager::getInstance();
     keyboardManager = &ResultsKeyboardManager::getInstance();
-    currentTime = 0.0f;
+    _currentTime = 0.0f;
 }
 
 void Results::update(int deltaTime) {
-    currentTime += deltaTime;
+    _currentTime += deltaTime;
 }
 
 void Results::render() {

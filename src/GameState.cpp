@@ -3,23 +3,29 @@
 #include <GL/glut.h>
 #include "common_defs.h"
 
+GameState::GameState() {
+
+}
+
+GameState::~GameState() {
+
+}
+
+
 void GameState::keyPressed(int key) {
     keyboardManager->keyPressed(key);
-    keys[key] = true;
 
 }
 
 void GameState::keyReleased(int key) {
-    keys[key] = false;
 }
 
 void GameState::specialKeyPressed(int key) {
     keyboardManager->specialKeyPressed(key);
-    specialKeys[key] = true;
 }
 
 void GameState::specialKeyReleased(int key) {
-    specialKeys[key] = false;
+
 }
 
 void GameState::mouseMove(int x, int y) {
@@ -55,11 +61,4 @@ void GameState::mouseRelease(int button) {
 
 }
 
-bool GameState::getKey(int key) const {
-    return keys[key];
-}
-
-bool GameState::getSpecialKey(int key) const {
-    return specialKeys[key];
-}
 

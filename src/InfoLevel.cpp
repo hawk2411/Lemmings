@@ -7,7 +7,7 @@
 void InfoLevel::init() {
     keyboardManager = &InfoLevelKeyboardManager::getInstance();
     mouseManager = &InfoLevelMouseManager::getInstance();
-    currentTime = 0.0f;
+    _currentTime = 0.0f;
 }
 
 void InfoLevel::setLevel(int numLevel, int levelMode) {
@@ -22,7 +22,7 @@ void InfoLevel::setLevel(int numLevel, int levelMode) {
 }
 
 void InfoLevel::update(int deltaTime) {
-    currentTime += deltaTime;
+    _currentTime += deltaTime;
 }
 
 void InfoLevel::render() {

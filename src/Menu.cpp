@@ -4,8 +4,8 @@
 #include "ShaderManager.h"
 #include "Game.h"
 
-Menu::Menu() {
-
+Menu::Menu() : mode(0) {
+    music = make_unique<Sound>(Game::instance().getSoundManager(), "sounds/MenuSong.ogg", FMOD_LOOP_NORMAL | FMOD_CREATESTREAM);
 }
 
 Menu::~Menu() {
@@ -49,9 +49,8 @@ void Menu::init() {
     menuAbout->setPosition(glm::vec2(80, 130));
     menuExit->setPosition(glm::vec2(171, 130));
 
-    music = Game::instance().getSoundManager()->loadSound("sounds/MenuSong.ogg", FMOD_LOOP_NORMAL | FMOD_CREATESTREAM);
-    channel = Game::instance().getSoundManager()->playSound(music);
-    channel->setVolume(1.0f);
+    music->playSound();
+    music->setVolume(1.0f);
 
 }
 
@@ -126,5 +125,5 @@ int Menu::getMode() {
 }
 
 void Menu::endMusic() {
-    channel->stop();
+    music->stopSound();
 }

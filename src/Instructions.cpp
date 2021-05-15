@@ -8,8 +8,22 @@
 
 //#define LINESPAGE 6
 
+
+Instructions::Instructions() : actualPage(0),
+                               _instructionsWord(nullptr),
+                               _onlyLeft(false),
+                               _onlyRight(true) {
+
+    _music = make_unique<Sound>(Game::instance().getSoundManager(), "sounds/InstructionsSong.ogg",
+                                FMOD_LOOP_NORMAL | FMOD_CREATESTREAM);
+}
+
+Instructions::~Instructions() {
+
+}
+
 void Instructions::init() {
-    currentTime = 0.0f;
+    _currentTime = 0.0f;
     _onlyRight = true;
     _onlyLeft = false;
     actualPage = 0;
@@ -17,16 +31,12 @@ void Instructions::init() {
     initSprites();
     mouseManager = &InstructionsMouseManager::getInstance();
     keyboardManager = &InstructionsKeyboardManager::getInstance();
-
-    _music = Game::instance().getSoundManager()->loadSound("sounds/InstructionsSong.ogg",
-                                                           FMOD_LOOP_NORMAL | FMOD_CREATESTREAM);
-    _channel = Game::instance().getSoundManager()->playSound(_music);
-    _channel->setVolume(1.f);
+    _music->playSound();
+    _music->setVolume(1.f);
 }
 
 void Instructions::update(int deltaTime) {
-    currentTime += deltaTime;
-
+    _currentTime +=  static_cast<float>(deltaTime);
 }
 
 void Instructions::render() {
@@ -269,5 +279,5 @@ void Instructions::initLines() {
 }
 
 void Instructions::endMusic() {
-    _channel->stop();
+    _music->stopSound();
 }

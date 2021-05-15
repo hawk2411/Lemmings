@@ -9,13 +9,17 @@ enum FallerAnims {
 };
 
 #define FATAL_FALLING_DISTANCE 65
-Faller::Faller(Jobs jobs) : Job(jobs), state(FallerState::FALLING_RIGHT_STATE), deathEffect(nullptr)
-{
-    cout << "Faller job created" << endl;
 
+Faller::Faller(Jobs jobs) : Job(jobs),
+                            state(FallerState::FALLING_RIGHT_STATE),
+                            deathEffect(nullptr),
+                            currentDistance(0),
+                            dead(false) {
+    deathEffect = make_unique<Sound>(Game::instance().getSoundManager(), "sounds/lemmingsEffects/SPLAT.WAV",
+                                     FMOD_DEFAULT | FMOD_CREATESTREAM | FMOD_UNIQUE);
 }
+
 Faller::~Faller() {
-    cout << "Faller job deleted" << endl;
 }
 
 void Faller::initAnims(ShaderProgram &shaderProgram) {
@@ -41,9 +45,6 @@ void Faller::initAnims(ShaderProgram &shaderProgram) {
 
     state = FallerState::FALLING_RIGHT_STATE;
     jobSprite->changeAnimation(FALLING_RIGHT);
-
-    deathEffect = Game::instance().getSoundManager()->loadSound("sounds/lemmingsEffects/SPLAT.WAV",
-                                          FMOD_DEFAULT | FMOD_CREATESTREAM | FMOD_UNIQUE);
 
 }
 
@@ -77,8 +78,8 @@ void Faller::updateStateMachine(int deltaTime) {
                 if (dead) {
                     state = FallerState::FALLING_DEATH_STATE;
                     jobSprite->changeAnimation(FALLING_DEATH);
-                    FMOD::Channel *channeled = Game::instance().getSoundManager()->playSound(deathEffect);
-                    channeled->setVolume(0.8f);
+                    deathEffect->playSound();
+                    deathEffect->setVolume(0.8f);
                 } else {
                     isFinished = true;
                     _nextJob = Jobs::WALKER;
@@ -89,7 +90,7 @@ void Faller::updateStateMachine(int deltaTime) {
         case FallerState::FALLING_DEATH_STATE:
             if (jobSprite->isInLastFrame()) {
                 isFinished = true;
-                if(_nextJob != Jobs::UNKNOWN){
+                if (_nextJob != Jobs::UNKNOWN) {
                     _nextJob = Jobs::UNKNOWN;
                 }
             }

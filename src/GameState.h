@@ -7,6 +7,8 @@
 class GameState {
 
 public:
+    GameState();
+    virtual ~GameState();
 
     virtual void init() = 0;
 
@@ -29,19 +31,13 @@ public:
 
     void mouseRelease(int button);
 
-    bool getKey(int key) const;
-
-    bool getSpecialKey(int key) const;
-
 
 protected:
     MouseManager *mouseManager;
     KeyboardManager *keyboardManager;
-    float currentTime;
+    float _currentTime;
 
 private:
-
-    bool keys[256], specialKeys[256]; // Store key states so that
     // we can have access at any time
     int mouseX, mouseY;               // Mouse position
     bool bLeftMouse, bRightMouse;     // Mouse button states

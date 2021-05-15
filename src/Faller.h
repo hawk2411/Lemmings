@@ -3,7 +3,7 @@
 
 
 #include "Job.h"
-#include "SoundManager.h"
+#include "Sound.h"
 
 class Faller : public Job {
 public:
@@ -28,7 +28,7 @@ private:
     FallerState state;
     int currentDistance = 0;
     bool dead = false;
-    FMOD::Sound *deathEffect;
+    unique_ptr<Sound> deathEffect;
 };
 
 

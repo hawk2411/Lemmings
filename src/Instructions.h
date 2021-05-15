@@ -5,7 +5,7 @@
 #include "Texture.h"
 #include "Sprite.h"
 #include "Word.h"
-#include "SoundManager.h"
+#include "Sound.h"
 
 #define LINESPAGE 6
 
@@ -16,6 +16,9 @@ public:
         static Instructions instance;
         return instance;
     };
+
+    Instructions();
+    ~Instructions() override;
 
     void init() override;
 
@@ -54,9 +57,7 @@ private:
     bool _onlyLeft;
     bool _onlyRight;
 
-    FMOD::Sound *_music;
-    FMOD::Channel *_channel;
-
+    unique_ptr<Sound> _music;
 };
 
 

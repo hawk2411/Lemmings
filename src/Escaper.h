@@ -3,7 +3,7 @@
 
 
 #include "Job.h"
-#include "SoundManager.h"
+#include "Sound.h"
 
 
 class Escaper : public Job {
@@ -26,7 +26,7 @@ private:
 
 private:
     EscaperState state;
-    FMOD::Sound *escapeEfect;
+    unique_ptr<Sound> escapeEfect;
 };
 
 

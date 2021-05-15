@@ -4,7 +4,7 @@
 #include "GameState.h"
 #include "Texture.h"
 #include "Sprite.h"
-#include "SoundManager.h"
+#include "Sound.h"
 
 class Credits : public GameState {
 
@@ -13,6 +13,9 @@ public:
         static Credits instance;
         return instance;
     };
+
+    Credits();
+    ~Credits();
 
     void init();
 
@@ -30,9 +33,7 @@ private:
     // Parametres
     Texture creditsLevelTexture;
     std::unique_ptr<Sprite> creditsLevelSprite;
-
-    FMOD::Sound *music;
-    FMOD::Channel *channel;
+    unique_ptr<Sound> music;
 };
 
 

@@ -4,6 +4,35 @@
 #include "ParticleSystemManager.h"
 #include "Utils.h"
 
+LevelManager::LevelManager() : _jobCount(nullptr),
+                               _deadLemmings(0),
+                               _savedLemmings(0),
+                               _goalLemmingNum(0),
+                               _releaseRate(0),
+                               _minReleaseRate(0),
+                               _availableLemmings(0),
+                               _actualLevel(0),
+                               _actualMode(0),
+                               _goalTime(0),
+                               _currentTime(0.0f),
+                               _lastTimeSpawnedLemming(0),
+                               _spawningLemmings(false),
+                               _finishedLevel(false),
+                               _exploding(false),
+                               _door(nullptr),
+                               _trapdoor(nullptr),
+                               _music(nullptr),
+                               _dooropen(nullptr) {
+
+
+    _dooropen = make_unique<Sound>(Game::instance().getSoundManager(), "sounds/lemmingsEffects/Letsgo.ogg", FMOD_DEFAULT | FMOD_UNIQUE);
+}
+
+LevelManager::~LevelManager() {
+
+}
+
+
 void LevelManager::init(string levelMode, int levelNum) {
     _currentTime = 0.0f;
 
@@ -40,11 +69,10 @@ void LevelManager::init(string levelMode, int levelNum) {
     _exploding = false;
 
     string musicPath = "sounds/Lemming" + to_string(levelNum) + ".ogg";
-    _music = Game::instance().getSoundManager()->loadSound(musicPath, FMOD_LOOP_NORMAL | FMOD_CREATESTREAM);
-    _dooropen = Game::instance().getSoundManager()->loadSound("sounds/lemmingsEffects/Letsgo.ogg", FMOD_DEFAULT | FMOD_UNIQUE);
+    _music = make_unique<Sound>(Game::instance().getSoundManager(), musicPath, FMOD_LOOP_NORMAL | FMOD_CREATESTREAM);
 
-    _channel = Game::instance().getSoundManager()->playSound(_dooropen);
-    _channel->setVolume(1.);
+    _dooropen->playSound();
+    _dooropen->setVolume(1.0f);
 }
 
 void LevelManager::update(int deltaTime) {
@@ -58,8 +86,9 @@ void LevelManager::update(int deltaTime) {
         _trapdoor->update(deltaTime);
         if (_trapdoor->isOpened()) {
             _currentTime = 0;
-            _channel = Game::instance().getSoundManager()->playSound(_music);
-            _channel->setVolume(1.f);
+            _dooropen->stopSound();
+            _music->playSound();
+            _music->setVolume(1.f);
         }
         return;
     }
@@ -259,11 +288,11 @@ void LevelManager::decreaseJobCount(int index) {
 
 
 void LevelManager::endMusic() {
-    _channel->stop();
+    _music->stopSound();
 }
 
 void LevelManager::clearLemmings() {
-    for(auto* lemmming: _lemmings) {
+    for (auto *lemmming: _lemmings) {
         delete lemmming;
     }
     _lemmings.clear();

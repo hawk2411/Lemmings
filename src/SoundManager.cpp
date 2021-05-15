@@ -34,22 +34,22 @@ SoundManager::~SoundManager() {
     }
 }
 
-FMOD::Sound *SoundManager::loadSound(const std::string &file, FMOD_MODE mode) const {
-    FMOD::Sound *pSound;
-    _lowLevelSystem->createSound(file.c_str(), mode, nullptr, &pSound);
-    return pSound;
-}
-
-FMOD::Channel *SoundManager::playSound(FMOD::Sound *sound) const {
-    FMOD::Channel *channel;
-    _lowLevelSystem->playSound(sound, nullptr, false, &channel);
-    return channel;
-}
-
-void SoundManager::update() {
-    _system->update();
-    _lowLevelSystem->update();
-}
+//FMOD::Sound *SoundManager::loadSound(const std::string &file, FMOD_MODE mode) const {
+//    FMOD::Sound *pSound;
+//    _lowLevelSystem->createSound(file.c_str(), mode, nullptr, &pSound);
+//    return pSound;
+//}
+//
+//FMOD::Channel *SoundManager::playSound(FMOD::Sound *sound) const {
+//    FMOD::Channel *channel;
+//    _lowLevelSystem->playSound(sound, nullptr, false, &channel);
+//    return channel;
+//}
+//
+//void SoundManager::update() {
+//    _system->update();
+//    _lowLevelSystem->update();
+//}
 
 std::string SoundManager::getFMODExceptionText(FMOD_RESULT result) {
     std::stringstream ss;

@@ -6,7 +6,7 @@
 #include "Level.h"
 #include "Door.h"
 #include "Trapdoor.h"
-#include "SoundManager.h"
+#include "Sound.h"
 
 class LevelManager {
 
@@ -15,6 +15,10 @@ public:
         static LevelManager instance;
         return instance;
     };
+
+    LevelManager();
+    ~LevelManager();
+
 
     void init(string levelMode, int levelNum);
 
@@ -70,7 +74,6 @@ private:
     int *_jobCount;
     set<Lemming *> _lemmings;    //TODO why the fuck is this a set? Are they sorted?
 
-
     int _deadLemmings;
     int _savedLemmings;
     int _goalLemmingNum;
@@ -93,8 +96,9 @@ private:
     Door *_door;
     Trapdoor *_trapdoor;
 
-    FMOD::Sound *_music, *_dooropen;
-    FMOD::Channel *_channel;
+    unique_ptr<Sound> _music;
+    unique_ptr<Sound> _dooropen;
+
 
     void finishLevel();
 

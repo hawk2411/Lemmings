@@ -10,11 +10,11 @@ public:
 
     ~SoundManager();
 
-    FMOD::Sound *loadSound(const std::string &file, FMOD_MODE mode) const;
+//    FMOD::Sound *loadSound(const std::string &file, FMOD_MODE mode) const;
+//
+//    FMOD::Channel *playSound(FMOD::Sound *sound) const;
 
-    FMOD::Channel *playSound(FMOD::Sound *sound) const;
-
-    void update();
+//    void update();
     FMOD::System* getLowLevelSystem()const{return _lowLevelSystem;}
 
     static std::string getFMODExceptionText(FMOD_RESULT result);

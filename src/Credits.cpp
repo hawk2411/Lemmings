@@ -4,9 +4,17 @@
 #include "CreditsKeyboardManager.h"
 #include "Game.h"
 
+Credits::Credits() {
+    music = make_unique<Sound>(Game::instance().getSoundManager(), "sounds/CreditsSong.ogg", FMOD_LOOP_NORMAL | FMOD_CREATESTREAM);
+}
+
+Credits::~Credits() {
+
+}
+
 
 void Credits::init() {
-    currentTime = 0.0f;
+    _currentTime = 0.0f;
     initTextures();
     creditsLevelSprite = Sprite::createSprite(glm::vec2(CAMERA_WIDTH, CAMERA_HEIGHT), glm::vec2(1.f, 1.f),
                                               &ShaderManager::getInstance().getShaderProgram(), &creditsLevelTexture);
@@ -14,14 +22,14 @@ void Credits::init() {
     mouseManager = &CreditsMouseManager::getInstance();
     keyboardManager = &CreditsKeyboardManager::getInstance();
 
-    music = Game::instance().getSoundManager()->loadSound("sounds/CreditsSong.ogg", FMOD_LOOP_NORMAL | FMOD_CREATESTREAM);
 
-    channel = Game::instance().getSoundManager()->playSound(music);
-    channel->setVolume(1.f);
+
+    music->playSound();
+    music->setVolume(1.f);
 }
 
 void Credits::update(int deltaTime) {
-    currentTime += static_cast<float>(deltaTime);
+    _currentTime += static_cast<float>(deltaTime);
 }
 
 void Credits::render() {
@@ -37,5 +45,5 @@ void Credits::initTextures() {
 }
 
 void Credits::endMusic() {
-    channel->stop();
+    music->stopSound();
 }

@@ -4,8 +4,8 @@
 #include <glm/glm.hpp>
 #include "ShaderProgram.h"
 #include "GameState.h"
-#include "SoundManager.h"
 #include "Sprite.h"
+#include "Sound.h"
 
 class Menu : public GameState {
 
@@ -59,7 +59,7 @@ private:
     std::unique_ptr<Sprite> menuMode;
     std::unique_ptr<Sprite> menuPlaying;
 
-    int mode; // 0 = FUN, 1 = TRICKY, 2 = TAXING
+    int mode; // 0 = FUN, 1 = TRICKY, 2 = TAXING TODO change to enum
 
     float currentTime;
 
@@ -69,9 +69,7 @@ private:
             glm::vec2(0, 0.5)
     };
 
-    const SoundManager *soundManager;
-    FMOD::Sound *music;
-    FMOD::Channel *channel;
+    unique_ptr<Sound> music;
 };
 
 
