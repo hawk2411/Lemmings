@@ -41,6 +41,7 @@ void LevelManager::init(string levelMode, int levelNum) {
     if (levelMode == "fun") _actualMode = FUN_MODE;
     if (levelMode == "tricky") _actualMode = TRICKY_MODE;
     if (levelMode == "taxing") _actualMode = TAXING_MODE;
+
     Level::currentLevel().createFromFile("levels/" + levelName + ".txt");
     Level::currentLevel().init();
 

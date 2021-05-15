@@ -3,7 +3,14 @@
 #include <GL/glut.h>
 #include "common_defs.h"
 
-GameState::GameState() {
+GameState::GameState() :
+        mouseManager(nullptr),
+        keyboardManager(nullptr),
+        _currentTime(0.0),
+        mouseX(0),
+        mouseY(0),
+        bLeftMouse(false),
+        bRightMouse(false) {
 
 }
 
@@ -32,10 +39,10 @@ void GameState::mouseMove(int x, int y) {
     int windowWidth = glutGet(GLUT_WINDOW_WIDTH);
     int windowHeight = glutGet(GLUT_WINDOW_HEIGHT);
 
-    float aspectRatioX = (float(CAMERA_WIDTH) / windowWidth);
-    float aspectRatioy = (float(CAMERA_HEIGHT) / windowHeight);
-    mouseX = x * aspectRatioX;
-    mouseY = y * aspectRatioy;
+    float aspectRatioX = (float(CAMERA_WIDTH) / static_cast<float>(windowWidth));
+    float aspectRatioY = (float(CAMERA_HEIGHT) / static_cast<float>(windowHeight));
+    mouseX = static_cast<int>(static_cast<float>(x) * aspectRatioX);
+    mouseY = static_cast<int>(static_cast<float>(y) * aspectRatioY);
 
     mouseManager->mouseMoved(mouseX, mouseY, bLeftMouse, bRightMouse);
 }

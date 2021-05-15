@@ -41,9 +41,6 @@ private:
     // we can have access at any time
     int mouseX, mouseY;               // Mouse position
     bool bLeftMouse, bRightMouse;     // Mouse button states
-
-
-
 };
 
 
