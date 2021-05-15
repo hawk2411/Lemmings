@@ -67,7 +67,6 @@ void Faller::updateStateMachine(int deltaTime) {
         case FallerState::FALLING_RIGHT_STATE:
             fall = collisionFloor(3);
             if (fall > 0) {
-                cout << "Faller fall > 0" << endl;
                 jobSprite->incPosition(glm::vec2(0, fall));
                 currentDistance += fall;
                 if (currentDistance >= FATAL_FALLING_DISTANCE) {
@@ -76,13 +75,11 @@ void Faller::updateStateMachine(int deltaTime) {
                 }
             } else {
                 if (dead) {
-                    cout << "Faller is dead" << endl;
                     state = FallerState::FALLING_DEATH_STATE;
                     jobSprite->changeAnimation(FALLING_DEATH);
                     FMOD::Channel *channeled = Game::instance().getSoundManager()->playSound(deathEffect);
                     channeled->setVolume(0.8f);
                 } else {
-                    cout << "Faller is finished" << endl;
                     isFinished = true;
                     _nextJob = Jobs::WALKER;
                 }
@@ -90,13 +87,11 @@ void Faller::updateStateMachine(int deltaTime) {
             break;
 
         case FallerState::FALLING_DEATH_STATE:
-            cout << "Faller FALLING_DEATH_STATE" << endl;
             if (jobSprite->isInLastFrame()) {
                 isFinished = true;
                 if(_nextJob != Jobs::UNKNOWN){
                     _nextJob = Jobs::UNKNOWN;
                 }
-
             }
             break;
     }

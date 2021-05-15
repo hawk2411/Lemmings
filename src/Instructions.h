@@ -7,7 +7,7 @@
 #include "Word.h"
 #include "SoundManager.h"
 
-#define LINESPAGE 20
+#define LINESPAGE 6
 
 class Instructions : public GameState {
 
