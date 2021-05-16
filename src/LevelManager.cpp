@@ -25,7 +25,7 @@ LevelManager::LevelManager() : _jobCount(nullptr),
                                _dooropen(nullptr) {
 
 
-    _dooropen = make_unique<Sound>(Game::instance().getSoundManager(), "sounds/lemmingsEffects/Letsgo.ogg", FMOD_DEFAULT | FMOD_UNIQUE);
+    _dooropen = make_unique<Sound>(Game::instance()->getSoundManager(), "sounds/lemmingsEffects/Letsgo.ogg", FMOD_DEFAULT | FMOD_UNIQUE);
 }
 
 LevelManager::~LevelManager() {
@@ -70,7 +70,7 @@ void LevelManager::init(string levelMode, int levelNum) {
     _exploding = false;
 
     string musicPath = "sounds/Lemming" + to_string(levelNum) + ".ogg";
-    _music = make_unique<Sound>(Game::instance().getSoundManager(), musicPath, FMOD_LOOP_NORMAL | FMOD_CREATESTREAM);
+    _music = make_unique<Sound>(Game::instance()->getSoundManager(), musicPath, FMOD_LOOP_NORMAL | FMOD_CREATESTREAM);
 
     _dooropen->playSound();
     _dooropen->setVolume(1.0f);

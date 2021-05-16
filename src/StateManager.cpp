@@ -10,13 +10,13 @@
 
 void StateManager::changeMenu() {
     Menu::getInstance().init();
-    Game::instance().setGameState(&Menu::getInstance());
+    Game::instance()->setGameState(&Menu::getInstance());
 }
 
 void StateManager::changeInfo(int levelMode, int levelNum) {
     InfoLevel::instance().init();
     InfoLevel::instance().setLevel(levelNum, levelMode);
-    Game::instance().setGameState(&InfoLevel::instance());
+    Game::instance()->setGameState(&InfoLevel::instance());
 }
 
 void StateManager::changeScene(int levelMode, int levelNum) {
@@ -37,22 +37,22 @@ void StateManager::changeScene(int levelMode, int levelNum) {
 
     LevelManager::getInstance().init(modeName, levelNum);
     Scene::getInstance().init();
-    Game::instance().setGameState(&Scene::getInstance());
+    Game::instance()->setGameState(&Scene::getInstance());
 
 }
 
 void StateManager::changeResults(int goalPercentage, int currentPercentage) {
     Results::getInstance().init();
     Results::getInstance().setPercentages(goalPercentage, currentPercentage);
-    Game::instance().setGameState(&Results::getInstance());
+    Game::instance()->setGameState(&Results::getInstance());
 }
 
 void StateManager::changeCredits() {
     Credits::instance().init();
-    Game::instance().setGameState(&Credits::instance());
+    Game::instance()->setGameState(&Credits::instance());
 }
 
 void StateManager::changeInstructions() {
     Instructions::getInstance().init();
-    Game::instance().setGameState(&Instructions::getInstance());
+    Game::instance()->setGameState(&Instructions::getInstance());
 }

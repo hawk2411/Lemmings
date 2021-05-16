@@ -132,12 +132,56 @@ const SoundManager *Game::getSoundManager() const {
 void Game::mouseCallback(int button, int state, int x, int y) {
     switch(state) {
         case GLUT_DOWN:
-            Game::instance().getGameState()->mousePress(button);
+            Game::instance()->getGameState()->mousePress(button);
             break;
         case GLUT_UP:
-            Game::instance().getGameState()->mouseRelease(button);
+            Game::instance()->getGameState()->mouseRelease(button);
             break;
         default:
             break;
     }
+}
+
+Game *Game::instance() {
+    static Game G(glutGet(GLUT_ELAPSED_TIME));
+    return &G;
+}
+
+void Game::drawCallback() {
+    Game::instance()->render();
+    glutSwapBuffers();
+}
+
+void Game::idleCallback() {
+    int currentTime = glutGet(GLUT_ELAPSED_TIME);
+    int deltaTime = currentTime - Game::instance()->prevTime;
+
+    if (static_cast<float>(deltaTime) > TIME_PER_FRAME) {
+        // Every time we enter here is equivalent to a game loop execution
+        if (!Game::instance()->update(deltaTime))
+            exit(0);
+        Game::instance()->prevTime = currentTime;
+        glutPostRedisplay();
+    }
+}
+
+void Game::keyboardDownCallback(unsigned char key, int x, int y) {
+
+    Game::instance()->getGameState()->keyPressed(key);
+}
+
+void Game::keyboardUpCallback(unsigned char key, int x, int y) {
+    Game::instance()->getGameState()->keyReleased(key);
+}
+
+void Game::specialDownCallback(int key, int x, int y) {
+    Game::instance()->getGameState()->specialKeyPressed(key);
+}
+
+void Game::specialUpCallback(int key, int x, int y) {
+    Game::instance()->getGameState()->specialKeyReleased(key);
+}
+
+void Game::motionCallback(int x, int y) {
+    Game::instance()->getGameState()->mouseMove(x, y);
 }

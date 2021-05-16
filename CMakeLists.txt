@@ -30,13 +30,9 @@ add_executable(lemmings src/main.cpp
         src/Shader.cpp
         src/Menu.cpp
         src/JobAssigner.cpp
-        src/CreditsKeyboardManager.cpp
-        src/InfoLevelKeyboardManager.cpp
         src/DoorStandard.cpp
         src/InfoLevel.cpp
         src/Miner.cpp
-        src/MenuKeyboardManager.cpp
-        src/SceneMouseManager.cpp
         src/Button.cpp
         src/UI.cpp
         src/MaskedTexturedQuad.cpp
@@ -59,7 +55,6 @@ add_executable(lemmings src/main.cpp
         src/Cursor.cpp
         src/PurpleNumFactory.cpp
         src/GameState.cpp
-        src/ResultsKeyboardManager.cpp
         src/Door.cpp
         src/Job.cpp
         src/LetterFactory.cpp
@@ -70,12 +65,10 @@ add_executable(lemmings src/main.cpp
         src/TrapdoorStandard.cpp
         src/ButtonFactory.cpp
         src/Floater.cpp
-        src/SceneKeyboardManager.cpp
         src/Level.cpp
         src/JobFactory.cpp
         src/Basher.cpp
         src/Results.cpp
-        src/InstructionsKeyboardManager.cpp
         src/TrapdoorHell.cpp
         src/Faller.cpp
         src/Blocker.cpp

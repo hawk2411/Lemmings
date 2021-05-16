@@ -1,11 +1,10 @@
 #include "Menu.h"
-#include "MenuKeyboardManager.h"
-#include "MenuMouseManager.h"
 #include "ShaderManager.h"
 #include "Game.h"
+#include "StateManager.h"
 
 Menu::Menu() : mode(0) {
-    music = make_unique<Sound>(Game::instance().getSoundManager(), "sounds/MenuSong.ogg", FMOD_LOOP_NORMAL | FMOD_CREATESTREAM);
+    music = make_unique<Sound>(Game::instance()->getSoundManager(), "sounds/MenuSong.ogg", FMOD_LOOP_NORMAL | FMOD_CREATESTREAM);
 }
 
 Menu::~Menu() {
@@ -17,9 +16,6 @@ void Menu::init() {
 
     mode = 0;
     currentTime = 0.0f;
-
-    keyboardManager = &MenuKeyboardManager::getInstance();
-    mouseManager = &MenuMouseManager::getInstance();
 
     menuBackground = Sprite::createSprite(glm::vec2(320, 230), glm::vec2(1.f, 1.f),
                                           &ShaderManager::getInstance().getShaderProgram(), &menuTexture);
@@ -120,10 +116,45 @@ void Menu::changeMode() {
     menuMode->changeAnimation(mode);
 }
 
-int Menu::getMode() {
+int Menu::getMode() const {
     return mode;
 }
 
 void Menu::endMusic() {
     music->stopSound();
 }
+
+void Menu::keyPressed(int key) {
+    if (key == 27) // Escape code
+    {
+        Game::instance()->changeBplay();
+        endMusic();
+    } else if (key == 'h') // Hard mode
+    {
+        Game::instance()->swapDifficultyMode();
+    }
+}
+
+void Menu::specialKeyPressed(int key) {
+    if (key == GLUT_KEY_F1) { // key f1 go to playing
+        int mode = getMode();
+        endMusic();
+        StateManager::instance().changeInfo(mode, 1);
+    } else if (key == GLUT_KEY_F2) { // F2 go to Instructions
+        endMusic();
+        StateManager::instance().changeInstructions();
+    } else if (key == GLUT_KEY_F3) { // F3 go to About
+        endMusic();
+        StateManager::instance().changeCredits();
+    } else if (key == GLUT_KEY_UP) {
+        changeModeUp();
+    } else if (key == GLUT_KEY_DOWN) {
+        changeModeDown();
+    }
+}
+
+void Menu::mouseMoved(int mouseX, int mouseY, bool bLeftButton, bool bRightButton) {
+
+}
+
+

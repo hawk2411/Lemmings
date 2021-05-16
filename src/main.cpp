@@ -8,8 +8,6 @@
 //Remove console (only works in Visual Studio)
 #pragma comment(linker, "/subsystem:\"windows\" /entry:\"mainCRTStartup\"")
 
-int Game::prevTime {0};
-
 int main(int argc, char **argv) {
     srand(time(0));
 
@@ -38,10 +36,7 @@ int main(int argc, char **argv) {
     glewExperimental = GL_TRUE;
     glewInit();
 
-    // Game instance initialization
-    Game::instance().init();
-    Game::prevTime = glutGet(GLUT_ELAPSED_TIME);
-
+    Game::instance()->init();
     // GLUT gains control of the application
     glutMainLoop();
 

@@ -1,12 +1,16 @@
+#include <GL/glew.h>
+#include <GL/glut.h>
 #include "InfoLevel.h"
-#include "InfoLevelKeyboardManager.h"
-#include "InfoLevelMouseManager.h"
 #include "ShaderManager.h"
 #include "KeyFactory.h"
+#include "StateManager.h"
+
+InfoLevel::InfoLevel()  {
+    _currentTime = 0.0f;
+}
+
 
 void InfoLevel::init() {
-    keyboardManager = &InfoLevelKeyboardManager::getInstance();
-    mouseManager = &InfoLevelMouseManager::getInstance();
     _currentTime = 0.0f;
 }
 
@@ -22,7 +26,7 @@ void InfoLevel::setLevel(int numLevel, int levelMode) {
 }
 
 void InfoLevel::update(int deltaTime) {
-    _currentTime += deltaTime;
+    _currentTime += static_cast<float>(deltaTime);
 }
 
 void InfoLevel::render() {
@@ -58,11 +62,11 @@ void InfoLevel::initTextures() {
 
 }
 
-int InfoLevel::getMode() {
+int InfoLevel::getMode() const {
     return _mode;
 }
 
-int InfoLevel::getLevel() {
+int InfoLevel::getLevel() const {
     return _level;
 }
 
@@ -81,3 +85,37 @@ void InfoLevel::initSprites() {
 
 
 }
+
+void InfoLevel::keyPressed(int key) {
+    if (key == 27) // Escape code
+    {
+        StateManager::instance().changeMenu();
+    }
+}
+
+void InfoLevel::keyReleased(int key) {
+
+}
+
+void InfoLevel::specialKeyPressed(int key) {
+
+    if (key == GLUT_KEY_RIGHT) {
+        StateManager::instance().changeScene(InfoLevel::instance().getMode(), InfoLevel::instance().getLevel());
+    } else if (key == GLUT_KEY_LEFT) {
+        StateManager::instance().changeMenu();
+    }
+}
+
+void InfoLevel::specialKeyReleased(int key) {
+
+}
+
+void InfoLevel::mouseMoved(int mouseX, int mouseY, bool bLeftButton, bool bRightButton) {
+
+}
+
+InfoLevel::~InfoLevel() {
+
+}
+
+

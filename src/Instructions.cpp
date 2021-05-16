@@ -1,15 +1,14 @@
 #include "Instructions.h"
 #include "Utils.h"
 #include "ShaderManager.h"
-#include "InstructionsMouseManager.h"
-#include "InstructionsKeyboardManager.h"
 #include "KeyFactory.h"
+#include "StateManager.h"
 #include "Game.h"
 Instructions::Instructions() : actualPage(0),
                                _onlyLeft(false),
                                _onlyRight(true){
 
-    _music = make_unique<Sound>(Game::instance().getSoundManager(), "sounds/InstructionsSong.ogg",
+    _music = make_unique<Sound>(Game::instance()->getSoundManager(), "sounds/InstructionsSong.ogg",
                                 FMOD_LOOP_NORMAL | FMOD_CREATESTREAM);
 
     _leftKey = KeyFactory::instance().createLeftKey();
@@ -212,8 +211,6 @@ void Instructions::init() {
     _onlyRight = true;
     _onlyLeft = false;
     actualPage = 0;
-    mouseManager = &InstructionsMouseManager::getInstance();
-    keyboardManager = &InstructionsKeyboardManager::getInstance();
     _music->playSound();
     _music->setVolume(1.f);
 }
@@ -262,3 +259,33 @@ void Instructions::passPageRight() {
 void Instructions::endMusic() {
     _music->stopSound();
 }
+
+void Instructions::mouseMoved(int mouseX, int mouseY, bool bLeftButton, bool bRightButton) {
+
+}
+
+void Instructions::keyPressed(int key) {
+    if (key == 27) {
+        StateManager::instance().changeMenu();
+        endMusic();
+    }
+
+}
+
+void Instructions::keyReleased(int key) {
+
+}
+
+void Instructions::specialKeyPressed(int key) {
+    if (key == GLUT_KEY_RIGHT) {
+        passPageRight();
+
+    } else if (key == GLUT_KEY_LEFT) {
+        passPageLeft();
+    }
+}
+
+void Instructions::specialKeyReleased(int key) {
+
+}
+

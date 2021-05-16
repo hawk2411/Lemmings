@@ -21,21 +21,31 @@ public:
         return instance;
     };
 
-    void init();
+    void init() override;
 
-    void update(int deltaTime);
+    void update(int deltaTime) override;
 
-    void render();
+    void render() override;
 
     void setPercentages(int goalPercentage, int currentPercentage);
 
-    int getSelectedButtonIndex();
+    int getSelectedButtonIndex() const;
 
     int getSelectedButton();
 
     void changeSelectedButtonLeft();
 
     void changeSelectedButtonRight();
+
+    void keyPressed(int key) override;
+
+    void keyReleased(int key) override;
+
+    void specialKeyPressed(int key) override;
+
+    void specialKeyReleased(int key) override;
+
+    void mouseMoved(int mouseX, int mouseY, bool bLeftButton, bool bRightButton) override;
 
 private:
     void initButtons();

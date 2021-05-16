@@ -2,13 +2,13 @@
 #define _GAMESTATE_INCLUDE
 
 #include "MouseManager.h"
-#include "KeyboardManager.h"
+#include "IKeyboardManager.h"
 
-class GameState {
+class GameState : public IKeyboardManager, public MouseManager {
 
 public:
     GameState();
-    virtual ~GameState();
+    ~GameState() override;
 
     virtual void init() = 0;
 
@@ -16,25 +16,15 @@ public:
 
     virtual void render() = 0;
 
-    // Input callback methods
-    void keyPressed(int key);
+    void mouseMove(int x, int y) override;
 
-    void keyReleased(int key);
+    void mousePress(int button) override;
 
-    void specialKeyPressed(int key);
+    void mouseRelease(int button) override;
 
-    void specialKeyReleased(int key);
-
-    void mouseMove(int x, int y);
-
-    void mousePress(int button);
-
-    void mouseRelease(int button);
-
+    virtual void mouseMoved(int mouseX, int mouseY, bool bLeftButton, bool bRightButton) = 0;
 
 protected:
-    MouseManager *mouseManager;
-    KeyboardManager *keyboardManager;
     float _currentTime;
 
 private:

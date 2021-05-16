@@ -1,11 +1,10 @@
 #include "Credits.h"
 #include "ShaderManager.h"
-#include "CreditsMouseManager.h"
-#include "CreditsKeyboardManager.h"
 #include "Game.h"
+#include "StateManager.h"
 
 Credits::Credits() {
-    music = make_unique<Sound>(Game::instance().getSoundManager(), "sounds/CreditsSong.ogg", FMOD_LOOP_NORMAL | FMOD_CREATESTREAM);
+    music = make_unique<Sound>(Game::instance()->getSoundManager(), "sounds/CreditsSong.ogg", FMOD_LOOP_NORMAL | FMOD_CREATESTREAM);
 }
 
 Credits::~Credits() {
@@ -18,12 +17,6 @@ void Credits::init() {
     initTextures();
     creditsLevelSprite = Sprite::createSprite(glm::vec2(CAMERA_WIDTH, CAMERA_HEIGHT), glm::vec2(1.f, 1.f),
                                               &ShaderManager::getInstance().getShaderProgram(), &creditsLevelTexture);
-
-    mouseManager = &CreditsMouseManager::getInstance();
-    keyboardManager = &CreditsKeyboardManager::getInstance();
-
-
-
     music->playSound();
     music->setVolume(1.f);
 }
@@ -46,4 +39,28 @@ void Credits::initTextures() {
 
 void Credits::endMusic() {
     music->stopSound();
+}
+void Credits::keyPressed(int key) {
+
+    if (key == 27) // Escape code
+    {
+        StateManager::instance().changeMenu();
+        Credits::instance().endMusic();
+    }
+
+}
+
+void Credits::keyReleased(int key) {
+
+}
+
+void Credits::specialKeyPressed(int key) {
+}
+
+void Credits::specialKeyReleased(int key) {
+
+}
+
+void Credits::mouseMoved(int mouseX, int mouseY, bool bLeftButton, bool bRightButton) {
+
 }

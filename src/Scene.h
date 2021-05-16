@@ -24,11 +24,11 @@ public:
         return instance;
     };
 
-    void init();
+    void init() override;
 
-    void update(int deltaTime);
+    void update(int deltaTime) override;
 
-    void render();
+    void render() override;
 
     void eraseMask(int x, int y);
 
@@ -44,18 +44,60 @@ public:
 
     void changeSpeedUpStatus();
 
-    bool isPaused();
+    bool isPaused() const;
 
-    bool isSpeedUp();
+    bool isSpeedUp() const;
 
     char getPixel(int x, int y);
 
 
-    VariableTexture &getMaskedMap();
+    static VariableTexture &getMaskedMap();
 
     void setMaskManager(MaskManager *maskManager);
 
+    enum ScreenClickedArea {
+        MAP,
+        UI,
+        INFO
+    };
+
+    enum ScreenMovedArea {
+        SCROLL_AREA_LEFT,
+        SCROLL_AREA_RIGHT,
+        LEVEL,
+        NONE_AREA
+    };
+
+
+    enum MouseStates {
+        NONE,
+        LEFT_MOUSE_PRESSED,
+        RIGHT_MOUSE_PRESSED
+    };
+
+    void mouseMoved(int mouseX, int mouseY, bool bLeftButton, bool bRightButton) override;
+
+    void update();
+
+    void keyPressed(int key) override;
+
+    void keyReleased(int key) override;
+
+    void specialKeyPressed(int key) override;
+
+    void specialKeyReleased(int key) override;
+
 private:
+    ScreenClickedArea getClickedScreenArea(int mouseX, int mouseY);
+
+    ScreenMovedArea getMovedScreenArea(int mouseX, int mouseY);
+
+    void leftClickOnUI(int posX, int posY);
+
+    void leftClickOnMap(int posX, int posY);
+
+    void updateCursorPosition();
+
     void initMap();
 
     void initUI();
@@ -67,7 +109,11 @@ private:
 
     std::unique_ptr<MaskedTexturedQuad> map;
 
-    MaskManager *maskManager;
+    MaskManager *maskManager = nullptr;
+    int posX=0, posY=0;
+
+    MouseStates mouseState = MouseStates::NONE;
+    ScreenMovedArea screenMovedArea = NONE_AREA;
 
 };
 

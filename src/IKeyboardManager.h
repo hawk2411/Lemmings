@@ -1,10 +1,12 @@
 #ifndef _KEYBOARDMANAGER_INCLUDE
 #define _KEYBOARDMANAGER_INCLUDE
 
-
-class KeyboardManager {
+struct IKeyboardManager {
 
 public:
+
+    virtual ~IKeyboardManager() = default;
+
     virtual void keyPressed(int key) = 0;
 
     virtual void keyReleased(int key) = 0;

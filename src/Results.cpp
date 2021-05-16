@@ -1,13 +1,12 @@
-#include "Results.h"
-#include "ResultsMouseManager.h"
-#include "ResultsKeyboardManager.h"
 #include "Texture.h"
 #include "Game.h"
 #include "ShaderManager.h"
+#include "LevelManager.h"
+#include "StateManager.h"
+
+#include "Results.h"
 
 void Results::init() {
-    mouseManager = &ResultsMouseManager::getInstance();
-    keyboardManager = &ResultsKeyboardManager::getInstance();
     _currentTime = 0.0f;
 }
 
@@ -27,7 +26,7 @@ void Results::render() {
     renderButtons();
 }
 
-int Results::getSelectedButtonIndex() {
+int Results::getSelectedButtonIndex() const {
     return selectedButton;
 }
 
@@ -161,4 +160,61 @@ void Results::renderButtons() {
         }
         currentButton->render();
     }
+}
+
+void Results::keyPressed(int key) {
+    if (key == 13) {
+        int selected = getSelectedButton();
+        int currentLevel = LevelManager::getInstance().getActualLevel();
+        int currentMode = LevelManager::getInstance().getActualMode();
+
+        switch (selected) {
+            case 0: // RETRY
+                StateManager::instance().changeInfo(currentMode, currentLevel);
+                break;
+
+            case 1: // CONTINUE
+
+                switch (currentMode) {
+                    case FUN_MODE:
+                        if (currentLevel < 4) StateManager::instance().changeInfo(currentMode, currentLevel + 1);
+                        else if (currentLevel == 4) StateManager::instance().changeInfo(currentMode, 7);
+                        else StateManager::instance().changeInfo(TRICKY_MODE, 1);
+                        break;
+                    case TRICKY_MODE:
+                        if (currentLevel < 3) StateManager::instance().changeInfo(currentMode, currentLevel + 1);
+                        else StateManager::instance().changeInfo(TAXING_MODE, 1);
+                        break;
+                    case TAXING_MODE:
+                        StateManager::instance().changeMenu();
+                        break;
+                }
+
+                break;
+
+            case 2: // MENU
+                StateManager::instance().changeMenu();
+                break;
+        }
+    }
+}
+
+void Results::keyReleased(int key) {
+
+}
+
+void Results::specialKeyPressed(int key) {
+    if (key == GLUT_KEY_RIGHT) {
+        changeSelectedButtonRight();
+    } else if (key == GLUT_KEY_LEFT) {
+        changeSelectedButtonLeft();
+    }
+}
+
+void Results::specialKeyReleased(int key) {
+
+}
+
+void Results::mouseMoved(int mouseX, int mouseY, bool bLeftButton, bool bRightButton) {
+
 }

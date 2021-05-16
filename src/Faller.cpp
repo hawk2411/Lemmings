@@ -15,7 +15,7 @@ Faller::Faller(Jobs jobs) : Job(jobs),
                             deathEffect(nullptr),
                             currentDistance(0),
                             dead(false) {
-    deathEffect = make_unique<Sound>(Game::instance().getSoundManager(), "sounds/lemmingsEffects/SPLAT.WAV",
+    deathEffect = make_unique<Sound>(Game::instance()->getSoundManager(), "sounds/lemmingsEffects/SPLAT.WAV",
                                      FMOD_DEFAULT | FMOD_CREATESTREAM | FMOD_UNIQUE);
 }
 

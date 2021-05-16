@@ -30,6 +30,17 @@ public:
 
     void endMusic();
 
+    void mouseMoved(int mouseX, int mouseY, bool bLeftButton, bool bRightButton) override;
+
+    void keyPressed(int key);
+
+    void keyReleased(int key);
+
+    void specialKeyPressed(int key);
+
+    void specialKeyReleased(int key);
+
+
 private:
     const int LINES_PAGE = 6;
     int actualPage;

@@ -6,11 +6,12 @@ class MouseManager {
 
 public:
 
-    virtual void mouseMoved(int mouseX, int mouseY, bool bLeftButton, bool bRightButton) = 0;
 
+    virtual void mouseMove(int x, int y) = 0;
 
-private:
-    int posX = {}, posY = {};
+    virtual void mousePress(int button) = 0;
+
+    virtual void mouseRelease(int button) = 0;
 
 };
 
