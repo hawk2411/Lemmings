@@ -6,7 +6,7 @@
 #include "Scene.h"
 #include "Menu.h"
 #include "SoundManager.h"
-#include "MouseManager.h"
+#include "IMouseManager.h"
 #include "IKeyboardManager.h"
 #include "GameState.h"
 #include "ShaderManager.h"

@@ -2,7 +2,6 @@
 #include <GL/glut.h>
 #include "Cursor.h"
 #include "Game.h"
-#include "Scene.h"
 #include "ShaderManager.h"
 
 enum CursorStates {

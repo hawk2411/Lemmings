@@ -1,7 +1,3 @@
-#include <cmath>
-#include <iostream>
-#include <GL/glew.h>
-#include <GL/glut.h>
 #include "Job.h"
 #include "Scene.h"
 

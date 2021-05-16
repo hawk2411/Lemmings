@@ -1,10 +1,10 @@
 #ifndef _GAMESTATE_INCLUDE
 #define _GAMESTATE_INCLUDE
 
-#include "MouseManager.h"
+#include "IMouseManager.h"
 #include "IKeyboardManager.h"
 
-class GameState : public IKeyboardManager, public MouseManager {
+class GameState : public IKeyboardManager, public IMouseManager {
 
 public:
     GameState();

@@ -6,7 +6,7 @@
 #include "Sprite.h"
 #include "Word.h"
 #include "IKeyboardManager.h"
-#include "MouseManager.h"
+#include "IMouseManager.h"
 
 class InfoLevel : public GameState{
 

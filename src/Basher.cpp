@@ -1,11 +1,6 @@
-#include <cmath>
-#include <iostream>
-#include <GL/glew.h>
-#include <GL/glut.h>
 #include "Basher.h"
 #include "Game.h"
 #include "Scene.h"
-#include "JobFactory.h"
 #include "Utils.h"
 
 #define JUMP_ANGLE_STEP 4

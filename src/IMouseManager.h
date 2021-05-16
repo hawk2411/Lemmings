@@ -2,7 +2,7 @@
 #define _MOUSEMANAGER_INCLUDE
 
 
-class MouseManager {
+class IMouseManager {
 
 public:
 
