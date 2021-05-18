@@ -41,9 +41,6 @@ void Countdown::update(int deltaTime) {
     }
 }
 
-bool Countdown::isOver() const {
-    return _over;
-}
 
 void Countdown::start(int goalTime) {
     _goalTime = MAX_SEC + goalTime;

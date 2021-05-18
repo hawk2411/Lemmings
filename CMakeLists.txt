@@ -84,9 +84,9 @@ add_executable(lemmings src/main.cpp
         src/Word.cpp
         src/SoundManager.cpp
         src/Sound.cpp
-        src/StopWatch.cpp
-        src/StopWatch.h
         src/LemmingsException.cpp
+        src/TimerEventService.h
+        src/TimerEventService.cpp
         libs/SOIL/src/image_helper.c
         libs/SOIL/src/image_helper.h
         libs/SOIL/src/image_DXT.h
