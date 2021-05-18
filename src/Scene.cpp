@@ -21,7 +21,7 @@ void Scene::init() {
 
     ParticleSystemManager::getInstance().init();
 
-    if (Game::instance()->isHardMode()) {
+    if (_game->isHardMode()) {
         setMaskManager(&HardMaskManager::getInstance());
     } else {
         setMaskManager(&EasyMaskManager::getInstance());
@@ -130,7 +130,7 @@ void Scene::updateUI() {
 }
 
 
-void Scene::setMaskManager(MaskManager *maskM) {
+void Scene::setMaskManager(IMaskManager *maskM) {
     maskManager = maskM;
 
     maskManager->init();
@@ -237,7 +237,7 @@ void Scene::update() {
         Scroller::getInstance().scrollRight();
         Cursor::getInstance().setScrollRightCursor();
     } else if (screenMovedArea == ScreenMovedArea::LEVEL) {
-        int lemmingIndex = LevelRunner::getInstance().getLemmingIndexInPos(_mousePosX, _mousePosY);
+        int lemmingIndex = LevelRunner::getInstance().getLemmingIndexInPos(posX, posY);
         UIAdapter::getInstance().changeFocusedLemming(lemmingIndex);
 
         if (lemmingIndex != -1) {
@@ -271,8 +271,8 @@ Scene::ScreenClickedArea Scene::getClickedScreenArea(int mouseX, int mouseY) {
 }
 
 
-Scene::ScreenMovedArea Scene::getMovedScreenArea() const {
-    if (0 <= _mousePosX && _mousePosX < SCROLL_WIDTH && _mousePosY < LEVEL_HEIGHT) {
+Scene::ScreenMovedArea Scene::getMovedScreenArea(int mouseX, int mouseY) {
+    if (0 <= mouseX && mouseX < SCROLL_WIDTH && mouseY < LEVEL_HEIGHT) {
         return ScreenMovedArea::SCROLL_AREA_LEFT;
     } else if (LEVEL_WIDTH - SCROLL_WIDTH <= mouseX && mouseX < LEVEL_WIDTH && mouseY < LEVEL_HEIGHT) {
         return ScreenMovedArea::SCROLL_AREA_RIGHT;
@@ -289,12 +289,11 @@ void Scene::leftClickOnUI(int posX, int posY) {
     UIAdapter::getInstance().changeSelectedButton(clickedButtonIndex);
 }
 
-
 void Scene::leftClickOnMap(int posX, int posY) {
 
     if (JobAssigner::getInstance().hasJobToAssign()) {
 
-        int selectedLemmingIndex = LevelRunner::getInstance().getLemmingIndexInPos(_mousePosX, _mousePosX);
+        int selectedLemmingIndex = LevelRunner::getInstance().getLemmingIndexInPos(posX, posY);
         JobAssigner::getInstance().assigJobLemming(selectedLemmingIndex);
     }
 }

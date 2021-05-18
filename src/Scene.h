@@ -9,7 +9,6 @@
 #include "UI.h"
 #include "Word.h"
 #include "IMaskManager.h"
-#include "GameMode.h"
 
 // Scene contains all the entities of our game.
 // It is responsible for updating and render them.
@@ -19,7 +18,7 @@ class Scene : public GameState {
 
 public:
 
-    explicit Scene(Game *game);
+    Scene(Game *game) : GameState(game) {}
 
     void mouseMoved(int mouseX, int mouseY, bool bLeftButton, bool bRightButton) override;
 
@@ -52,7 +51,7 @@ public:
 
     static VariableTexture &getMaskedMap();
 
-    void setGameMode(GameMode::Types newGameMode);
+    void setMaskManager(IMaskManager *maskManager);
 
     enum ScreenClickedArea {
         MAP,
@@ -73,6 +72,8 @@ public:
         LEFT_MOUSE_PRESSED,
         RIGHT_MOUSE_PRESSED
     };
+
+
 
     void update();
 

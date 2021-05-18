@@ -40,7 +40,7 @@ public:
 private:
     std::map <States::Type, unique_ptr<GameState>> _gameStates;
     States::Type _currentState;
-    Game *_game;
+
 };
 
 

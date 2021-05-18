@@ -14,9 +14,9 @@
 #include "GameState.h"
 #include "ShaderManager.h"
 #include "StateManager.h"
-#include "GameMode.h"
 
 const float TIME_PER_FRAME = 1000.f / 30.f; // Approx. 30 fps;
+
 
 class Game {
 
@@ -71,7 +71,7 @@ public:
 
     void changeBplay();
 
-    GameMode::Types getGameMode() const;
+    bool isHardMode() const;
 
     void swapDifficultyMode();
 
@@ -85,7 +85,7 @@ private:
     SoundManager soundManager;
     unique_ptr<StateManager> _stateManager;
     bool bPlay; // Continue to play game?
-    GameMode::Types _gameMode;
+    bool hardMode;
 
     int prevTime;
     std::unique_ptr<Sprite> hardModeIndicator;

@@ -41,7 +41,17 @@ void GameState::onMouseButtonDown(const SDL_MouseButtonEvent &buttonEvent) {
             break;
     }
 
-}
+void GameState::onMouseButtonUp(const SDL_MouseButtonEvent &buttonEvent) {
+    switch( buttonEvent.button) {
+        case SDL_BUTTON_LEFT:
+            mouseMoved(mouseX, mouseY, (buttonEvent.state & SDL_BUTTON(SDL_BUTTON_LEFT)),
+                       buttonEvent.state & SDL_BUTTON(SDL_BUTTON_RIGHT));
+            break;
+        case SDL_BUTTON_RIGHT:
+            mouseMoved(mouseX, mouseY, (buttonEvent.state & SDL_BUTTON(SDL_BUTTON_LEFT)),
+                       buttonEvent.state & SDL_BUTTON(SDL_BUTTON_RIGHT));
+            break;
+    }
 
 void GameState::onMouseButtonUp(const SDL_MouseButtonEvent &buttonEvent) {
     switch( buttonEvent.button) {

@@ -8,7 +8,7 @@
 #include "StateManager.h"
 #include "LevelRunner.h"
 
-StateManager::StateManager(Game* game) :_currentState(States::Type::Menu), _game(game) {
+StateManager::StateManager(Game* game) :_currentState(States::Type::Menu) {
     _gameStates.insert( std::make_pair(States::Type::Menu, unique_ptr<GameState>(new Menu(game))));
     _gameStates.insert( std::make_pair(States::Type::Scene, unique_ptr<GameState>(new Scene(game))));
     _gameStates.insert( std::make_pair(States::Type::SceneInfo, unique_ptr<GameState>(new InfoLevel(game))));
@@ -46,11 +46,8 @@ void StateManager::changeScene(int levelMode, int levelNum) {
         default:
             return;
     }
-    auto *scene = dynamic_cast<Scene*>(_gameStates[_currentState].get());
-    scene->setLevel(levelMode, levelNum);;
-    scene->setGameMode(_game->getGameMode());
 
-
+    dynamic_cast<Scene*>(_gameStates[_currentState].get())->setLevel(levelMode, levelNum);
     _gameStates[_currentState]->init();
 
 }

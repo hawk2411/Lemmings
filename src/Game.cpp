@@ -14,7 +14,7 @@ void Game::render() {
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     _stateManager->getCurrentGameState()->render();
-    if (_gameMode == GameMode::Types::Hard) {
+    if (hardMode) {
         hardModeIndicator->render();
     }
 
@@ -116,14 +116,17 @@ const SoundManager *Game::getSoundManager() const {
     return &soundManager;
 }
 
-Game::Game() {
+Game::Game() : bPlay(true), hardMode(false),
+                hardModeIndicator(nullptr), prevTime(prevTime) {
+    glClearColor(0.f, 0.f, 0.f, 1.0f);
+    initSpriteSheets();
+    ShaderManager::getInstance().init();
+    hardModeIndicator = Sprite::createSprite(glm::ivec2(20, 20), glm::vec2(136. / 256, 160. / 256),
+                                             &ShaderManager::getInstance().getShaderProgram(),
+                                             &Game::spriteSheets().skullSprite);
+    hardModeIndicator->setPosition(glm::vec2(CAMERA_WIDTH - 26, 5));
 
 }
-
-GameMode::Types Game::getGameMode() const {
-    return _gameMode;
-}
-
 
 
 //Game *Game::instance() {
@@ -135,7 +138,7 @@ GameMode::Types Game::getGameMode() const {
 //    Game::instance()->render();
 //}
 
-//void Game::idleCallback() {
+void Game::idleCallback() {
 //    int currentTime = glutGet(GLUT_ELAPSED_TIME);
 //    int deltaTime = currentTime - Game::instance()->prevTime;
 //
@@ -146,25 +149,25 @@ GameMode::Types Game::getGameMode() const {
 //        Game::instance()->prevTime = currentTime;
 //        glutPostRedisplay();
 //    }
-//}
+}
 
-//void Game::keyboardDownCallback(unsigned char key, int x, int y) {
-//
-////    Game::instance()->getGameState()->keyPressed(key);
-//}
-//
-//void Game::keyboardUpCallback(unsigned char key, int x, int y) {
-////    Game::instance()->getGameState()->keyReleased(key);
-//}
-//
-//void Game::specialDownCallback(int key, int x, int y) {
-////    Game::instance()->getGameState()->specialKeyPressed(key);
-//}
-//
-//void Game::specialUpCallback(int key, int x, int y) {
-////    Game::instance()->getGameState()->specialKeyReleased(key);
-//}
-//
-//void Game::motionCallback(int x, int y) {
-////    Game::instance()->getGameState()->mouseMove(x, y);
-//}
+void Game::keyboardDownCallback(unsigned char key, int x, int y) {
+
+//    Game::instance()->getGameState()->keyPressed(key);
+}
+
+void Game::keyboardUpCallback(unsigned char key, int x, int y) {
+//    Game::instance()->getGameState()->keyReleased(key);
+}
+
+void Game::specialDownCallback(int key, int x, int y) {
+//    Game::instance()->getGameState()->specialKeyPressed(key);
+}
+
+void Game::specialUpCallback(int key, int x, int y) {
+//    Game::instance()->getGameState()->specialKeyReleased(key);
+}
+
+void Game::motionCallback(int x, int y) {
+//    Game::instance()->getGameState()->mouseMove(x, y);
+}

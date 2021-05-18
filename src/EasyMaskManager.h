@@ -8,9 +8,9 @@ public:
 
     void init() override;
 
-    void update(int deltaTime) override;
+    void update() override;
 
-    void eraseMask(int x, int y, int currentTime) override;
+    void eraseMask(int x, int y) override;
 
     void applyMask(int x, int y) override;
 

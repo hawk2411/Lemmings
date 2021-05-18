@@ -12,8 +12,8 @@ void HardMaskManager::init() {
 
 }
 
-void HardMaskManager::update(int deltaTime) {
-    int currentTime = deltaTime * 10;
+void HardMaskManager::update() {
+    int currentTime = LevelRunner::getInstance().getCurrentTime() * 10;
 
     int levelHeight = Level::currentLevel().getLevelAttributes()->levelSize.y;
     int levelWidth = Level::currentLevel().getLevelAttributes()->levelSize.x;
@@ -32,7 +32,7 @@ void HardMaskManager::update(int deltaTime) {
 
 void HardMaskManager::eraseMask(int x, int y) {
     if (getPixel(x, y) != 200) {
-        currentTime *=  10;
+        int currentTime = LevelRunner::getInstance().getCurrentTime() * 10;
         timeWhenDisappear[x][y] = currentTime;
         timeToAppear[x][y] = currentTime + rand() % 6 + (SEC_TO_REAPPEAR + rand() % 3) * 10;
 

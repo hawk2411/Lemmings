@@ -47,6 +47,11 @@ void Countdown::start(int goalTime) {
     _isStarted = true;
 }
 
+bool Countdown::isOver() const {
+    return _over;
+}
+
+
 void Countdown::reset(){
     _goalTime = 0;
     _isStarted = false;

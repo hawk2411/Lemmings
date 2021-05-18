@@ -98,7 +98,7 @@ add_executable(lemmings src/main.cpp
         libs/SOIL/src/stbi_DDS_aug.h
         libs/SOIL/src/stbi_DDS_aug_c.h
 
-        )
+        src/TimerEventService.cpp src/TimerEventService.h)
 
 
 find_package(OpenGL REQUIRED)
