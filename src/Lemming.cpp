@@ -12,12 +12,12 @@
 
 Lemming::Lemming(const glm::vec2 &initialPosition) {
     this->shaderProgram = &ShaderManager::getInstance().getShaderProgram();
-    _job = JobFactory::instance().createFallerJob();
+    _job = JobFactory::createFallerJob();
     _job->initAnims(*shaderProgram);
+    _position = initialPosition;
     _job->sprite()->setPosition(initialPosition);
-    countdown = nullptr;
-    alive = true;
-    isSaved = false;
+    _alive = true;
+    _isSaved = false;
 }
 
 void Lemming::update(int deltaTime) {
@@ -26,36 +26,34 @@ void Lemming::update(int deltaTime) {
     }
 
     if (outOfMap()) {
-        alive = false;
+        _alive = false;
         delete _job;
         //lemming no longer has a job
         return;
     }
-    if (countdown != nullptr && countdown->isOver()) {
+    if (_countdown.isStarted() && _countdown.isOver()) {
         changeJob(Jobs::EXPLODER);
-        delete countdown;
-        countdown = nullptr;
         return;
     }
     //still not nuked
     _job->updateStateMachine(deltaTime);
 
-    if (countdown != nullptr) {
+    if (_countdown.isStarted()) {
         //countdown for nuke is running
-        countdown->setPosition(glm::vec2(6, -8) + _job->sprite()->getPosition());
-        countdown->update(deltaTime);
+        _countdown.setPosition(glm::vec2(6, -8) + _job->sprite()->getPosition());
+        _countdown.update(deltaTime);
     }
 
     if (_job->finished()) {
         if (_job->getNextJob() == Jobs::UNKNOWN) {
             if (_job->getCurrentJob() == Jobs::ESCAPER) {
-                isSaved = true;
+                _isSaved = true;
             } else {
                 cout << "is finished but not alive" << endl;
-                alive = false;
+                _alive = false;
             }
         }
-        if (alive && !isSaved) {
+        if (_alive && !_isSaved) {
             changeJob(_job->getNextJob());
         }
 
@@ -69,9 +67,7 @@ void Lemming::render() {
     _job->sprite()->render();
     _job->sprite()->setPosition(oldPosition);
 
-    if (countdown != nullptr) {
-        countdown->render();
-    }
+    _countdown.render();
 }
 
 void Lemming::changeJob(Jobs nextJob) {
@@ -81,7 +77,7 @@ void Lemming::changeJob(Jobs nextJob) {
         oldPosition = _job->sprite()->getPosition();
         delete _job;
     }
-    _job = JobFactory::instance().createJob(nextJob);
+    _job = JobFactory::createJob(nextJob);
     if(_job == nullptr)
         return;
 
@@ -99,11 +95,11 @@ Job *Lemming::getJob() {
 }
 
 bool Lemming::dead() const {
-    return !alive;
+    return !_alive;
 }
 
 bool Lemming::saved() const {
-    return isSaved;
+    return _isSaved;
 }
 
 bool Lemming::isWalkingRight() const {
@@ -115,8 +111,8 @@ void Lemming::setWalkingRight(bool value) {
     _job->setWalkingRight(value);
 }
 
-void Lemming::writeDestiny() {
-    countdown = new Countdown();
+void Lemming::writeDestiny(int deltaTime) {
+    _countdown.start(deltaTime);
 }
 
 bool Lemming::outOfMap() {

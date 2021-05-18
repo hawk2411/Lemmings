@@ -12,7 +12,7 @@ enum BasherAnims {
     BASHER_RIGHT, BASHER_LEFT
 };
 
-Basher::Basher(Jobs jobs) : Job(jobs) {
+Basher::Basher() : Job(Jobs::BASHER) {
 
 }
 

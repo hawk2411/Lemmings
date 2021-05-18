@@ -7,7 +7,7 @@
 
 class Exploder : public Job {
 public:
-    Exploder(Jobs jobs);
+    Exploder();
 
     void initAnims(ShaderProgram &shaderProgram);
 

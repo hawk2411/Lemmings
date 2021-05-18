@@ -1,6 +1,6 @@
 #include "UI.h"
 #include "Scene.h"
-#include "LevelManager.h"
+#include "LevelRunner.h"
 #include "Level.h"
 #include "ShaderManager.h"
 #include "PredefinedWordFactory.h"
@@ -70,18 +70,18 @@ void UI::render() {
 
 void UI::update() {
     for (int i = 0; i < 8; ++i) {
-        int jobCount = LevelManager::getInstance().getJobCount(i);
+        int jobCount = LevelRunner::getInstance().getJobCount(i);
         buttons[i + 2].setNum(jobCount);
     }
 
-    buttons[Button::ButtonNames::MINUS_BUTTON].setNum(LevelManager::getInstance().getMinReleaseRate());
-    buttons[Button::ButtonNames::PLUS_BUTTON].setNum(LevelManager::getInstance().getReleaseRate());
+    buttons[Button::ButtonNames::MINUS_BUTTON].setNum(LevelRunner::getInstance().getMinReleaseRate());
+    buttons[Button::ButtonNames::PLUS_BUTTON].setNum(LevelRunner::getInstance().getReleaseRate());
 
-    numberOutLemmings.displayNum(LevelManager::getInstance().getNumLemmingsAlive());
+    numberOutLemmings.displayNum(LevelRunner::getInstance().getNumLemmingsAlive());
 
-    numberInLemmings.displayPercentage(LevelManager::getInstance().getPercentageSavedLemmings());
+    numberInLemmings.displayPercentage(LevelRunner::getInstance().getPercentageSavedLemmings());
 
-    time.displayTime(LevelManager::getInstance().getRemainingTime());
+    time.displayTime(LevelRunner::getInstance().getRemainingTime());
 }
 
 void UI::setPosition(glm::vec2 position) {

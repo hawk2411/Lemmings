@@ -7,7 +7,7 @@
 #define JUMP_HEIGHT 96
 #define FALL_STEP 4
 
-Digger::Digger(Jobs jobs) : Job(jobs) {
+Digger::Digger() : Job(Jobs::DIGGER) {
 
 }
 

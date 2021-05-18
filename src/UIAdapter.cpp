@@ -1,7 +1,7 @@
 #include "UIAdapter.h"
 #include "JobAssigner.h"
 #include "Scene.h"
-#include "LevelManager.h"
+#include "LevelRunner.h"
 #include "Lemming.h"
 #include "PredefinedWordFactory.h"
 
@@ -10,7 +10,7 @@ void UIAdapter::changeFocusedLemming(int lemmingIndex) {
     if (lemmingIndex == -1) {
         lemmingJobName = "";
     } else {
-        lemmingJobName = LevelManager::getInstance().getLemmingJobNameIndex(lemmingIndex);
+        lemmingJobName = LevelRunner::getInstance().getLemmingJobNameIndex(lemmingIndex);
     }
     UI::getInstance().changeDisplayedJob(lemmingJobName);
 }
@@ -32,12 +32,12 @@ void UIAdapter::activateButton(int buttonIndex) {
     switch (buttonIndex) {
         case Button::MINUS_BUTTON:
             if (Level::currentLevel().getLevelAttributes()->releaseRate) {
-                LevelManager::getInstance().decreaseReleaseRate();
+                LevelRunner::getInstance().decreaseReleaseRate();
             }
             break;
         case Button::PLUS_BUTTON:
             if (Level::currentLevel().getLevelAttributes()->releaseRate) {
-                LevelManager::getInstance().increaseReleaseRate();
+                LevelRunner::getInstance().increaseReleaseRate();
             }
             break;
         case Button::CLIMBER_BUTTON:
@@ -87,7 +87,7 @@ void UIAdapter::activateButton(int buttonIndex) {
             }
             break;
         case Button::NUKE_BUTTON:
-            LevelManager::getInstance().apocalypse();
+            LevelRunner::getInstance().apocalypse();
             break;
         case Button::SPEED_BUTTON:
             Scene::getInstance().changeSpeedUpStatus();

@@ -10,11 +10,11 @@ enum FallerAnims {
 
 #define FATAL_FALLING_DISTANCE 65
 
-Faller::Faller(Jobs jobs) : Job(jobs),
-                            state(FallerState::FALLING_RIGHT_STATE),
-                            deathEffect(nullptr),
-                            currentDistance(0),
-                            dead(false) {
+Faller::Faller() : Job(Jobs::FALLER),
+                   state(FallerState::FALLING_RIGHT_STATE),
+                   deathEffect(nullptr),
+                   currentDistance(0),
+                   dead(false) {
     deathEffect = make_unique<Sound>(Game::instance()->getSoundManager(), "sounds/lemmingsEffects/SPLAT.WAV",
                                      FMOD_DEFAULT | FMOD_CREATESTREAM | FMOD_UNIQUE);
 }

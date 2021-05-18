@@ -7,7 +7,7 @@
 
 class Basher : public Job {
 public:
-    Basher(Jobs jobs);
+    Basher();
 
     void initAnims(ShaderProgram &shaderProgram) override;
 

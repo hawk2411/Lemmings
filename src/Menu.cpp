@@ -1,10 +1,12 @@
-#include "Menu.h"
 #include "ShaderManager.h"
 #include "Game.h"
 #include "StateManager.h"
 
-Menu::Menu() : mode(0) {
-    music = make_unique<Sound>(Game::instance()->getSoundManager(), "sounds/MenuSong.ogg", FMOD_LOOP_NORMAL | FMOD_CREATESTREAM);
+#include "Menu.h"
+
+Menu::Menu(Game *game) : GameState(game), _mode(0) {
+    music = make_unique<Sound>(_game->getSoundManager(), "sounds/MenuSong.ogg",
+                               FMOD_LOOP_NORMAL | FMOD_CREATESTREAM);
 }
 
 Menu::~Menu() {
@@ -14,7 +16,7 @@ Menu::~Menu() {
 void Menu::init() {
     initTextures();
 
-    mode = 0;
+    _mode = 0;
     currentTime = 0.0f;
 
     menuBackground = Sprite::createSprite(glm::vec2(320, 230), glm::vec2(1.f, 1.f),
@@ -31,7 +33,7 @@ void Menu::init() {
     for (int i = 0; i < 3; ++i) {
         menuMode->addKeyframe(i, modePositions[i]);
     }
-    menuMode->changeAnimation(mode);
+    menuMode->changeAnimation(_mode);
 
     menuExit = Sprite::createSprite(glm::vec2(111, 52), glm::vec2(1.f, 1.f),
                                     &ShaderManager::getInstance().getShaderProgram(), &menuExitTexture);
@@ -101,60 +103,64 @@ void Menu::initTextures() {
 }
 
 void Menu::changeModeUp() {
-    if (mode + 1 < 3) {
-        ++mode;
+    if (_mode + 1 < 3) {
+        ++_mode;
     }
 }
 
 void Menu::changeModeDown() {
-    if (mode - 1 >= 0) {
-        --mode;
+    if (_mode - 1 >= 0) {
+        --_mode;
     }
 }
 
 void Menu::changeMode() {
-    menuMode->changeAnimation(mode);
+    menuMode->changeAnimation(_mode);
 }
 
 int Menu::getMode() const {
-    return mode;
+    return _mode;
 }
 
 void Menu::endMusic() {
     music->stopSound();
 }
 
-void Menu::keyPressed(int key) {
-    if (key == 27) // Escape code
-    {
-        Game::instance()->changeBplay();
-        endMusic();
-    } else if (key == 'h') // Hard mode
-    {
-        Game::instance()->swapDifficultyMode();
-    }
-}
-
-void Menu::specialKeyPressed(int key) {
-    if (key == GLUT_KEY_F1) { // key f1 go to playing
-        int mode = getMode();
-        endMusic();
-        StateManager::instance().changeInfo(mode, 1);
-    } else if (key == GLUT_KEY_F2) { // F2 go to Instructions
-        endMusic();
-        StateManager::instance().changeInstructions();
-    } else if (key == GLUT_KEY_F3) { // F3 go to About
-        endMusic();
-        StateManager::instance().changeCredits();
-    } else if (key == GLUT_KEY_UP) {
-        changeModeUp();
-    } else if (key == GLUT_KEY_DOWN) {
-        changeModeDown();
-    }
-}
-
 void Menu::mouseMoved(int mouseX, int mouseY, bool bLeftButton, bool bRightButton) {
 
+}
+
+void Menu::onKeyPressed(const SDL_KeyboardEvent &keyboardEvent) {
+    switch (keyboardEvent.keysym.sym) {
+        case SDLK_F1:
+            // key f1 go to playing
+            endMusic();
+            StateManager::instance().changeInfo(getMode(), 1);
+            break;
+        case SDLK_F2:
+            // F2 go to Instructions
+            endMusic();
+            StateManager::instance().changeInstructions();
+            break;
+        case SDLK_F3:
+            // F3 go to About
+            endMusic();
+            StateManager::instance().changeCredits();
+            break;
+        case SDLK_UP:
+            changeModeUp();
+            break;
+        case SDLK_DOWN:
+            changeModeDown();
+            break;
+        case SDLK_ESCAPE:
+            _game->changeBplay();
+            endMusic();
+            break;
+        case SDLK_h:
+            _game->swapDifficultyMode();
+            break;
+    }
 }
 
 

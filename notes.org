@@ -60,3 +60,103 @@ class Menu : public GameState {
 }
 
    #+end_src   
+
+
+** HardMaskManager
+  
+   has directly dependencies to singletons
+   - LevelManager to get the current time
+     and
+   - Level to get it size and masked map
+
+     at the moment no class initialize the LevelRunner and in old version it was
+     StateManager which initialize the singleton of LevelManager (now LevelRunner)
+     #+begin_src c++
+	    void StateManager::changeScene(int levelMode, int levelNum) {
+ 
+ 
+	      LevelManager::getInstance().init(modeName, levelNum);
+	      Scene::getInstance().init();
+	      Game::instance()->setGameState(&Scene::getInstance());
+	    }
+     #+end_src
+
+     [[StateManager]] is no longer a singleton rather part of Game class, so HardMaskManager must have accesss to Game
+
+*** initialized from
+     [[Scene]]
+     
+*** speaks with
+    [[Level]]
+    [[LevelRunner]]
+     
+     
+** Game
+*** initialize
+    [[SoundManager]]
+    [[StateManager]]
+
+    
+** SoundManager
+** StateManager
+   is reponsible to create all type of [[GameState]] pages and manage the switch between them
+   in the process of switching to Scene page the LevelManager must be initialized.
+
+** Scene
+
+*** is inherited from
+    [[GameState]]
+
+*** is parent from
+    
+*** is initialized from
+   [[StateManager]]
+   
+*** initialiaze:
+   [[HardMaskManager]],  [[EasyManager]] is initialized here
+
+*** speaks with
+    [[JobAssigner]], [[Cursor]], [[LevelRunner]], [[UIAdapter]], [[UI]], [[Scroller]], [[StateManger]], [[Level]], [[ParticleSystemManager]]
+   
+   
+** GameState
+   
+** LevelRunner
+   Is reponsible to run a level, it create the lemmings and coordinate the state of them
+
+*** initialize
+    [[Level]] [[Lemmings]] [[Job]]
+    
+*** is initialized from:
+   StateManager
+   
+*** speaks with:
+    [[Level]]: Level instance is initialized here.
+   
+
+
+** EasyManager
+   
+*** inherited from
+    
+*** is parent from
+    
+*** initialized from
+    
+*** initialialze
+    
+*** speak with
+
+    
+** Level
+   
+*** inherited from
+    
+*** is parent from
+    
+*** initialized from
+    
+*** initialialze
+    
+*** speak with
+    

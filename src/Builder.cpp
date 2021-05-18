@@ -9,7 +9,7 @@ enum BuilderAnims {
     NOSTEPS
 };
 
-Builder::Builder(Jobs jobs) : Job(jobs) {
+Builder::Builder() : Job(Jobs::BUILDER) {
 
 }
 

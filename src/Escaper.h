@@ -8,7 +8,7 @@
 
 class Escaper : public Job {
 public:
-    Escaper(Jobs jobs);
+    Escaper();
 
     void initAnims(ShaderProgram &shaderProgram);
 

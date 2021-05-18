@@ -4,11 +4,11 @@
 #include "KeyFactory.h"
 #include "StateManager.h"
 #include "Game.h"
-Instructions::Instructions() : actualPage(0),
-                               _onlyLeft(false),
-                               _onlyRight(true){
+Instructions::Instructions(Game *game) : actualPage(0),
+                                         _onlyLeft(false),
+                                         _onlyRight(true), GameState(game) {
 
-    _music = make_unique<Sound>(Game::instance()->getSoundManager(), "sounds/InstructionsSong.ogg",
+    _music = make_unique<Sound>(game->getSoundManager(), "sounds/InstructionsSong.ogg",
                                 FMOD_LOOP_NORMAL | FMOD_CREATESTREAM);
 
     _leftKey = KeyFactory::instance().createLeftKey();
@@ -264,28 +264,18 @@ void Instructions::mouseMoved(int mouseX, int mouseY, bool bLeftButton, bool bRi
 
 }
 
-void Instructions::keyPressed(int key) {
-    if (key == 27) {
-        StateManager::instance().changeMenu();
-        endMusic();
+void Instructions::onKeyPressed(const SDL_KeyboardEvent &keyboardEvent) {
+    switch (keyboardEvent.keysym.sym) {
+        case SDLK_ESCAPE:
+            StateManager::instance().changeMenu();
+            endMusic();
+            break;
+        case SDLK_RIGHT:
+            passPageRight();
+            break;
+        case SDLK_LEFT:
+            passPageLeft();
+            break;;
     }
-
-}
-
-void Instructions::keyReleased(int key) {
-
-}
-
-void Instructions::specialKeyPressed(int key) {
-    if (key == GLUT_KEY_RIGHT) {
-        passPageRight();
-
-    } else if (key == GLUT_KEY_LEFT) {
-        passPageLeft();
-    }
-}
-
-void Instructions::specialKeyReleased(int key) {
-
 }
 

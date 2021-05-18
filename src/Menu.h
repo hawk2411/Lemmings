@@ -6,16 +6,14 @@
 #include "GameState.h"
 #include "Sprite.h"
 #include "Sound.h"
+#include "Game.h"
+
+class Game;
 
 class Menu : public GameState {
 
 public:
-    static Menu &getInstance() {
-        static Menu instance;
-        return instance;
-    };
-
-    Menu();
+    Menu(Game *game);
 
     ~Menu() override;
 
@@ -33,18 +31,15 @@ public:
 
     void endMusic();
 
-    void keyPressed(int key) override;
-    void keyReleased(int key)  override {}
-    void specialKeyPressed(int key) override;
-    void specialKeyReleased(int key) override {}
 
     void mouseMoved(int mouseX, int mouseY, bool bLeftButton, bool bRightButton) override;
+
+    void onKeyPressed(const SDL_KeyboardEvent &keyboardEvent) override;
 
 
 private:
 
     // Functions
-
     void initTextures();
 
     void changeMode();
@@ -67,7 +62,7 @@ private:
     std::unique_ptr<Sprite> menuMode;
     std::unique_ptr<Sprite> menuPlaying;
 
-    int mode; // 0 = FUN, 1 = TRICKY, 2 = TAXING TODO change to enum
+    int _mode; // 0 = FUN, 1 = TRICKY, 2 = TAXING TODO change to enum
 
     float currentTime;
 

@@ -6,20 +6,32 @@
 #include "Instructions.h"
 #include "Game.h"
 #include "StateManager.h"
-#include "LevelManager.h"
+#include "LevelRunner.h"
+
+StateManager::StateManager(Game* game) :_currentState(States::Type::Menu), _game(game) {
+    _gameStates.insert( std::make_pair(States::Type::Menu, unique_ptr<GameState>(new Menu(game))));
+    _gameStates.insert( std::make_pair(States::Type::Scene, unique_ptr<GameState>(new Scene(game))));
+    _gameStates.insert( std::make_pair(States::Type::SceneInfo, unique_ptr<GameState>(new InfoLevel(game))));
+    _gameStates.insert( std::make_pair(States::Type::Result, unique_ptr<GameState>(new Results(game))));
+    _gameStates.insert( std::make_pair(States::Type::Instruction, unique_ptr<GameState>(new Instructions(game))));
+    _gameStates.insert( std::make_pair(States::Type::Credits, unique_ptr<GameState>(new Credits(game))));
+}
 
 void StateManager::changeMenu() {
-    Menu::getInstance().init();
-    Game::instance()->setGameState(&Menu::getInstance());
+    _currentState = States::Type::Menu;
+    _gameStates[_currentState]->init();
+
 }
 
 void StateManager::changeInfo(int levelMode, int levelNum) {
-    InfoLevel::instance().init();
-    InfoLevel::instance().setLevel(levelNum, levelMode);
-    Game::instance()->setGameState(&InfoLevel::instance());
+    _currentState=States::Type::SceneInfo;
+    _gameStates[_currentState]->init();
+    dynamic_cast<InfoLevel*>(_gameStates[_currentState].get())->setLevel(levelMode, levelNum);
+
 }
 
 void StateManager::changeScene(int levelMode, int levelNum) {
+    _currentState= States::Type::Scene;
     string modeName;
     switch (levelMode) {
         case FUN_MODE:
@@ -31,28 +43,40 @@ void StateManager::changeScene(int levelMode, int levelNum) {
         case TAXING_MODE:
             modeName = "taxing";
             break;
+        default:
+            return;
     }
-//    modeName="fun";
-//    levelNum=4;
+    auto *scene = dynamic_cast<Scene*>(_gameStates[_currentState].get());
+    scene->setLevel(levelMode, levelNum);;
+    scene->setGameMode(_game->getGameMode());
 
-    LevelManager::getInstance().init(modeName, levelNum);
-    Scene::getInstance().init();
-    Game::instance()->setGameState(&Scene::getInstance());
+
+    _gameStates[_currentState]->init();
 
 }
 
 void StateManager::changeResults(int goalPercentage, int currentPercentage) {
-    Results::getInstance().init();
-    Results::getInstance().setPercentages(goalPercentage, currentPercentage);
-    Game::instance()->setGameState(&Results::getInstance());
+    dynamic_cast<Results*>(_gameStates[States::Type::Result].get())->setPercentages(goalPercentage, currentPercentage);
+    _gameStates[States::Type::Result]->init();
+    _currentState = States::Type::Result
 }
 
 void StateManager::changeCredits() {
-    Credits::instance().init();
-    Game::instance()->setGameState(&Credits::instance());
+    _currentState = States::Type::Credits;
+    _gameStates[_currentState]->init();
 }
 
 void StateManager::changeInstructions() {
-    Instructions::getInstance().init();
-    Game::instance()->setGameState(&Instructions::getInstance());
+    _currentState = States::Type::Instruction;
+    _gameStates[_currentState]->init();
 }
+
+GameState *StateManager::getCurrentGameState() {
+    return _gameStates[_currentState].get();
+}
+
+GameState *StateManager::getGameState(States::Type key_type) {
+    return _gameStates[key_type].get();
+}
+
+

@@ -11,6 +11,7 @@ enum WalkerAnims {
     WALKING_LEFT, WALKING_RIGHT
 };
 
+Walker::Walker() : Job(Jobs::WALKER), _state(WALKING_RIGHT_STATE){}
 
 void Walker::initAnims(ShaderProgram &shaderProgram) {
     jobSprite = Sprite::createSprite(glm::ivec2(16, 16), glm::vec2(1.f / 16, 1.f / 14), &shaderProgram,
@@ -35,24 +36,24 @@ void Walker::setWalkingRight(bool value) {
 
     if (walkingRight) {
         jobSprite->changeAnimation(WALKING_RIGHT);
-        state = WALKING_RIGHT_STATE;
+        _state = WALKING_RIGHT_STATE;
     } else {
         jobSprite->changeAnimation(WALKING_LEFT);
-        state = WALKING_LEFT_STATE;
+        _state = WALKING_LEFT_STATE;
     }
 }
 
 void Walker::updateStateMachine(int deltaTime) {
     int fall;
 
-    switch (state) {
+    switch (_state) {
         case WALKING_LEFT_STATE:
             jobSprite->incPosition(glm::vec2(-1, -2));
 
             if (collision()) {
                 jobSprite->decPosition(glm::vec2(-1, -2));
                 jobSprite->changeAnimation(WALKING_RIGHT);
-                state = WALKING_RIGHT_STATE;
+                _state = WALKING_RIGHT_STATE;
                 setWalkingRight(true);
             } else {
                 fall = collisionFloor(4);
@@ -76,7 +77,7 @@ void Walker::updateStateMachine(int deltaTime) {
             if (collision()) {
                 jobSprite->decPosition(glm::vec2(1, -2));
                 jobSprite->changeAnimation(WALKING_LEFT);
-                state = WALKING_LEFT_STATE;
+                _state = WALKING_LEFT_STATE;
                 setWalkingRight(false);
 
             } else {
@@ -98,6 +99,8 @@ void Walker::updateStateMachine(int deltaTime) {
             break;
     }
 }
+
+
 
 
 

@@ -8,17 +8,12 @@
 class Results : public GameState {
 
 public:
+    Results(Game *game) : GameState(game) {}
+
     enum ResultsButtonName {
         RETRY,
         CONTINUE,
         MENU
-    };
-
-
-    static Results &getInstance() {
-        static Results instance; // Guaranteed to be destroyed.
-        // Instantiated on first use.
-        return instance;
     };
 
     void init() override;
@@ -37,13 +32,7 @@ public:
 
     void changeSelectedButtonRight();
 
-    void keyPressed(int key) override;
-
-    void keyReleased(int key) override;
-
-    void specialKeyPressed(int key) override;
-
-    void specialKeyReleased(int key) override;
+    void onKeyPressed(const SDL_KeyboardEvent &keyboardEvent) override;
 
     void mouseMoved(int mouseX, int mouseY, bool bLeftButton, bool bRightButton) override;
 

@@ -9,7 +9,7 @@ enum ClimberAnims {
     LEDGING_LEFT, LEDGING_RIGHT
 };
 
-Climber::Climber(Jobs jobs) : Job(jobs) {
+Climber::Climber() : Job(Jobs::CLIMBER) {
 
 }
 

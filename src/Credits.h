@@ -5,16 +5,12 @@
 #include "Texture.h"
 #include "Sprite.h"
 #include "Sound.h"
+#include "Game.h"
 
 class Credits : public GameState {
 
 public:
-    static Credits &instance() {
-        static Credits instance;
-        return instance;
-    };
-
-    Credits();
+    Credits(Game *game);
     ~Credits() override;
 
     void init() override;
@@ -25,13 +21,7 @@ public:
 
     void endMusic();
 
-    void keyPressed(int key) override;
-
-    void keyReleased(int key) override;
-
-    void specialKeyPressed(int key) override;
-
-    void specialKeyReleased(int key) override;
+    void onKeyPressed(const SDL_KeyboardEvent &keyboardEvent) override;
 
     void mouseMoved(int mouseX, int mouseY, bool bLeftButton, bool bRightButton) override;
 

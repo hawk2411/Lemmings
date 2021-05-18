@@ -16,12 +16,19 @@ public:
 
     void update(int deltaTime);
 
-    bool isOver();
+    bool isOver() const;
+
+    void start(int goalTime);
+
+    void reset();
+
+    bool isStarted() const;
 
 private:
-    std::unique_ptr<Sprite> countNum;
-    int goalTime;
-    bool over;
+    std::unique_ptr<Sprite> _countNum;
+    int _goalTime;
+    bool _over;
+    bool _isStarted;
 
 };
 

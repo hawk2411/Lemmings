@@ -9,7 +9,7 @@ enum EscaperAnims {
     ESCAPING
 };
 
-Escaper::Escaper(Jobs jobs) : Job(jobs) {
+Escaper::Escaper() : Job(Jobs::ESCAPER) {
     escapeEfect = make_unique<Sound>(Game::instance()->getSoundManager(), "sounds/lemmingsEffects/YIPPEE.WAV",
                                                                 FMOD_DEFAULT | FMOD_CREATESTREAM | FMOD_UNIQUE);
 

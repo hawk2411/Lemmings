@@ -13,47 +13,47 @@
 #include "Builder.h"
 
 Job *JobFactory::createWalkerJob() {
-    return new Walker(Jobs::WALKER);
+    return new Walker();
 }
 
 Job *JobFactory::createDiggerJob() {
-    return new Digger(Jobs::DIGGER);
+    return new Digger();
 }
 
 Job *JobFactory::createEscaperJob() {
-    return new Escaper(Jobs::ESCAPER);
+    return new Escaper();
     }
 
 Job *JobFactory::createExploderJob() {
-    return new Exploder(Jobs::EXPLODER);
+    return new Exploder();
     }
 
 Job *JobFactory::createMinerJob() {
-    return new Miner(Jobs::MINER);
+    return new Miner();
     }
 
 Job *JobFactory::createFloaterJob() {
-    return new Floater(Jobs::FLOATER);
+    return new Floater();
 }
 
 Job *JobFactory::createBasherJob() {
-    return new Basher(Jobs::BASHER);
+    return new Basher();
 }
 
 Job *JobFactory::createBlockerJob() {
-    return new Blocker(Jobs::BLOCKER);
+    return new Blocker();
 }
 
 Job *JobFactory::createFallerJob() {
-    return new Faller(Jobs::FALLER);
+    return new Faller();
 }
 
 Job *JobFactory::createClimberJob() {
-    return new Climber(Jobs::CLIMBER);
+    return new Climber();
 }
 
 Job *JobFactory::createBuilderJob() {
-    return new Builder(Jobs::BUILDER);
+    return new Builder();
 }
 
 Job *JobFactory::createJob(Jobs jobToCreate) {

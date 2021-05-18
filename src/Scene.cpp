@@ -12,7 +12,7 @@
 #include "Utils.h"
 #include "HardMaskManager.h"
 #include "EasyMaskManager.h"
-#include "LevelManager.h"
+#include "LevelRunner.h"
 #include "JobAssigner.h"
 #include "UIAdapter.h"
 
@@ -52,15 +52,15 @@ void Scene::update(int deltaTime) {
         deltaTime = 4 * deltaTime;
     }
 
-    LevelManager::getInstance().update(deltaTime);
+    LevelRunner::getInstance().update(deltaTime);
     ParticleSystemManager::getInstance().update(deltaTime);
     updateUI();
 
-    if (LevelManager::getInstance().finished() && ParticleSystemManager::getInstance().finished()) {
-        int goalPercentage = LevelManager::getInstance().getPercentageTotalLemmings();
-        int currentPercentage = LevelManager::getInstance().getPercentageSavedLemmings();
+    if (LevelRunner::getInstance().finished() && ParticleSystemManager::getInstance().finished()) {
+        int goalPercentage = LevelRunner::getInstance().getPercentageTotalLemmings();
+        int currentPercentage = LevelRunner::getInstance().getPercentageSavedLemmings();
 
-        LevelManager::getInstance().endMusic();
+        LevelRunner::getInstance().endMusic();
         StateManager::instance().changeResults(goalPercentage, currentPercentage);
     }
 
@@ -74,7 +74,7 @@ void Scene::render() {
 
 
     ShaderManager::getInstance().useShaderProgram();
-    LevelManager::getInstance().render();
+    LevelRunner::getInstance().render();
     ParticleSystemManager::getInstance().render();
     UI::getInstance().render();
     Cursor::getInstance().render();
@@ -165,6 +165,13 @@ void Scene::buildStep(glm::vec2 position) {
     }
 }
 
+void Scene::onKeyPressed(const SDL_KeyboardEvent &keyboardEvent) {
+    if (keyboardEvent.keysym.sym == SDLK_ESCAPE) {
+        StateManager::instance().changeMenu();
+    }
+
+}
+
 void Scene::mouseMoved(int mouseX, int mouseY, bool bLeftButton, bool bRightButton) {
     posX = mouseX;
     posY = mouseY;
@@ -230,7 +237,7 @@ void Scene::update() {
         Scroller::getInstance().scrollRight();
         Cursor::getInstance().setScrollRightCursor();
     } else if (screenMovedArea == ScreenMovedArea::LEVEL) {
-        int lemmingIndex = LevelManager::getInstance().getLemmingIndexInPos(posX, posY);
+        int lemmingIndex = LevelRunner::getInstance().getLemmingIndexInPos(_mousePosX, _mousePosY);
         UIAdapter::getInstance().changeFocusedLemming(lemmingIndex);
 
         if (lemmingIndex != -1) {
@@ -263,8 +270,9 @@ Scene::ScreenClickedArea Scene::getClickedScreenArea(int mouseX, int mouseY) {
     throw std::runtime_error("Scene::getClickedScreenArea unknown behavior.");
 }
 
-Scene::ScreenMovedArea Scene::getMovedScreenArea(int mouseX, int mouseY) {
-    if (0 <= mouseX && mouseX < SCROLL_WIDTH && mouseY < LEVEL_HEIGHT) {
+
+Scene::ScreenMovedArea Scene::getMovedScreenArea() const {
+    if (0 <= _mousePosX && _mousePosX < SCROLL_WIDTH && _mousePosY < LEVEL_HEIGHT) {
         return ScreenMovedArea::SCROLL_AREA_LEFT;
     } else if (LEVEL_WIDTH - SCROLL_WIDTH <= mouseX && mouseX < LEVEL_WIDTH && mouseY < LEVEL_HEIGHT) {
         return ScreenMovedArea::SCROLL_AREA_RIGHT;
@@ -286,7 +294,7 @@ void Scene::leftClickOnMap(int posX, int posY) {
 
     if (JobAssigner::getInstance().hasJobToAssign()) {
 
-        int selectedLemmingIndex = LevelManager::getInstance().getLemmingIndexInPos(posX, posY);
+        int selectedLemmingIndex = LevelRunner::getInstance().getLemmingIndexInPos(_mousePosX, _mousePosX);
         JobAssigner::getInstance().assigJobLemming(selectedLemmingIndex);
     }
 }
@@ -307,24 +315,5 @@ void Scene::updateCursorPosition() {
     }
 
     Cursor::getInstance().setPosition(cursorPosition);
-
-}
-
-void Scene::keyPressed(int key) {
-    if (key == 27) {
-        LevelManager::getInstance().endMusic();
-        StateManager::instance().changeMenu();
-    }
-}
-
-void Scene::keyReleased(int key) {
-
-}
-
-void Scene::specialKeyPressed(int key) {
-
-}
-
-void Scene::specialKeyReleased(int key) {
 
 }

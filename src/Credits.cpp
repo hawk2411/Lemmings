@@ -3,8 +3,9 @@
 #include "Game.h"
 #include "StateManager.h"
 
-Credits::Credits() {
-    music = make_unique<Sound>(Game::instance()->getSoundManager(), "sounds/CreditsSong.ogg", FMOD_LOOP_NORMAL | FMOD_CREATESTREAM);
+Credits::Credits(Game *game) : GameState(game) {
+    music = make_unique<Sound>(game->getSoundManager(), "sounds/CreditsSong.ogg",
+                               FMOD_LOOP_NORMAL | FMOD_CREATESTREAM);
 }
 
 Credits::~Credits() {
@@ -40,27 +41,14 @@ void Credits::initTextures() {
 void Credits::endMusic() {
     music->stopSound();
 }
-void Credits::keyPressed(int key) {
-
-    if (key == 27) // Escape code
-    {
-        StateManager::instance().changeMenu();
-        Credits::instance().endMusic();
-    }
-
-}
-
-void Credits::keyReleased(int key) {
-
-}
-
-void Credits::specialKeyPressed(int key) {
-}
-
-void Credits::specialKeyReleased(int key) {
-
-}
 
 void Credits::mouseMoved(int mouseX, int mouseY, bool bLeftButton, bool bRightButton) {
 
+}
+
+void Credits::onKeyPressed(const SDL_KeyboardEvent &keyboardEvent) {
+    if (keyboardEvent.keysym.sym == SDLK_ESCAPE) {
+        StateManager::instance().changeMenu();
+        endMusic();
+    }
 }

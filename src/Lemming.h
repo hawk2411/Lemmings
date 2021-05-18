@@ -37,17 +37,17 @@ public:
 
     Job *getJob();
 
-    void writeDestiny();
+    void writeDestiny(int deltaTime);
 
 private:
     Job *_job;
     //Sprite *sprite;
-    Countdown *countdown;
+    Countdown _countdown;
     ShaderProgram *shaderProgram;
     bool walkingRight = true; // is marked true when the lemmings walks in right direction
-    bool alive;
-    bool isSaved;
-    glm::vec2 position;
+    bool _alive;
+    bool _isSaved;
+    glm::vec2 _position;
 
     bool outOfMap();
 

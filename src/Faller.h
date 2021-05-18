@@ -7,7 +7,7 @@
 
 class Faller : public Job {
 public:
-    Faller(Jobs jobs);
+    Faller();
     ~Faller() override;
     void initAnims(ShaderProgram &shaderProgram) override;
 

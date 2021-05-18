@@ -1,16 +1,23 @@
 #ifndef _STATEMANAGER_INCLUDE
 #define _STATEMANAGER_INCLUDE
-
+#include <map>
 #include "GameState.h"
+
+struct States {
+    enum class Type {
+        Menu = 0,
+        Scene = 1,
+        SceneInfo = 2,
+        Result = 3,
+        Instruction = 4,
+        Credits = 5
+    };
+};
 
 class StateManager {
 
 public:
-
-    static StateManager &instance() {
-        static StateManager instance;
-        return instance;
-    };
+    explicit StateManager(Game *game);
 
     void changeMenu();
 
@@ -24,8 +31,16 @@ public:
 
     void changeInstructions();
 
+    States::Type getCurrentStateType()const{return _currentState;}
+    void setCurrentState(States::Type type){_currentState = type;}
+
+    GameState* getCurrentGameState();
+
+    GameState* getGameState(States::Type key_type);
 private:
-    GameState *gameState;
+    std::map <States::Type, unique_ptr<GameState>> _gameStates;
+    States::Type _currentState;
+    Game *_game;
 };
 
 

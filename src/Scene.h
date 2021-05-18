@@ -8,7 +8,8 @@
 #include "Level.h"
 #include "UI.h"
 #include "Word.h"
-#include "MaskManager.h"
+#include "IMaskManager.h"
+#include "GameMode.h"
 
 // Scene contains all the entities of our game.
 // It is responsible for updating and render them.
@@ -18,11 +19,9 @@ class Scene : public GameState {
 
 public:
 
-    static Scene &getInstance() {
-        static Scene instance; // Guaranteed to be destroyed.
-        // Instantiated on first use.
-        return instance;
-    };
+    explicit Scene(Game *game);
+
+    void mouseMoved(int mouseX, int mouseY, bool bLeftButton, bool bRightButton) override;
 
     void init() override;
 
@@ -53,7 +52,7 @@ public:
 
     static VariableTexture &getMaskedMap();
 
-    void setMaskManager(MaskManager *maskManager);
+    void setGameMode(GameMode::Types newGameMode);
 
     enum ScreenClickedArea {
         MAP,
@@ -75,17 +74,9 @@ public:
         RIGHT_MOUSE_PRESSED
     };
 
-    void mouseMoved(int mouseX, int mouseY, bool bLeftButton, bool bRightButton) override;
-
     void update();
 
-    void keyPressed(int key) override;
-
-    void keyReleased(int key) override;
-
-    void specialKeyPressed(int key) override;
-
-    void specialKeyReleased(int key) override;
+    void onKeyPressed(const SDL_KeyboardEvent &keyboardEvent) override;
 
 private:
     ScreenClickedArea getClickedScreenArea(int mouseX, int mouseY);
@@ -109,7 +100,7 @@ private:
 
     std::unique_ptr<MaskedTexturedQuad> map;
 
-    MaskManager *maskManager = nullptr;
+    IMaskManager *maskManager = nullptr;
     int posX=0, posY=0;
 
     MouseStates mouseState = MouseStates::NONE;

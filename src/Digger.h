@@ -7,7 +7,7 @@
 
 class Digger : public Job {
 public:
-    Digger(Jobs jobs);
+    Digger();
 
     void initAnims(ShaderProgram &shaderProgram);
 

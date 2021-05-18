@@ -9,7 +9,7 @@ enum FloaterAnims {
     FLOATER_OPENING_RIGHT, FLOATER_OPENING_LEFT, FLOATER_FALLING_RIGHT, FLOATER_FALLING_LEFT
 };
 
-Floater::Floater(Jobs jobs) : Job(jobs) {
+Floater::Floater() : Job(Jobs::FLOATER) {
 
 }
 

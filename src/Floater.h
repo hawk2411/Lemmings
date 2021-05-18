@@ -7,7 +7,7 @@
 
 class Floater : public Job {
 public:
-    Floater(Jobs jobs);
+    Floater();
 
     void initAnims(ShaderProgram &shaderProgram) override;
 

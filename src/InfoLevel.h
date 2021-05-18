@@ -11,12 +11,7 @@
 class InfoLevel : public GameState{
 
 public:
-    static InfoLevel &instance() {
-        static InfoLevel instance;
-        return instance;
-    };
-
-    InfoLevel();
+    explicit InfoLevel(Game* game);
     ~InfoLevel() override;
 
     // GameState override
@@ -30,20 +25,15 @@ public:
     void setLevel(int level, int mode);
     //===================================================================
     //KeyboardManager override
+    void onKeyPressed(const SDL_KeyboardEvent &keyboardEvent) override;;
 
-    void keyPressed(int key) override;
+    void mouseMoved(int mouseX, int mouseY, bool bLeftButton, bool bRightButton) override;
 
-    void keyReleased(int key) override;
-
-    void specialKeyPressed(int key) override;
-
-    void specialKeyReleased(int key) override;
     //===================================================================
     int getMode() const;
 
     int getLevel() const;
 
-    void mouseMoved(int mouseX, int mouseY, bool bLeftButton, bool bRightButton) override;
 
 private:
 

@@ -6,7 +6,7 @@
 #define JUMP_HEIGHT 96
 #define FALL_STEP 4
 
-Blocker::Blocker(Jobs jobs) : Job(jobs) {
+Blocker::Blocker() : Job(Jobs::BLOCKER), state(BlockerState::BLOCKING_STATE) {
 
 }
 
@@ -21,7 +21,7 @@ void Blocker::initAnims(ShaderProgram &shaderProgram) {
     for (int i = 0; i < 16; i++)
         jobSprite->addKeyframe(0, glm::vec2(float(i) / 16, 3.0f / 14));
 
-    state = BLOCKING_STATE;
+    state = BlockerState::BLOCKING_STATE;
     jobSprite->changeAnimation(0);
 
 }
@@ -33,7 +33,7 @@ void Blocker::setWalkingRight(bool value) {
 void Blocker::updateStateMachine(int deltaTime) {
 
     switch (state) {
-        case BLOCKING_STATE:
+        case BlockerState::BLOCKING_STATE:
 
             glm::ivec2 posBase = jobSprite->getPosition();
 

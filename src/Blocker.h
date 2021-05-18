@@ -11,7 +11,7 @@
 
 class Blocker : public Job {
 public:
-    Blocker(Jobs jobs);
+    Blocker();
 
     void initAnims(ShaderProgram &shaderProgram) override;
 
@@ -24,7 +24,7 @@ public:
     }
 
 private:
-    enum BlockerState {
+    enum class BlockerState {
         BLOCKING_STATE
     };
 

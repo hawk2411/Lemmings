@@ -7,7 +7,7 @@
 
 class Miner : public Job {
 public:
-    Miner(Jobs jobs);
+    Miner();
 
     void initAnims(ShaderProgram &shaderProgram) override;
 

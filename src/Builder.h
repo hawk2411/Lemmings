@@ -11,7 +11,7 @@ class Builder : public Job {
 
 
 public:
-    Builder(Jobs jobs);
+    Builder();
 
     void initAnims(ShaderProgram &shaderProgram) override;
 

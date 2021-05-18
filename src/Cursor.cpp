@@ -1,5 +1,4 @@
 #include <GL/glew.h>
-#include <GL/glut.h>
 #include "Cursor.h"
 #include "Game.h"
 #include "ShaderManager.h"
@@ -12,7 +11,8 @@ enum CursorStates {
 };
 
 void Cursor::init() {
-    glutWarpPointer(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2);
+    SDL_WarpMouseGlobal(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2);
+    //glutWarpPointer(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2);
 
     cursorSprite = Sprite::createSprite(glm::ivec2(12, 12), glm::vec2(29. / 32, 29. / 128),
                                         &ShaderManager::getInstance().getShaderProgram(),

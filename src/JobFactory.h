@@ -13,28 +13,28 @@ public:
         return instance;
     };
 
-    Job* createJob(Jobs jobToCreate);
-    Job *createWalkerJob();
+    static Job* createJob(Jobs jobToCreate);
+    static Job *createWalkerJob();
 
-    Job *createDiggerJob();
+    static Job *createDiggerJob();
 
-    Job *createEscaperJob();
+    static Job *createEscaperJob();
 
-    Job *createExploderJob();
+    static Job *createExploderJob();
 
-    Job *createMinerJob();
+    static Job *createMinerJob();
 
-    Job *createFloaterJob();
+    static Job *createFloaterJob();
 
-    Job *createBasherJob();
+    static Job *createBasherJob();
 
-    Job *createBlockerJob();
+    static Job *createBlockerJob();
 
-    Job *createFallerJob();
+    static Job *createFallerJob();
 
-    Job *createClimberJob();
+    static Job *createClimberJob();
 
-    Job *createBuilderJob();
+    static Job *createBuilderJob();
 };
 
 

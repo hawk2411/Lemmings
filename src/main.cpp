@@ -1,7 +1,13 @@
+#define GLEW_STATIC
 #include <GL/glew.h>
-#include <GL/glut.h>
+#define SDL_MAIN_HANDLED
+#include <SDL2/SDL.h>
+#include <cstdint>
 #include <ctime>
 #include <random>
+
+#include "TimerEventService.h"
+#include "StopWatch.h"
 #include "Game.h"
 
 
@@ -11,34 +17,69 @@
 int main(int argc, char **argv) {
     srand(time(0));
 
-    // GLUT initialization
-    glutInit(&argc, argv);
-    glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH);
-    glutInitWindowPosition(100, 100);
-    glutInitWindowSize(WINDOW_WIDTH, WINDOW_HEIGHT);
+    SDL_Init(SDL_INIT_EVERYTHING);
 
-    glutCreateWindow(argv[0]);
-    glutSetWindowTitle("Lemmings");
+    SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8);
+    SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
+    SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8);
+    SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 8);
+    SDL_GL_SetAttribute(SDL_GL_BUFFER_SIZE, 32);
+    SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 
-    glutSetCursor(GLUT_CURSOR_NONE);
+    Uint32 flag = SDL_WINDOW_OPENGL;
 
-    glutDisplayFunc(Game::drawCallback);
-    glutIdleFunc(Game::idleCallback);
-    glutKeyboardFunc(Game::keyboardDownCallback);
-    glutKeyboardUpFunc(Game::keyboardUpCallback);
-    glutSpecialFunc(Game::specialDownCallback);
-    glutSpecialUpFunc(Game::specialUpCallback);
-    glutMouseFunc(Game::mouseCallback);
-    glutMotionFunc(Game::motionCallback);
-    glutPassiveMotionFunc(Game::motionCallback);
+    SDL_Window *window = SDL_CreateWindow("", 100, 100, 800, 600, flag);
+    SDL_GLContext glContext = SDL_GL_CreateContext(window);
+    GLenum err = glewInit();
+    if (err != GLEW_OK) {
+        std::cerr << "Error: " << glewGetErrorString(err) << std::endl;
+        std::cin.get();
+        return -1;
+    }
 
-    // GLEW will take care of OpenGL extension functions
-    glewExperimental = GL_TRUE;
-    glewInit();
+    bool close = false;
+    //StopWatch stopWatch;
 
-    Game::instance()->init();
-    // GLUT gains control of the application
-    glutMainLoop();
+    Game game;
+    game.init();
+    //SDL_SetWindowGrab(window, SDL_TRUE);
+    TimerEventService timerService;
+    timerService.startEvents(UPDATE_EVENT);
+
+    SDL_Event event;
+    while (!close) {
+        while (SDL_PollEvent(&event)) {
+            switch (event.type) {
+                case SDL_QUIT:
+                    close = true;
+                    break;
+                case SDL_KEYDOWN:
+                case SDL_KEYUP:
+                    game.keyboardDownCallback(event.key);
+                    break;
+                case SDL_MOUSEMOTION:
+                    game.onMousMove(event.motion);
+                    break;
+                case SDL_MOUSEBUTTONDOWN:
+                    game.onMouseButtonDown(event.button);
+                    break;
+                case SDL_MOUSEBUTTONUP:
+                    game.onMouseButtonUp(event.button);
+                    break;
+                case SDL_USEREVENT:
+                {
+                    if( reinterpret_cast<std::uintptr_t>(event.user.data1) == UPDATE_EVENT) {
+                        game.update( reinterpret_cast<std::uintptr_t>(event.user.data2));
+                    }
+                    break;
+                }
+            }
+
+        }
+        game.render();
+        SDL_GL_SwapWindow(window);
+
+    }
 
     return 0;
 }

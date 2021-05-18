@@ -3,14 +3,14 @@
 #include "Scene.h"
 #include "Utils.h"
 #include "ParticleSystemManager.h"
-#include "LevelManager.h"
+#include "LevelRunner.h"
 
 enum ExploderAnims {
     EXPLODER,
     BURNING_DEATH
 };
 
-Exploder::Exploder(Jobs jobs) : Job(jobs) {
+Exploder::Exploder() : Job(Jobs::EXPLODER) {
 
 }
 

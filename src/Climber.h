@@ -9,7 +9,7 @@ class Climber : public Job {
 
 
 public:
-    Climber(Jobs jobs);
+    Climber();
 
     void initAnims(ShaderProgram &shaderProgram) override;
 

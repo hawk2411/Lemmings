@@ -1,11 +1,10 @@
 #include <GL/glew.h>
-#include <GL/glut.h>
 #include "InfoLevel.h"
 #include "ShaderManager.h"
 #include "KeyFactory.h"
 #include "StateManager.h"
 
-InfoLevel::InfoLevel()  {
+InfoLevel::InfoLevel(Game * game) : GameState(game){
     _currentTime = 0.0f;
 }
 
@@ -86,28 +85,18 @@ void InfoLevel::initSprites() {
 
 }
 
-void InfoLevel::keyPressed(int key) {
-    if (key == 27) // Escape code
-    {
-        StateManager::instance().changeMenu();
+void InfoLevel::onKeyPressed(const SDL_KeyboardEvent &keyboardEvent) {
+    switch (keyboardEvent.keysym.sym) {
+        case SDLK_ESCAPE:
+            StateManager::instance().changeMenu();
+            break;
+        case SDLK_RIGHT:
+            StateManager::instance().changeScene(getMode(), getLevel());
+            break;
+        case SDLK_LEFT:
+            StateManager::instance().changeMenu();
+            break;
     }
-}
-
-void InfoLevel::keyReleased(int key) {
-
-}
-
-void InfoLevel::specialKeyPressed(int key) {
-
-    if (key == GLUT_KEY_RIGHT) {
-        StateManager::instance().changeScene(InfoLevel::instance().getMode(), InfoLevel::instance().getLevel());
-    } else if (key == GLUT_KEY_LEFT) {
-        StateManager::instance().changeMenu();
-    }
-}
-
-void InfoLevel::specialKeyReleased(int key) {
-
 }
 
 void InfoLevel::mouseMoved(int mouseX, int mouseY, bool bLeftButton, bool bRightButton) {
@@ -117,5 +106,6 @@ void InfoLevel::mouseMoved(int mouseX, int mouseY, bool bLeftButton, bool bRight
 InfoLevel::~InfoLevel() {
 
 }
+
 
 

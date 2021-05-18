@@ -2,42 +2,30 @@
 #include "Menu.h"
 
 void Game::init() {
-    bPlay = true;
-    hardMode = false;
-    glClearColor(0.f, 0.f, 0.f, 1.0f);
-    initSpriteSheets();
-    ShaderManager::getInstance().init();
-    hardModeIndicator = Sprite::createSprite(glm::ivec2(20, 20), glm::vec2(136. / 256, 160. / 256),
-                                             &ShaderManager::getInstance().getShaderProgram(),
-                                             &Game::spriteSheets().skullSprite);
-    hardModeIndicator->setPosition(glm::vec2(CAMERA_WIDTH - 26, 5));
-
-    gameState = &Menu::getInstance();
-    gameState->init();
+    _stateManager = make_unique<StateManager>(this);
 }
 
 bool Game::update(int deltaTime) {
-    gameState->update(deltaTime);
-
+    _stateManager->getCurrentGameState()->update(deltaTime);
     return bPlay;
 }
 
 void Game::render() {
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    gameState->render();
-    if (hardMode) {
+    _stateManager->getCurrentGameState()->render();
+    if (_gameMode == GameMode::Types::Hard) {
         hardModeIndicator->render();
     }
 
 }
 
 GameState *Game::getGameState() {
-    return gameState;
+    return _stateManager->getCurrentGameState();
 }
 
-void Game::setGameState(GameState *state) {
-    gameState = state;
+void Game::setGameState(States::Type state) {
+    _stateManager->setCurrentState(state);
 }
 
 void Game::initSpriteSheets() {
@@ -128,60 +116,55 @@ const SoundManager *Game::getSoundManager() const {
     return &soundManager;
 }
 
-// Same for mouse button presses or releases
-void Game::mouseCallback(int button, int state, int x, int y) {
-    switch(state) {
-        case GLUT_DOWN:
-            Game::instance()->getGameState()->mousePress(button);
-            break;
-        case GLUT_UP:
-            Game::instance()->getGameState()->mouseRelease(button);
-            break;
-        default:
-            break;
-    }
+Game::Game() {
+
 }
 
-Game *Game::instance() {
-    static Game G(glutGet(GLUT_ELAPSED_TIME));
-    return &G;
+GameMode::Types Game::getGameMode() const {
+    return _gameMode;
 }
 
-void Game::drawCallback() {
-    Game::instance()->render();
-    glutSwapBuffers();
-}
 
-void Game::idleCallback() {
-    int currentTime = glutGet(GLUT_ELAPSED_TIME);
-    int deltaTime = currentTime - Game::instance()->prevTime;
 
-    if (static_cast<float>(deltaTime) > TIME_PER_FRAME) {
-        // Every time we enter here is equivalent to a game loop execution
-        if (!Game::instance()->update(deltaTime))
-            exit(0);
-        Game::instance()->prevTime = currentTime;
-        glutPostRedisplay();
-    }
-}
+//Game *Game::instance() {
+//    static Game G;
+//    return &G;
+//}
 
-void Game::keyboardDownCallback(unsigned char key, int x, int y) {
+//void Game::drawCallback() {
+//    Game::instance()->render();
+//}
 
-    Game::instance()->getGameState()->keyPressed(key);
-}
+//void Game::idleCallback() {
+//    int currentTime = glutGet(GLUT_ELAPSED_TIME);
+//    int deltaTime = currentTime - Game::instance()->prevTime;
+//
+//    if (static_cast<float>(deltaTime) > TIME_PER_FRAME) {
+//        // Every time we enter here is equivalent to a game loop execution
+//        if (!Game::instance()->update(deltaTime))
+//            exit(0);
+//        Game::instance()->prevTime = currentTime;
+//        glutPostRedisplay();
+//    }
+//}
 
-void Game::keyboardUpCallback(unsigned char key, int x, int y) {
-    Game::instance()->getGameState()->keyReleased(key);
-}
-
-void Game::specialDownCallback(int key, int x, int y) {
-    Game::instance()->getGameState()->specialKeyPressed(key);
-}
-
-void Game::specialUpCallback(int key, int x, int y) {
-    Game::instance()->getGameState()->specialKeyReleased(key);
-}
-
-void Game::motionCallback(int x, int y) {
-    Game::instance()->getGameState()->mouseMove(x, y);
-}
+//void Game::keyboardDownCallback(unsigned char key, int x, int y) {
+//
+////    Game::instance()->getGameState()->keyPressed(key);
+//}
+//
+//void Game::keyboardUpCallback(unsigned char key, int x, int y) {
+////    Game::instance()->getGameState()->keyReleased(key);
+//}
+//
+//void Game::specialDownCallback(int key, int x, int y) {
+////    Game::instance()->getGameState()->specialKeyPressed(key);
+//}
+//
+//void Game::specialUpCallback(int key, int x, int y) {
+////    Game::instance()->getGameState()->specialKeyReleased(key);
+//}
+//
+//void Game::motionCallback(int x, int y) {
+////    Game::instance()->getGameState()->mouseMove(x, y);
+//}

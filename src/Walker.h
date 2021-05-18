@@ -13,7 +13,7 @@ class Walker : public Job {
 
 
 public:
-    Walker(Jobs jobId):Job(jobId){}
+    Walker();
     void initAnims(ShaderProgram &shaderProgram) override;
 
     void updateStateMachine(int deltaTime) override;
@@ -29,7 +29,7 @@ private:
     };
 
 private:
-    WalkerState state;
+    WalkerState _state;
 };
 
 #endif // _WALKER_INCLUDE

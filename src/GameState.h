@@ -3,11 +3,12 @@
 
 #include "IMouseManager.h"
 #include "IKeyboardManager.h"
+class Game;
 
 class GameState : public IKeyboardManager, public IMouseManager {
 
 public:
-    GameState();
+    GameState(Game *game);
     ~GameState() override;
 
     virtual void init() = 0;
@@ -16,21 +17,19 @@ public:
 
     virtual void render() = 0;
 
-    void mouseMove(int x, int y) override;
+    void onMouseMove(const SDL_MouseMotionEvent& motionEvent)override;
 
-    void mousePress(int button) override;
+    void onMouseButtonDown(const SDL_MouseButtonEvent &buttonEvent) override;
 
-    void mouseRelease(int button) override;
-
-    virtual void mouseMoved(int mouseX, int mouseY, bool bLeftButton, bool bRightButton) = 0;
+    void onMouseButtonUp(const SDL_MouseButtonEvent &buttonEvent) override;
 
 protected:
     float _currentTime;
-
+    Game *_game;
 private:
     // we can have access at any time
     int mouseX, mouseY;               // Mouse position
-    bool bLeftMouse, bRightMouse;     // Mouse button states
+
 };
 
 

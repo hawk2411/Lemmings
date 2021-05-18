@@ -10,12 +10,7 @@
 class Instructions : public GameState {
 
 public:
-    static Instructions &getInstance() {
-        static Instructions instance;
-        return instance;
-    };
-
-    Instructions();
+    Instructions(Game *game);
     ~Instructions() override;
 
     void init() override;
@@ -39,6 +34,8 @@ public:
     void specialKeyPressed(int key);
 
     void specialKeyReleased(int key);
+
+    void onKeyPressed(const SDL_KeyboardEvent &keyboardEvent) override;
 
 
 private:
