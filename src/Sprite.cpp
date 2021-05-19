@@ -78,11 +78,11 @@ void Sprite::render() const {
     glEnable(GL_TEXTURE_2D);
     shaderProgram->setTextureUnit("tex", 0);
     glActiveTexture(GL_TEXTURE0);
-    const Texture* current = _spriteSheet;
-    if(currentAnimation < 0 || currentAnimation >= _rotated.size()) {
+    const Texture *current = _spriteSheet;
+    if (currentAnimation < 0 || currentAnimation >= _rotated.size()) {
         _spriteSheet->use();
     } else {
-        _rotated[currentAnimation]?_rotatedSpriteSheet->use():_spriteSheet->use();
+        _rotated[currentAnimation] ? _rotatedSpriteSheet->use() : _spriteSheet->use();
     }
     glBindVertexArray(vao);
     glEnableVertexAttribArray(posLocation);
@@ -114,6 +114,20 @@ void Sprite::addKeyframe(int animId, const glm::vec2 &displacement, bool isRotat
         _rotated[animId] = isRotated;
     }
 
+}
+
+void Sprite::changeAnimation(Difficulty::Mode mode) {
+    switch (mode) {
+        case Difficulty::Mode::FUN_MODE:
+            changeAnimation(0);
+            break;
+        case Difficulty::Mode::TRICKY_MODE:
+            changeAnimation(1);
+            break;
+        case Difficulty::Mode::TAXING_MODE:
+            changeAnimation(2);
+            break;
+    }
 }
 
 void Sprite::changeAnimation(int animId) {

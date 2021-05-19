@@ -4,7 +4,7 @@
 
 #include "Menu.h"
 
-Menu::Menu(Game *game) : GameState(game), _mode(0) {
+Menu::Menu(Game *game) : GameState(game), _mode(Difficulty::Mode::FUN_MODE) {
     music = make_unique<Sound>(_game->getSoundManager(), "sounds/MenuSong.ogg",
                                FMOD_LOOP_NORMAL | FMOD_CREATESTREAM);
 }
@@ -16,7 +16,7 @@ Menu::~Menu() {
 void Menu::init() {
     initTextures();
 
-    _mode = 0;
+    _mode = Difficulty::Mode::FUN_MODE;
     currentTime = 0.0f;
 
     menuBackground = Sprite::createSprite(glm::vec2(320, 230), glm::vec2(1.f, 1.f),
@@ -54,8 +54,8 @@ void Menu::init() {
 
 
 void Menu::update(int deltaTime) {
-    currentTime += deltaTime;
-    changeMode();
+    currentTime +=  static_cast<float>(deltaTime);
+    menuMode->changeAnimation( _mode);
 }
 
 void Menu::render() {
@@ -103,22 +103,32 @@ void Menu::initTextures() {
 }
 
 void Menu::changeModeUp() {
-    if (_mode + 1 < 3) {
-        ++_mode;
+    switch (_mode) {
+        case Difficulty::Mode::FUN_MODE:
+            _mode = Difficulty::Mode::TRICKY_MODE;
+            break;
+        case Difficulty::Mode::TRICKY_MODE:
+            _mode = Difficulty::Mode::TAXING_MODE;
+            break;
+        default:
+            return;
     }
 }
 
 void Menu::changeModeDown() {
-    if (_mode - 1 >= 0) {
-        --_mode;
+    switch (_mode) {
+        case Difficulty::Mode::TAXING_MODE:
+            _mode = Difficulty::Mode::TRICKY_MODE;
+            break;
+        case Difficulty::Mode::TRICKY_MODE:
+            _mode = Difficulty::Mode::FUN_MODE;
+            break;
+        default:
+            return;
     }
 }
 
-void Menu::changeMode() {
-    menuMode->changeAnimation(_mode);
-}
-
-int Menu::getMode() const {
+Difficulty::Mode Menu::getMode() const {
     return _mode;
 }
 

@@ -5,10 +5,12 @@
 #include <glm/glm.hpp>
 #include <vector>
 #include "MaskedTexturedQuad.h"
-#include "Level.h"
+//#include "Level.h"
 #include "UI.h"
 #include "Word.h"
 #include "IMaskManager.h"
+
+#include "LevelRunner.h"
 
 // Scene contains all the entities of our game.
 // It is responsible for updating and render them.
@@ -18,7 +20,7 @@ class Scene : public GameState {
 
 public:
 
-    Scene(Game *game) : GameState(game) {}
+    Scene(Game *game, SoundManager *soundManager ) : GameState(game) {}
 
     void mouseMoved(int mouseX, int mouseY, bool bLeftButton, bool bRightButton) override;
 
@@ -106,6 +108,8 @@ private:
 
     MouseStates mouseState = MouseStates::NONE;
     ScreenMovedArea screenMovedArea = NONE_AREA;
+
+    LevelRunner _levelRunner;
 
 };
 

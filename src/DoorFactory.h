@@ -7,15 +7,7 @@
 class DoorFactory {
 
 public:
-
-    static DoorFactory &instance() {
-        static DoorFactory instance; // Guaranteed to be destroyed.
-        // Instantiated on first use.
-        return instance;
-    };
-
     static Door *createDoor(const string &type);
-
 };
 
 

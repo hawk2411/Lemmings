@@ -65,6 +65,8 @@ public:
 private:
     void spawnLemmings();
 
+    Level levelStartValues;
+
 
     int *_jobCount;
     set<Lemming *> _lemmings;    //TODO why the fuck is this a set? Are they sorted?

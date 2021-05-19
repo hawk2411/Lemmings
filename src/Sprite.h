@@ -8,6 +8,7 @@
 #include "Texture.h"
 #include "ShaderProgram.h"
 #include "AnimKeyframes.h"
+#include "Difficulty.h"
 
 
 // This class is derived from code seen earlier in TexturedQuad but it is also
@@ -44,6 +45,8 @@ public:
     void addKeyframe(int animId, const glm::vec2 &frame, bool isRotated = false);
 
     void changeAnimation(int animId);
+
+    void changeAnimation(Difficulty::Mode mode);
 
     int animation() const;
 

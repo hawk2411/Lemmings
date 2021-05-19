@@ -41,10 +41,10 @@ void LevelRunner::init(const string& levelMode, int levelNum) {
     if (levelMode == "tricky") _actualMode = TRICKY_MODE;
     if (levelMode == "taxing") _actualMode = TAXING_MODE;
 
-    Level::currentLevel().createFromFile("levels/" + levelName + ".txt");
+    Level::currentLevel().initFromFile("levels/" + levelName + ".txt");
     Level::currentLevel().init();
 
-    _jobCount = Level::currentLevel().getLevelAttributes()->jobCount;
+    _jobCount = Level::currentLevel().getLevelAttributes()->lemmingsProJob;
 
     clearLemmings();
 

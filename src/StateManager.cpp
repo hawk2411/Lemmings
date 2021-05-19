@@ -34,23 +34,7 @@ void StateManager::changeInfo(int levelMode, int levelNum) {
 
 void StateManager::changeScene(int levelMode, int levelNum) {
     _currentState= States::Type::Scene;
-    string modeName;
-    switch (levelMode) {
-        case FUN_MODE:
-            modeName = "fun";
-            break;
-        case TRICKY_MODE:
-            modeName = "tricky";
-            break;
-        case TAXING_MODE:
-            modeName = "taxing";
-            break;
-        default:
-            return;
-    }
-    LevelRunner runner;
-    runner.init(modeName, levelNum);
-
+    std::unique_ptr<Level> level = std::make_unique<Level>(levelMode, levelNum);
     dynamic_cast<Scene*>(_gameStates[_currentState].get())->setLevel(levelMode, levelNum);
     _gameStates[_currentState]->init();
 

@@ -7,6 +7,7 @@
 #include "Sprite.h"
 #include "Sound.h"
 #include "Game.h"
+#include "Difficulty.h"
 
 class Game;
 
@@ -27,7 +28,7 @@ public:
 
     void changeModeDown();
 
-    int getMode() const;
+    Difficulty::Mode getMode() const;
 
     void endMusic();
 
@@ -41,8 +42,6 @@ private:
 
     // Functions
     void initTextures();
-
-    void changeMode();
 
     // Parametres
 
@@ -62,7 +61,7 @@ private:
     std::unique_ptr<Sprite> menuMode;
     std::unique_ptr<Sprite> menuPlaying;
 
-    int _mode; // 0 = FUN, 1 = TRICKY, 2 = TAXING TODO change to enum
+    Difficulty::Mode _mode;
 
     float currentTime;
 

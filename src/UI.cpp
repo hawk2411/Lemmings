@@ -128,7 +128,7 @@ void UI::changeSelectedButton(int selectedButton) {
 }
 
 int UI::getSelectedButtonJobCount() {
-    return Level::currentLevel().getLevelAttributes()->jobCount[selectedButton - 2];
+    return Level::currentLevel().getLevelAttributes()->lemmingsProJob[selectedButton - 2];
 }
 
 void UI::changeDisplayedJob(string lemmingJobName) {

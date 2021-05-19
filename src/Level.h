@@ -8,51 +8,47 @@
 #include "VariableTexture.h"
 #include "Door.h"
 #include "Trapdoor.h"
+#include "Difficulty.h"
 
-class Level {
 
-public:
+struct Level {
+
+    Level(Difficulty::Mode difficulty, int levelNo);
 
     static Level &currentLevel() {
         static Level currentLevel;
 
         return currentLevel;
     }
+    int numLemmings{};
+    int goalLemmings{};
+    int time{};
 
-    struct LevelAttributes {
-        int numLemmings;
-        int goalLemmings;
-        int time;
+    int releaseRate{};
+    int minReleaseRate{};
+    static const size_t COUNT_JOBS = 8;
+    int lemmingsProJob[COUNT_JOBS]{};
+    std::unique_ptr<Door> _door;
+    std::unique_ptr<Trapdoor> trapdoor;
 
-        int releaseRate;
-        int minReleaseRate;
-        int jobCount[8];
+    Texture levelTexture;
+    VariableTexture maskedMap;
 
-        unique_ptr<Door> _door;
-        Trapdoor *trapdoor;
+    glm::vec2 cameraPos{};
+    glm::vec2 levelSize{};
 
-        Texture levelTexture;
-        VariableTexture maskedMap;
+    glm::vec2 _doorPos{};
+    glm::vec2 _trapdoorPos{};
 
-        glm::vec2 cameraPos;
-        glm::vec2 levelSize;
-    };
-
-    void createFromFile(const string &file);
-
-    void init();
-
-    LevelAttributes *getLevelAttributes();
-
+    string _mapTexturePath;
+    string _mapMaskPath;
+    int _actualLevel;
+    Level::Mode _actualMode;
 
 private:
-    LevelAttributes levelAttributes;
+    void initFromFile(const string &file);
 
-    glm::vec2 doorPos;
-    glm::vec2 trapdoorPos;
-
-    string mapTexturePath;
-    string mapMaskPath;
+    static std::string getFilename(Difficulty::Mode levelMode, int levelNo);
 };
 
 #endif // _LEVEL_INCLUDE

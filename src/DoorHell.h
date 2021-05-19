@@ -7,7 +7,7 @@
 class DoorHell : public Door {
 
 public:
-    virtual void init();
+    void init() override;
 };
 
 
