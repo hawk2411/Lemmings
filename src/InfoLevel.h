@@ -1,12 +1,14 @@
 #ifndef _INFOLEVEL_INCLUDE
 #define _INFOLEVEL_INCLUDE
 
-#include "GameState.h"
 #include "Texture.h"
 #include "Sprite.h"
 #include "Word.h"
 #include "IKeyboardManager.h"
 #include "IMouseManager.h"
+
+#include "GameState.h"
+#include "Game.h"
 
 class InfoLevel : public GameState{
 
@@ -43,8 +45,8 @@ private:
     void initSprites();
 
     // Parametres
-    Texture _InfoLevelTexture;
-    std::unique_ptr<Sprite> _InfoLevelSprite;
+    Texture _infoLevelTexture;
+    std::unique_ptr<Sprite> _infoLevelSprite;
     std::unique_ptr<Sprite> _leftKey;
     std::unique_ptr<Sprite> _rightKey;
     Word *_playWord{};

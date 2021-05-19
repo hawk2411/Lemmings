@@ -10,7 +10,7 @@
 class Credits : public GameState {
 
 public:
-    Credits(Game *game);
+    explicit Credits(Game *game);
     ~Credits() override;
 
     void init() override;

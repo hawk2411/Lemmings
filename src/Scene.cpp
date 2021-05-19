@@ -68,9 +68,9 @@ void Scene::update(int deltaTime) {
 
 void Scene::render() {
     ShaderManager::getInstance().useMaskedShaderProgram();
-    map->render(ShaderManager::getInstance().getMaskedShaderProgram(),
-                Level::currentLevel().getLevelAttributes()->levelTexture,
-                Level::currentLevel().getLevelAttributes()->maskedMap);
+    _map->render(ShaderManager::getInstance().getMaskedShaderProgram(),
+                 Level::currentLevel().getLevelAttributes()->levelTexture,
+                 Level::currentLevel().getLevelAttributes()->maskedMap);
 
 
     ShaderManager::getInstance().useShaderProgram();
@@ -116,8 +116,8 @@ void Scene::initMap() {
     );
 
     glm::vec2 texCoords[2] = {normalizedTexCoordStart, normalizedTexCoordEnd};
-    map = MaskedTexturedQuad::createTexturedQuad(geom, texCoords,
-                                                 ShaderManager::getInstance().getMaskedShaderProgram());
+    _map = MaskedTexturedQuad::createTexturedQuad(geom, texCoords,
+                                                  ShaderManager::getInstance().getMaskedShaderProgram());
 }
 
 void Scene::initUI() {

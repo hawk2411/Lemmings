@@ -1,17 +1,10 @@
 #ifndef _GAME_INCLUDE
 #define _GAME_INCLUDE
 
-#define GLEW_STATIC
 #include <GL/glew.h>
-#define SDL_MAIN_HANDLED
 #include <SDL2/SDL.h>
-
-#include "Scene.h"
-#include "Menu.h"
+#include "Sprite.h"
 #include "SoundManager.h"
-#include "IMouseManager.h"
-#include "IKeyboardManager.h"
-#include "GameState.h"
 #include "ShaderManager.h"
 #include "StateManager.h"
 
@@ -26,17 +19,40 @@ public:
      */
     explicit Game();
 
-    void keyboardDownCallback(const SDL_KeyboardEvent &event){
-        gameState->onKeyPressed(event);
+    struct SpriteSheets {
+        Texture cursorSprites;
+        Texture lemmingAnimations;
+        Texture rotatedLemmingAnimations;
+        Texture doorSprites;
+        Texture trapdoorSprites;
+        Texture numSprites;
+        Texture greenNumSprites;
+        Texture purpleNumSprites;
+        Texture buttonSprites;
+        Texture jobNamesSprites;
+        Texture infoWordSprites;
+        Texture resultsWordSprites;
+        Texture stepSprite;
+        Texture greenNumLetters;
+        Texture keySprites;
+        Texture particleSprites;
+        Texture skullSprite;
+    };
+
+    void keyboardDownCallback(const SDL_KeyboardEvent &event) {
+        _stateManager->getCurrentGameState()->onKeyPressed(event);
     }
-    void onMousMove(const SDL_MouseMotionEvent& mouseMotionEvent){
-        gameState->onMouseMove(mouseMotionEvent);
+
+    void onMousMove(const SDL_MouseMotionEvent &mouseMotionEvent) {
+        _stateManager->getCurrentGameState()->onMouseMove(mouseMotionEvent);
     }
-    void onMouseButtonDown(const SDL_MouseButtonEvent& mouseButtonEvent) {
-        gameState->onMouseButtonDown(mouseButtonEvent);
+
+    void onMouseButtonDown(const SDL_MouseButtonEvent &mouseButtonEvent) {
+        _stateManager->getCurrentGameState()->onMouseButtonDown(mouseButtonEvent);
     }
-    void onMouseButtonUp(const SDL_MouseButtonEvent& mouseButtonEvent) {
-        gameState->onMouseButtonUp(mouseButtonEvent);
+
+    void onMouseButtonUp(const SDL_MouseButtonEvent &mouseButtonEvent) {
+        _stateManager->getCurrentGameState()->onMouseButtonUp(mouseButtonEvent);
     }
 
     //******************************************************************************************
@@ -48,6 +64,7 @@ public:
 s     */
 private:
     static void initSpriteSheets();
+
 public:
 
 
@@ -77,38 +94,19 @@ public:
 
     const SoundManager *getSoundManager() const;
 
-    GameState *getGameState();
-
-    void setGameState(States::Type state);
+    StateManager *getStateManager();
 
 private:
     SoundManager soundManager;
     unique_ptr<StateManager> _stateManager;
+    unique_ptr<ShaderManager> _shaderManager;
+
     bool bPlay; // Continue to play game?
     bool hardMode;
 
     int prevTime;
     std::unique_ptr<Sprite> hardModeIndicator;
 
-    struct SpriteSheets {
-        Texture cursorSprites;
-        Texture lemmingAnimations;
-        Texture rotatedLemmingAnimations;
-        Texture doorSprites;
-        Texture trapdoorSprites;
-        Texture numSprites;
-        Texture greenNumSprites;
-        Texture purpleNumSprites;
-        Texture buttonSprites;
-        Texture jobNamesSprites;
-        Texture infoWordSprites;
-        Texture resultsWordSprites;
-        Texture stepSprite;
-        Texture greenNumLetters;
-        Texture keySprites;
-        Texture particleSprites;
-        Texture skullSprite;
-    };
 
 };
 

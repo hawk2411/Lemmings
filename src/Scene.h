@@ -99,7 +99,7 @@ private:
     bool paused = false;
     bool speedUp = false;
 
-    std::unique_ptr<MaskedTexturedQuad> map;
+    std::unique_ptr<MaskedTexturedQuad> _map;
 
     IMaskManager *maskManager = nullptr;
     int posX=0, posY=0;

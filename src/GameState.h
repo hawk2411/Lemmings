@@ -3,12 +3,13 @@
 
 #include "IMouseManager.h"
 #include "IKeyboardManager.h"
+
 class Game;
 
 class GameState : public IKeyboardManager, public IMouseManager {
 
 public:
-    GameState(Game *game);
+    explicit GameState(Game *game);
     ~GameState() override;
 
     virtual void init() = 0;

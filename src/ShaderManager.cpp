@@ -3,8 +3,7 @@
 #include "ShaderManager.h"
 #include "Shader.h"
 
-void ShaderManager::init() {
-
+ShaderManager::ShaderManager() {
     Shader vShader, fShader;
 
     vShader.initFromFile(VERTEX_SHADER, "shaders/texture.vert");
@@ -82,3 +81,5 @@ void ShaderManager::useShaderProgram() {
 glm::mat4 ShaderManager::getProjectionMatrix() {
     return _projection;
 }
+
+

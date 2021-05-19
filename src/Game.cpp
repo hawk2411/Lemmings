@@ -1,8 +1,24 @@
+#include <memory>
+
 #include "Game.h"
-#include "Menu.h"
+
+Game::Game() : bPlay(true), hardMode(false),
+               hardModeIndicator(nullptr), prevTime(prevTime) {
+    glClearColor(0.f, 0.f, 0.f, 1.0f);
+    _shaderManager = std::make_unique<ShaderManager>();
+    _stateManager = std::make_unique<StateManager>(this, _shaderManager.get());
+
+    initSpriteSheets();
+    hardModeIndicator = Sprite::createSprite(glm::ivec2(20, 20), glm::vec2(136. / 256, 160. / 256),
+                                             &ShaderManager::getInstance().getShaderProgram(),
+                                             &Game::spriteSheets().skullSprite);
+    hardModeIndicator->setPosition(glm::vec2(CAMERA_WIDTH - 26, 5));
+
+}
 
 void Game::init() {
-    _stateManager = make_unique<StateManager>(this);
+
+
 }
 
 bool Game::update(int deltaTime) {
@@ -18,14 +34,6 @@ void Game::render() {
         hardModeIndicator->render();
     }
 
-}
-
-GameState *Game::getGameState() {
-    return _stateManager->getCurrentGameState();
-}
-
-void Game::setGameState(States::Type state) {
-    _stateManager->setCurrentState(state);
 }
 
 void Game::initSpriteSheets() {
@@ -116,16 +124,9 @@ const SoundManager *Game::getSoundManager() const {
     return &soundManager;
 }
 
-Game::Game() : bPlay(true), hardMode(false),
-                hardModeIndicator(nullptr), prevTime(prevTime) {
-    glClearColor(0.f, 0.f, 0.f, 1.0f);
-    initSpriteSheets();
-    ShaderManager::getInstance().init();
-    hardModeIndicator = Sprite::createSprite(glm::ivec2(20, 20), glm::vec2(136. / 256, 160. / 256),
-                                             &ShaderManager::getInstance().getShaderProgram(),
-                                             &Game::spriteSheets().skullSprite);
-    hardModeIndicator->setPosition(glm::vec2(CAMERA_WIDTH - 26, 5));
 
+StateManager *Game::getStateManager() {
+    return _stateManager.get();
 }
 
 
@@ -138,7 +139,7 @@ Game::Game() : bPlay(true), hardMode(false),
 //    Game::instance()->render();
 //}
 
-void Game::idleCallback() {
+//void Game::idleCallback() {
 //    int currentTime = glutGet(GLUT_ELAPSED_TIME);
 //    int deltaTime = currentTime - Game::instance()->prevTime;
 //
@@ -149,25 +150,25 @@ void Game::idleCallback() {
 //        Game::instance()->prevTime = currentTime;
 //        glutPostRedisplay();
 //    }
-}
+//}
 
-void Game::keyboardDownCallback(unsigned char key, int x, int y) {
-
-//    Game::instance()->getGameState()->keyPressed(key);
-}
-
-void Game::keyboardUpCallback(unsigned char key, int x, int y) {
-//    Game::instance()->getGameState()->keyReleased(key);
-}
-
-void Game::specialDownCallback(int key, int x, int y) {
-//    Game::instance()->getGameState()->specialKeyPressed(key);
-}
-
-void Game::specialUpCallback(int key, int x, int y) {
-//    Game::instance()->getGameState()->specialKeyReleased(key);
-}
-
-void Game::motionCallback(int x, int y) {
-//    Game::instance()->getGameState()->mouseMove(x, y);
-}
+//void Game::keyboardDownCallback(unsigned char key, int x, int y) {
+//
+////    Game::instance()->getGameState()->keyPressed(key);
+//}
+//
+//void Game::keyboardUpCallback(unsigned char key, int x, int y) {
+////    Game::instance()->getGameState()->keyReleased(key);
+//}
+//
+//void Game::specialDownCallback(int key, int x, int y) {
+////    Game::instance()->getGameState()->specialKeyPressed(key);
+//}
+//
+//void Game::specialUpCallback(int key, int x, int y) {
+////    Game::instance()->getGameState()->specialKeyReleased(key);
+//}
+//
+//void Game::motionCallback(int x, int y) {
+////    Game::instance()->getGameState()->mouseMove(x, y);
+//}

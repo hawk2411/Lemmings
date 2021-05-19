@@ -48,7 +48,7 @@ void Credits::mouseMoved(int mouseX, int mouseY, bool bLeftButton, bool bRightBu
 
 void Credits::onKeyPressed(const SDL_KeyboardEvent &keyboardEvent) {
     if (keyboardEvent.keysym.sym == SDLK_ESCAPE) {
-        StateManager::instance().changeMenu();
+        _game->getStateManager()->changeMenu();
         endMusic();
     }
 }

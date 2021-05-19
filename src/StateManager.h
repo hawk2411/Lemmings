@@ -1,6 +1,7 @@
 #ifndef _STATEMANAGER_INCLUDE
 #define _STATEMANAGER_INCLUDE
 #include <map>
+#include "ShaderManager.h"
 #include "GameState.h"
 
 struct States {
@@ -17,7 +18,7 @@ struct States {
 class StateManager {
 
 public:
-    explicit StateManager(Game *game);
+    explicit StateManager(Game *game, ShaderManager *shaderManager);
 
     void changeMenu();
 
@@ -40,8 +41,8 @@ public:
 private:
     std::map <States::Type, unique_ptr<GameState>> _gameStates;
     States::Type _currentState;
-
+    ShaderManager *_shaderManager;
 };
 
 
-#endif // _GAMESTATE_INCLUDE
+#endif // _STATEMANAGER_INCLUDE

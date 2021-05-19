@@ -1,8 +1,11 @@
 #include <GL/glew.h>
-#include "InfoLevel.h"
+
 #include "ShaderManager.h"
 #include "KeyFactory.h"
 #include "StateManager.h"
+#include "GameState.h"
+#include "InfoLevel.h"
+
 
 InfoLevel::InfoLevel(Game * game) : GameState(game){
     _currentTime = 0.0f;
@@ -19,8 +22,8 @@ void InfoLevel::setLevel(int numLevel, int levelMode) {
 
     initTextures();
 
-    _InfoLevelSprite = Sprite::createSprite(glm::vec2(CAMERA_WIDTH, CAMERA_HEIGHT), glm::vec2(1.f, 1.f),
-                                            &ShaderManager::getInstance().getShaderProgram(), &_InfoLevelTexture);
+    _infoLevelSprite = Sprite::createSprite(glm::vec2(CAMERA_WIDTH, CAMERA_HEIGHT), glm::vec2(1.f, 1.f),
+                                            &ShaderManager::getInstance().getShaderProgram(), &_infoLevelTexture);
     initSprites();
 }
 
@@ -31,7 +34,7 @@ void InfoLevel::update(int deltaTime) {
 void InfoLevel::render() {
     ShaderManager::getInstance().useShaderProgram();
 
-    _InfoLevelSprite->render();
+    _infoLevelSprite->render();
     _menuWord->render();
     _rightKey->render();
     _playWord->render();
@@ -55,9 +58,9 @@ void InfoLevel::initTextures() {
 
     string levelName = levelType + to_string(_level);
 
-    _InfoLevelTexture.loadFromFile("images/levels/" + levelName + "/info.png", TEXTURE_PIXEL_FORMAT_RGBA);
-    _InfoLevelTexture.setMinFilter(GL_NEAREST);
-    _InfoLevelTexture.setMagFilter(GL_NEAREST);
+    _infoLevelTexture.loadFromFile("images/levels/" + levelName + "/info.png", TEXTURE_PIXEL_FORMAT_RGBA);
+    _infoLevelTexture.setMinFilter(GL_NEAREST);
+    _infoLevelTexture.setMagFilter(GL_NEAREST);
 
 }
 
@@ -88,13 +91,13 @@ void InfoLevel::initSprites() {
 void InfoLevel::onKeyPressed(const SDL_KeyboardEvent &keyboardEvent) {
     switch (keyboardEvent.keysym.sym) {
         case SDLK_ESCAPE:
-            StateManager::instance().changeMenu();
+            _game->getStateManager()->changeMenu();
             break;
         case SDLK_RIGHT:
-            StateManager::instance().changeScene(getMode(), getLevel());
+            _game->getStateManager()->changeScene(getMode(), getLevel());
             break;
         case SDLK_LEFT:
-            StateManager::instance().changeMenu();
+            _game->getStateManager()->changeMenu();
             break;
     }
 }
