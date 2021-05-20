@@ -40,20 +40,6 @@ struct LevelModes {
                 throw LemmingsException("Unknown difficulty level-");
         }
     }
-
-    static Mode getFromInt(int mode) {
-        switch(mode)
-        {
-            case 0 :
-                return LevelModes::Mode::FUN_MODE;
-            case 1:
-                return LevelModes::Mode::TRICKY_MODE;
-            case 2:
-                return LevelModes::Mode::TAXING_MODE;
-            default:
-                throw LemmingsException("Can not convert to level mode");
-        }
-    }
 };
 
 #endif //LEMMINGS_LEVELMODES_H

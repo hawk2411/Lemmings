@@ -24,7 +24,7 @@ public:
 //
     void changeInfo(LevelModes::Mode levelMode, int levelNum);
 //
-//    void changeScene(LevelModes::Mode levelMode, int levelNum);
+    void changeScene(LevelModes::Mode levelMode, int levelNum);
 //
 //    void changeResults(int goalPercentage, int currentPercentage);
 //

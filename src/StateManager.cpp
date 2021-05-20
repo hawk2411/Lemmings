@@ -1,6 +1,6 @@
 #include "Menu.h"
 //#include "InfoLevel.h"
-//#include "Scene.h"
+#include "Scene.h"
 //#include "Results.h"
 #include "Credits.h"
 #include "Instructions.h"
@@ -38,15 +38,16 @@ void StateManager::changeInfo(LevelModes::Mode levelMode, int levelNum) {
 
 }
 
-//
-//void StateManager::changeScene(LevelModes::Mode levelMode, int levelNum) {
-//    _currentState= States::Type::Scene;
-//
-//
-//    dynamic_cast<Scene*>(_gameStates[_currentState].get())->setLevel(levelMode, levelNum);
-//    _gameStates[_currentState]->init();
-//
-//}
+
+void StateManager::changeScene(LevelModes::Mode levelMode, int levelNum) {
+    _currentState= States::Type::Scene;
+
+
+    dynamic_cast<Scene*>(_gameStates[_currentState].get())->setLevel(levelMode, levelNum);
+    _gameStates[_currentState]->init();
+
+}
+
 //
 //void StateManager::changeResults(int goalPercentage, int currentPercentage) {
 //    dynamic_cast<Results*>(_gameStates[States::Type::Result].get())->setPercentages(goalPercentage, currentPercentage);
