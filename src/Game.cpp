@@ -22,14 +22,14 @@ void Game::init() {
 }
 
 bool Game::update(int deltaTime) {
-    _stateManager->getCurrentGameState()->update(deltaTime);
+    _stateManager->update(deltaTime);
     return bPlay;
 }
 
 void Game::render() {
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    _stateManager->getCurrentGameState()->render();
+    _stateManager->render();
     if (hardMode) {
         hardModeIndicator->render();
     }

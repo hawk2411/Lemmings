@@ -19,9 +19,9 @@ public:
 
     Lemming(const glm::vec2 &initialPosition);
 
-    void update(int deltaTime);
+    void update(int deltaTime, const glm::vec2 &levelSize);
 
-    void render();
+    void render(const glm::vec2 &cameraPos);
 
     void changeJob(Jobs nextJob);
 
@@ -49,7 +49,7 @@ private:
     bool _isSaved;
     glm::vec2 _position;
 
-    bool outOfMap();
+    bool outOfMap(const glm::vec2 &levelSize);
 
 };
 

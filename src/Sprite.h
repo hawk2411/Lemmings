@@ -46,8 +46,6 @@ public:
 
     void changeAnimation(int animId);
 
-    void changeAnimation(Difficulty::Mode mode);
-
     int animation() const;
 
     int getAnimationCurrentFrame() const;

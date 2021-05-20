@@ -11,8 +11,9 @@
 
 StateManager::StateManager(Game* game, ShaderManager* shaderManager) :_currentState(States::Type::Menu) {
     _shaderManager = shaderManager;
+
     _gameStates.insert( std::make_pair(States::Type::Menu, unique_ptr<GameState>(new Menu(game))));
-    _gameStates.insert( std::make_pair(States::Type::Scene, unique_ptr<GameState>(new Scene(game))));
+    _gameStates.insert( std::make_pair(States::Type::Scene, unique_ptr<GameState>(new Scene(game, game->getStateManager()))));
     _gameStates.insert( std::make_pair(States::Type::SceneInfo, unique_ptr<GameState>(new InfoLevel(game))));
     _gameStates.insert( std::make_pair(States::Type::Result, unique_ptr<GameState>(new Results(game))));
     _gameStates.insert( std::make_pair(States::Type::Instruction, unique_ptr<GameState>(new Instructions(game))));
@@ -25,16 +26,17 @@ void StateManager::changeMenu() {
 
 }
 
-void StateManager::changeInfo(int levelMode, int levelNum) {
+void StateManager::changeInfo(Difficulty::Mode levelMode, int levelNum) {
     _currentState=States::Type::SceneInfo;
     _gameStates[_currentState]->init();
     dynamic_cast<InfoLevel*>(_gameStates[_currentState].get())->setLevel(levelMode, levelNum);
 
 }
 
-void StateManager::changeScene(int levelMode, int levelNum) {
+void StateManager::changeScene(Difficulty::Mode levelMode, int levelNum) {
     _currentState= States::Type::Scene;
-    std::unique_ptr<Level> level = std::make_unique<Level>(levelMode, levelNum);
+
+
     dynamic_cast<Scene*>(_gameStates[_currentState].get())->setLevel(levelMode, levelNum);
     _gameStates[_currentState]->init();
 
@@ -60,8 +62,15 @@ GameState *StateManager::getCurrentGameState() {
     return _gameStates[_currentState].get();
 }
 
-GameState *StateManager::getGameState(States::Type key_type) {
-    return _gameStates[key_type].get();
+void StateManager::update(int deltaTime) {
+    _gameStates[_currentState]->update(deltaTime);
 }
+
+void StateManager::render() {
+    _gameStates[_currentState]->render();
+}
+
+
+
 
 

@@ -20,7 +20,7 @@ class Scene : public GameState {
 
 public:
 
-    Scene(Game *game, SoundManager *soundManager ) : GameState(game) {}
+    Scene(Game *game, SoundManager *soundManager );
 
     void mouseMoved(int mouseX, int mouseY, bool bLeftButton, bool bRightButton) override;
 
@@ -81,6 +81,8 @@ public:
 
     void onKeyPressed(const SDL_KeyboardEvent &keyboardEvent) override;
 
+    void setLevel(Difficulty::Mode mode, int i);
+
 private:
     ScreenClickedArea getClickedScreenArea(int mouseX, int mouseY);
 
@@ -109,7 +111,7 @@ private:
     MouseStates mouseState = MouseStates::NONE;
     ScreenMovedArea screenMovedArea = NONE_AREA;
 
-    LevelRunner _levelRunner;
+    std::unique_ptr<LevelRunner> _levelRunner;
 
 };
 

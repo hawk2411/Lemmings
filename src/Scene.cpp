@@ -16,6 +16,9 @@
 #include "JobAssigner.h"
 #include "UIAdapter.h"
 
+Scene::Scene(Game *game, SoundManager *soundManager) : GameState(game) {
+    _levelRunner = std::make_unique<LevelRunner>()
+}
 void Scene::init() {
     Cursor::getInstance().init();
 
@@ -74,7 +77,7 @@ void Scene::render() {
 
 
     ShaderManager::getInstance().useShaderProgram();
-    LevelRunner::getInstance().render();
+    LevelRunner::getInstance().render(<#initializer#>);
     ParticleSystemManager::getInstance().render();
     UI::getInstance().render();
     Cursor::getInstance().render();
@@ -316,3 +319,9 @@ void Scene::updateCursorPosition() {
     Cursor::getInstance().setPosition(cursorPosition);
 
 }
+
+void Scene::setLevel(Difficulty::Mode mode, int i) {
+
+}
+
+

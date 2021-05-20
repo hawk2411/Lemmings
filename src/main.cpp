@@ -54,7 +54,7 @@ int main(int argc, char **argv) {
                     break;
                 case SDL_KEYDOWN:
                 case SDL_KEYUP:
-                    game.keyboardDownCallback(event.key);
+                    game.onKeyPressed(event.key);
                     break;
                 case SDL_MOUSEMOTION:
                     game.onMousMove(event.motion);

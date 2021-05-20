@@ -2,6 +2,7 @@
 #define _LEVEL_RUNNER_INCLUDE
 
 #include <set>
+#include "SoundManager.h"
 #include "Lemming.h"
 #include "Level.h"
 #include "Door.h"
@@ -11,17 +12,17 @@
 class LevelRunner {
 
 public:
-    LevelRunner();
+    LevelRunner(SoundManager *soundManager, Difficulty::Mode levelMode, int levelNo);
     ~LevelRunner();
 
 
-    void init(const string& levelMode, int levelNum);
+    void changeLevel(Difficulty::Mode levelMode, int levelNum);
 
     void update(int deltaTime);
 
     void render();
 
-    bool finished();
+    bool finished() const;
 
     int getNumLemmingsAlive();
 
@@ -65,10 +66,9 @@ public:
 private:
     void spawnLemmings();
 
-    Level levelStartValues;
+    std::unique_ptr<Level> _levelStartValues;
 
 
-    int *_jobCount;
     set<Lemming *> _lemmings;    //TODO why the fuck is this a set? Are they sorted?
 
     int _deadLemmings;
@@ -89,12 +89,10 @@ private:
     bool _finishedLevel;
 
     bool _exploding;
-
-    Door *_door;
-    Trapdoor *_trapdoor;
+    SoundManager *_soundManager;
 
     unique_ptr<Sound> _music;
-    unique_ptr<Sound> _dooropen;
+    unique_ptr<Sound> _dooropenSound;
 
 
     void finishLevel();

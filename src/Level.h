@@ -15,11 +15,11 @@ struct Level {
 
     Level(Difficulty::Mode difficulty, int levelNo);
 
-    static Level &currentLevel() {
-        static Level currentLevel;
-
-        return currentLevel;
-    }
+//    static Level &currentLevel() {
+//        static Level currentLevel;
+//
+//        return currentLevel;
+//    }
     int numLemmings{};
     int goalLemmings{};
     int time{};
@@ -29,7 +29,7 @@ struct Level {
     static const size_t COUNT_JOBS = 8;
     int lemmingsProJob[COUNT_JOBS]{};
     std::unique_ptr<Door> _door;
-    std::unique_ptr<Trapdoor> trapdoor;
+    std::unique_ptr<Trapdoor> _trapdoor;
 
     Texture levelTexture;
     VariableTexture maskedMap;
@@ -43,7 +43,7 @@ struct Level {
     string _mapTexturePath;
     string _mapMaskPath;
     int _actualLevel;
-    Level::Mode _actualMode;
+    Difficulty::Mode _actualMode;
 
 private:
     void initFromFile(const string &file);

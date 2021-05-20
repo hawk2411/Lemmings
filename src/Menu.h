@@ -63,8 +63,6 @@ private:
 
     Difficulty::Mode _mode;
 
-    float currentTime;
-
     glm::vec2 modePositions[3] = {
             glm::vec2(0, 0),
             glm::vec2(0, 0.25),

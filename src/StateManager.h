@@ -22,9 +22,9 @@ public:
 
     void changeMenu();
 
-    void changeInfo(int levelMode, int levelNum);
+    void changeInfo(Difficulty::Mode levelMode, int levelNum);
 
-    void changeScene(int levelMode, int levelNum);
+    void changeScene(Difficulty::Mode levelMode, int levelNum);
 
     void changeResults(int goalPercentage, int currentPercentage);
 
@@ -32,12 +32,29 @@ public:
 
     void changeInstructions();
 
-    States::Type getCurrentStateType()const{return _currentState;}
-    void setCurrentState(States::Type type){_currentState = type;}
+    void update(int deltaTime);
+
+    void render();
 
     GameState* getCurrentGameState();
 
-    GameState* getGameState(States::Type key_type);
+    void onKeyPressed(const SDL_KeyboardEvent &event) {
+        _gameStates[_currentState]->onKeyPressed(event);
+    }
+
+    void onMouseMove(const SDL_MouseMotionEvent &mouseMotionEvent) {
+        _gameStates[_currentState]->onMouseMove(mouseMotionEvent);
+    }
+
+    void onMouseButtonDown(const SDL_MouseButtonEvent &mouseButtonEvent) {
+        _gameStates[_currentState]->onMouseButtonDown(mouseButtonEvent);
+    }
+
+    void onMouseButtonUp(const SDL_MouseButtonEvent &mouseButtonEvent) {
+        _gameStates[_currentState]->onMouseButtonUp(mouseButtonEvent);
+    }
+
+
 private:
     std::map <States::Type, unique_ptr<GameState>> _gameStates;
     States::Type _currentState;

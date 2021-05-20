@@ -10,7 +10,7 @@ public:
 
     Countdown();
 
-    void render();
+    void render(const glm::vec2 &cameraPos);
 
     void setPosition(glm::vec2 position);
 

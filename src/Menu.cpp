@@ -17,7 +17,7 @@ void Menu::init() {
     initTextures();
 
     _mode = Difficulty::Mode::FUN_MODE;
-    currentTime = 0.0f;
+    _currentTime = 0.0f;
 
     menuBackground = Sprite::createSprite(glm::vec2(320, 230), glm::vec2(1.f, 1.f),
                                           &ShaderManager::getInstance().getShaderProgram(), &menuTexture);
@@ -33,7 +33,7 @@ void Menu::init() {
     for (int i = 0; i < 3; ++i) {
         menuMode->addKeyframe(i, modePositions[i]);
     }
-    menuMode->changeAnimation(_mode);
+    menuMode->changeAnimation( Difficulty::convertToInt(_mode));
 
     menuExit = Sprite::createSprite(glm::vec2(111, 52), glm::vec2(1.f, 1.f),
                                     &ShaderManager::getInstance().getShaderProgram(), &menuExitTexture);
@@ -54,8 +54,8 @@ void Menu::init() {
 
 
 void Menu::update(int deltaTime) {
-    currentTime +=  static_cast<float>(deltaTime);
-    menuMode->changeAnimation( _mode);
+    _currentTime +=  static_cast<float>(deltaTime);
+    menuMode->changeAnimation( Difficulty::convertToInt(_mode));
 }
 
 void Menu::render() {
@@ -145,17 +145,17 @@ void Menu::onKeyPressed(const SDL_KeyboardEvent &keyboardEvent) {
         case SDLK_F1:
             // key f1 go to playing
             endMusic();
-            StateManager::instance().changeInfo(getMode(), 1);
+            _game->getStateManager()->changeInfo(getMode(), 1);
             break;
         case SDLK_F2:
             // F2 go to Instructions
             endMusic();
-            StateManager::instance().changeInstructions();
+            _game->getStateManager()->changeInstructions();
             break;
         case SDLK_F3:
             // F3 go to About
             endMusic();
-            StateManager::instance().changeCredits();
+            _game->getStateManager()->changeCredits();
             break;
         case SDLK_UP:
             changeModeUp();

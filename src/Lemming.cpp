@@ -20,12 +20,12 @@ Lemming::Lemming(const glm::vec2 &initialPosition) {
     _isSaved = false;
 }
 
-void Lemming::update(int deltaTime) {
+void Lemming::update(int deltaTime, const glm::vec2 &levelSize) {
     if (_job->sprite()->update(deltaTime) == 0) {
         return;
     }
 
-    if (outOfMap()) {
+    if (outOfMap(levelSize)) {
         _alive = false;
         delete _job;
         //lemming no longer has a job
@@ -61,13 +61,13 @@ void Lemming::update(int deltaTime) {
 
 }
 
-void Lemming::render() {
+void Lemming::render(const glm::vec2 &cameraPos) {
     glm::vec2 oldPosition = _job->sprite()->getPosition();
-    _job->sprite()->setPosition(oldPosition - Level::currentLevel().getLevelAttributes()->cameraPos);
+    _job->sprite()->setPosition(oldPosition - cameraPos);
     _job->sprite()->render();
     _job->sprite()->setPosition(oldPosition);
 
-    _countdown.render();
+    _countdown.render(cameraPos);
 }
 
 void Lemming::changeJob(Jobs nextJob) {
@@ -115,8 +115,6 @@ void Lemming::writeDestiny(int deltaTime) {
     _countdown.start(deltaTime);
 }
 
-bool Lemming::outOfMap() {
-    return !Utils::insideRectangle(_job->sprite()->getPosition(), glm::vec2(0, 0),
-                                   glm::vec2(Level::currentLevel().getLevelAttributes()->levelSize.x,
-                                             Level::currentLevel().getLevelAttributes()->levelSize.y));
+bool Lemming::outOfMap(const glm::vec2 &levelSize) {
+    return !Utils::insideRectangle(_job->sprite()->getPosition(), glm::vec2(0, 0), levelSize);
 }

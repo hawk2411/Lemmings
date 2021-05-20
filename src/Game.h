@@ -39,20 +39,20 @@ public:
         Texture skullSprite;
     };
 
-    void keyboardDownCallback(const SDL_KeyboardEvent &event) {
-        _stateManager->getCurrentGameState()->onKeyPressed(event);
+    void onKeyPressed(const SDL_KeyboardEvent &event) {
+        _stateManager->onKeyPressed(event);
     }
 
     void onMousMove(const SDL_MouseMotionEvent &mouseMotionEvent) {
-        _stateManager->getCurrentGameState()->onMouseMove(mouseMotionEvent);
+        _stateManager->onMouseMove(mouseMotionEvent);
     }
 
     void onMouseButtonDown(const SDL_MouseButtonEvent &mouseButtonEvent) {
-        _stateManager->getCurrentGameState()->onMouseButtonDown(mouseButtonEvent);
+        _stateManager->onMouseButtonDown(mouseButtonEvent);
     }
 
     void onMouseButtonUp(const SDL_MouseButtonEvent &mouseButtonEvent) {
-        _stateManager->getCurrentGameState()->onMouseButtonUp(mouseButtonEvent);
+        _stateManager->onMouseButtonUp(mouseButtonEvent);
     }
 
     //******************************************************************************************

@@ -15,22 +15,7 @@ Level::Level(Difficulty::Mode difficulty, int levelNo): _actualLevel(levelNo), _
 }
 
 std::string Level::getFilename(Difficulty::Mode levelMode, int levelNo) {
-
-    string modeName;
-    switch (levelMode) {
-        case Difficulty::Mode::FUN_MODE:
-            modeName = "fun";
-            break;
-        case Difficulty::Mode::TRICKY_MODE:
-            modeName = "tricky";
-            break;
-        case Difficulty::Mode::TAXING_MODE:
-            modeName = "taxing";
-            break;
-        default:
-            throw LemmingsException("Unknown level mode.");
-    }
-    return "levels/" + modeName + "-" + to_string(levelNo) + ".txt";
+    return "levels/" + Difficulty::convertToString(levelMode) + "-" + to_string(levelNo) + ".txt";
 }
 
 void Level::initFromFile(const string &file) {
@@ -74,7 +59,7 @@ void Level::initFromFile(const string &file) {
                 iss >> trapdoorPosX >> trapdoorPosY >> trapdoorType;
 
                 _trapdoorPos = glm::vec2(trapdoorPosX, trapdoorPosY);
-                trapdoor = std::unique_ptr<Trapdoor>(TrapdoorFactory::createTrapdoor(trapdoorType));
+                _trapdoor = std::unique_ptr<Trapdoor>(TrapdoorFactory::createTrapdoor(trapdoorType));
                 break;
             }
             case 4: // DOOR_POS DOOR_TYPE(standard, egypt, maya, hell)
@@ -111,8 +96,8 @@ void Level::initFromFile(const string &file) {
     maskedMap.setMagFilter(GL_NEAREST);
 
 
-    trapdoor->init();
-    trapdoor->setPosition(_trapdoorPos);
+    _trapdoor->init();
+    _trapdoor->setPosition(_trapdoorPos);
 
     _door->init();
     _door->setPosition(_doorPos);

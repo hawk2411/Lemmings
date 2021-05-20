@@ -116,20 +116,6 @@ void Sprite::addKeyframe(int animId, const glm::vec2 &displacement, bool isRotat
 
 }
 
-void Sprite::changeAnimation(Difficulty::Mode mode) {
-    switch (mode) {
-        case Difficulty::Mode::FUN_MODE:
-            changeAnimation(0);
-            break;
-        case Difficulty::Mode::TRICKY_MODE:
-            changeAnimation(1);
-            break;
-        case Difficulty::Mode::TAXING_MODE:
-            changeAnimation(2);
-            break;
-    }
-}
-
 void Sprite::changeAnimation(int animId) {
     if (animId < int(animations.size())) {
         currentAnimation = animId;
