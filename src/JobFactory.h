@@ -4,16 +4,7 @@
 #include "Job.h"
 
 class JobFactory {
-
-public:
-
-    static JobFactory &instance() {
-        static JobFactory instance; // Guaranteed to be destroyed.
-        // Instantiated on first use.
-        return instance;
-    };
-
-    static Job* createJob(Jobs jobToCreate);
+private:
     static Job *createWalkerJob();
 
     static Job *createDiggerJob();
@@ -35,6 +26,11 @@ public:
     static Job *createClimberJob();
 
     static Job *createBuilderJob();
+
+
+public:
+
+    static Job* createJob(Jobs jobToCreate);
 };
 
 

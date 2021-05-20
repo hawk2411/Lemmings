@@ -12,7 +12,7 @@ public:
 
     void initAnims(ShaderProgram &shaderProgram);
 
-    void updateStateMachine(int deltaTime);
+    void updateStateMachine(int deltaTime, Level *levelAttributes, IMaskManager *mask);
 
     void setWalkingRight(bool value);
 

@@ -5,7 +5,8 @@
 #include "Sprite.h"
 #include "Job.h"
 #include "Countdown.h"
-
+#include "Level.h"
+#include "IMaskManager.h"
 
 
 // Lemming is basically a Sprite that represents one lemming. As such it has
@@ -19,7 +20,7 @@ public:
 
     Lemming(const glm::vec2 &initialPosition);
 
-    void update(int deltaTime, const glm::vec2 &levelSize);
+    void update(int deltaTime, Level *levelAttributes, IMaskManager *mask);
 
     void render(const glm::vec2 &cameraPos);
 

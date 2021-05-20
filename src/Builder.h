@@ -15,7 +15,7 @@ public:
 
     void initAnims(ShaderProgram &shaderProgram) override;
 
-    void updateStateMachine(int deltaTime) override;
+    void updateStateMachine(int deltaTime, Level *levelAttributes, IMaskManager *mask) override;
 
     void setWalkingRight(bool value) override;
 
@@ -29,16 +29,17 @@ private:
 private:
     BuilderState state;
 
-    void buildLeft();
+    void buildLeft(Level *attributes, IMaskManager *mask);
 
-    void buildRight();
+    void buildRight(Level *attributes, IMaskManager *mask);
 
-    bool cannotBuildRight();
+    bool cannotBuildRight(IMaskManager *mask);
 
-    bool cannotBuildLeft();
+    bool cannotBuildLeft(IMaskManager *mask);
 
     int buildedSteps = 0;
 
+    void buildStep(glm::vec2 position, Level *attributes, IMaskManager *mask);
 };
 
 #endif // _BUILDER_INCLUDE

@@ -4,6 +4,7 @@
 #include "ShaderManager.h"
 #include "JobFactory.h"
 #include "Utils.h"
+#include "IMaskManager.h"
 
 #define JUMP_ANGLE_STEP 4
 #define JUMP_HEIGHT 96
@@ -12,20 +13,20 @@
 
 Lemming::Lemming(const glm::vec2 &initialPosition) {
     this->shaderProgram = &ShaderManager::getInstance().getShaderProgram();
-    _job = JobFactory::createFallerJob();
+    _job = JobFactory::createJob(Jobs::FALLER);
     _job->initAnims(*shaderProgram);
     _position = initialPosition;
-    _job->sprite()->setPosition(initialPosition);
+    _job->sprite()->setPosition(_position);
     _alive = true;
     _isSaved = false;
 }
 
-void Lemming::update(int deltaTime, const glm::vec2 &levelSize) {
+void Lemming::update(int deltaTime, Level *levelAttributes, IMaskManager *mask) {
     if (_job->sprite()->update(deltaTime) == 0) {
         return;
     }
 
-    if (outOfMap(levelSize)) {
+    if (outOfMap(levelAttributes->levelSize)) {
         _alive = false;
         delete _job;
         //lemming no longer has a job
@@ -36,7 +37,7 @@ void Lemming::update(int deltaTime, const glm::vec2 &levelSize) {
         return;
     }
     //still not nuked
-    _job->updateStateMachine(deltaTime);
+    _job->updateStateMachine(deltaTime, levelAttributes, mask);
 
     if (_countdown.isStarted()) {
         //countdown for nuke is running

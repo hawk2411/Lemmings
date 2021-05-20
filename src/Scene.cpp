@@ -53,11 +53,11 @@ void Scene::update(int deltaTime) {
         deltaTime = 4 * deltaTime;
     }
 
-    _levelRunner->update(deltaTime);
+    _levelRunner->update(deltaTime, _maskManagers[_currentDifficultyMode].get());
     ParticleSystemManager::getInstance().update(deltaTime);
     updateUI();
 
-    if (_levelRunner.finished() && ParticleSystemManager::getInstance().finished()) {
+    if (_levelRunner->finished() && ParticleSystemManager::getInstance().finished()) {
         int goalPercentage = _levelRunner->getPercentageTotalLemmings();
         int currentPercentage = _levelRunner->getPercentageSavedLemmings();
 

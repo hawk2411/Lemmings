@@ -13,7 +13,7 @@ public:
 
     void initAnims(ShaderProgram &shaderProgram) override;
 
-    void updateStateMachine(int deltaTime) override;
+    void updateStateMachine(int deltaTime, Level *levelAttributes, IMaskManager *mask) override;
 
     void setWalkingRight(bool value) override;
 
@@ -33,9 +33,9 @@ private:
 private:
     CLimberState state;
 
-    void climbLeft();
+    void climbLeft(Level *level);
 
-    void climbRight();
+    void climbRight(Level *level);
 
 };
 

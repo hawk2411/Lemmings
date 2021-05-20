@@ -8,6 +8,7 @@
 #include "Door.h"
 #include "Trapdoor.h"
 #include "Sound.h"
+#include "IMaskManager.h"
 
 class LevelRunner {
 
@@ -18,7 +19,7 @@ public:
 
     void changeLevel(LevelModes::Mode levelMode, int levelNum);
 
-    void update(int deltaTime);
+    void update(int deltaTime, IMaskManager *currentMask);
 
     void render();
 
@@ -97,7 +98,7 @@ private:
 
     void finishLevel();
 
-    void updateLemmings(int deltaTime);
+    void updateLemmings(int deltaTime, IMaskManager *currentMask);
 
     void renderLemmings();
 

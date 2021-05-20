@@ -4,6 +4,7 @@
 #include "Utils.h"
 
 #include "LevelRunner.h"
+#include "IMaskManager.h"
 
 LevelRunner::LevelRunner(SoundManager *soundManager, LevelModes::Mode levelMode, int levelNo) : _deadLemmings(0),
                                                                                                 _savedLemmings(0),
@@ -18,10 +19,7 @@ LevelRunner::LevelRunner(SoundManager *soundManager, LevelModes::Mode levelMode,
                                                                                                 _lastTimeSpawnedLemming(0),
                                                                                                 _spawningLemmings(false),
                                                                                                 _finishedLevel(false),
-                                                                                                _exploding(false),
-                                                                                                _door(nullptr),
-                                                                                                _trapdoor(nullptr),
-                                                                                                _music(nullptr) {
+                                                                                                _exploding(false){
 
     _soundManager = soundManager;
     _dooropenSound = make_unique<Sound>(soundManager, "sounds/lemmingsEffects/Letsgo.ogg", FMOD_DEFAULT | FMOD_UNIQUE);
@@ -49,9 +47,6 @@ void LevelRunner::changeLevel(LevelModes::Mode levelMode, int levelNum) {
     _availableLemmings = _levelStartValues->numLemmings;
     _spawningLemmings = true;
 
-    _door = _levelStartValues->_door.get();
-    _trapdoor = _levelStartValues->_trapdoor.get();
-
     _deadLemmings = 0;
     _savedLemmings = 0;
 
@@ -65,7 +60,7 @@ void LevelRunner::changeLevel(LevelModes::Mode levelMode, int levelNum) {
     _dooropenSound->setVolume(1.0f);
 }
 
-void LevelRunner::update(int deltaTime) {
+void LevelRunner::update(int deltaTime, IMaskManager *currentMask) {
     _currentTime += deltaTime;
 
     if (_currentTime / 1000 >= _goalTime) {
@@ -86,7 +81,7 @@ void LevelRunner::update(int deltaTime) {
     if (_spawningLemmings) {
         spawnLemmings();
     }
-    updateLemmings(deltaTime);
+    updateLemmings(deltaTime, nullptr);
 
     _levelStartValues->_door->update(deltaTime);
     _levelStartValues->_trapdoor->update(deltaTime);
@@ -113,7 +108,7 @@ void LevelRunner::spawnLemmings() {
     if (elapsedTimeSinceLastLemming >= timeToNextLemming) {
         --_availableLemmings;
         _lastTimeSpawnedLemming = _currentTime;
-        Lemming *newLemming = new Lemming(_levelStartValues->_trapdoor->getEnterPosition());
+        auto *newLemming = new Lemming(_levelStartValues->_trapdoor->getEnterPosition());
         newLemming->setWalkingRight(true);
         _lemmings.insert(newLemming);
 
@@ -239,12 +234,12 @@ void LevelRunner::finishLevel() {
     _finishedLevel = true;
 }
 
-void LevelRunner::updateLemmings(int deltaTime) {
+void LevelRunner::updateLemmings(int deltaTime, IMaskManager *currentMask) {
     auto it = _lemmings.begin();
     while (it != _lemmings.end()) {
         auto current = it++;
         Lemming *currentLemming = *current;
-        currentLemming->update(deltaTime, <#initializer#>);
+        currentLemming->update(deltaTime, getLevelAttributes(), currentMask);
 
         bool saved = currentLemming->saved();
         bool dead = currentLemming->dead();

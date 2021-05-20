@@ -13,26 +13,26 @@ Digger::Digger() : Job(Jobs::DIGGER) {
 
 
 void Digger::initAnims(ShaderProgram &shaderProgram) {
-    jobSprite = Sprite::createSprite(glm::ivec2(16, 16), glm::vec2(1.f / 16, 1.f / 14), &shaderProgram,
-                                     &Game::spriteSheets().lemmingAnimations,
-                                     &Game::spriteSheets().rotatedLemmingAnimations);
-    jobSprite->setNumberAnimations(1);
+    _jobSprite = Sprite::createSprite(glm::ivec2(16, 16), glm::vec2(1.f / 16, 1.f / 14), &shaderProgram,
+                                      &Game::spriteSheets().lemmingAnimations,
+                                      &Game::spriteSheets().rotatedLemmingAnimations);
+    _jobSprite->setNumberAnimations(1);
 
     // DIGGER
-    jobSprite->setAnimationSpeed(0, 12);
+    _jobSprite->setAnimationSpeed(0, 12);
     for (int i = 0; i < 8; i++)
-        jobSprite->addKeyframe(0, glm::vec2(float(i) / 16, 8.0f / 14));
+        _jobSprite->addKeyframe(0, glm::vec2(float(i) / 16, 8.0f / 14));
 
 
     state = DIGGING_STATE;
-    jobSprite->changeAnimation(0);
+    _jobSprite->changeAnimation(0);
 }
 
 void Digger::setWalkingRight(bool value) {
     walkingRight = value;
 }
 
-void Digger::updateStateMachine(int deltaTime) {
+void Digger::updateStateMachine(int deltaTime, Level *levelAttributes, IMaskManager *mask) {
 
     switch (state) {
 
@@ -46,7 +46,7 @@ void Digger::updateStateMachine(int deltaTime) {
                 } else {
                     _nextJob = Jobs::WALKER;
                 }
-            } else if (jobSprite->isInFirstFrame() || jobSprite->getAnimationCurrentFrame() == 4) {
+            } else if (_jobSprite->isInFirstFrame() || _jobSprite->getAnimationCurrentFrame() == 4) {
                 dig();
             }
 
@@ -54,7 +54,7 @@ void Digger::updateStateMachine(int deltaTime) {
 }
 
 bool Digger::canDig() const {
-    glm::ivec2 posBase = jobSprite->getPosition();
+    glm::ivec2 posBase = _jobSprite->getPosition();
 
     posBase +=  glm::ivec2(4, 14);
     for (int j = 0; j < 3; ++j) {
@@ -71,7 +71,7 @@ bool Digger::canDig() const {
 
 void Digger::dig() {
 
-    glm::ivec2 posBase = jobSprite->getPosition();
+    glm::ivec2 posBase = _jobSprite->getPosition();
 
     posBase += glm::ivec2(4, 14);
 
@@ -82,7 +82,7 @@ void Digger::dig() {
         Scene::getInstance().eraseMask(x, y);
     }
 
-    jobSprite->incPosition(glm::ivec2(0, 1));
+    _jobSprite->incPosition(glm::ivec2(0, 1));
 }
 
 

@@ -18,31 +18,31 @@ Miner::Miner() : Job(Jobs::MINER) {
 }
 
 void Miner::initAnims(ShaderProgram &shaderProgram) {
-    jobSprite = Sprite::createSprite(glm::ivec2(16, 16), glm::vec2(1.f / 16, 1.f / 14), &shaderProgram,
-                                     &Game::spriteSheets().lemmingAnimations,
-                                     &Game::spriteSheets().rotatedLemmingAnimations);
-    jobSprite->setNumberAnimations(2);
+    _jobSprite = Sprite::createSprite(glm::ivec2(16, 16), glm::vec2(1.f / 16, 1.f / 14), &shaderProgram,
+                                      &Game::spriteSheets().lemmingAnimations,
+                                      &Game::spriteSheets().rotatedLemmingAnimations);
+    _jobSprite->setNumberAnimations(2);
 
 
     // MINER
-    jobSprite->setAnimationSpeed(MINER_RIGHT, 12);
+    _jobSprite->setAnimationSpeed(MINER_RIGHT, 12);
     for (int i = 0; i < 24; i++)
         if (i < 8) {
-            jobSprite->addKeyframe(MINER_RIGHT, glm::vec2(float(i + 8) / 16, 8.0f / 14));
+            _jobSprite->addKeyframe(MINER_RIGHT, glm::vec2(float(i + 8) / 16, 8.0f / 14));
         } else {
-            jobSprite->addKeyframe(MINER_RIGHT, glm::vec2(float(i - 8) / 16, 9.0f / 14));
+            _jobSprite->addKeyframe(MINER_RIGHT, glm::vec2(float(i - 8) / 16, 9.0f / 14));
         }
 
-    jobSprite->setAnimationSpeed(MINER_LEFT, 12);
+    _jobSprite->setAnimationSpeed(MINER_LEFT, 12);
     for (int i = 0; i < 24; i++)
         if (i < 8) {
-            jobSprite->addKeyframe(MINER_LEFT, glm::vec2((15 - float(i + 8)) / 16, 8.0f / 14), true);
+            _jobSprite->addKeyframe(MINER_LEFT, glm::vec2((15 - float(i + 8)) / 16, 8.0f / 14), true);
         } else {
-            jobSprite->addKeyframe(MINER_LEFT, glm::vec2(((23 - float(i)) / 16), 9.0f / 14), true);
+            _jobSprite->addKeyframe(MINER_LEFT, glm::vec2(((23 - float(i)) / 16), 9.0f / 14), true);
         }
 
     state = MINER_RIGHT_STATE;
-    jobSprite->changeAnimation(MINER_RIGHT);
+    _jobSprite->changeAnimation(MINER_RIGHT);
 
 
 }
@@ -52,14 +52,14 @@ void Miner::setWalkingRight(bool value) {
 
     if (walkingRight) {
         state = MINER_RIGHT_STATE;
-        jobSprite->changeAnimation(MINER_RIGHT);
+        _jobSprite->changeAnimation(MINER_RIGHT);
     } else {
         state = MINER_LEFT_STATE;
-        jobSprite->changeAnimation(MINER_LEFT);
+        _jobSprite->changeAnimation(MINER_LEFT);
     }
 }
 
-void Miner::updateStateMachine(int deltaTime) {
+void Miner::updateStateMachine(int deltaTime, Level *levelAttributes, IMaskManager *mask) {
     int fall;
 
     switch (state) {
@@ -98,7 +98,7 @@ void Miner::updateStateMachine(int deltaTime) {
 
 
 void Miner::printMine() {
-    glm::ivec2 posBase = jobSprite->getPosition();
+    glm::ivec2 posBase = _jobSprite->getPosition();
 
     posBase += glm::ivec2(10, 16);
 
@@ -141,11 +141,11 @@ void Miner::printMine() {
 
 void Miner::mineRight() {
     //printMine();
-    glm::ivec2 posBase = jobSprite->getPosition();
+    glm::ivec2 posBase = _jobSprite->getPosition();
 
     posBase += glm::ivec2(10, 16);
 
-    if (jobSprite->getAnimationCurrentFrame() == 2) {
+    if (_jobSprite->getAnimationCurrentFrame() == 2) {
         int x = posBase.x;
         int y = posBase.y;
 
@@ -166,15 +166,15 @@ void Miner::mineRight() {
             Scene::getInstance().eraseMask(x + 5, y - i);
         }
     }
-    if (jobSprite->getAnimationCurrentFrame() == 17) {
-        jobSprite->incPosition(glm::vec2(2, 1));
+    if (_jobSprite->getAnimationCurrentFrame() == 17) {
+        _jobSprite->incPosition(glm::vec2(2, 1));
 
     }
 
 }
 
 bool Miner::canMineRight() {
-    glm::ivec2 posBase = jobSprite->getPosition();
+    glm::ivec2 posBase = _jobSprite->getPosition();
 
     posBase += glm::ivec2(10, 17);
 
@@ -229,7 +229,7 @@ bool Miner::canMineRight() {
 
 
 bool Miner::canMineLeft() {
-    glm::ivec2 posBase = jobSprite->getPosition();
+    glm::ivec2 posBase = _jobSprite->getPosition();
 
     posBase += glm::ivec2(0, 17);
 
@@ -272,10 +272,10 @@ bool Miner::canMineLeft() {
 }
 
 void Miner::mineLeft() {
-    glm::ivec2 posBase = jobSprite->getPosition();
+    glm::ivec2 posBase = _jobSprite->getPosition();
     posBase += glm::ivec2(0, 16);
 
-    if (jobSprite->getAnimationCurrentFrame() == 2) {
+    if (_jobSprite->getAnimationCurrentFrame() == 2) {
         int x = posBase.x;
         int y = posBase.y;
 
@@ -300,8 +300,8 @@ void Miner::mineLeft() {
         }
     }
 
-    if (jobSprite->getAnimationCurrentFrame() == 17) {
-        jobSprite->incPosition(glm::vec2(-2, 1));
+    if (_jobSprite->getAnimationCurrentFrame() == 17) {
+        _jobSprite->incPosition(glm::vec2(-2, 1));
 
     }
 }

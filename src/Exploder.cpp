@@ -16,27 +16,27 @@ Exploder::Exploder() : Job(Jobs::EXPLODER) {
 
 void Exploder::initAnims(ShaderProgram &shaderProgram) {
 
-    jobSprite = Sprite::createSprite(glm::ivec2(16, 16), glm::vec2(1.f / 16, 1.f / 14), &shaderProgram,
-                                     &Game::spriteSheets().lemmingAnimations,
-                                     &Game::spriteSheets().rotatedLemmingAnimations);
-    jobSprite->setNumberAnimations(2);
+    _jobSprite = Sprite::createSprite(glm::ivec2(16, 16), glm::vec2(1.f / 16, 1.f / 14), &shaderProgram,
+                                      &Game::spriteSheets().lemmingAnimations,
+                                      &Game::spriteSheets().rotatedLemmingAnimations);
+    _jobSprite->setNumberAnimations(2);
 
     // EXPLODER
 
-    jobSprite->setAnimationSpeed(EXPLODER, 12);
+    _jobSprite->setAnimationSpeed(EXPLODER, 12);
     for (int i = 0; i < 16; i++) {
-        jobSprite->addKeyframe(EXPLODER, glm::vec2(float(i) / 16, 10.0f / 14));
+        _jobSprite->addKeyframe(EXPLODER, glm::vec2(float(i) / 16, 10.0f / 14));
     }
 
     // BURNING_DEATH
-    jobSprite->setAnimationSpeed(BURNING_DEATH, 12);
+    _jobSprite->setAnimationSpeed(BURNING_DEATH, 12);
     for (int i = 0; i < 16; i++) {
-        jobSprite->addKeyframe(BURNING_DEATH, glm::vec2(float(i) / 16, 13.0f / 14));
+        _jobSprite->addKeyframe(BURNING_DEATH, glm::vec2(float(i) / 16, 13.0f / 14));
     }
 
 
     state = EXPLODER_STATE;
-    jobSprite->changeAnimation(EXPLODER);
+    _jobSprite->changeAnimation(EXPLODER);
 
 }
 
@@ -44,17 +44,17 @@ void Exploder::setWalkingRight(bool value) {
     walkingRight = value;
 }
 
-void Exploder::updateStateMachine(int deltaTime) {
+void Exploder::updateStateMachine(int deltaTime, Level *levelAttributes, IMaskManager *mask) {
 
     switch (state) {
         case EXPLODER_STATE:
-            if (jobSprite->isInLastFrame()) {
+            if (_jobSprite->isInLastFrame()) {
                 state = BURNING_DEATH_STATE;
-                jobSprite->changeAnimation(BURNING_DEATH);
+                _jobSprite->changeAnimation(BURNING_DEATH);
             }
             break;
         case BURNING_DEATH_STATE:
-            if (jobSprite->isInLastFrame()) {
+            if (_jobSprite->isInLastFrame()) {
                 explode();
                 isFinished = true;
                 _nextJob = Jobs::UNKNOWN;
@@ -65,7 +65,7 @@ void Exploder::updateStateMachine(int deltaTime) {
 }
 
 void Exploder::explode() {
-    glm::vec2 posBase = jobSprite->getPosition();
+    glm::vec2 posBase = _jobSprite->getPosition();
 
     for (int i = 0; i < 16; ++i) {
         for (int j = 0; j < 22; ++j) {

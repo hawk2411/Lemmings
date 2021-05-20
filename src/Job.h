@@ -2,6 +2,8 @@
 #define _JOB_INCLUDE
 
 #include "Sprite.h"
+#include "Level.h"
+#include "IMaskManager.h"
 
 // Lemming is basically a Sprite that represents one lemming. As such it has
 // all properties it needs to track its movement and collisions.
@@ -29,7 +31,7 @@ public:
 
     virtual ~Job();
 
-    virtual void updateStateMachine(int deltaTime) = 0;
+    virtual void updateStateMachine(int deltaTime, Level *levelAttributes, IMaskManager *mask) = 0;
 
     virtual void initAnims(ShaderProgram &shaderProgram) = 0;
 
@@ -53,7 +55,7 @@ protected:
 
     bool collision() const;
 
-    unique_ptr<Sprite> jobSprite;
+    unique_ptr<Sprite> _jobSprite;
     bool isFinished;
     Jobs _currentJob;
     Jobs _nextJob;
