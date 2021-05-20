@@ -3,7 +3,7 @@
 
 #include <glm/glm.hpp>
 #include "ShaderProgram.h"
-#include "MaskedTexturedQuad.h"
+
 
 
 class ShaderManager {

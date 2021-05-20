@@ -1,6 +1,8 @@
 #include <memory>
+#include "EventCreator.h"
 
 #include "Game.h"
+
 
 Game::Game() : bPlay(true), _dmode(Difficulties::Mode::Easy),
                hardModeIndicator(nullptr), prevTime(prevTime) {
@@ -120,7 +122,7 @@ Difficulties::Mode Game::getDifficultyMode() const {
 }
 
 void Game::swapDifficultyMode() {
-    _dmode = (_dmode == Difficulties::Mode::Easy)?Difficulties::Mode::Hard: Difficulties::Mode::Easy
+    _dmode = (_dmode == Difficulties::Mode::Easy)?Difficulties::Mode::Hard: Difficulties::Mode::Easy;
 }
 
 SoundManager *Game::getSoundManager() const {
@@ -130,6 +132,19 @@ SoundManager *Game::getSoundManager() const {
 
 StateManager *Game::getStateManager() {
     return _stateManager.get();
+}
+
+void Game::onUserEvent(const SDL_UserEvent &event) {
+    switch (event.code) {
+        case UPDATE_EVENT: {
+            int delay = *(int *) event.data1;
+            update(delay);
+        }
+            break;
+        default:
+            _stateManager->onUserEvent(event);
+    }
+
 }
 
 

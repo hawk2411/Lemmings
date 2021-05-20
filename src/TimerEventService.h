@@ -11,10 +11,11 @@
 class TimerEventService {
 public:
     explicit TimerEventService();
-    void startEvents(Uint32 parameter, Uint32 delay = (33 / 10) * 10);
+    void startEvents(Sint32 parameter, Uint32 delay = (33 / 10) * 10);
     void stopEvents();
 private:
     SDL_TimerID _timer_id;
+    Sint32 _user_code;
 
     static Uint32 TimerCallback(Uint32 interval, void *param);
     static const Sint32 EVENT_CODE = 1;

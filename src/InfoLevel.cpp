@@ -4,34 +4,29 @@
 #include "KeyFactory.h"
 #include "StateManager.h"
 #include "GameState.h"
+#include "EventCreator.h"
 #include "InfoLevel.h"
 
 
 InfoLevel::InfoLevel(Game * game, LevelModes::Mode mode, int level) : GameState(game), _mode(mode), _level(level){
-    _infoLevelTexture.loadFromFile("images/levels/" + LevelModes::convertToString(_mode) + to_string(_level) + "/info.png", TEXTURE_PIXEL_FORMAT_RGBA);
-    _infoLevelTexture.setMinFilter(GL_NEAREST);
-    _infoLevelTexture.setMagFilter(GL_NEAREST);
+    initTextures();
 
-    _leftKey = KeyFactory::instance().createLeftKey(glm::vec2(25, 15));
-    _leftKey->setPosition(glm::vec2(5, 173));
-
+    _leftKey = KeyFactory::createLeftKey(glm::vec2(25, 15));
     _menuWord = std::make_unique<Word>("MENU");
-    _menuWord->setPosition(glm::vec2(36, 173));
 
-    _rightKey = KeyFactory::instance().createRightKey(glm::vec2(25, 15));
-    _rightKey->setPosition(glm::vec2(280, 173));
-
+    _rightKey = KeyFactory::createRightKey(glm::vec2(25, 15));
     _playWord = std::make_unique<Word>("PLAY");
-    _playWord->setPosition(glm::vec2(240, 173));
-
 }
 
-InfoLevel::~InfoLevel() {
-
-}
+InfoLevel::~InfoLevel() = default;
 
 void InfoLevel::init() {
     _currentTime = 0.0f;
+
+    _leftKey->setPosition(glm::vec2(5, 173));
+    _menuWord->setPosition(glm::vec2(36, 173));
+    _rightKey->setPosition(glm::vec2(280, 173));
+    _playWord->setPosition(glm::vec2(240, 173));
 }
 
 void InfoLevel::setLevel(LevelModes::Mode levelMode, int numLevel) {
@@ -60,9 +55,7 @@ void InfoLevel::render() {
 
 void InfoLevel::initTextures() {
 
-    const string levelName = LevelModes::convertToString(_mode) + to_string(_level);
-
-    _infoLevelTexture.loadFromFile("images/levels/" + levelName + "/info.png", TEXTURE_PIXEL_FORMAT_RGBA);
+    _infoLevelTexture.loadFromFile("images/levels/" + LevelModes::convertToString(_mode) + to_string(_level) + "/info.png", TEXTURE_PIXEL_FORMAT_RGBA);
     _infoLevelTexture.setMinFilter(GL_NEAREST);
     _infoLevelTexture.setMagFilter(GL_NEAREST);
 
@@ -79,13 +72,16 @@ int InfoLevel::getLevel() const {
 void InfoLevel::onKeyPressed(const SDL_KeyboardEvent &keyboardEvent) {
     switch (keyboardEvent.keysym.sym) {
         case SDLK_ESCAPE:
-            _game->getStateManager()->changeMenu();
+            EventCreator::sendSimpleUserEvent(CHANGE_TO_MENU);
             break;
-        case SDLK_RIGHT:
-            _game->getStateManager()->changeScene(getMode(), getLevel());
+        case SDLK_RIGHT: {
+            int *mode = new int(LevelModes::convertToInt(getMode()));
+            int *number = new int(1);
+            EventCreator::sendSimpleUserEvent(CHANGE_TO_SCENE, mode, number);
             break;
+        }
         case SDLK_LEFT:
-            _game->getStateManager()->changeMenu();
+            EventCreator::sendSimpleUserEvent(CHANGE_TO_MENU);
             break;
     }
 }

@@ -63,6 +63,8 @@ public:
      *
      *  Game is a singleton (a class with a single instance) that represents our whole application
 s     */
+    void onUserEvent(const SDL_UserEvent &event);
+
 private:
     static void initSpriteSheets();
 

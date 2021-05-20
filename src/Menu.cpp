@@ -3,21 +3,13 @@
 #include "StateManager.h"
 
 #include "Menu.h"
+#include "EventCreator.h"
 
 Menu::Menu(Game *game) : GameState(game), _mode(LevelModes::Mode::FUN_MODE) {
     music = make_unique<Sound>(_game->getSoundManager(), "sounds/MenuSong.ogg",
                                FMOD_LOOP_NORMAL | FMOD_CREATESTREAM);
-}
 
-Menu::~Menu() {
-
-}
-
-void Menu::init() {
     initTextures();
-
-    _mode = LevelModes::Mode::FUN_MODE;
-    _currentTime = 0.0f;
 
     menuBackground = Sprite::createSprite(glm::vec2(320, 230), glm::vec2(1.f, 1.f),
                                           &ShaderManager::getInstance().getShaderProgram(), &menuTexture);
@@ -39,6 +31,11 @@ void Menu::init() {
                                     &ShaderManager::getInstance().getShaderProgram(), &menuExitTexture);
     menuAbout = Sprite::createSprite(glm::vec2(111, 52), glm::vec2(1.f, 1.f),
                                      &ShaderManager::getInstance().getShaderProgram(), &menuAboutTexture);
+}
+
+Menu::~Menu() = default;
+
+void Menu::init() {
     menuBackground->setPosition(glm::vec2(0, 0));
     menuLogo->setPosition(glm::vec2(40, 10));
     menuPlaying->setPosition(glm::vec2(35, 85));
@@ -54,7 +51,7 @@ void Menu::init() {
 
 
 void Menu::update(int deltaTime) {
-    _currentTime +=  static_cast<float>(deltaTime);
+    _currentTime += static_cast<float>(deltaTime);
     menuMode->changeAnimation(LevelModes::convertToInt(_mode));
 }
 
@@ -141,21 +138,27 @@ void Menu::mouseMoved(int mouseX, int mouseY, bool bLeftButton, bool bRightButto
 }
 
 void Menu::onKeyPressed(const SDL_KeyboardEvent &keyboardEvent) {
+
     switch (keyboardEvent.keysym.sym) {
         case SDLK_F1:
             // key f1 go to playing
             endMusic();
-            _game->getStateManager()->changeInfo(getMode(), 1);
+            {
+                int *mode = new int(LevelModes::convertToInt(getMode()));
+                int *number = new int(1);
+                EventCreator::sendSimpleUserEvent(CHANGE_TO_INFO, mode, number);
+            }
             break;
         case SDLK_F2:
             // F2 go to Instructions
             endMusic();
-            _game->getStateManager()->changeInstructions();
+            EventCreator::sendSimpleUserEvent(CHANGE_TO_INSTRUCTION);
             break;
         case SDLK_F3:
             // F3 go to About
             endMusic();
-            _game->getStateManager()->changeCredits();
+            EventCreator::sendSimpleUserEvent(CHANGE_TO_CREDITS);
+            //_game->getStateManager()->changeCredits();
             break;
         case SDLK_UP:
             changeModeUp();
@@ -164,8 +167,12 @@ void Menu::onKeyPressed(const SDL_KeyboardEvent &keyboardEvent) {
             changeModeDown();
             break;
         case SDLK_ESCAPE:
-            _game->changeBplay();
             endMusic();
+
+            SDL_Event quitEvent;
+            SDL_memset(&quitEvent, 0, sizeof(quitEvent));
+            quitEvent.type = SDL_QUIT;
+            SDL_PushEvent(&quitEvent);
             break;
         case SDLK_h:
             _game->swapDifficultyMode();

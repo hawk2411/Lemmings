@@ -14,7 +14,7 @@ class Game;
 class Menu : public GameState {
 
 public:
-    Menu(Game *game);
+    explicit Menu(Game *game);
 
     ~Menu() override;
 

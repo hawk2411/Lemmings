@@ -1,7 +1,11 @@
 #define GLEW_STATIC
+
 #include <GL/glew.h>
+
 #define SDL_MAIN_HANDLED
 #include <SDL2/SDL.h>
+
+#include <iostream>
 #include <cstdint>
 #include <ctime>
 #include <random>
@@ -43,17 +47,19 @@ int main(int argc, char **argv) {
     game.init();
     //SDL_SetWindowGrab(window, SDL_TRUE);
     TimerEventService timerService;
-    timerService.startEvents(UPDATE_EVENT);
+    int event_type = UPDATE_EVENT;
+    timerService.startEvents(event_type);
 
     SDL_Event event;
     while (!close) {
         while (SDL_PollEvent(&event)) {
             switch (event.type) {
                 case SDL_QUIT:
+                    game.changeBplay();
                     close = true;
                     break;
                 case SDL_KEYDOWN:
-                case SDL_KEYUP:
+                //case SDL_KEYUP:
                     game.onKeyPressed(event.key);
                     break;
                 case SDL_MOUSEMOTION:
@@ -66,12 +72,8 @@ int main(int argc, char **argv) {
                     game.onMouseButtonUp(event.button);
                     break;
                 case SDL_USEREVENT:
-                {
-                    if( reinterpret_cast<std::uintptr_t>(event.user.data1) == UPDATE_EVENT) {
-                        game.update( reinterpret_cast<std::uintptr_t>(event.user.data2));
-                    }
+                    game.onUserEvent(event.user);
                     break;
-                }
             }
 
         }

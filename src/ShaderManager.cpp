@@ -1,5 +1,6 @@
 #include <iostream>
 #include <glm/gtc/matrix_transform.hpp>
+#include "common_defs.h"
 #include "ShaderManager.h"
 #include "Shader.h"
 
