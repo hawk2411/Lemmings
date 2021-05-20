@@ -7,8 +7,8 @@
 #include "InfoLevel.h"
 
 
-InfoLevel::InfoLevel(Game * game, Difficulty::Mode mode, int level) : GameState(game), _mode(mode), _level(level){
-    _infoLevelTexture.loadFromFile("images/levels/" + Difficulty::convertToString(_mode) + to_string(_level) + "/info.png", TEXTURE_PIXEL_FORMAT_RGBA);
+InfoLevel::InfoLevel(Game * game, LevelModes::Mode mode, int level) : GameState(game), _mode(mode), _level(level){
+    _infoLevelTexture.loadFromFile("images/levels/" + LevelModes::convertToString(_mode) + to_string(_level) + "/info.png", TEXTURE_PIXEL_FORMAT_RGBA);
     _infoLevelTexture.setMinFilter(GL_NEAREST);
     _infoLevelTexture.setMagFilter(GL_NEAREST);
 
@@ -34,7 +34,7 @@ void InfoLevel::init() {
     _currentTime = 0.0f;
 }
 
-void InfoLevel::setLevel(Difficulty::Mode levelMode, int numLevel) {
+void InfoLevel::setLevel(LevelModes::Mode levelMode, int numLevel) {
     _level = numLevel;
     _mode = levelMode;
 
@@ -60,7 +60,7 @@ void InfoLevel::render() {
 
 void InfoLevel::initTextures() {
 
-    const string levelName = Difficulty::convertToString(_mode) + to_string(_level);
+    const string levelName = LevelModes::convertToString(_mode) + to_string(_level);
 
     _infoLevelTexture.loadFromFile("images/levels/" + levelName + "/info.png", TEXTURE_PIXEL_FORMAT_RGBA);
     _infoLevelTexture.setMinFilter(GL_NEAREST);
@@ -68,7 +68,7 @@ void InfoLevel::initTextures() {
 
 }
 
-Difficulty::Mode InfoLevel::getMode() const {
+LevelModes::Mode InfoLevel::getMode() const {
     return _mode;
 }
 

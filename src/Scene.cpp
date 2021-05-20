@@ -17,18 +17,16 @@
 #include "UIAdapter.h"
 
 Scene::Scene(Game *game, SoundManager *soundManager) : GameState(game) {
-    _levelRunner = std::make_unique<LevelRunner>()
+    _levelRunner = std::make_unique<LevelRunner>(soundManager, LevelModes::Mode::FUN_MODE, 0);
+    _maskManagers.insert(std::make_pair(Difficulties::Mode::Easy, std::unique_ptr<IMaskManager>(new EasyMaskManager(_levelRunner->getLevelAttributes()))));
+    _maskManagers.insert(std::make_pair(Difficulties::Mode::Hard, std::unique_ptr<IMaskManager>(new HardMaskManager(_levelRunner->getLevelAttributes()))));
+    _currentDifficultyMode = game->getDifficultyMode();
 }
 void Scene::init() {
     Cursor::getInstance().init();
 
     ParticleSystemManager::getInstance().init();
-
-    if (_game->isHardMode()) {
-        setMaskManager(&HardMaskManager::getInstance());
-    } else {
-        setMaskManager(&EasyMaskManager::getInstance());
-    }
+    _currentDifficultyMode = _game->getDifficultyMode();
 
     initMap();
     initUI();
@@ -40,7 +38,7 @@ void Scene::init() {
 
 void Scene::update(int deltaTime) {
     update();
-    maskManager->update();
+    _maskManagers[_currentDifficultyMode].get()->update();
 
     if (Scroller::getInstance().isScrolled()) {
         initMap();
@@ -55,15 +53,15 @@ void Scene::update(int deltaTime) {
         deltaTime = 4 * deltaTime;
     }
 
-    LevelRunner::getInstance().update(deltaTime);
+    _levelRunner->update(deltaTime);
     ParticleSystemManager::getInstance().update(deltaTime);
     updateUI();
 
-    if (LevelRunner::getInstance().finished() && ParticleSystemManager::getInstance().finished()) {
-        int goalPercentage = LevelRunner::getInstance().getPercentageTotalLemmings();
-        int currentPercentage = LevelRunner::getInstance().getPercentageSavedLemmings();
+    if (_levelRunner.finished() && ParticleSystemManager::getInstance().finished()) {
+        int goalPercentage = _levelRunner->getPercentageTotalLemmings();
+        int currentPercentage = _levelRunner->getPercentageSavedLemmings();
 
-        LevelRunner::getInstance().endMusic();
+        _levelRunner->endMusic();
         StateManager::instance().changeResults(goalPercentage, currentPercentage);
     }
 
@@ -72,19 +70,19 @@ void Scene::update(int deltaTime) {
 void Scene::render() {
     ShaderManager::getInstance().useMaskedShaderProgram();
     _map->render(ShaderManager::getInstance().getMaskedShaderProgram(),
-                 Level::currentLevel().getLevelAttributes()->levelTexture,
-                 Level::currentLevel().getLevelAttributes()->maskedMap);
+                 _levelRunner->getLevelAttributes()->levelTexture,
+                 _levelRunner->getLevelAttributes()->maskedMap);
 
 
     ShaderManager::getInstance().useShaderProgram();
-    LevelRunner::getInstance().render(<#initializer#>);
+    _levelRunner->render();
     ParticleSystemManager::getInstance().render();
     UI::getInstance().render();
     Cursor::getInstance().render();
 }
 
 VariableTexture &Scene::getMaskedMap() {
-    return Level::currentLevel().getLevelAttributes()->maskedMap;
+    return _levelRunner->getLevelAttributes()->maskedMap;
 }
 
 void Scene::changePauseStatus() {
@@ -107,15 +105,15 @@ bool Scene::isSpeedUp() const {
 void Scene::initMap() {
     glm::vec2 geom[2] = {glm::vec2(0.f, 0.f), glm::vec2(float(LEVEL_WIDTH), float(LEVEL_HEIGHT))};
 
-    int levelWidth = Level::currentLevel().getLevelAttributes()->levelTexture.width();
-    int levelHeight = Level::currentLevel().getLevelAttributes()->levelTexture.height();
+    int levelWidth = _levelRunner->getLevelAttributes()->levelTexture.width();
+    int levelHeight =_levelRunner->getLevelAttributes()->levelTexture.height();
     glm::vec2 normalizedTexCoordStart = glm::vec2(
-            Level::currentLevel().getLevelAttributes()->cameraPos.x / levelWidth,
-            Level::currentLevel().getLevelAttributes()->cameraPos.y / levelHeight
+            _levelRunner->getLevelAttributes()->cameraPos.x / levelWidth,
+            _levelRunner->getLevelAttributes()->cameraPos.y / levelHeight
     );
     glm::vec2 normalizedTexCoordEnd = glm::vec2(
-            (Level::currentLevel().getLevelAttributes()->cameraPos.x + LEVEL_WIDTH) / levelWidth,
-            (Level::currentLevel().getLevelAttributes()->cameraPos.y + LEVEL_HEIGHT) / levelHeight
+            (_levelRunner->getLevelAttributes()->cameraPos.x + LEVEL_WIDTH) / levelWidth,
+            (_levelRunner->getLevelAttributes()->cameraPos.y + LEVEL_HEIGHT) / levelHeight
     );
 
     glm::vec2 texCoords[2] = {normalizedTexCoordStart, normalizedTexCoordEnd};
@@ -132,37 +130,30 @@ void Scene::updateUI() {
     UI::getInstance().update();
 }
 
-
-void Scene::setMaskManager(IMaskManager *maskM) {
-    maskManager = maskM;
-
-    maskManager->init();
-}
-
 void Scene::eraseMask(int x, int y) {
-    maskManager->eraseMask(x, y);
+    _maskManagers[_currentDifficultyMode]->eraseMask(x, y);
 }
 
 void Scene::eraseSpecialMask(int x, int y) {
-    maskManager->eraseSpecialMask(x, y);
+    _maskManagers[_currentDifficultyMode]->eraseSpecialMask(x, y);
 
 }
 
 char Scene::getPixel(int x, int y) {
-    return maskManager->getPixel(x, y);
+    return _maskManagers[_currentDifficultyMode]->getPixel(x, y);
 }
 
 void Scene::applyMask(int x, int y) {
-    maskManager->applyMask(x, y);
+    _maskManagers[_currentDifficultyMode]->applyMask(x, y);
 }
 
 void Scene::applySpecialMask(int x, int y) {
-    maskManager->applySpecialMask(x, y);
+    _maskManagers[_currentDifficultyMode]->applySpecialMask(x, y);
 }
 
 void Scene::buildStep(glm::vec2 position) {
     for (int i = 0; i < 5; ++i) {
-        Utils::changeTexelColor(Level::currentLevel().getLevelAttributes()->levelTexture.getId(), position.x + i,
+        Utils::changeTexelColor(_levelRunner->getLevelAttributes()->levelTexture.getId(), position.x + i,
                                 position.y, 120, 77, 0, 255);
         applyMask(position.x + i, position.y);
     }
@@ -170,7 +161,7 @@ void Scene::buildStep(glm::vec2 position) {
 
 void Scene::onKeyPressed(const SDL_KeyboardEvent &keyboardEvent) {
     if (keyboardEvent.keysym.sym == SDLK_ESCAPE) {
-        StateManager::instance().changeMenu();
+        _game->getStateManager()->changeMenu();
     }
 
 }
@@ -240,7 +231,7 @@ void Scene::update() {
         Scroller::getInstance().scrollRight();
         Cursor::getInstance().setScrollRightCursor();
     } else if (screenMovedArea == ScreenMovedArea::LEVEL) {
-        int lemmingIndex = LevelRunner::getInstance().getLemmingIndexInPos(posX, posY);
+        int lemmingIndex = _levelRunner->getLemmingIndexInPos(posX, posY);
         UIAdapter::getInstance().changeFocusedLemming(lemmingIndex);
 
         if (lemmingIndex != -1) {
@@ -296,7 +287,7 @@ void Scene::leftClickOnMap(int posX, int posY) {
 
     if (JobAssigner::getInstance().hasJobToAssign()) {
 
-        int selectedLemmingIndex = LevelRunner::getInstance().getLemmingIndexInPos(posX, posY);
+        int selectedLemmingIndex = _levelRunner->getLemmingIndexInPos(posX, posY);
         JobAssigner::getInstance().assigJobLemming(selectedLemmingIndex);
     }
 }
@@ -320,7 +311,7 @@ void Scene::updateCursorPosition() {
 
 }
 
-void Scene::setLevel(Difficulty::Mode mode, int i) {
+void Scene::setLevel(LevelModes::Mode mode, int i) {
 
 }
 

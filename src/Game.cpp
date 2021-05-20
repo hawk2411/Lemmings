@@ -2,9 +2,12 @@
 
 #include "Game.h"
 
-Game::Game() : bPlay(true), hardMode(false),
+Game::Game() : bPlay(true), _dmode(Difficulties::Mode::Easy),
                hardModeIndicator(nullptr), prevTime(prevTime) {
-    glClearColor(0.f, 0.f, 0.f, 1.0f);
+
+    glClearColor(0.f, 0.f, 0.f, 1.0f);  //TODO glClearColor here???
+    _soundManager = std::make_unique<SoundManager>();
+
     _shaderManager = std::make_unique<ShaderManager>();
     _stateManager = std::make_unique<StateManager>(this, _shaderManager.get());
 
@@ -30,7 +33,7 @@ void Game::render() {
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     _stateManager->render();
-    if (hardMode) {
+    if (_dmode == Difficulties::Mode::Hard) {
         hardModeIndicator->render();
     }
 
@@ -112,16 +115,16 @@ void Game::changeBplay() {
     bPlay = !bPlay;
 }
 
-bool Game::isHardMode() const {
-    return hardMode;
+Difficulties::Mode Game::getDifficultyMode() const {
+    return _dmode;
 }
 
 void Game::swapDifficultyMode() {
-    hardMode = !hardMode;
+    _dmode = (_dmode == Difficulties::Mode::Easy)?Difficulties::Mode::Hard: Difficulties::Mode::Easy
 }
 
-const SoundManager *Game::getSoundManager() const {
-    return &soundManager;
+SoundManager *Game::getSoundManager() const {
+    return _soundManager.get();
 }
 
 

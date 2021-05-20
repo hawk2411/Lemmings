@@ -7,6 +7,7 @@
 #include "SoundManager.h"
 #include "ShaderManager.h"
 #include "StateManager.h"
+#include "Difficulties.h"
 
 const float TIME_PER_FRAME = 1000.f / 30.f; // Approx. 30 fps;
 
@@ -88,21 +89,22 @@ public:
 
     void changeBplay();
 
-    bool isHardMode() const;
+    Difficulties::Mode getDifficultyMode() const;
 
     void swapDifficultyMode();
 
-    const SoundManager *getSoundManager() const;
+    SoundManager *getSoundManager() const;
 
     StateManager *getStateManager();
 
 private:
-    SoundManager soundManager;
+    unique_ptr<SoundManager> _soundManager;
     unique_ptr<StateManager> _stateManager;
     unique_ptr<ShaderManager> _shaderManager;
 
     bool bPlay; // Continue to play game?
-    bool hardMode;
+    Difficulties::Mode _dmode;
+
 
     int prevTime;
     std::unique_ptr<Sprite> hardModeIndicator;

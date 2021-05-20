@@ -4,7 +4,7 @@
 
 #include "Menu.h"
 
-Menu::Menu(Game *game) : GameState(game), _mode(Difficulty::Mode::FUN_MODE) {
+Menu::Menu(Game *game) : GameState(game), _mode(LevelModes::Mode::FUN_MODE) {
     music = make_unique<Sound>(_game->getSoundManager(), "sounds/MenuSong.ogg",
                                FMOD_LOOP_NORMAL | FMOD_CREATESTREAM);
 }
@@ -16,7 +16,7 @@ Menu::~Menu() {
 void Menu::init() {
     initTextures();
 
-    _mode = Difficulty::Mode::FUN_MODE;
+    _mode = LevelModes::Mode::FUN_MODE;
     _currentTime = 0.0f;
 
     menuBackground = Sprite::createSprite(glm::vec2(320, 230), glm::vec2(1.f, 1.f),
@@ -33,7 +33,7 @@ void Menu::init() {
     for (int i = 0; i < 3; ++i) {
         menuMode->addKeyframe(i, modePositions[i]);
     }
-    menuMode->changeAnimation( Difficulty::convertToInt(_mode));
+    menuMode->changeAnimation(LevelModes::convertToInt(_mode));
 
     menuExit = Sprite::createSprite(glm::vec2(111, 52), glm::vec2(1.f, 1.f),
                                     &ShaderManager::getInstance().getShaderProgram(), &menuExitTexture);
@@ -55,7 +55,7 @@ void Menu::init() {
 
 void Menu::update(int deltaTime) {
     _currentTime +=  static_cast<float>(deltaTime);
-    menuMode->changeAnimation( Difficulty::convertToInt(_mode));
+    menuMode->changeAnimation(LevelModes::convertToInt(_mode));
 }
 
 void Menu::render() {
@@ -104,11 +104,11 @@ void Menu::initTextures() {
 
 void Menu::changeModeUp() {
     switch (_mode) {
-        case Difficulty::Mode::FUN_MODE:
-            _mode = Difficulty::Mode::TRICKY_MODE;
+        case LevelModes::Mode::FUN_MODE:
+            _mode = LevelModes::Mode::TRICKY_MODE;
             break;
-        case Difficulty::Mode::TRICKY_MODE:
-            _mode = Difficulty::Mode::TAXING_MODE;
+        case LevelModes::Mode::TRICKY_MODE:
+            _mode = LevelModes::Mode::TAXING_MODE;
             break;
         default:
             return;
@@ -117,18 +117,18 @@ void Menu::changeModeUp() {
 
 void Menu::changeModeDown() {
     switch (_mode) {
-        case Difficulty::Mode::TAXING_MODE:
-            _mode = Difficulty::Mode::TRICKY_MODE;
+        case LevelModes::Mode::TAXING_MODE:
+            _mode = LevelModes::Mode::TRICKY_MODE;
             break;
-        case Difficulty::Mode::TRICKY_MODE:
-            _mode = Difficulty::Mode::FUN_MODE;
+        case LevelModes::Mode::TRICKY_MODE:
+            _mode = LevelModes::Mode::FUN_MODE;
             break;
         default:
             return;
     }
 }
 
-Difficulty::Mode Menu::getMode() const {
+LevelModes::Mode Menu::getMode() const {
     return _mode;
 }
 

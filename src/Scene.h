@@ -5,7 +5,6 @@
 #include <glm/glm.hpp>
 #include <vector>
 #include "MaskedTexturedQuad.h"
-//#include "Level.h"
 #include "UI.h"
 #include "Word.h"
 #include "IMaskManager.h"
@@ -53,8 +52,6 @@ public:
 
     static VariableTexture &getMaskedMap();
 
-    void setMaskManager(IMaskManager *maskManager);
-
     enum ScreenClickedArea {
         MAP,
         UI,
@@ -81,7 +78,7 @@ public:
 
     void onKeyPressed(const SDL_KeyboardEvent &keyboardEvent) override;
 
-    void setLevel(Difficulty::Mode mode, int i);
+    void setLevel(LevelModes::Mode mode, int i);
 
 private:
     ScreenClickedArea getClickedScreenArea(int mouseX, int mouseY);
@@ -105,13 +102,16 @@ private:
 
     std::unique_ptr<MaskedTexturedQuad> _map;
 
-    IMaskManager *maskManager = nullptr;
+    std::map<Difficulties::Mode, std::unique_ptr<IMaskManager>> _maskManagers;
+    Difficulties::Mode _currentDifficultyMode;
+
     int posX=0, posY=0;
 
     MouseStates mouseState = MouseStates::NONE;
     ScreenMovedArea screenMovedArea = NONE_AREA;
 
     std::unique_ptr<LevelRunner> _levelRunner;
+
 
 };
 

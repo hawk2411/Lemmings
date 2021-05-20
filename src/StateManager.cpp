@@ -9,12 +9,12 @@
 
 #include "StateManager.h"
 
-StateManager::StateManager(Game* game, ShaderManager* shaderManager) :_currentState(States::Type::Menu) {
-    _shaderManager = shaderManager;
+StateManager::StateManager(Game* game, ShaderManager* shaderManager) :_currentState(States::Type::Menu),
+    _shaderManager(shaderManager) {
 
     _gameStates.insert( std::make_pair(States::Type::Menu, unique_ptr<GameState>(new Menu(game))));
-    _gameStates.insert( std::make_pair(States::Type::Scene, unique_ptr<GameState>(new Scene(game, game->getStateManager()))));
-    _gameStates.insert( std::make_pair(States::Type::SceneInfo, unique_ptr<GameState>(new InfoLevel(game))));
+    _gameStates.insert( std::make_pair(States::Type::Scene, unique_ptr<GameState>(new Scene(game, game->getSoundManager()))));
+    _gameStates.insert( std::make_pair(States::Type::SceneInfo, unique_ptr<GameState>(new InfoLevel(game, LevelModes::Mode::FUN_MODE, 0))));
     _gameStates.insert( std::make_pair(States::Type::Result, unique_ptr<GameState>(new Results(game))));
     _gameStates.insert( std::make_pair(States::Type::Instruction, unique_ptr<GameState>(new Instructions(game))));
     _gameStates.insert( std::make_pair(States::Type::Credits, unique_ptr<GameState>(new Credits(game))));
@@ -26,14 +26,14 @@ void StateManager::changeMenu() {
 
 }
 
-void StateManager::changeInfo(Difficulty::Mode levelMode, int levelNum) {
+void StateManager::changeInfo(LevelModes::Mode levelMode, int levelNum) {
     _currentState=States::Type::SceneInfo;
     _gameStates[_currentState]->init();
     dynamic_cast<InfoLevel*>(_gameStates[_currentState].get())->setLevel(levelMode, levelNum);
 
 }
 
-void StateManager::changeScene(Difficulty::Mode levelMode, int levelNum) {
+void StateManager::changeScene(LevelModes::Mode levelMode, int levelNum) {
     _currentState= States::Type::Scene;
 
 

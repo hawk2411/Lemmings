@@ -8,7 +8,7 @@
 #include "Texture.h"
 #include "ShaderProgram.h"
 #include "AnimKeyframes.h"
-#include "Difficulty.h"
+#include "LevelModes.h"
 
 
 // This class is derived from code seen earlier in TexturedQuad but it is also

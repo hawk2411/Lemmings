@@ -7,7 +7,7 @@
 #include "Sprite.h"
 #include "Sound.h"
 #include "Game.h"
-#include "Difficulty.h"
+#include "LevelModes.h"
 
 class Game;
 
@@ -28,7 +28,7 @@ public:
 
     void changeModeDown();
 
-    Difficulty::Mode getMode() const;
+    LevelModes::Mode getMode() const;
 
     void endMusic();
 
@@ -61,7 +61,7 @@ private:
     std::unique_ptr<Sprite> menuMode;
     std::unique_ptr<Sprite> menuPlaying;
 
-    Difficulty::Mode _mode;
+    LevelModes::Mode _mode;
 
     glm::vec2 modePositions[3] = {
             glm::vec2(0, 0),

@@ -5,7 +5,7 @@
 
 #include "LevelRunner.h"
 
-LevelRunner::LevelRunner(SoundManager *soundManager, Difficulty::Mode levelMode, int levelNo) : _deadLemmings(0),
+LevelRunner::LevelRunner(SoundManager *soundManager, LevelModes::Mode levelMode, int levelNo) : _deadLemmings(0),
                                                                                                 _savedLemmings(0),
                                                                                                 _goalLemmingNum(0),
                                                                                                 _releaseRate(0),
@@ -31,9 +31,9 @@ LevelRunner::LevelRunner(SoundManager *soundManager, Difficulty::Mode levelMode,
 LevelRunner::~LevelRunner() = default;
 
 
-void LevelRunner::changeLevel(Difficulty::Mode levelMode, int levelNum) {
+void LevelRunner::changeLevel(LevelModes::Mode levelMode, int levelNum) {
 
-    _levelStartValues == std::make_unique<Level>(levelMode, levelNum);
+    _levelStartValues = std::make_unique<Level>(levelMode, levelNum);
     _currentTime = 0.0f;
 
 

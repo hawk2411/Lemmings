@@ -7,15 +7,15 @@
 #include "Level.h"
 #include "DoorFactory.h"
 #include "TrapdoorFactory.h"
-#include "Difficulty.h"
+#include "LevelModes.h"
 
-Level::Level(Difficulty::Mode difficulty, int levelNo): _actualLevel(levelNo), _actualMode(difficulty) {
+Level::Level(LevelModes::Mode difficulty, int levelNo): _actualLevel(levelNo), _actualMode(difficulty) {
 
     initFromFile(getFilename(difficulty, levelNo));
 }
 
-std::string Level::getFilename(Difficulty::Mode levelMode, int levelNo) {
-    return "levels/" + Difficulty::convertToString(levelMode) + "-" + to_string(levelNo) + ".txt";
+std::string Level::getFilename(LevelModes::Mode levelMode, int levelNo) {
+    return "levels/" + LevelModes::convertToString(levelMode) + "-" + to_string(levelNo) + ".txt";
 }
 
 void Level::initFromFile(const string &file) {

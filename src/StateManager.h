@@ -22,9 +22,9 @@ public:
 
     void changeMenu();
 
-    void changeInfo(Difficulty::Mode levelMode, int levelNum);
+    void changeInfo(LevelModes::Mode levelMode, int levelNum);
 
-    void changeScene(Difficulty::Mode levelMode, int levelNum);
+    void changeScene(LevelModes::Mode levelMode, int levelNum);
 
     void changeResults(int goalPercentage, int currentPercentage);
 

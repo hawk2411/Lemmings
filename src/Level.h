@@ -8,12 +8,12 @@
 #include "VariableTexture.h"
 #include "Door.h"
 #include "Trapdoor.h"
-#include "Difficulty.h"
+#include "LevelModes.h"
 
 
 struct Level {
 
-    Level(Difficulty::Mode difficulty, int levelNo);
+    Level(LevelModes::Mode difficulty, int levelNo);
 
 //    static Level &currentLevel() {
 //        static Level currentLevel;
@@ -43,12 +43,12 @@ struct Level {
     string _mapTexturePath;
     string _mapMaskPath;
     int _actualLevel;
-    Difficulty::Mode _actualMode;
+    LevelModes::Mode _actualMode;
 
 private:
     void initFromFile(const string &file);
 
-    static std::string getFilename(Difficulty::Mode levelMode, int levelNo);
+    static std::string getFilename(LevelModes::Mode levelMode, int levelNo);
 };
 
 #endif // _LEVEL_INCLUDE

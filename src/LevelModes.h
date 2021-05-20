@@ -2,20 +2,20 @@
 // Created by hawk on 19.05.21.
 //
 
-#ifndef LEMMINGS_DIFFICULTY_H
-#define LEMMINGS_DIFFICULTY_H
+#ifndef LEMMINGS_LEVELMODES_H
+#define LEMMINGS_LEVELMODES_H
 
 #include <string>
 #include "LemmingsException.h"
 
-struct Difficulty {
+struct LevelModes {
     enum class Mode {
         FUN_MODE = 0,
         TRICKY_MODE = 1,
         TAXING_MODE = 2
     };
 
-    static std::string convertToString(const Difficulty::Mode &mode) {
+    static std::string convertToString(const LevelModes::Mode &mode) {
         switch (mode) {
             case Mode::FUN_MODE:
                 return "fun";
@@ -28,13 +28,13 @@ struct Difficulty {
         }
     }
 
-    static int convertToInt(const Difficulty::Mode &mode) {
+    static int convertToInt(const LevelModes::Mode &mode) {
         switch (mode) {
-            case Difficulty::Mode::FUN_MODE:
+            case LevelModes::Mode::FUN_MODE:
                 return 0;
-            case Difficulty::Mode::TRICKY_MODE:
+            case LevelModes::Mode::TRICKY_MODE:
                 return 1;
-            case Difficulty::Mode::TAXING_MODE:
+            case LevelModes::Mode::TAXING_MODE:
                 return 2;
             default:
                 throw LemmingsException("Unknown difficulty level-");
@@ -42,4 +42,4 @@ struct Difficulty {
     }
 };
 
-#endif //LEMMINGS_DIFFICULTY_H
+#endif //LEMMINGS_LEVELMODES_H

@@ -7,7 +7,7 @@
 
 class HardMaskManager : public IMaskManager {
 public:
-
+    explicit HardMaskManager(Level* level) : IMaskManager(level){}
     void init() override;
 
     void update() override;

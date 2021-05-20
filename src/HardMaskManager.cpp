@@ -5,8 +5,8 @@
 #define SEC_TO_REAPPEAR 10
 
 void HardMaskManager::init() {
-    int levelHeight = Level::currentLevel().getLevelAttributes()->levelSize.y;
-    int levelWidth = Level::currentLevel().getLevelAttributes()->levelSize.x;
+    int levelHeight = _level->levelSize.y;
+    int levelWidth = _level->levelSize.x;
     timeWhenDisappear = std::vector<std::vector<int>>(levelWidth, std::vector<int>(levelHeight, -1));
     timeToAppear = std::vector<std::vector<int>>(levelWidth, std::vector<int>(levelHeight, -1));
 
@@ -15,8 +15,8 @@ void HardMaskManager::init() {
 void HardMaskManager::update() {
     int currentTime = LevelRunner::getInstance().getCurrentTime() * 10;
 
-    int levelHeight = Level::currentLevel().getLevelAttributes()->levelSize.y;
-    int levelWidth = Level::currentLevel().getLevelAttributes()->levelSize.x;
+    int levelHeight = _level->levelSize.y;
+    int levelWidth = _level->levelSize.x;
 
     for (int i = 0; i < levelWidth; ++i) {
         for (int j = 0; j < levelHeight; ++j) {
@@ -36,7 +36,7 @@ void HardMaskManager::eraseMask(int x, int y) {
         timeWhenDisappear[x][y] = currentTime;
         timeToAppear[x][y] = currentTime + rand() % 6 + (SEC_TO_REAPPEAR + rand() % 3) * 10;
 
-        Level::currentLevel().getLevelAttributes()->maskedMap.setPixel(x, y, 0);
+        _level->maskedMap.setPixel(x, y, 0);
     }
 }
 
@@ -44,21 +44,21 @@ void HardMaskManager::applyMask(int x, int y) {
     timeWhenDisappear[x][y] = -1;
     timeToAppear[x][y] = -1;
 
-    Level::currentLevel().getLevelAttributes()->maskedMap.setPixel(x, y, 255);
+    _level->maskedMap.setPixel(x, y, 255);
 
 }
 
 void HardMaskManager::eraseSpecialMask(int x, int y) {
-    Level::currentLevel().getLevelAttributes()->maskedMap.setPixel(x, y, 0);
+    _level->maskedMap.setPixel(x, y, 0);
 
 }
 
 void HardMaskManager::applySpecialMask(int x, int y) {
-    Level::currentLevel().getLevelAttributes()->maskedMap.setPixel(x, y, 200);
+    _level->maskedMap.setPixel(x, y, 200);
 }
 
 char HardMaskManager::getPixel(int x, int y) {
-    return Level::currentLevel().getLevelAttributes()->maskedMap.pixel(x, y);
+    return _level->maskedMap.pixel(x, y);
 }
 
 void HardMaskManager::regenerateMask(int x, int y) {

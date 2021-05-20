@@ -12,11 +12,11 @@
 class LevelRunner {
 
 public:
-    LevelRunner(SoundManager *soundManager, Difficulty::Mode levelMode, int levelNo);
+    LevelRunner(SoundManager *soundManager, LevelModes::Mode levelMode, int levelNo);
     ~LevelRunner();
 
 
-    void changeLevel(Difficulty::Mode levelMode, int levelNum);
+    void changeLevel(LevelModes::Mode levelMode, int levelNum);
 
     void update(int deltaTime);
 
@@ -61,7 +61,7 @@ public:
     void decreaseJobCount(int index);
 
     void endMusic();
-
+    Level* getLevelAttributes()const{return _levelStartValues.get();}
 
 private:
     void spawnLemmings();

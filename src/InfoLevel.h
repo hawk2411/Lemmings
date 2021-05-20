@@ -7,14 +7,14 @@
 #include "IKeyboardManager.h"
 #include "IMouseManager.h"
 
-#include "Difficulty.h"
+#include "LevelModes.h"
 #include "GameState.h"
 #include "Game.h"
 
 class InfoLevel : public GameState{
 
 public:
-    explicit InfoLevel(Game* game, Difficulty::Mode mode, int level);
+    explicit InfoLevel(Game* game, LevelModes::Mode mode, int level);
     ~InfoLevel() override;
 
     // GameState override
@@ -25,7 +25,7 @@ public:
 
     void render()override;
 
-    void setLevel(Difficulty::Mode levelMode, int numLevel);
+    void setLevel(LevelModes::Mode levelMode, int numLevel);
     //===================================================================
     //KeyboardManager override
     void onKeyPressed(const SDL_KeyboardEvent &keyboardEvent) override;;
@@ -33,7 +33,7 @@ public:
     void mouseMoved(int mouseX, int mouseY, bool bLeftButton, bool bRightButton) override;
 
     //===================================================================
-    Difficulty::Mode getMode() const;
+    LevelModes::Mode getMode() const;
 
     int getLevel() const;
 
@@ -51,7 +51,7 @@ private:
     std::unique_ptr<Word> _playWord;
     std::unique_ptr<Word> _menuWord;
 
-    Difficulty::Mode _mode;
+    LevelModes::Mode _mode;
     int _level;
 
 };
