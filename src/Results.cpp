@@ -3,6 +3,7 @@
 #include "ShaderManager.h"
 #include "LevelRunner.h"
 #include "StateManager.h"
+#include "EventCreator.h"
 
 #include "Results.h"
 
@@ -177,35 +178,44 @@ void Results::onKeyPressed(const SDL_KeyboardEvent &keyboardEvent) {
             break;
         case SDLK_RETURN: {
             int selected = getSelectedButton();
-            int currentLevel = LevelRunner::getInstance().getActualLevel();
-            int currentMode = LevelRunner::getInstance().getActualMode();
+            int currentLevel = _level;
+            //int currentMode = LevelRunner::getInstance().getActualMode();
 
             switch (selected) {
                 case 0: // RETRY
-                    StateManager::instance().changeInfo(currentMode, currentLevel);
+                    // TODO
+                    //StateManager::instance().changeInfo(currentMode, currentLevel);
+                    EventCreator::sendSimpleUserEvent(CHANGE_TO_INFO, new int(LevelModes::convertToInt(_levelMode)), new int(_level));
                     break;
 
                 case 1: // CONTINUE
 
-                    switch (currentMode) {
-                        case FUN_MODE:
-                            if (currentLevel < 4) StateManager::instance().changeInfo(currentMode, currentLevel + 1);
-                            else if (currentLevel == 4) StateManager::instance().changeInfo(currentMode, 7);
-                            else StateManager::instance().changeInfo(TRICKY_MODE, 1);
+                    switch (_levelMode) {
+                        case LevelModes::Mode::FUN_MODE:
+                            if (currentLevel < 4) {
+                                EventCreator::sendSimpleUserEvent(CHANGE_TO_INFO, new int(LevelModes::convertToInt(_levelMode)), new int(_level+1));
+                            } else if (currentLevel == 4) {
+                                EventCreator::sendSimpleUserEvent(CHANGE_TO_INFO, new int(LevelModes::convertToInt(_levelMode)), new int(7));
+                            } else {
+                                EventCreator::sendSimpleUserEvent(CHANGE_TO_INFO, new int(LevelModes::convertToInt(LevelModes::Mode::TRICKY_MODE)), new int(1));
+                            }
                             break;
-                        case TRICKY_MODE:
-                            if (currentLevel < 3) StateManager::instance().changeInfo(currentMode, currentLevel + 1);
-                            else StateManager::instance().changeInfo(TAXING_MODE, 1);
+                        case LevelModes::Mode::TRICKY_MODE:
+                            if (currentLevel < 3) {
+                                EventCreator::sendSimpleUserEvent(CHANGE_TO_INFO, new int(LevelModes::convertToInt(_levelMode)), new int(_level+1));
+                            } else {
+                                EventCreator::sendSimpleUserEvent(CHANGE_TO_INFO, new int(LevelModes::convertToInt(LevelModes::Mode::TAXING_MODE)), new int(1));
+                            }
                             break;
-                        case TAXING_MODE:
-                            StateManager::instance().changeMenu();
+                        case LevelModes::Mode::TAXING_MODE:
+                            EventCreator::sendSimpleUserEvent(CHANGE_TO_MENU);
                             break;
                     }
 
                     break;
 
                 case 2: // MENU
-                    StateManager::instance().changeMenu();
+                    EventCreator::sendSimpleUserEvent(CHANGE_TO_MENU);
                     break;
             }
         }

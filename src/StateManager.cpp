@@ -1,7 +1,7 @@
 #include "Menu.h"
-//#include "InfoLevel.h"
+#include "InfoLevel.h"
 #include "Scene.h"
-//#include "Results.h"
+#include "Results.h"
 #include "Credits.h"
 #include "Instructions.h"
 //#include "LevelRunner.h"
@@ -15,10 +15,10 @@ StateManager::StateManager(Game *game, ShaderManager *shaderManager) : _currentS
                                                                        _shaderManager(shaderManager) {
 
     _gameStates.insert(std::make_pair(States::Type::Menu, unique_ptr<GameState>(new Menu(game))));
-    //_gameStates.insert( std::make_pair(States::Type::Scene, unique_ptr<GameState>(new Scene(game, game->getSoundManager()))));
+    _gameStates.insert( std::make_pair(States::Type::Scene, unique_ptr<GameState>(new Scene(game, game->getSoundManager()))));
     _gameStates.insert(std::make_pair(States::Type::SceneInfo,
                                       unique_ptr<GameState>(new InfoLevel(game, LevelModes::Mode::FUN_MODE, 0))));
-//    _gameStates.insert( std::make_pair(States::Type::Result, unique_ptr<GameState>(new Results(game))));
+    _gameStates.insert( std::make_pair(States::Type::Result, unique_ptr<GameState>(new Results(game, LevelModes::Mode::FUN_MODE, 0))));
     _gameStates.insert(std::make_pair(States::Type::Instruction, unique_ptr<GameState>(new Instructions(game))));
     _gameStates.insert(std::make_pair(States::Type::Credits, unique_ptr<GameState>(new Credits(game))));
     setCurrentState(States::Type::Menu);
@@ -112,7 +112,7 @@ void StateManager::onUserEvent(const SDL_UserEvent &event) {
             int *mode = static_cast<int *>(event.data1);
             int *number = static_cast<int *>(event.data2);
 
-            changeInfo(LevelModes::getFromInt(*mode), *number);
+            changeScene(LevelModes::getFromInt(*mode), *number);
             delete mode;
             delete number;
             break;

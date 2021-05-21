@@ -14,7 +14,7 @@
 #include "Scene.h"
 
 Scene::Scene(Game *game, SoundManager *soundManager) : GameState(game) {
-    _levelRunner = std::make_unique<LevelRunner>(soundManager, LevelModes::Mode::FUN_MODE, 0);
+    _levelRunner = std::make_unique<LevelRunner>(soundManager, LevelModes::Mode::FUN_MODE, 1);
     _maskManagers.insert(std::make_pair(Difficulties::Mode::Easy, std::unique_ptr<IMaskManager>(
             new EasyMaskManager(_levelRunner->getLevelAttributes()))));
     _maskManagers.insert(std::make_pair(Difficulties::Mode::Hard, std::unique_ptr<IMaskManager>(

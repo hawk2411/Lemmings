@@ -8,7 +8,7 @@
 class Results : public GameState {
 
 public:
-    Results(Game *game) : GameState(game) {}
+    Results(Game *game, LevelModes::Mode levelMode, int level) : GameState(game), _levelMode(levelMode), _level(level) {}
 
     enum ResultsButtonName {
         RETRY,
@@ -36,10 +36,14 @@ public:
 
     void mouseMoved(int mouseX, int mouseY, bool bLeftButton, bool bRightButton) override;
 
+    void setLevel(LevelModes::Mode mode, int level){ _levelMode= mode; _level = level;}
+
 private:
     void initButtons();
 
     void renderButtons();
+
+    vector<ResultsButtonName> possibleButtons;
 
     Texture backgroundTexture;
     std::unique_ptr<Sprite> background;
@@ -51,10 +55,11 @@ private:
     std::unique_ptr<Sprite> retryButton;
     std::unique_ptr<Sprite> menuButton;
 
-    int selectedButton;
-    bool passedLevel;
+    int selectedButton{};
+    bool passedLevel{};
 
-    vector<ResultsButtonName> possibleButtons;
+    LevelModes::Mode _levelMode;
+    int _level;
 
 };
 

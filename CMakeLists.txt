@@ -88,6 +88,8 @@ add_executable(lemmings src/main.cpp
         src/LemmingsException.cpp
         src/TimerEventService.h
         src/TimerEventService.cpp
+        src/EventCreator.h
+        src/EventCreator.cpp
         libs/SOIL/src/image_helper.c
         libs/SOIL/src/image_helper.h
         libs/SOIL/src/image_DXT.h
