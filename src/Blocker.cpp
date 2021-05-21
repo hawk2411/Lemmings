@@ -5,7 +5,7 @@
 #define JUMP_HEIGHT 96
 #define FALL_STEP 4
 
-Blocker::Blocker() : Job(Jobs::BLOCKER), state(BlockerState::BLOCKING_STATE) {
+Blocker::Blocker(SoundManager *soundManager) : Job(Jobs::BLOCKER,soundManager), state(BlockerState::BLOCKING_STATE) {
 
 }
 

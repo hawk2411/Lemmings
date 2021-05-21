@@ -22,7 +22,7 @@ public:
 
     void update(int deltaTime);
 
-    void render();
+    void render(glm::vec2 cameraPos);
 
 private:
     std::unique_ptr<Sprite> _sprite;

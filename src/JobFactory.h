@@ -2,35 +2,36 @@
 #define _JOBFACTORY_INCLUDE
 
 #include "Job.h"
+#include "SoundManager.h"
 
 class JobFactory {
 private:
-    static Job *createWalkerJob();
+    static Job *createWalkerJob(SoundManager *soundManager);
 
-    static Job *createDiggerJob();
+    static Job *createDiggerJob(SoundManager *soundManager);
 
-    static Job *createEscaperJob();
+    static Job *createEscaperJob(SoundManager *soundManager);
 
-    static Job *createExploderJob();
+    static Job *createExploderJob(SoundManager *soundManager);
 
-    static Job *createMinerJob();
+    static Job *createMinerJob(SoundManager *soundManager);
 
-    static Job *createFloaterJob();
+    static Job *createFloaterJob(SoundManager *soundManager);
 
-    static Job *createBasherJob();
+    static Job *createBasherJob(SoundManager *soundManager);
 
-    static Job *createBlockerJob();
+    static Job *createBlockerJob(SoundManager *soundManager);
 
-    static Job *createFallerJob();
+    static Job *createFallerJob(SoundManager *soundManager);
 
-    static Job *createClimberJob();
+    static Job *createClimberJob(SoundManager *soundManager);
 
-    static Job *createBuilderJob();
+    static Job *createBuilderJob(SoundManager *soundManager);
 
 
 public:
 
-    static Job* createJob(Jobs jobToCreate);
+    static Job *createJob(Jobs jobToCreate, SoundManager *soundManager);
 };
 
 

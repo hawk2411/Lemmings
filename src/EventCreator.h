@@ -13,7 +13,7 @@
 #define CHANGE_TO_INFO 13
 #define CHANGE_TO_SCENE 14
 #define CHANGE_TO_RESULT 15
-
+#define CREATE_NEW_PARTICLE_SYSTEM 22
 class EventCreator {
 
 public:

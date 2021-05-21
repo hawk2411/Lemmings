@@ -8,7 +8,7 @@
 
 class Escaper : public Job {
 public:
-    Escaper();
+    Escaper(SoundManager *soundManager);
 
     void initAnims(ShaderProgram &shaderProgram);
 

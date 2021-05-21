@@ -11,9 +11,9 @@
 #define FALL_STEP 4
 
 
-Lemming::Lemming(const glm::vec2 &initialPosition) {
+Lemming::Lemming(const glm::vec2 &initialPosition, SoundManager *soundManager) : _soundManager(soundManager) {
     this->shaderProgram = &ShaderManager::getInstance().getShaderProgram();
-    _job = JobFactory::createJob(Jobs::FALLER);
+    _job = JobFactory::createJob(Jobs::FALLER, _soundManager);
     _job->initAnims(*shaderProgram);
     _position = initialPosition;
     _job->sprite()->setPosition(_position);
@@ -78,7 +78,7 @@ void Lemming::changeJob(Jobs nextJob) {
         oldPosition = _job->sprite()->getPosition();
         delete _job;
     }
-    _job = JobFactory::createJob(nextJob);
+    _job = JobFactory::createJob(nextJob, _soundManager);
     if(_job == nullptr)
         return;
 

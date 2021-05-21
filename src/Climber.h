@@ -9,7 +9,7 @@ class Climber : public Job {
 
 
 public:
-    Climber();
+    Climber(SoundManager *soundManager);
 
     void initAnims(ShaderProgram &shaderProgram) override;
 

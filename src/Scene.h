@@ -14,6 +14,7 @@
 #include "Cursor.h"
 #include "LevelRunner.h"
 #include "JobAssigner.h"
+#include "Scroller.h"
 
 // Scene contains all the entities of our game.
 // It is responsible for updating and render them.
@@ -125,7 +126,7 @@ private:
     UserInterface _ui;
     JobAssigner _jobAssigner;
     ParticleSystemManager _particleSystemManager;
-
+    Scroller _scroller;
 };
 
 #endif // _SCENE_INCLUDE

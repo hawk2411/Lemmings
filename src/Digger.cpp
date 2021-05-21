@@ -7,7 +7,7 @@
 #define JUMP_HEIGHT 96
 #define FALL_STEP 4
 
-Digger::Digger() : Job(Jobs::DIGGER) {
+Digger::Digger(SoundManager *soundManager) : Job(Jobs::DIGGER, soundManager) {
 
 }
 

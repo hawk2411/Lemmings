@@ -21,7 +21,7 @@ enum LemmingAnims
 };
 */
 
-Job::Job(Jobs currentJob): isFinished(false), _currentJob(currentJob), _nextJob(Jobs::UNKNOWN), walkingRight(true){
+Job::Job(Jobs currentJob, SoundManager* soundManager ): isFinished(false), _currentJob(currentJob), _nextJob(Jobs::UNKNOWN), walkingRight(true), _soundManager(soundManager){
 }
 
 Job::~Job() {

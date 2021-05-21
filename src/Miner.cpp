@@ -13,7 +13,7 @@ enum MinerAnims {
     MINER_RIGHT, MINER_LEFT
 };
 
-Miner::Miner() : Job(Jobs::MINER) {
+Miner::Miner(SoundManager *soundManager) : Job(Jobs::MINER, soundManager) {
 
 }
 

@@ -2,25 +2,21 @@
 #define _SCROLLER_INCLUDE
 
 
+#include <glm/vec2.hpp>
+
 class Scroller {
 
 public:
-    static Scroller &getInstance() {
-        static Scroller instance; // Guaranteed to be destroyed.
-        // Instantiated on first use.
-        return instance;
-    };
+    void scrollLeft(glm::vec2 cameraPos, int levelSize);
 
-    void scrollLeft();
+    void scrollRight(glm::vec2 cameraPos, int levelSize);
 
-    void scrollRight();
+    bool isScrolled() const;
 
-    bool isScrolled();
-
-    void iScroll();
+    void setScroll(bool isScroll);
 
 private:
-    void scroll(int scrollDisplacement);
+    void scroll(int scrollDisplacement, glm::vec2 cameraPos, int levelSize);
 
     bool scrolled;
 };

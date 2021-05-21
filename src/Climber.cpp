@@ -9,7 +9,7 @@ enum ClimberAnims {
     LEDGING_LEFT, LEDGING_RIGHT
 };
 
-Climber::Climber() : Job(Jobs::CLIMBER) {
+Climber::Climber(SoundManager* soundManager) : Job(Jobs::CLIMBER, soundManager) {
     state = CLIMBING_RIGHT_STATE;
 }
 

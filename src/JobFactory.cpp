@@ -12,75 +12,75 @@
 #include "Climber.h"
 #include "Builder.h"
 
-Job *JobFactory::createWalkerJob() {
-    return new Walker();
+Job *JobFactory::createWalkerJob(SoundManager *soundManager) {
+    return new Walker(soundManager);
 }
 
-Job *JobFactory::createDiggerJob() {
-    return new Digger();
+Job *JobFactory::createDiggerJob(SoundManager *soundManager) {
+    return new Digger(soundManager);
 }
 
-Job *JobFactory::createEscaperJob() {
-    return new Escaper();
+Job *JobFactory::createEscaperJob(SoundManager *soundManager) {
+    return new Escaper(soundManager);
     }
 
-Job *JobFactory::createExploderJob() {
-    return new Exploder();
+Job *JobFactory::createExploderJob(SoundManager *soundManager) {
+    return new Exploder(soundManager);
     }
 
-Job *JobFactory::createMinerJob() {
-    return new Miner();
+Job *JobFactory::createMinerJob(SoundManager *soundManager) {
+    return new Miner(soundManager);
     }
 
-Job *JobFactory::createFloaterJob() {
-    return new Floater();
+Job *JobFactory::createFloaterJob(SoundManager *soundManager) {
+    return new Floater(soundManager);
 }
 
-Job *JobFactory::createBasherJob() {
-    return new Basher();
+Job *JobFactory::createBasherJob(SoundManager *soundManager) {
+    return new Basher(soundManager);
 }
 
-Job *JobFactory::createBlockerJob() {
-    return new Blocker();
+Job *JobFactory::createBlockerJob(SoundManager *soundManager) {
+    return new Blocker(soundManager);
 }
 
-Job *JobFactory::createFallerJob() {
-    return new Faller();
+Job *JobFactory::createFallerJob(SoundManager *soundManager) {
+    return new Faller(soundManager);
 }
 
-Job *JobFactory::createClimberJob() {
-    return new Climber();
+Job *JobFactory::createClimberJob(SoundManager *soundManager) {
+    return new Climber(soundManager);
 }
 
-Job *JobFactory::createBuilderJob() {
-    return new Builder();
+Job *JobFactory::createBuilderJob(SoundManager *soundManager) {
+    return new Builder(soundManager);
 }
 
-Job *JobFactory::createJob(Jobs jobToCreate) {
+Job *JobFactory::createJob(Jobs jobToCreate, SoundManager *soundManager) {
     switch(jobToCreate)
     {
         case Jobs::WALKER:
-            return createWalkerJob();
+            return createWalkerJob(soundManager);
         case Jobs::DIGGER:
-            return createDiggerJob();
+            return createDiggerJob(soundManager);
         case Jobs::ESCAPER:
-            return createEscaperJob();
+            return createEscaperJob(soundManager);
         case Jobs::EXPLODER:
-            return createExploderJob();
+            return createExploderJob(soundManager);
         case Jobs::MINER:
-            return createMinerJob();
+            return createMinerJob(soundManager);
         case Jobs::FLOATER:
-            return createFloaterJob();
+            return createFloaterJob(soundManager);
         case Jobs::BASHER:
-            return createBasherJob();
+            return createBasherJob(soundManager);
         case Jobs::BLOCKER:
-            return createBlockerJob();
+            return createBlockerJob(soundManager);
         case Jobs::FALLER:
-            return createFallerJob();
+            return createFallerJob(soundManager);
         case Jobs::CLIMBER:
-            return createClimberJob();
+            return createClimberJob(soundManager);
         case Jobs::BUILDER:
-            return createBuilderJob();
+            return createBuilderJob(soundManager);
         default:
             return nullptr;
     }

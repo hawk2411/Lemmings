@@ -12,13 +12,13 @@ Instructions::Instructions(Game *game) : actualPage(0),
 
     _music = make_unique<Sound>(game->getSoundManager(), "sounds/InstructionsSong.ogg",
                                 FMOD_LOOP_NORMAL | FMOD_CREATESTREAM);
-    _leftKey = KeyFactory::instance().createLeftKey();
-    _rightKey = KeyFactory::instance().createRightKey();
+    _leftKey = KeyFactory::createLeftKey();
+    _rightKey = KeyFactory::createRightKey();
     _instructionsLevelTexture.loadFromFile("images/menu/menuBackground.png", TEXTURE_PIXEL_FORMAT_RGBA);
     _instructionsLevelTexture.setMinFilter(GL_NEAREST);
     _instructionsLevelTexture.setMagFilter(GL_NEAREST);
     _instructionsWord = make_unique<Word>("INSTRUCTIONS");
-    _escapeKey = KeyFactory::instance().createEscapeKey();
+    _escapeKey = KeyFactory::createEscapeKey();
     _instructionsLevelSprite = Sprite::createSprite(glm::vec2(CAMERA_WIDTH, CAMERA_HEIGHT), glm::vec2(1.f, 1.f),
                                                     &ShaderManager::getInstance().getShaderProgram(),
                                                     &_instructionsLevelTexture);

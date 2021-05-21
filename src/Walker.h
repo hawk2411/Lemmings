@@ -13,7 +13,7 @@ class Walker : public Job {
 
 
 public:
-    Walker();
+    Walker(SoundManager *soundManager);
     void initAnims(ShaderProgram &shaderProgram) override;
 
     void updateStateMachine(int deltaTime, Level *levelAttributes, IMaskManager *mask) override;

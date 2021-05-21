@@ -23,10 +23,10 @@ void ParticleSystemManager::update(int deltaTime) {
     }
 }
 
-void ParticleSystemManager::render() {
+void ParticleSystemManager::render(glm::vec2 cameraPos) {
     for (int i = 0; i < particleSystems.size(); ++i) {
         if (particleSystems[i]->notFinished()) {
-            particleSystems[i]->render();
+            particleSystems[i]->render(cameraPos);
         }
     }
 }

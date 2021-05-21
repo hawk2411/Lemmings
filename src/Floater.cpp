@@ -9,7 +9,7 @@ enum FloaterAnims {
     FLOATER_OPENING_RIGHT, FLOATER_OPENING_LEFT, FLOATER_FALLING_RIGHT, FLOATER_FALLING_LEFT
 };
 
-Floater::Floater() : Job(Jobs::FLOATER) {
+Floater::Floater(SoundManager *soundManager) : Job(Jobs::FLOATER, soundManager) {
 
 }
 

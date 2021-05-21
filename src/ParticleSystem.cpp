@@ -33,12 +33,12 @@ void ParticleSystem::update(int deltaTime) {
 
 }
 
-void ParticleSystem::render() {
+void ParticleSystem::render(glm::vec2 cameraPos) {
     for (int i = 0; i < numParticles; ++i) {
-        particles[i]->render();
+        particles[i]->render(cameraPos);
     }
 }
 
-bool ParticleSystem::notFinished() {
+bool ParticleSystem::notFinished() const {
     return alive;
 }

@@ -7,7 +7,7 @@
 
 class Faller : public Job {
 public:
-    Faller();
+    Faller(SoundManager *soundManager);
     ~Faller() override;
     void initAnims(ShaderProgram &shaderProgram) override;
 

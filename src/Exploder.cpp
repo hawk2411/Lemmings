@@ -1,16 +1,18 @@
-#include "Exploder.h"
 #include "Game.h"
 #include "Scene.h"
 #include "Utils.h"
 #include "ParticleSystemManager.h"
 #include "LevelRunner.h"
+#include "EventCreator.h"
+
+#include "Exploder.h"
 
 enum ExploderAnims {
     EXPLODER,
     BURNING_DEATH
 };
 
-Exploder::Exploder() : Job(Jobs::EXPLODER) {
+Exploder::Exploder(SoundManager *soundManager) : Job(Jobs::EXPLODER, soundManager) {
 
 }
 
@@ -55,7 +57,7 @@ void Exploder::updateStateMachine(int deltaTime, Level *levelAttributes, IMaskMa
             break;
         case BURNING_DEATH_STATE:
             if (_jobSprite->isInLastFrame()) {
-                explode(nullptr);
+                explode(mask);
                 isFinished = true;
                 _nextJob = Jobs::UNKNOWN;
             }
@@ -83,8 +85,8 @@ void Exploder::explode(IMaskManager *mask) {
         }
     }
     posBase += glm::ivec2(8, 15);
-
-    ParticleSystemManager::getInstance().createNewParticleSystem(posBase);
+    auto eventData = new glm::vec2(posBase);
+    EventCreator::sendSimpleUserEvent(CREATE_NEW_PARTICLE_SYSTEM, eventData);
 }
 
 

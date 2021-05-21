@@ -11,7 +11,7 @@ class Builder : public Job {
 
 
 public:
-    Builder();
+    Builder(SoundManager *soundManager);
 
     void initAnims(ShaderProgram &shaderProgram) override;
 

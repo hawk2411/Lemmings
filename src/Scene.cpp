@@ -40,9 +40,9 @@ void Scene::update(int deltaTime) {
     update();
     _maskManagers[_currentDifficultyMode].get()->update(deltaTime);
 
-    if (Scroller::getInstance().isScrolled()) {
+    if (_scroller.isScrolled()) {
         initMap();
-        Scroller::getInstance().iScroll();
+        _scroller.setScroll(false);
     }
 
     if (paused) {
@@ -77,7 +77,7 @@ void Scene::render() {
 
     ShaderManager::getInstance().useShaderProgram();
     _levelRunner->render();
-    _particleSystemManager.render();
+    _particleSystemManager.render(_levelRunner->getLevelAttributes()->cameraPos);
     _ui.render();
     _cursor.render();
 }
@@ -226,10 +226,10 @@ void Scene::update() {
     updateCursorPosition();
 
     if (screenMovedArea == ScreenMovedArea::SCROLL_AREA_LEFT) {
-        Scroller::getInstance().scrollLeft();
+        _scroller.scrollLeft(_levelRunner->getLevelAttributes()->cameraPos, _levelRunner->getLevelAttributes()->levelSize.x);
         _cursor.setScrollLeftCursor();
     } else if (screenMovedArea == ScreenMovedArea::SCROLL_AREA_RIGHT) {
-        Scroller::getInstance().scrollRight();
+        _scroller.scrollRight(_levelRunner->getLevelAttributes()->cameraPos, _levelRunner->getLevelAttributes()->levelSize.x);
         _cursor.setScrollRightCursor();
     } else if (screenMovedArea == ScreenMovedArea::LEVEL) {
         int lemmingIndex = _levelRunner->getLemmingIndexInPos(posX, posY);

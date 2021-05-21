@@ -7,7 +7,7 @@
 
 class Exploder : public Job {
 public:
-    Exploder();
+    Exploder(SoundManager *soundManager);
 
     void initAnims(ShaderProgram &shaderProgram);
 

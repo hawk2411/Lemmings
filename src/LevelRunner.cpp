@@ -108,7 +108,7 @@ void LevelRunner::spawnLemmings() {
     if (elapsedTimeSinceLastLemming >= timeToNextLemming) {
         --_availableLemmings;
         _lastTimeSpawnedLemming = static_cast<int>(_currentTime);
-        auto *newLemming = new Lemming(_levelStartValues->_trapdoor->getEnterPosition());
+        auto *newLemming = new Lemming(_levelStartValues->_trapdoor->getEnterPosition(), _soundManager);
         newLemming->setWalkingRight(true);
         _lemmings.insert(newLemming);
 

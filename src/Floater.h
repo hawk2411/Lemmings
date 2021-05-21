@@ -7,7 +7,7 @@
 
 class Floater : public Job {
 public:
-    Floater();
+    Floater(SoundManager *soundManager);
 
     void initAnims(ShaderProgram &shaderProgram) override;
 

@@ -7,6 +7,7 @@
 #include "Countdown.h"
 #include "Level.h"
 #include "IMaskManager.h"
+#include "SoundManager.h"
 
 
 // Lemming is basically a Sprite that represents one lemming. As such it has
@@ -18,7 +19,7 @@ class Lemming {
 public:
     Lemming() {};
 
-    Lemming(const glm::vec2 &initialPosition);
+    Lemming(const glm::vec2 &initialPosition, SoundManager *soundManager);
 
     void update(int deltaTime, Level *levelAttributes, IMaskManager *mask);
 
@@ -49,6 +50,7 @@ private:
     bool _alive;
     bool _isSaved;
     glm::vec2 _position;
+    SoundManager* _soundManager;
 
     bool outOfMap(const glm::vec2 &levelSize);
 

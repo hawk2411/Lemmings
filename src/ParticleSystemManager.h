@@ -13,7 +13,7 @@ public:
 
     void update(int deltaTime);
 
-    void render();
+    void render(glm::vec2 cameraPos);
 
     bool finished();
 

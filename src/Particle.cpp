@@ -43,9 +43,9 @@ void Particle::update(int deltaTime) {
     _speed += glm::vec2(0, 0.25);
 }
 
-void Particle::render() {
+void Particle::render(glm::vec2 cameraPos) {
     glm::vec2 oldPosition = _sprite->getPosition();
-    _sprite->setPosition(oldPosition - Level::currentLevel().getLevelAttributes()->cameraPos);
+    _sprite->setPosition(oldPosition - cameraPos);
     _sprite->render();
     _sprite->setPosition(oldPosition);
 }
