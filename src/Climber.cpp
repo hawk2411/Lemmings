@@ -69,12 +69,12 @@ void Climber::updateStateMachine(int deltaTime, Level *levelAttributes, IMaskMan
         case WALKING_LEFT_STATE:
             _jobSprite->incPosition(glm::vec2(-1, -1));
 
-            if (collision()) {
+            if (collision(levelAttributes->maskedMap)) {
                 _jobSprite->decPosition(glm::vec2(-1, -1));
                 _jobSprite->changeAnimation(CLIMBING_LEFT);
                 state = CLIMBING_LEFT_STATE;
             } else {
-                fall = collisionFloor(3);
+                fall = collisionFloor(3, levelAttributes->maskedMap);
                 if (fall > 0) {
                     _jobSprite->incPosition(glm::vec2(0, 1));
                 }
@@ -98,13 +98,13 @@ void Climber::updateStateMachine(int deltaTime, Level *levelAttributes, IMaskMan
         case WALKING_RIGHT_STATE:
             _jobSprite->incPosition(glm::vec2(1, -1));
 
-            if (collision()) {
+            if (collision(levelAttributes->maskedMap)) {
                 _jobSprite->decPosition(glm::vec2(1, -1));
                 _jobSprite->changeAnimation(CLIMBING_RIGHT);
                 state = CLIMBING_RIGHT_STATE;
 
             } else {
-                fall = collisionFloor(3);
+                fall = collisionFloor(3, levelAttributes->maskedMap);
                 if (fall < 3) {
                     _jobSprite->incPosition(glm::vec2(0, fall));
 
@@ -150,13 +150,15 @@ void Climber::climbLeft(Level *level) {
 
     posBase += glm::vec2(7, 15);
 
-    if (level->maskedMap.pixel(_jobSprite->getPosition().x + 7, _jobSprite->getPosition().y + 1) != 0) {
+    if (level->maskedMap.pixel(static_cast<int>(_jobSprite->getPosition().x) + 7,
+                               static_cast<int>(_jobSprite->getPosition().y) + 1) != 0) {
         _jobSprite->incPosition(glm::vec2(2, 0));
         isFinished = true;
         _nextJob = Jobs::FALLER;
-    } else if (level->maskedMap.pixel(posBase.x - 1, posBase.y - 3) == 0) {
+    } else if (level->maskedMap.pixel(static_cast<int>(posBase.x) - 1, static_cast<int>(posBase.y) - 3) == 0) {
         _jobSprite->changeAnimation(LEDGING_LEFT);
         state = LEDGING_LEFT_STATE;
+
     }
 
 }
@@ -166,11 +168,12 @@ void Climber::climbRight(Level *level) {
 
 
     posBase += glm::vec2(8, 15);
-    if (level->maskedMap.pixel(_jobSprite->getPosition().x + 8, _jobSprite->getPosition().y + 1) != 0) {
+    if (level->maskedMap.pixel(static_cast<int>(_jobSprite->getPosition().x) + 8,
+                               static_cast<int>(_jobSprite->getPosition().y) + 1) != 0) {
         _jobSprite->incPosition(glm::vec2(-2, 0));
         isFinished = true;
         _nextJob = Jobs::FALLER;
-    } else if (level->maskedMap.pixel(posBase.x + 1, posBase.y - 3) == 0) {
+    } else if (level->maskedMap.pixel(static_cast<int>(posBase.x) + 1, static_cast<int>(posBase.y) - 3) == 0) {
         _jobSprite->changeAnimation(LEDGING_RIGHT);
         state = LEDGING_RIGHT_STATE;
     }

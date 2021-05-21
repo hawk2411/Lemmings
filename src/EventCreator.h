@@ -12,6 +12,7 @@
 #define CHANGE_TO_INSTRUCTION 12
 #define CHANGE_TO_INFO 13
 #define CHANGE_TO_SCENE 14
+#define CHANGE_TO_RESULT 15
 
 class EventCreator {
 

@@ -5,11 +5,11 @@ void EasyMaskManager::init() {
 
 }
 
-void EasyMaskManager::update() {
+void EasyMaskManager::update(int time) {
 
 }
 
-void EasyMaskManager::eraseMask(int x, int y) {
+void EasyMaskManager::eraseMask(int x, int y, int time) {
     if (getPixel(x, y) != 200) {
         _level->maskedMap.setPixel(x, y, 0);
     }

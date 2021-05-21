@@ -5,14 +5,15 @@
 #include <glm/glm.hpp>
 #include <vector>
 #include <map>
-
+#include "ParticleSystemManager.h"
 #include "Difficulties.h"
 #include "MaskedTexturedQuad.h"
-#include "UI.h"
+#include "UserInterface.h"
 #include "Word.h"
 #include "IMaskManager.h"
-
+#include "Cursor.h"
 #include "LevelRunner.h"
+#include "JobAssigner.h"
 
 // Scene contains all the entities of our game.
 // It is responsible for updating and render them.
@@ -53,7 +54,7 @@ public:
     char getPixel(int x, int y);
 
 
-    static VariableTexture &getMaskedMap();
+    VariableTexture &getMaskedMap();
 
     enum ScreenClickedArea {
         MAP,
@@ -100,6 +101,12 @@ private:
 
     void updateUI();
 
+    void activateButton(int buttonIndex);
+
+    inline int getSelectedButtonJobCount();
+    /*
+     * private fields
+     */
     bool paused = false;
     bool speedUp = false;
 
@@ -114,7 +121,10 @@ private:
     ScreenMovedArea screenMovedArea = NONE_AREA;
 
     std::unique_ptr<LevelRunner> _levelRunner;
-
+    Cursor _cursor;
+    UserInterface _ui;
+    JobAssigner _jobAssigner;
+    ParticleSystemManager _particleSystemManager;
 
 };
 

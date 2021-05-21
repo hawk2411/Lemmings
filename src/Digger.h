@@ -19,9 +19,9 @@ public:
 
 
 private:
-    void dig();
+    void dig(IMaskManager *mask);
 
-    bool canDig()const;
+    bool canDig(IMaskManager *mask) const;
 
 private:
     enum DiggerState {

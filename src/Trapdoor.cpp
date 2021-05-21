@@ -1,6 +1,4 @@
-#include <iostream>
 #include "Trapdoor.h"
-#include "Game.h"
 
 
 void Trapdoor::update(int deltaTime) {
@@ -11,14 +9,14 @@ void Trapdoor::update(int deltaTime) {
     trapdoorSprite->update(deltaTime);
 }
 
-void Trapdoor::render() {
+void Trapdoor::render(glm::vec2 cameraPos) {
     glm::vec2 oldPosition = trapdoorSprite->getPosition();
-    trapdoorSprite->setPosition(oldPosition - Level::currentLevel().getLevelAttributes()->cameraPos);
+    trapdoorSprite->setPosition(oldPosition - cameraPos);
     trapdoorSprite->render();
     trapdoorSprite->setPosition(oldPosition);
 }
 
-bool Trapdoor::isOpened() {
+bool Trapdoor::isOpened() const {
     return opened;
 }
 

@@ -10,9 +10,9 @@ public:
     explicit HardMaskManager(Level* level) : IMaskManager(level){}
     void init() override;
 
-    void update() override;
+    void update(int time) override;
 
-    void eraseMask(int x, int y) override;
+    void eraseMask(int x, int y, int time) override;
 
     void applyMask(int x, int y) override;
 

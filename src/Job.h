@@ -51,9 +51,9 @@ public:
 
 
 protected:
-    int collisionFloor(int maxFall) const;
+    int collisionFloor(int maxFall, const VariableTexture &maskedMap) const;
 
-    bool collision() const;
+    bool collision(const VariableTexture &maskedMap) const;
 
     unique_ptr<Sprite> _jobSprite;
     bool isFinished;

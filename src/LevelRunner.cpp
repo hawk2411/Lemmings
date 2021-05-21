@@ -81,7 +81,7 @@ void LevelRunner::update(int deltaTime, IMaskManager *currentMask) {
     if (_spawningLemmings) {
         spawnLemmings();
     }
-    updateLemmings(deltaTime, nullptr);
+    updateLemmings(deltaTime, currentMask);
 
     _levelStartValues->_door->update(deltaTime);
     _levelStartValues->_trapdoor->update(deltaTime);
@@ -92,8 +92,8 @@ void LevelRunner::update(int deltaTime, IMaskManager *currentMask) {
 }
 
 void LevelRunner::render() {
-    _levelStartValues->_trapdoor->render();
-    _levelStartValues->_door->render();
+    _levelStartValues->_trapdoor->render(_levelStartValues->cameraPos);
+    _levelStartValues->_door->render(_levelStartValues->cameraPos);
     renderLemmings();
 }
 
@@ -102,12 +102,12 @@ bool LevelRunner::finished() const {
 }
 
 void LevelRunner::spawnLemmings() {
-    int elapsedTimeSinceLastLemming = _currentTime - _lastTimeSpawnedLemming;
+    int elapsedTimeSinceLastLemming = static_cast<int>(_currentTime - static_cast<float>(_lastTimeSpawnedLemming));
     int timeToNextLemming = 3500 * (100 - _releaseRate) / 50;    //TODO what is that formula?
 
     if (elapsedTimeSinceLastLemming >= timeToNextLemming) {
         --_availableLemmings;
-        _lastTimeSpawnedLemming = _currentTime;
+        _lastTimeSpawnedLemming = static_cast<int>(_currentTime);
         auto *newLemming = new Lemming(_levelStartValues->_trapdoor->getEnterPosition());
         newLemming->setWalkingRight(true);
         _lemmings.insert(newLemming);

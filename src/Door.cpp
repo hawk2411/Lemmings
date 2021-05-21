@@ -7,9 +7,9 @@ void Door::update(int deltaTime) {
     doorSprite->update(deltaTime);
 }
 
-void Door::render() {
+void Door::render(glm::vec2 cameraPos) {
     glm::vec2 oldPosition = doorSprite->getPosition();
-    doorSprite->setPosition(doorSprite->getPosition() - Level::currentLevel().getLevelAttributes()->cameraPos);
+    doorSprite->setPosition(doorSprite->getPosition() - cameraPos);
     doorSprite->render();
     doorSprite->setPosition(oldPosition);
 }

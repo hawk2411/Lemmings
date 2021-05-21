@@ -55,7 +55,7 @@ void Exploder::updateStateMachine(int deltaTime, Level *levelAttributes, IMaskMa
             break;
         case BURNING_DEATH_STATE:
             if (_jobSprite->isInLastFrame()) {
-                explode();
+                explode(nullptr);
                 isFinished = true;
                 _nextJob = Jobs::UNKNOWN;
             }
@@ -64,7 +64,7 @@ void Exploder::updateStateMachine(int deltaTime, Level *levelAttributes, IMaskMa
     }
 }
 
-void Exploder::explode() {
+void Exploder::explode(IMaskManager *mask) {
     glm::vec2 posBase = _jobSprite->getPosition();
 
     for (int i = 0; i < 16; ++i) {
@@ -78,7 +78,7 @@ void Exploder::explode() {
             if (i >= offset && i < 16 - offset) {
                 int x = posBase.x + i;
                 int y = posBase.y + j;
-                Scene::getInstance().eraseSpecialMask(x, y);
+                mask->eraseSpecialMask(x, y);
             }
         }
     }

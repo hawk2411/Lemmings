@@ -66,7 +66,7 @@ void Faller::updateStateMachine(int deltaTime, Level *levelAttributes, IMaskMana
     switch (state) {
         case FallerState::FALLING_LEFT_STATE:
         case FallerState::FALLING_RIGHT_STATE:
-            fall = collisionFloor(3);
+            fall = collisionFloor(3, levelAttributes->maskedMap);
             if (fall > 0) {
                 _jobSprite->incPosition(glm::vec2(0, fall));
                 currentDistance += fall;

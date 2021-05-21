@@ -11,7 +11,7 @@ public:
 
     void update(int deltaTime);
 
-    void render();
+    void render(glm::vec2 cameraPos);
 
     void setPosition(glm::vec2 position);
 

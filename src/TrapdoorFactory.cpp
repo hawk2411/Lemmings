@@ -13,5 +13,5 @@ Trapdoor *TrapdoorFactory::createTrapdoor(const string& type) {
     if (type == "hell") {
         return new TrapdoorHell();
     }
-    throw LemmingsException("Unknown trap door type.")
+    throw LemmingsException("Unknown trap door type.");
 }

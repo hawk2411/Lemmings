@@ -34,7 +34,8 @@ add_executable(lemmings src/main.cpp
         src/InfoLevel.cpp
         src/Miner.cpp
         src/Button.cpp
-        src/UI.cpp
+        src/UserInterface.h
+        src/UserInterface.cpp
         src/MaskedTexturedQuad.cpp
         src/TrapdoorFactory.cpp
         src/main.cpp

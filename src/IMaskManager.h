@@ -8,9 +8,9 @@ public:
 
     virtual void init() = 0;
 
-    virtual void update() = 0;
+    virtual void update(int time) = 0;
 
-    virtual void eraseMask(int x, int y) = 0;
+    virtual void eraseMask(int x, int y, int time) = 0;
 
     virtual void applyMask(int x, int y) = 0;
 

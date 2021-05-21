@@ -8,37 +8,30 @@
 #include "NumDisplayGreen.h"
 #include "PercentageDisplay.h"
 #include "TimeDisplay.h"
+#include "LevelRunner.h"
 
-
-class UI {
-
+class UserInterface {
 public:
-    static UI &getInstance() {
-        static UI instance; // Guaranteed to be destroyed.
-        // Instantiated on first use.
-        return instance;
-    };
-
     void init();
 
-    void update();
+    void update(LevelRunner *levelRunner);
 
     void render();
 
     void setPosition(glm::vec2 position);
 
-    int getButtonIndexInPos(int posX, int posY);
+    int getButtonIndexInPos(int posX, int posY, bool isPaused) const;
 
     void changeSelectedButton(int selectedButton);
 
-    int getSelectedButtonJobCount();
-
     void changeDisplayedJob(string lemmingJobName);
+
+    int getSelectedButton()const{return _selectedButton;}
 
 private:
     static const int NUM_BUTTONS = 13;
 
-    glm::vec2 position;
+    glm::vec2 _position;
 
     Button buttons[NUM_BUTTONS];
 
@@ -56,10 +49,9 @@ private:
     std::unique_ptr<Sprite> timeWord;
     TimeDisplay time;
 
-
-    int selectedButton;
+    int _selectedButton;
     Texture selectFrameTexture;
-    std::unique_ptr<Sprite> selectFrame;
+    std::unique_ptr<Sprite> _selectFrame;
 };
 
 #endif // _UI_INCLUDE

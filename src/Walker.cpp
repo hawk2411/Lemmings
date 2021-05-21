@@ -50,18 +50,18 @@ void Walker::updateStateMachine(int deltaTime, Level *levelAttributes, IMaskMana
         case WALKING_LEFT_STATE:
             _jobSprite->incPosition(glm::vec2(-1, -2));
 
-            if (collision()) {
+            if (collision(levelAttributes->maskedMap)) {
                 _jobSprite->decPosition(glm::vec2(-1, -2));
                 _jobSprite->changeAnimation(WALKING_RIGHT);
                 _state = WALKING_RIGHT_STATE;
                 setWalkingRight(true);
             } else {
-                fall = collisionFloor(4);
+                fall = collisionFloor(4, levelAttributes->maskedMap);
                 if (fall < 4) {
                     _jobSprite->incPosition(glm::vec2(0, fall));
 
                     if (_jobSprite->getPosition() ==
-                        Level::currentLevel().getLevelAttributes()->_door->getEscapePosition()) {
+                        levelAttributes->_door->getEscapePosition()) {
                         isFinished = true;
                         _nextJob = Jobs::ESCAPER;
                     }
@@ -74,19 +74,19 @@ void Walker::updateStateMachine(int deltaTime, Level *levelAttributes, IMaskMana
         case WALKING_RIGHT_STATE:
             _jobSprite->incPosition(glm::vec2(1, -2));
 
-            if (collision()) {
+            if (collision(levelAttributes->maskedMap)) {
                 _jobSprite->decPosition(glm::vec2(1, -2));
                 _jobSprite->changeAnimation(WALKING_LEFT);
                 _state = WALKING_LEFT_STATE;
                 setWalkingRight(false);
 
             } else {
-                fall = collisionFloor(4);
+                fall = collisionFloor(4, levelAttributes->maskedMap);
                 if (fall < 4) {
                     _jobSprite->incPosition(glm::vec2(0, fall));
 
                     if (_jobSprite->getPosition() ==
-                        Level::currentLevel().getLevelAttributes()->_door->getEscapePosition()) {
+                        levelAttributes->_door->getEscapePosition()) {
                         isFinished = true;
                         _nextJob = Jobs::ESCAPER;
                     }

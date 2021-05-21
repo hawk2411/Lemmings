@@ -6,12 +6,6 @@
 
 class Cursor {
 public:
-    static Cursor &getInstance() {
-        static Cursor instance; // Guaranteed to be destroyed.
-        // Instantiated on first use.
-        return instance;
-    };
-
     void init();
 
     void render();

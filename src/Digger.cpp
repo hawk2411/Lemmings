@@ -37,23 +37,23 @@ void Digger::updateStateMachine(int deltaTime, Level *levelAttributes, IMaskMana
     switch (state) {
 
         case DIGGING_STATE:
-            if (!canDig()) {
+            if (!canDig(mask)) {
                 isFinished = true;
 
-                int fall = collisionFloor(3);
+                int fall = collisionFloor(3, levelAttributes->maskedMap);
                 if (fall >= 3) {
                     _nextJob = Jobs::FALLER;;
                 } else {
                     _nextJob = Jobs::WALKER;
                 }
             } else if (_jobSprite->isInFirstFrame() || _jobSprite->getAnimationCurrentFrame() == 4) {
-                dig();
+                dig(mask);
             }
 
     }
 }
 
-bool Digger::canDig() const {
+bool Digger::canDig(IMaskManager *mask) const {
     glm::ivec2 posBase = _jobSprite->getPosition();
 
     posBase +=  glm::ivec2(4, 14);
@@ -61,7 +61,7 @@ bool Digger::canDig() const {
         for (int i = 0; i < 9; ++i) {
             int x = posBase.x + i;
             int y = posBase.y + j;
-            if (Scene::getInstance().getPixel(x, y) == -1) {
+            if (mask->getPixel(x, y) == -1) {
                 return true;
             }
         }
@@ -69,7 +69,7 @@ bool Digger::canDig() const {
     return false;
 }
 
-void Digger::dig() {
+void Digger::dig(IMaskManager *mask) {
 
     glm::ivec2 posBase = _jobSprite->getPosition();
 
@@ -79,7 +79,7 @@ void Digger::dig() {
 
     for (int i = 0; i < 9; ++i) {
         int x = posBase.x + i;
-        Scene::getInstance().eraseMask(x, y);
+        mask->eraseMask(x, y, 0);
     }
 
     _jobSprite->incPosition(glm::ivec2(0, 1));

@@ -1,14 +1,13 @@
-#include "UI.h"
-#include "Scene.h"
 #include "LevelRunner.h"
-#include "Level.h"
 #include "ShaderManager.h"
 #include "PredefinedWordFactory.h"
 #include "ButtonFactory.h"
 #include "UIAdapter.h"
 
-void UI::init() {
-    selectedButton = -1;
+#include "UserInterface.h"
+
+void UserInterface::init() {
+    _selectedButton = -1;
 
     backgroundTexture.loadFromFile("images/UI/black_frame.png", TEXTURE_PIXEL_FORMAT_RGBA);
     backgroundTexture.setMinFilter(GL_NEAREST);
@@ -32,8 +31,8 @@ void UI::init() {
     selectFrameTexture.setMinFilter(GL_NEAREST);
     selectFrameTexture.setMagFilter(GL_NEAREST);
 
-    selectFrame = Sprite::createSprite(glm::vec2(17, 25), glm::vec2(17. / 32, 25. / 32),
-                                       &ShaderManager::getInstance().getShaderProgram(), &selectFrameTexture);
+    _selectFrame = Sprite::createSprite(glm::vec2(17, 25), glm::vec2(17. / 32, 25. / 32),
+                                        &ShaderManager::getInstance().getShaderProgram(), &selectFrameTexture);
 
     for (int i = 0; i < NUM_BUTTONS; ++i) {
         buttons[i] = ButtonFactory::instance().createButton(i);
@@ -43,10 +42,10 @@ void UI::init() {
     setPosition(glm::vec2(0, 0));
 }
 
-void UI::render() {
+void UserInterface::render() {
     background->render();
 
-    if (jobName != NULL) {
+    if (jobName) {
         jobName->render();
     }
 
@@ -63,29 +62,29 @@ void UI::render() {
         buttons[i].render();
     }
 
-    if (selectedButton != -1) {
-        selectFrame->render();
+    if (_selectedButton != -1) {
+        _selectFrame->render();
     }
 }
 
-void UI::update() {
+void UserInterface::update(LevelRunner *levelRunner) {
     for (int i = 0; i < 8; ++i) {
-        int jobCount = LevelRunner::getInstance().getJobCount(i);
+        int jobCount = levelRunner->getJobCount(i);
         buttons[i + 2].setNum(jobCount);
     }
 
-    buttons[Button::ButtonNames::MINUS_BUTTON].setNum(LevelRunner::getInstance().getMinReleaseRate());
-    buttons[Button::ButtonNames::PLUS_BUTTON].setNum(LevelRunner::getInstance().getReleaseRate());
+    buttons[Button::ButtonNames::MINUS_BUTTON].setNum(levelRunner->getMinReleaseRate());
+    buttons[Button::ButtonNames::PLUS_BUTTON].setNum(levelRunner->getReleaseRate());
 
-    numberOutLemmings.displayNum(LevelRunner::getInstance().getNumLemmingsAlive());
+    numberOutLemmings.displayNum(levelRunner->getNumLemmingsAlive());
 
-    numberInLemmings.displayPercentage(LevelRunner::getInstance().getPercentageSavedLemmings());
+    numberInLemmings.displayPercentage(levelRunner->getPercentageSavedLemmings());
 
-    time.displayTime(LevelRunner::getInstance().getRemainingTime());
+    time.displayTime(levelRunner->getRemainingTime());
 }
 
-void UI::setPosition(glm::vec2 position) {
-    this->position = position;
+void UserInterface::setPosition(glm::vec2 position) {
+    this->_position = position;
     background->setPosition(position);
 
     jobName->setPosition(position + glm::vec2(0, 1));
@@ -104,13 +103,13 @@ void UI::setPosition(glm::vec2 position) {
     }
 }
 
-int UI::getButtonIndexInPos(int posX, int posY) {
+int UserInterface::getButtonIndexInPos(int posX, int posY, bool isPaused) const {
     for (int i = 0; i < NUM_BUTTONS; ++i) {
-        int leftPos = position.x + 16 * i + 1;
-        int rightPos = position.x + 16 * i + 17;
+        int leftPos = _position.x + 16 * i + 1;
+        int rightPos = _position.x + 16 * i + 17;
 
-        if (leftPos <= posX && posX < rightPos && posY >= position.y + 13) {
-            if (i != Button::PAUSE_BUTTON && Scene::getInstance().isPaused()) {
+        if (leftPos <= posX && posX < rightPos && posY >= _position.y + 13) {
+            if (i != Button::PAUSE_BUTTON && isPaused) {
                 return -1;
             } else {
                 return i;
@@ -121,16 +120,12 @@ int UI::getButtonIndexInPos(int posX, int posY) {
     return -1;
 }
 
-void UI::changeSelectedButton(int selectedButton) {
-    this->selectedButton = selectedButton;
+void UserInterface::changeSelectedButton(int selectedButton) {
+    _selectedButton = selectedButton;
 
-    selectFrame->setPosition(position + glm::vec2(16 * selectedButton, 12));
+    _selectFrame->setPosition(_position + glm::vec2(16 * selectedButton, 12));
 }
 
-int UI::getSelectedButtonJobCount() {
-    return Level::currentLevel().getLevelAttributes()->lemmingsProJob[selectedButton - 2];
-}
-
-void UI::changeDisplayedJob(string lemmingJobName) {
-    UIAdapter::getInstance().changeJobName(jobName.get(), lemmingJobName);
+void UserInterface::changeDisplayedJob(string lemmingJobName) {
+    UIAdapter::changeJobName(jobName.get(), lemmingJobName);
 }

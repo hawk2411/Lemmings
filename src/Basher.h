@@ -21,9 +21,9 @@ public:
 
 
 private:
-    bool bashRight(IMaskManager *mask);
+    bool bashRight(IMaskManager *mask, int time);
 
-    bool bashLeft(IMaskManager *mask);
+    bool bashLeft(IMaskManager *mask, int time);
 
 private:
     enum BasherState {

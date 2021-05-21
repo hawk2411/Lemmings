@@ -66,80 +66,80 @@ void Miner::updateStateMachine(int deltaTime, Level *levelAttributes, IMaskManag
 
         case MINER_RIGHT_STATE:
 
-            if (!canMineRight()) {
+            if (!canMineRight(mask)) {
                 isFinished = true;
 
-                int fall = collisionFloor(3);
+                int fall = collisionFloor(3, levelAttributes->maskedMap);
                 if (fall >= 3) {
                     _nextJob = Jobs::FALLER;
                 } else {
                     _nextJob = Jobs::WALKER;
                 }
             } else {
-                mineRight();
+                mineRight(mask);
             }
 
             break;
         case MINER_LEFT_STATE:
-            if (!canMineLeft()) {
+            if (!canMineLeft(mask)) {
                 isFinished = true;
 
-                int fall = collisionFloor(3);
+                int fall = collisionFloor(3, levelAttributes->maskedMap);
                 if (fall >= 3) {
                     _nextJob = Jobs::FALLER;
                 } else {
                     _nextJob = Jobs::WALKER;
                 }
             } else {
-                mineLeft();
+                mineLeft(mask);
             }
     }
 }
 
 
-void Miner::printMine() {
-    glm::ivec2 posBase = _jobSprite->getPosition();
+//void Miner::printMine() {
+//    glm::ivec2 posBase = _jobSprite->getPosition();
+//
+//    posBase += glm::ivec2(10, 16);
+//
+//    int x = posBase.x;
+//    int y = posBase.y;
+//
+//    for (int i = 0; i < 3; ++i) {
+//        Utils::changeTexelColor(Level::currentLevel().getLevelAttributes()->levelTexture.getId(), x + i, y, 120, 77, 0,
+//                                255);
+//        Scene::getInstance().applyMask(x + i, y);
+//
+//        Utils::changeTexelColor(Level::currentLevel().getLevelAttributes()->levelTexture.getId(), x + i, y - 12, 120,
+//                                77, 0, 255);
+//        Scene::getInstance().applyMask(x + i, y - 12);
+//    }
+//
+//    for (int i = 0; i < 12; i += 11) {
+//        Utils::changeTexelColor(Level::currentLevel().getLevelAttributes()->levelTexture.getId(), x + 3, y - i, 120, 77,
+//                                0, 255);
+//        Scene::getInstance().applyMask(x + 3, y - i);
+//
+//        Utils::changeTexelColor(Level::currentLevel().getLevelAttributes()->levelTexture.getId(), x + 3, y - (i + 1),
+//                                120, 77, 0, 255);
+//        Scene::getInstance().applyMask(x + 3, y - (i + 1));
+//    }
+//
+//    for (int i = 1; i < 12; ++i) {
+//        Utils::changeTexelColor(Level::currentLevel().getLevelAttributes()->levelTexture.getId(), x + 4, y - i, 120, 77,
+//                                0, 255);
+//        Scene::getInstance().applyMask(x + 4, y - i);
+//    }
+//
+//    for (int i = 2; i < 11; ++i) {
+//        Utils::changeTexelColor(Level::currentLevel().getLevelAttributes()->levelTexture.getId(), x + 5, y - i, 120, 77,
+//                                0, 255);
+//        Scene::getInstance().applyMask(x + 5, y - i);
+//    }
+//
+//}
 
-    posBase += glm::ivec2(10, 16);
-
-    int x = posBase.x;
-    int y = posBase.y;
-
-    for (int i = 0; i < 3; ++i) {
-        Utils::changeTexelColor(Level::currentLevel().getLevelAttributes()->levelTexture.getId(), x + i, y, 120, 77, 0,
-                                255);
-        Scene::getInstance().applyMask(x + i, y);
-
-        Utils::changeTexelColor(Level::currentLevel().getLevelAttributes()->levelTexture.getId(), x + i, y - 12, 120,
-                                77, 0, 255);
-        Scene::getInstance().applyMask(x + i, y - 12);
-    }
-
-    for (int i = 0; i < 12; i += 11) {
-        Utils::changeTexelColor(Level::currentLevel().getLevelAttributes()->levelTexture.getId(), x + 3, y - i, 120, 77,
-                                0, 255);
-        Scene::getInstance().applyMask(x + 3, y - i);
-
-        Utils::changeTexelColor(Level::currentLevel().getLevelAttributes()->levelTexture.getId(), x + 3, y - (i + 1),
-                                120, 77, 0, 255);
-        Scene::getInstance().applyMask(x + 3, y - (i + 1));
-    }
-
-    for (int i = 1; i < 12; ++i) {
-        Utils::changeTexelColor(Level::currentLevel().getLevelAttributes()->levelTexture.getId(), x + 4, y - i, 120, 77,
-                                0, 255);
-        Scene::getInstance().applyMask(x + 4, y - i);
-    }
-
-    for (int i = 2; i < 11; ++i) {
-        Utils::changeTexelColor(Level::currentLevel().getLevelAttributes()->levelTexture.getId(), x + 5, y - i, 120, 77,
-                                0, 255);
-        Scene::getInstance().applyMask(x + 5, y - i);
-    }
-
-}
-
-void Miner::mineRight() {
+void Miner::mineRight(IMaskManager *mask) {
     //printMine();
     glm::ivec2 posBase = _jobSprite->getPosition();
 
@@ -150,20 +150,20 @@ void Miner::mineRight() {
         int y = posBase.y;
 
         for (int i = 0; i < 4; ++i) {
-            Scene::getInstance().eraseMask(x + i, y);
-            Scene::getInstance().eraseMask(x + i, y - (i + 1));
-            Scene::getInstance().eraseMask(x + i, y - (i + 2));
-            Scene::getInstance().eraseMask(x + i, y - 12);
-            Scene::getInstance().eraseMask(x + i, y - 11);
-            Scene::getInstance().eraseMask(x + i, y - 10);
+            mask->eraseMask(x + i, y, 0);
+            mask->eraseMask(x + i, y - (i + 1), 0);
+            mask->eraseMask(x + i, y - (i + 2), 0);
+            mask->eraseMask(x + i, y - 12, 0);
+            mask->eraseMask(x + i, y - 11, 0);
+            mask->eraseMask(x + i, y - 10, 0);
         }
 
         for (int i = 0; i < 12; ++i) {
-            Scene::getInstance().eraseMask(x + 4, y - i);
+            mask->eraseMask(x + 4, y - i, 0);
         }
 
         for (int i = 2; i < 11; ++i) {
-            Scene::getInstance().eraseMask(x + 5, y - i);
+            mask->eraseMask(x + 5, y - i, 0);
         }
     }
     if (_jobSprite->getAnimationCurrentFrame() == 17) {
@@ -173,7 +173,7 @@ void Miner::mineRight() {
 
 }
 
-bool Miner::canMineRight() {
+bool Miner::canMineRight(IMaskManager *mask) {
     glm::ivec2 posBase = _jobSprite->getPosition();
 
     posBase += glm::ivec2(10, 17);
@@ -182,44 +182,44 @@ bool Miner::canMineRight() {
     int y = posBase.y;
 
     for (int i = 0; i < 3; ++i) {
-        if (Scene::getInstance().getPixel(x + i, y) == -1) {
+        if (mask->getPixel(x + i, y) == -1) {
             return true;
         }
-        if (Scene::getInstance().getPixel(x + i, y - (i + 1)) == -1) {
+        if (mask->getPixel(x + i, y - (i + 1)) == -1) {
             return true;
         }
-        if (Scene::getInstance().getPixel(x + i, y - (i + 2)) == -1) {
+        if (mask->getPixel(x + i, y - (i + 2)) == -1) {
             return true;
         }
-        if (Scene::getInstance().getPixel(x + i, y - 12) == -1) {
+        if (mask->getPixel(x + i, y - 12) == -1) {
             return true;
         }
-        if (Scene::getInstance().getPixel(x + i, y - 11) == -1) {
+        if (mask->getPixel(x + i, y - 11) == -1) {
             return true;
         }
-        if (Scene::getInstance().getPixel(x + i, y - 10) == -1) {
+        if (mask->getPixel(x + i, y - 10) == -1) {
             return true;
         }
 
     }
 
     for (int i = 0; i < 12; i += 11) {
-        if (Scene::getInstance().getPixel(x + 3, y - i) == -1) {
+        if (mask->getPixel(x + 3, y - i) == -1) {
             return true;
         }
-        if (Scene::getInstance().getPixel(x + 3, y - (i + 1)) == -1) {
+        if (mask->getPixel(x + 3, y - (i + 1)) == -1) {
             return true;
         }
     }
 
     for (int i = 1; i < 12; ++i) {
-        if (Scene::getInstance().getPixel(x + 4, y - i) == -1) {
+        if (mask->getPixel(x + 4, y - i) == -1) {
             return true;
         }
     }
 
     for (int i = 2; i < 11; ++i) {
-        if (Scene::getInstance().getPixel(x + 5, y - i) == -1) {
+        if (mask->getPixel(x + 5, y - i) == -1) {
             return true;
         }
     }
@@ -228,7 +228,7 @@ bool Miner::canMineRight() {
 }
 
 
-bool Miner::canMineLeft() {
+bool Miner::canMineLeft(IMaskManager *mask) {
     glm::ivec2 posBase = _jobSprite->getPosition();
 
     posBase += glm::ivec2(0, 17);
@@ -237,33 +237,33 @@ bool Miner::canMineLeft() {
     int y = posBase.y;
 
     for (int i = 1; i < 11; ++i) {
-        if (Scene::getInstance().getPixel(x, y - i) == -1) {
+        if (mask->getPixel(x, y - i) == -1) {
             return true;
         }
     }
 
     for (int i = 0; i < 12; ++i) {
-        if (Scene::getInstance().getPixel(x + 1, y - i) == -1) {
+        if (mask->getPixel(x + 1, y - i) == -1) {
             return true;
         }
     }
 
     for (int i = 0; i < 12; i += 11) {
-        if (Scene::getInstance().getPixel(x + 2, y - i) == -1) {
+        if (mask->getPixel(x + 2, y - i) == -1) {
             return true;
         }
-        if (Scene::getInstance().getPixel(x + 2, y - (i + 1)) == -1) {
+        if (mask->getPixel(x + 2, y - (i + 1)) == -1) {
             return true;
         }
     }
 
     for (int i = 2; i < 6; ++i) {
         for (int j = 0; j < 13; j += 12) {
-            if (Scene::getInstance().getPixel(x + i, y - j) == -1) {
+            if (mask->getPixel(x + i, y - j) == -1) {
                 return true;
             }
 
-            if (Scene::getInstance().getPixel(x + i, y - (j + 1)) == -1) {
+            if (mask->getPixel(x + i, y - (j + 1)) == -1) {
                 return true;
             }
         }
@@ -271,7 +271,7 @@ bool Miner::canMineLeft() {
     return false;
 }
 
-void Miner::mineLeft() {
+void Miner::mineLeft(IMaskManager *mask) {
     glm::ivec2 posBase = _jobSprite->getPosition();
     posBase += glm::ivec2(0, 16);
 
@@ -280,22 +280,22 @@ void Miner::mineLeft() {
         int y = posBase.y;
 
         for (int i = 1; i < 11; ++i) {
-            Scene::getInstance().eraseMask(x, y - i);
+            mask->eraseMask(x, y - i, 0);
         }
 
         for (int i = 0; i < 12; ++i) {
-            Scene::getInstance().eraseMask(x + 1, y - i);
+            mask->eraseMask(x + 1, y - i, 0);
         }
 
         for (int i = 0; i < 12; i += 11) {
-            Scene::getInstance().eraseMask(x + 2, y - i);
-            Scene::getInstance().eraseMask(x + 2, y - (i + 1));
+            mask->eraseMask(x + 2, y - i, 0);
+            mask->eraseMask(x + 2, y - (i + 1), 0);
         }
 
         for (int i = 2; i < 6; ++i) {
             for (int j = 0; j < 13; j += 12) {
-                Scene::getInstance().eraseMask(x + i, y - j);
-                Scene::getInstance().eraseMask(x + i, y - (j + 1));
+                mask->eraseMask(x + i, y - j, 0);
+                mask->eraseMask(x + i, y - (j + 1), 0);
             }
         }
     }

@@ -52,7 +52,7 @@ void Basher::updateStateMachine(int deltaTime, Level *levelAttributes, IMaskMana
     switch (state) {
         case BASHING_RIGHT_STATE:
 
-            if (!bashRight(mask)) {
+            if (!bashRight(mask, deltaTime)) {
                 isFinished = true;
                 _nextJob = Jobs::WALKER;
             }
@@ -62,14 +62,14 @@ void Basher::updateStateMachine(int deltaTime, Level *levelAttributes, IMaskMana
 
         case BASHING_LEFT_STATE:
 
-            if (!bashLeft(mask)) {
+            if (!bashLeft(mask, deltaTime)) {
                 isFinished = true;
                 _nextJob = Jobs::WALKER;
             }
     }
 }
 
-bool Basher::bashRight(IMaskManager *mask) {
+bool Basher::bashRight(IMaskManager *mask, int time) {
     glm::ivec2 posBase = _jobSprite->getPosition();
     posBase += glm::ivec2(8, 16);
     int y = posBase.y;
@@ -100,12 +100,12 @@ bool Basher::bashRight(IMaskManager *mask) {
     if (currentFrame == 2 || currentFrame == 18) {
         for (int i = 0; i <= 6; ++i) {
             for (int j = 0; j <= 8; ++j) {
-                mask->eraseMask(x + i, y - 1 - j);
+                mask->eraseMask(x + i, y - 1 - j, time);
             }
         }
 
         for (int i = 0; i <= 6; ++i) {
-            mask->eraseMask(x + 7, y - 2 - i);
+            mask->eraseMask(x + 7, y - 2 - i, time);
         }
     }
 
@@ -118,7 +118,7 @@ bool Basher::bashRight(IMaskManager *mask) {
 }
 
 
-bool Basher::bashLeft(IMaskManager *mask) {
+bool Basher::bashLeft(IMaskManager *mask, int time) {
     glm::ivec2 posBase = _jobSprite->getPosition();
     posBase += glm::ivec2(7, 16);
     int y = posBase.y;
@@ -149,12 +149,12 @@ bool Basher::bashLeft(IMaskManager *mask) {
     if (currentFrame == 2 || currentFrame == 18) {
         for (int i = 0; i <= 6; ++i) {
             for (int j = 0; j <= 8; ++j) {
-                mask->eraseMask(x - i, y - 1 - j);
+                mask->eraseMask(x - i, y - 1 - j, time);
             }
         }
 
         for (int i = 0; i <= 6; ++i) {
-            mask->eraseMask(x - 7, y - 2 - i);
+            mask->eraseMask(x - 7, y - 2 - i, time);
         }
     }
 

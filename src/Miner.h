@@ -19,15 +19,15 @@ public:
 
 
 private:
-    void printMine();
+    //void printMine();
 
-    void mineRight();
+    void mineRight(IMaskManager *mask);
 
-    bool canMineRight();
+    bool canMineRight(IMaskManager *mask);
 
-    void mineLeft();
+    void mineLeft(IMaskManager *mask);
 
-    bool canMineLeft();
+    bool canMineLeft(IMaskManager *mask);
 
 private:
     enum MinerState {
