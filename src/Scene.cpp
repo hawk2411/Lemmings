@@ -26,7 +26,6 @@ void Scene::init() {
     _cursor.init();
 
     _particleSystemManager.init();
-    _currentDifficultyMode = _game->getDifficultyMode();
 
     initMap();
     initUI();
@@ -326,7 +325,7 @@ void Scene::updateCursorPosition() {
 }
 
 void Scene::setLevel(LevelModes::Mode mode, int i) {
-
+    // TODO why is nothing happen here?
 }
 
 

@@ -13,12 +13,14 @@ public:
     explicit TimerEventService();
     void startEvents(Sint32 parameter, Uint32 delay = (33 / 10) * 10);
     void stopEvents();
+
+
 private:
+    static Uint32 TimerCallback(Uint32 interval, void *param);
+
     SDL_TimerID _timer_id;
     Sint32 _user_code;
-
-    static Uint32 TimerCallback(Uint32 interval, void *param);
-    static const Sint32 EVENT_CODE = 1;
+    static Uint32 _interval;
 };
 
 

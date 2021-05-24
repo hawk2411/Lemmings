@@ -5,6 +5,9 @@
 #include "LemmingsException.h"
 #include "TimerEventService.h"
 
+Uint32 TimerEventService::_interval = 0;
+
+
 TimerEventService::TimerEventService() : _timer_id(0) {
 
 }
@@ -38,14 +41,15 @@ Uint32 TimerEventService::TimerCallback(Uint32 interval, void *param)
 
     SDL_Event event;
     SDL_UserEvent userevent;
-
+    TimerEventService::_interval = interval;
     /* In this example, our callback pushes a function
     into the queue, and causes our callback to be called again at the
     same interval: */
     SDL_memset(&userevent, 0, sizeof(userevent));
     userevent.type = SDL_USEREVENT;
     userevent.code = *(Sint32* )param;  //copy int;
-    userevent.data1 = &interval;
+
+    userevent.data1 = &_interval;
 
     event.type = SDL_USEREVENT;
     event.user = userevent;

@@ -49,12 +49,12 @@ void StateManager::changeScene(LevelModes::Mode levelMode, int levelNum) {
 }
 
 //
-//void StateManager::changeResults(int goalPercentage, int currentPercentage) {
-//    dynamic_cast<Results*>(_gameStates[States::Type::Result].get())->setPercentages(goalPercentage, currentPercentage);
-//    _gameStates[States::Type::Result]->init();
-//    _currentState = States::Type::Result
-//}
-//
+void StateManager::changeResults(int goalPercentage, int currentPercentage) {
+    dynamic_cast<Results*>(_gameStates[States::Type::Result].get())->setPercentages(goalPercentage, currentPercentage);
+    _gameStates[States::Type::Result]->init();
+    _currentState = States::Type::Result;
+}
+
 void StateManager::changeCredits() {
     _currentState = States::Type::Credits;
     _gameStates[_currentState]->init();
