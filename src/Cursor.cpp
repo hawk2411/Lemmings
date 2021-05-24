@@ -10,13 +10,18 @@ enum CursorStates {
     RIGHT
 };
 
-void Cursor::init() {
-    SDL_WarpMouseGlobal(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2);
-    //glutWarpPointer(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2);
+Cursor::Cursor() {
 
     cursorSprite = Sprite::createSprite(glm::ivec2(12, 12), glm::vec2(29. / 32, 29. / 128),
                                         &ShaderManager::getInstance().getShaderProgram(),
                                         &Game::spriteSheets().cursorSprites);
+
+}
+
+void Cursor::init() {
+    SDL_WarpMouseGlobal(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2);
+    //glutWarpPointer(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2);
+
     cursorSprite->setNumberAnimations(4);
 
     cursorSprite->setAnimationSpeed(CROSS, 12);
@@ -57,3 +62,4 @@ void Cursor::setCrossCursor() {
 void Cursor::setPosition(glm::vec2 newPosition) {
     cursorSprite->setPosition(newPosition);
 }
+

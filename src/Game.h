@@ -103,7 +103,6 @@ private:
     unique_ptr<SoundManager> _soundManager;
     unique_ptr<StateManager> _stateManager;
     unique_ptr<ShaderManager> _shaderManager;
-
     bool bPlay; // Continue to play game?
     Difficulties::Mode _dmode;
 

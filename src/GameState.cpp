@@ -19,7 +19,7 @@ void GameState::onMouseMove(const SDL_MouseMotionEvent &motionEvent) {
     int windowWidth;
     int windowHeight;
 
-    auto window = SDL_GetGrabbedWindow();
+    SDL_Window *window = SDL_GetWindowFromID(motionEvent.windowID);
     SDL_GL_GetDrawableSize(window, &windowWidth, &windowHeight);
 
     float aspectRatioX = (float(CAMERA_WIDTH) / static_cast<float>(windowWidth));

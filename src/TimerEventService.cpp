@@ -8,7 +8,7 @@
 Uint32 TimerEventService::_interval = 0;
 
 
-TimerEventService::TimerEventService() : _timer_id(0) {
+TimerEventService::TimerEventService() : _timer_id(0), _user_code(0) {
 
 }
 

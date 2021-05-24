@@ -202,6 +202,8 @@ int LevelRunner::getLemmingIndexInPos(int posX, int posY) {
 }
 
 string LevelRunner::getLemmingJobNameIndex(int index) {
+    if( index == -1)
+        return "";
     auto it = _lemmings.begin();
     std::advance(it, index);
     Lemming *currentLemming = *it;

@@ -6,6 +6,8 @@
 
 class Cursor {
 public:
+    Cursor();
+
     void init();
 
     void render();
