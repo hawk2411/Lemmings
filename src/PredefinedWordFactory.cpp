@@ -4,9 +4,9 @@
 #include "Sprite.h"
 #include "ShaderManager.h"
 
-std::unique_ptr<Sprite> PredefinedWordFactory::createJobWord() {
+unique_ptr<Sprite> PredefinedWordFactory::createJobWord(ShaderProgram *shaderProgram) {
     auto jobNameSprite = Sprite::createSprite(glm::ivec2(60, 10), glm::vec2(297. / 512, 81. / 1024),
-                                              &ShaderManager::getInstance().getShaderProgram(),
+                                              shaderProgram,
                                               &Game::spriteSheets().jobNamesSprites);
     jobNameSprite->setNumberAnimations(10);
 
@@ -26,19 +26,19 @@ std::unique_ptr<Sprite> PredefinedWordFactory::createJobWord() {
     return jobNameSprite;
 }
 
-std::unique_ptr<Sprite> PredefinedWordFactory::createInfoWord(string infoName) {
+unique_ptr<Sprite> PredefinedWordFactory::createInfoWord(const string &infoWord, ShaderProgram *shaderProgram) {
     auto infoWordSprite = Sprite::createSprite(glm::ivec2(30, 10), glm::vec2(168. / 512, 81. / 256),
-                                               &ShaderManager::getInstance().getShaderProgram(),
+                                               shaderProgram,
                                                &Game::spriteSheets().infoWordSprites);
     infoWordSprite->setNumberAnimations(1);
 
     glm::vec2 textureCoord;
 
-    if (infoName == "IN") {
+    if (infoWord == "IN") {
         textureCoord = glm::vec2(0, 0);
-    } else if (infoName == "OUT") {
+    } else if (infoWord == "OUT") {
         textureCoord = glm::vec2(0.5, 0);
-    } else if (infoName == "TIME") {
+    } else if (infoWord == "TIME") {
         textureCoord = glm::vec2(0, 0.5);
 
     }

@@ -3,7 +3,7 @@
 
 #include <glm/glm.hpp>
 #include "Button.h"
-
+#include "ShaderManager.h"
 
 class PredefinedWordFactory {
 
@@ -21,15 +21,9 @@ public:
         NONE
     };
 
-    static PredefinedWordFactory &instance() {
-        static PredefinedWordFactory instance; // Guaranteed to be destroyed.
-        // Instantiated on first use.
-        return instance;
-    };
+    static unique_ptr<Sprite> createJobWord(ShaderProgram *shaderProgram);
 
-    std::unique_ptr<Sprite> createJobWord();
-
-    std::unique_ptr<Sprite> createInfoWord(string infoWord);
+    static unique_ptr<Sprite> createInfoWord(const string &infoWord, ShaderProgram *shaderProgram);
 
 };
 

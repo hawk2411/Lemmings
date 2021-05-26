@@ -1,10 +1,24 @@
 #include <fstream>
 #include <sstream>
+#include <algorithm>
+#include <iterator>
+#include "LemmingsException.h"
+
 #include "Level.h"
 #include "DoorFactory.h"
 #include "TrapdoorFactory.h"
+#include "LevelModes.h"
 
-void Level::createFromFile(const string &file) {
+Level::Level(ShaderManager* shaderManager, LevelModes::Mode difficulty, int levelNo): _actualLevel(levelNo), _actualMode(difficulty), _shaderManager(shaderManager) {
+
+    initFromFile(getFilename(difficulty, levelNo));
+}
+
+std::string Level::getFilename(LevelModes::Mode levelMode, int levelNo) {
+    return "levels/" + LevelModes::convertToString(levelMode) + "-" + to_string(levelNo) + ".txt";
+}
+
+void Level::initFromFile(const string &file) {
     ifstream infile(file);
 
     int lineCount = 0;
@@ -21,78 +35,73 @@ void Level::createFromFile(const string &file) {
 
                 string levelName = levelType + to_string(levelNum);
 
-                mapTexturePath = "images/levels/" + levelName + "/map.png";
-                mapMaskPath = "images/levels/" + levelName + "/mask.png";
+                _mapTexturePath = "images/levels/" + levelName + "/map.png";
+                _mapMaskPath = "images/levels/" + levelName + "/mask.png";
                 break;
             }
 
             case 1: // NUM_LEMMINGS GOAL_LEMMINGS TIME(secs)
-                iss >> levelAttributes.numLemmings >> levelAttributes.goalLemmings >> levelAttributes.time;
+                iss >> numLemmings >> goalLemmings >> time;
                 break;
 
             case 2: //  RELEASE_RATE JOB_COUNT [CLIMBER, FLOATER, EXPLODER, BLOCKER, BUILDER, BASHER, MINER, DIGGER]
-                iss >> levelAttributes.releaseRate;
-                levelAttributes.minReleaseRate = levelAttributes.releaseRate;
-                for (int i = 0; i < 8; ++i) {
-                    iss >> levelAttributes.jobCount[i];
+                iss >> releaseRate;
+                minReleaseRate = releaseRate;
+                for(int & lemmingsCount : lemmingsProJob) {
+                    iss >> lemmingsCount;
                 }
                 break;
 
             case 3: // TRAPDOOR_POS TRAPDOOR_TYPE(standard, hell)
             {
                 int trapdoorPosX, trapdoorPosY;
-                string trapdoorType;
+                std::string trapdoorType;
                 iss >> trapdoorPosX >> trapdoorPosY >> trapdoorType;
 
-                trapdoorPos = glm::vec2(trapdoorPosX, trapdoorPosY);
-                levelAttributes.trapdoor = TrapdoorFactory::instance().createTrapdoor(trapdoorType);
+                _trapdoorPos = glm::vec2(trapdoorPosX, trapdoorPosY);
+                _trapdoor = std::unique_ptr<Trapdoor>(TrapdoorFactory::createTrapdoor(trapdoorType, _shaderManager));
                 break;
             }
             case 4: // DOOR_POS DOOR_TYPE(standard, egypt, maya, hell)
             {
                 int doorPosX, doorPosY;
-                string doorType;
+                std::string doorType;
                 iss >> doorPosX >> doorPosY >> doorType;
 
-                doorPos = glm::vec2(doorPosX, doorPosY);
-                levelAttributes._door = unique_ptr<Door>(DoorFactory::createDoor(doorType));
+                _doorPos = glm::vec2(doorPosX, doorPosY);
+                _door = unique_ptr<Door>(DoorFactory::createDoor(doorType, _shaderManager));
                 break;
             }
             case 5: // LEVEL CAMERA POS
                 int cameraPosX, cameraPosY;
                 iss >> cameraPosX >> cameraPosY;
-                levelAttributes.cameraPos = glm::vec2(cameraPosX, cameraPosY);
+                cameraPos = glm::vec2(cameraPosX, cameraPosY);
                 break;
             case 6: // LEVEL SIZE
                 int levelSizeX, levelSizeY;
                 iss >> levelSizeX >> levelSizeY;
-                levelAttributes.levelSize = glm::vec2(levelSizeX, levelSizeY);
+                levelSize = glm::vec2(levelSizeX, levelSizeY);
                 break;
             default:
                 break;
         }
         ++lineCount;
-
     }
+    levelTexture.loadFromFile(_mapTexturePath, TEXTURE_PIXEL_FORMAT_RGBA);
+    levelTexture.setMinFilter(GL_NEAREST);
+    levelTexture.setMagFilter(GL_NEAREST);
+
+    maskedMap.loadFromFile(_mapMaskPath, TEXTURE_PIXEL_FORMAT_L);
+    maskedMap.setMinFilter(GL_NEAREST);
+    maskedMap.setMagFilter(GL_NEAREST);
+
+
+    _trapdoor->init();
+    _trapdoor->setPosition(_trapdoorPos);
+
+    _door->init();
+    _door->setPosition(_doorPos);
+
 }
 
-Level::LevelAttributes *Level::getLevelAttributes() {
-    return &levelAttributes;
-}
 
-void Level::init() {
-    levelAttributes.levelTexture.loadFromFile(mapTexturePath, TEXTURE_PIXEL_FORMAT_RGBA);
-    levelAttributes.levelTexture.setMinFilter(GL_NEAREST);
-    levelAttributes.levelTexture.setMagFilter(GL_NEAREST);
-
-    levelAttributes.maskedMap.loadFromFile(mapMaskPath, TEXTURE_PIXEL_FORMAT_L);
-    levelAttributes.maskedMap.setMinFilter(GL_NEAREST);
-    levelAttributes.maskedMap.setMagFilter(GL_NEAREST);
-
-
-    levelAttributes.trapdoor->init();
-    levelAttributes.trapdoor->setPosition(trapdoorPos);
-
-    levelAttributes._door->init();
-    levelAttributes._door->setPosition(doorPos);
-}

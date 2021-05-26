@@ -1,11 +1,12 @@
+#include "ShaderManager.h"
 #include "PercentageDisplay.h"
 #include "GreenNumFactory.h"
 
-void PercentageDisplay::init() {
-    firstNum = GreenNumFactory::instance().createNum();
-    secondNum = GreenNumFactory::instance().createNum();
-    thirdNum = GreenNumFactory::instance().createNum();
-    percentage = GreenNumFactory::instance().createSymbol('%');
+void PercentageDisplay::init(ShaderManager *shaderManager) {
+    firstNum = GreenNumFactory::createNum(shaderManager);
+    secondNum = GreenNumFactory::createNum(shaderManager);
+    thirdNum = GreenNumFactory::createNum(shaderManager);
+    percentage = GreenNumFactory::createSymbol('%', shaderManager);
     setPosition(glm::vec2(0, 0));
 
 }

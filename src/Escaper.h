@@ -8,11 +8,11 @@
 
 class Escaper : public Job {
 public:
-    Escaper(Jobs jobs);
+    Escaper(SoundManager *soundManager);
 
     void initAnims(ShaderProgram &shaderProgram);
 
-    void updateStateMachine(int deltaTime);
+    void updateStateMachine(int deltaTime, Level *levelAttributes, IMaskManager *mask);
 
     void setWalkingRight(bool value);
 

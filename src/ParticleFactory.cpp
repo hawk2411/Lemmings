@@ -2,21 +2,21 @@
 #include <ctime>
 #include <random>
 
-Particle *ParticleFactory::createParticle() {
+Particle *ParticleFactory::createParticle(ShaderProgram* shaderProgram) {
 
     int color = rand() % 3;
 
     switch (color) {
         case 0:
-            return new Particle(Particle::ParticleColor::BLUE);
+            return new Particle(Particle::ParticleColor::BLUE, shaderProgram);
         case 1:
-            return new Particle(Particle::ParticleColor::GREEN);
+            return new Particle(Particle::ParticleColor::GREEN, shaderProgram);
 
         case 2:
-            return new Particle(Particle::ParticleColor::PINK);
+            return new Particle(Particle::ParticleColor::PINK, shaderProgram);
 
         default:
-            return NULL;
+            return nullptr;
     }
 }
 

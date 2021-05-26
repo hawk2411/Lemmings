@@ -1,6 +1,7 @@
 #ifndef _INSTRUCTIONS_INCLUDE
 #define _INSTRUCTIONS_INCLUDE
 
+#include "ShaderManager.h"
 #include "GameState.h"
 #include "Texture.h"
 #include "Sprite.h"
@@ -10,12 +11,7 @@
 class Instructions : public GameState {
 
 public:
-    static Instructions &getInstance() {
-        static Instructions instance;
-        return instance;
-    };
-
-    Instructions();
+    Instructions(Game *game);
     ~Instructions() override;
 
     void init() override;
@@ -32,19 +28,13 @@ public:
 
     void mouseMoved(int mouseX, int mouseY, bool bLeftButton, bool bRightButton) override;
 
-    void keyPressed(int key);
-
-    void keyReleased(int key);
-
-    void specialKeyPressed(int key);
-
-    void specialKeyReleased(int key);
+    void onKeyPressed(const SDL_KeyboardEvent &keyboardEvent) override;
 
 
 private:
     const int LINES_PAGE = 6;
     int actualPage;
-
+    ShaderManager* _shaderManager;
     // Parametres
     Texture _instructionsLevelTexture;
     std::unique_ptr<Sprite> _instructionsLevelSprite;

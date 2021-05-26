@@ -7,18 +7,19 @@
 #include "DoorHell.h"
 
 
-Door *DoorFactory::createDoor(const string &type) {
+Door *DoorFactory::createDoor(const string &type, ShaderManager *shaderManager) {
     if (type == "standard") {
-        return new DoorStandard();
+        return new DoorStandard(shaderManager);
     };
     if (type == "egypt") {
-        return new DoorEgypt();
+        return new DoorEgypt(shaderManager);
     }
     if (type == "maya") {
-        return new DoorMaya();
+        return new DoorMaya(shaderManager);
     }
     if (type == "hell") {
-        return new DoorHell();
+        return new DoorHell(shaderManager);
     }
     return nullptr;
 }
+

@@ -3,6 +3,7 @@
 
 #include "Sprite.h"
 #include "NumDisplayButton.h"
+#include "ShaderManager.h"
 
 class Button {
 
@@ -24,7 +25,7 @@ public:
         SPEED_BUTTON
     };
 
-    void init();
+    void init(ShaderManager *shaderManager);
 
     void render();
 

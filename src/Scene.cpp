@@ -1,31 +1,34 @@
 #include <iostream>
-#include <cmath>
-#include <ctime>
 #include <algorithm>
 #include "Game.h"
-#include "Scene.h"
-#include "ShaderManager.h"
-#include "Scroller.h"
 #include "Cursor.h"
-#include "ParticleSystemManager.h"
-#include "StateManager.h"
 #include "Utils.h"
 #include "HardMaskManager.h"
 #include "EasyMaskManager.h"
-#include "LevelManager.h"
-#include "JobAssigner.h"
-#include "UIAdapter.h"
+#include "EventCreator.h"
+
+#include "Scene.h"
+#include "LevelIndex.h"
+
+Scene::Scene(Game *game, SoundManager *soundManager, const LevelIndex &levelIndex)
+        : GameState(game), _scroller(false), _shaderManager(_game->getShaderManager()), _ui(_game->getShaderManager()),
+          _cursor(_game->getShaderManager()) {
+
+    _levelRunner = std::make_unique<LevelRunner>(soundManager, _game->getShaderManager(), levelIndex);
+
+    _maskManagers.insert(std::make_pair(Difficulties::Mode::Easy, std::unique_ptr<IMaskManager>(
+            new EasyMaskManager(_levelRunner->getLevelAttributes()))));
+
+    _maskManagers.insert(std::make_pair(Difficulties::Mode::Hard, std::unique_ptr<IMaskManager>(
+            new HardMaskManager(_levelRunner->getLevelAttributes()))));
+
+    _currentDifficultyMode = game->getDifficultyMode();
+}
 
 void Scene::init() {
-    Cursor::getInstance().init();
+    _cursor.init();
 
-    ParticleSystemManager::getInstance().init();
-
-    if (Game::instance()->isHardMode()) {
-        setMaskManager(&HardMaskManager::getInstance());
-    } else {
-        setMaskManager(&EasyMaskManager::getInstance());
-    }
+    _particleSystemManager.init();
 
     initMap();
     initUI();
@@ -37,11 +40,11 @@ void Scene::init() {
 
 void Scene::update(int deltaTime) {
     update();
-    maskManager->update();
+    _maskManagers[_currentDifficultyMode].get()->update(deltaTime);
 
-    if (Scroller::getInstance().isScrolled()) {
+    if (_scroller.isScrolled()) {
         initMap();
-        Scroller::getInstance().iScroll();
+        _scroller.setScroll(false);
     }
 
     if (paused) {
@@ -52,36 +55,37 @@ void Scene::update(int deltaTime) {
         deltaTime = 4 * deltaTime;
     }
 
-    LevelManager::getInstance().update(deltaTime);
-    ParticleSystemManager::getInstance().update(deltaTime);
+    _levelRunner->update(deltaTime, _maskManagers[_currentDifficultyMode].get());
+    _particleSystemManager.update(deltaTime);
     updateUI();
 
-    if (LevelManager::getInstance().finished() && ParticleSystemManager::getInstance().finished()) {
-        int goalPercentage = LevelManager::getInstance().getPercentageTotalLemmings();
-        int currentPercentage = LevelManager::getInstance().getPercentageSavedLemmings();
+    if (_levelRunner->finished() && _particleSystemManager.finished()) {
+        auto *resultStatistic = new ResultStatistic{_levelRunner->getPercentageTotalLemmings(),
+                                                    _levelRunner->getPercentageSavedLemmings()};
+        auto *levelIndex = new LevelIndex{_levelRunner->getActualMode(), _levelRunner->getActualLevel()};
+        _levelRunner->endMusic();
 
-        LevelManager::getInstance().endMusic();
-        StateManager::instance().changeResults(goalPercentage, currentPercentage);
+        EventCreator::sendSimpleUserEvent(CHANGE_TO_RESULT, resultStatistic, levelIndex);
     }
 
 }
 
 void Scene::render() {
-    ShaderManager::getInstance().useMaskedShaderProgram();
-    map->render(ShaderManager::getInstance().getMaskedShaderProgram(),
-                Level::currentLevel().getLevelAttributes()->levelTexture,
-                Level::currentLevel().getLevelAttributes()->maskedMap);
+    _shaderManager->useMaskedShaderProgram();
+    _map->render(_shaderManager->getMaskedShaderProgram(),
+                 _levelRunner->getLevelAttributes()->levelTexture,
+                 _levelRunner->getLevelAttributes()->maskedMap);
 
 
-    ShaderManager::getInstance().useShaderProgram();
-    LevelManager::getInstance().render();
-    ParticleSystemManager::getInstance().render();
-    UI::getInstance().render();
-    Cursor::getInstance().render();
+    _shaderManager->useShaderProgram();
+    _levelRunner->render();
+    _particleSystemManager.render(_levelRunner->getLevelAttributes()->cameraPos);
+    _ui.render();
+    _cursor.render();
 }
 
 VariableTexture &Scene::getMaskedMap() {
-    return Level::currentLevel().getLevelAttributes()->maskedMap;
+    return _levelRunner->getLevelAttributes()->maskedMap;
 }
 
 void Scene::changePauseStatus() {
@@ -104,65 +108,95 @@ bool Scene::isSpeedUp() const {
 void Scene::initMap() {
     glm::vec2 geom[2] = {glm::vec2(0.f, 0.f), glm::vec2(float(LEVEL_WIDTH), float(LEVEL_HEIGHT))};
 
-    int levelWidth = Level::currentLevel().getLevelAttributes()->levelTexture.width();
-    int levelHeight = Level::currentLevel().getLevelAttributes()->levelTexture.height();
+    int levelWidth = _levelRunner->getLevelAttributes()->levelTexture.width();
+    int levelHeight = _levelRunner->getLevelAttributes()->levelTexture.height();
     glm::vec2 normalizedTexCoordStart = glm::vec2(
-            Level::currentLevel().getLevelAttributes()->cameraPos.x / levelWidth,
-            Level::currentLevel().getLevelAttributes()->cameraPos.y / levelHeight
+            _levelRunner->getLevelAttributes()->cameraPos.x / static_cast<float>(levelWidth),
+            _levelRunner->getLevelAttributes()->cameraPos.y / static_cast<float>(levelHeight)
     );
     glm::vec2 normalizedTexCoordEnd = glm::vec2(
-            (Level::currentLevel().getLevelAttributes()->cameraPos.x + LEVEL_WIDTH) / levelWidth,
-            (Level::currentLevel().getLevelAttributes()->cameraPos.y + LEVEL_HEIGHT) / levelHeight
+            (_levelRunner->getLevelAttributes()->cameraPos.x + LEVEL_WIDTH) / static_cast<float>(levelWidth),
+            (_levelRunner->getLevelAttributes()->cameraPos.y + LEVEL_HEIGHT) / static_cast<float>(levelHeight)
     );
 
     glm::vec2 texCoords[2] = {normalizedTexCoordStart, normalizedTexCoordEnd};
-    map = MaskedTexturedQuad::createTexturedQuad(geom, texCoords,
-                                                 ShaderManager::getInstance().getMaskedShaderProgram());
+    _map = MaskedTexturedQuad::createTexturedQuad(geom, texCoords,
+                                                  _shaderManager->getMaskedShaderProgram());
 }
 
 void Scene::initUI() {
-    UI::getInstance().init();
-    UI::getInstance().setPosition(glm::vec2(0, LEVEL_HEIGHT - 1));
+    _ui.init();
+    _ui.setPosition(glm::vec2(0, LEVEL_HEIGHT - 1));
 }
 
 void Scene::updateUI() {
-    UI::getInstance().update();
+    _ui.update(_levelRunner.get());
 }
 
+void Scene::update() {
+    updateCursorPosition();
 
-void Scene::setMaskManager(MaskManager *maskM) {
-    maskManager = maskM;
+    if (screenMovedArea == ScreenMovedArea::SCROLL_AREA_LEFT) {
+        _scroller.scrollLeft(_levelRunner->getLevelAttributes()->cameraPos,
+                             static_cast<int>(_levelRunner->getLevelAttributes()->levelSize.x));
+        _cursor.setScrollLeftCursor();
+        return;
+    }
+    if (screenMovedArea == ScreenMovedArea::SCROLL_AREA_RIGHT) {
+        _scroller.scrollRight(_levelRunner->getLevelAttributes()->cameraPos,
+                              static_cast<int>(_levelRunner->getLevelAttributes()->levelSize.x));
+        _cursor.setScrollRightCursor();
+        return;
+    }
+    if (screenMovedArea == ScreenMovedArea::LEVEL) {
+        int lemmingIndex = _levelRunner->getLemmingIndexInPos(posX, posY);
+        _ui.changeDisplayedJob(_levelRunner->getLemmingJobNameIndex(lemmingIndex));
 
-    maskManager->init();
+        if (lemmingIndex != -1) {
+            _cursor.setFocusCursor();
+        } else {
+            _cursor.setCrossCursor();
+        }
+        return;
+    }
+    _cursor.setCrossCursor();
+
 }
 
 void Scene::eraseMask(int x, int y) {
-    maskManager->eraseMask(x, y);
+    _maskManagers[_currentDifficultyMode]->eraseMask(x, y, 0);
 }
 
 void Scene::eraseSpecialMask(int x, int y) {
-    maskManager->eraseSpecialMask(x, y);
+    _maskManagers[_currentDifficultyMode]->eraseSpecialMask(x, y);
 
 }
 
 char Scene::getPixel(int x, int y) {
-    return maskManager->getPixel(x, y);
+    return _maskManagers[_currentDifficultyMode]->getPixel(x, y);
 }
 
 void Scene::applyMask(int x, int y) {
-    maskManager->applyMask(x, y);
+    _maskManagers[_currentDifficultyMode]->applyMask(x, y);
 }
 
 void Scene::applySpecialMask(int x, int y) {
-    maskManager->applySpecialMask(x, y);
+    _maskManagers[_currentDifficultyMode]->applySpecialMask(x, y);
 }
 
 void Scene::buildStep(glm::vec2 position) {
     for (int i = 0; i < 5; ++i) {
-        Utils::changeTexelColor(Level::currentLevel().getLevelAttributes()->levelTexture.getId(), position.x + i,
+        Utils::changeTexelColor(_levelRunner->getLevelAttributes()->levelTexture.getId(), position.x + i,
                                 position.y, 120, 77, 0, 255);
         applyMask(position.x + i, position.y);
     }
+}
+
+void Scene::onKeyPressed(const SDL_KeyboardEvent &keyboardEvent) {
+    if (keyboardEvent.keysym.sym == SDLK_ESCAPE) {
+        _game->getStateManager()->changeMenu();
+    }
+
 }
 
 void Scene::mouseMoved(int mouseX, int mouseY, bool bLeftButton, bool bRightButton) {
@@ -220,30 +254,6 @@ void Scene::mouseMoved(int mouseX, int mouseY, bool bLeftButton, bool bRightButt
     }
 }
 
-void Scene::update() {
-    updateCursorPosition();
-
-    if (screenMovedArea == ScreenMovedArea::SCROLL_AREA_LEFT) {
-        Scroller::getInstance().scrollLeft();
-        Cursor::getInstance().setScrollLeftCursor();
-    } else if (screenMovedArea == ScreenMovedArea::SCROLL_AREA_RIGHT) {
-        Scroller::getInstance().scrollRight();
-        Cursor::getInstance().setScrollRightCursor();
-    } else if (screenMovedArea == ScreenMovedArea::LEVEL) {
-        int lemmingIndex = LevelManager::getInstance().getLemmingIndexInPos(posX, posY);
-        UIAdapter::getInstance().changeFocusedLemming(lemmingIndex);
-
-        if (lemmingIndex != -1) {
-            Cursor::getInstance().setFocusCursor();
-        } else {
-            Cursor::getInstance().setCrossCursor();
-        }
-
-    } else {
-        Cursor::getInstance().setCrossCursor();
-    }
-}
-
 Scene::ScreenClickedArea Scene::getClickedScreenArea(int mouseX, int mouseY) {
     if (
             0 <= mouseX
@@ -263,6 +273,7 @@ Scene::ScreenClickedArea Scene::getClickedScreenArea(int mouseX, int mouseY) {
     throw std::runtime_error("Scene::getClickedScreenArea unknown behavior.");
 }
 
+
 Scene::ScreenMovedArea Scene::getMovedScreenArea(int mouseX, int mouseY) {
     if (0 <= mouseX && mouseX < SCROLL_WIDTH && mouseY < LEVEL_HEIGHT) {
         return ScreenMovedArea::SCROLL_AREA_LEFT;
@@ -277,17 +288,29 @@ Scene::ScreenMovedArea Scene::getMovedScreenArea(int mouseX, int mouseY) {
 
 
 void Scene::leftClickOnUI(int posX, int posY) {
-    int clickedButtonIndex = UI::getInstance().getButtonIndexInPos(posX, posY);
-    UIAdapter::getInstance().changeSelectedButton(clickedButtonIndex);
-}
+    int clickedButtonIndex = _ui.getButtonIndexInPos(posX, posY, isPaused());
+    _ui.changeSelectedButton(clickedButtonIndex);
 
+    activateButton(clickedButtonIndex);
+}
 
 void Scene::leftClickOnMap(int posX, int posY) {
 
-    if (JobAssigner::getInstance().hasJobToAssign()) {
+    if (_jobAssigner.hasJobToAssign()) {
 
-        int selectedLemmingIndex = LevelManager::getInstance().getLemmingIndexInPos(posX, posY);
-        JobAssigner::getInstance().assigJobLemming(selectedLemmingIndex);
+        int selectedLemmingIndex = _levelRunner->getLemmingIndexInPos(posX, posY);
+        //_jobAssigner.assignJobLemming(selectedLemmingIndex);
+        if (_levelRunner->assignJob(selectedLemmingIndex, _jobAssigner.getJobToAssign())) {
+            auto jobName = _jobAssigner.getLastOfferedJob();
+            int jobIndex = _jobAssigner.jobNameToIndex(jobName);
+            _levelRunner->decreaseJobCount(jobIndex);
+            if (_levelRunner->getJobCount(jobIndex) > 0) {
+                _jobAssigner.offerJob(jobName);
+            } else {
+                _jobAssigner.setLastOfferedJob(JobAssigner::NONE);
+            }
+            //_jobAssigner.assignJobLemming(selectedLemmingIndex);
+        }
     }
 }
 
@@ -306,25 +329,94 @@ void Scene::updateCursorPosition() {
         cursorPosition.y = CAMERA_HEIGHT - 13;
     }
 
-    Cursor::getInstance().setPosition(cursorPosition);
+    _cursor.setPosition(cursorPosition);
 
 }
 
-void Scene::keyPressed(int key) {
-    if (key == 27) {
-        LevelManager::getInstance().endMusic();
-        StateManager::instance().changeMenu();
+void Scene::changeLevel(const LevelIndex &levelIndex) {
+    // TODO why is nothing happen here?
+    if (_levelRunner->getActualMode() != levelIndex.mode || _levelRunner->getActualLevel() != levelIndex.levelNo) {
+        _levelRunner->changeLevel(levelIndex);
+        _maskManagers[_currentDifficultyMode]->changeLevel(_levelRunner->getLevelAttributes());
     }
 }
 
-void Scene::keyReleased(int key) {
+
+void Scene::activateButton(int buttonIndex) {
+    _jobAssigner.deleteJobToAssign();
+
+    switch (buttonIndex) {
+        case Button::MINUS_BUTTON:
+            if (_levelRunner->getLevelAttributes()->releaseRate) {
+                _levelRunner->decreaseReleaseRate();
+            }
+            break;
+        case Button::PLUS_BUTTON:
+            if (_levelRunner->getLevelAttributes()->releaseRate) {
+                _levelRunner->increaseReleaseRate();
+            }
+            break;
+        case Button::CLIMBER_BUTTON:
+            if (getSelectedButtonJobCount() > 0) {
+                _jobAssigner.offerJob(JobAssigner::JobNames::CLIMBER);
+            }
+            break;
+        case Button::FLOATER_BUTTON:
+            if (getSelectedButtonJobCount() > 0) {
+                _jobAssigner.offerJob(JobAssigner::JobNames::FLOATER);
+            }
+            break;
+        case Button::EXPLODER_BUTTON:
+            if (getSelectedButtonJobCount() > 0) {
+                _jobAssigner.offerJob(JobAssigner::JobNames::BOMBER);
+            }
+            break;
+        case Button::BLOCKER_BUTTON:
+            if (getSelectedButtonJobCount() > 0) {
+                _jobAssigner.offerJob(JobAssigner::JobNames::BLOCKER);
+            }
+            break;
+        case Button::BUILDER_BUTTON:
+            if (getSelectedButtonJobCount() > 0) {
+                _jobAssigner.offerJob(JobAssigner::JobNames::BUILDER);
+            }
+            break;
+        case Button::BASHER_BUTTON:
+            if (getSelectedButtonJobCount() > 0) {
+                _jobAssigner.offerJob(JobAssigner::JobNames::BASHER);
+            }
+            break;
+        case Button::MINER_BUTTON:
+            if (getSelectedButtonJobCount() > 0) {
+                _jobAssigner.offerJob(JobAssigner::JobNames::MINER);
+            }
+            break;
+        case Button::DIGGER_BUTTON:
+            if (getSelectedButtonJobCount() > 0) {
+                _jobAssigner.offerJob(JobAssigner::JobNames::DIGGER);
+            }
+            break;
+        case Button::PAUSE_BUTTON:
+            changePauseStatus();
+            if (!isPaused()) {
+                _ui.changeSelectedButton(-1);
+            }
+            break;
+        case Button::NUKE_BUTTON:
+            _levelRunner->apocalypse();
+            break;
+        case Button::SPEED_BUTTON:
+            changeSpeedUpStatus();
+            if (!isSpeedUp()) {
+                _ui.changeSelectedButton(-1);
+            }
+            break;
+        default:
+            break;
+    }
 
 }
 
-void Scene::specialKeyPressed(int key) {
-
-}
-
-void Scene::specialKeyReleased(int key) {
-
+int Scene::getSelectedButtonJobCount() {
+    return _levelRunner->getLevelAttributes()->lemmingsProJob[_ui.getSelectedButton() - 2];
 }

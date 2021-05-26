@@ -2,21 +2,26 @@
 #include "ShaderManager.h"
 #include "Game.h"
 #include "StateManager.h"
+#include "EventCreator.h"
 
-Credits::Credits() {
-    music = make_unique<Sound>(Game::instance()->getSoundManager(), "sounds/CreditsSong.ogg", FMOD_LOOP_NORMAL | FMOD_CREATESTREAM);
+Credits::Credits(Game *game) : GameState(game), _shaderManager(_game->getShaderManager()) {
+    music = make_unique<Sound>(game->getSoundManager(), "sounds/CreditsSong.ogg",
+                               FMOD_LOOP_NORMAL | FMOD_CREATESTREAM);
+
+    creditsLevelTexture.loadFromFile("images/credits.png", TEXTURE_PIXEL_FORMAT_RGBA);
+    creditsLevelTexture.setMinFilter(GL_NEAREST);
+    creditsLevelTexture.setMagFilter(GL_NEAREST);
+
+    creditsLevelSprite = Sprite::createSprite(glm::vec2(CAMERA_WIDTH, CAMERA_HEIGHT), glm::vec2(1.f, 1.f),
+                                              &_shaderManager->getShaderProgram(), &creditsLevelTexture);
+
 }
 
-Credits::~Credits() {
-
-}
+Credits::~Credits() = default;
 
 
 void Credits::init() {
     _currentTime = 0.0f;
-    initTextures();
-    creditsLevelSprite = Sprite::createSprite(glm::vec2(CAMERA_WIDTH, CAMERA_HEIGHT), glm::vec2(1.f, 1.f),
-                                              &ShaderManager::getInstance().getShaderProgram(), &creditsLevelTexture);
     music->playSound();
     music->setVolume(1.f);
 }
@@ -26,41 +31,22 @@ void Credits::update(int deltaTime) {
 }
 
 void Credits::render() {
-    ShaderManager::getInstance().useShaderProgram();
+    _shaderManager->useShaderProgram();
     creditsLevelSprite->render();
 }
 
-void Credits::initTextures() {
-    creditsLevelTexture.loadFromFile("images/credits.png", TEXTURE_PIXEL_FORMAT_RGBA);
-    creditsLevelTexture.setMinFilter(GL_NEAREST);
-    creditsLevelTexture.setMagFilter(GL_NEAREST);
-
-}
 
 void Credits::endMusic() {
     music->stopSound();
 }
-void Credits::keyPressed(int key) {
-
-    if (key == 27) // Escape code
-    {
-        StateManager::instance().changeMenu();
-        Credits::instance().endMusic();
-    }
-
-}
-
-void Credits::keyReleased(int key) {
-
-}
-
-void Credits::specialKeyPressed(int key) {
-}
-
-void Credits::specialKeyReleased(int key) {
-
-}
 
 void Credits::mouseMoved(int mouseX, int mouseY, bool bLeftButton, bool bRightButton) {
 
+}
+
+void Credits::onKeyPressed(const SDL_KeyboardEvent &keyboardEvent) {
+    if (keyboardEvent.keysym.sym == SDLK_ESCAPE) {
+        EventCreator::sendSimpleUserEvent(CHANGE_TO_MENU, nullptr, nullptr);
+        endMusic();
+    }
 }

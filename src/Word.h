@@ -3,12 +3,13 @@
 
 #include <vector>
 #include "Sprite.h"
+#include "ShaderManager.h"
 
 
 class Word {
 
 public:
-    explicit Word(const string &word);
+    explicit Word(const string &word, ShaderManager *shaderManager);
 
     ~Word();
 

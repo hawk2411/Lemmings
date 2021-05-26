@@ -7,7 +7,9 @@
 class DoorMaya : public Door {
 
 public:
-    virtual void init();
+    explicit DoorMaya(ShaderManager *shaderManager);
+
+    void init() override;
 };
 
 

@@ -1,28 +1,38 @@
 #ifndef _SCENE_INCLUDE
 #define _SCENE_INCLUDE
 
-#include "GameState.h"
 #include <glm/glm.hpp>
 #include <vector>
+#include <map>
+#include "GameState.h"
+#include "ParticleSystemManager.h"
+#include "Difficulties.h"
 #include "MaskedTexturedQuad.h"
-#include "Level.h"
-#include "UI.h"
+#include "LevelIndex.h"
+#include "UserInterface.h"
 #include "Word.h"
-#include "MaskManager.h"
+#include "IMaskManager.h"
+#include "Cursor.h"
+#include "LevelRunner.h"
+#include "JobAssigner.h"
+#include "Scroller.h"
+
 
 // Scene contains all the entities of our game.
 // It is responsible for updating and render them.
 
+struct ResultStatistic {
+    int goalPercentage;
+    int currentPercentage;
+};
 
 class Scene : public GameState {
 
 public:
 
-    static Scene &getInstance() {
-        static Scene instance; // Guaranteed to be destroyed.
-        // Instantiated on first use.
-        return instance;
-    };
+    Scene(Game *game, SoundManager *soundManager, const LevelIndex& levelIndex);
+
+    void mouseMoved(int mouseX, int mouseY, bool bLeftButton, bool bRightButton) override;
 
     void init() override;
 
@@ -51,9 +61,7 @@ public:
     char getPixel(int x, int y);
 
 
-    static VariableTexture &getMaskedMap();
-
-    void setMaskManager(MaskManager *maskManager);
+    VariableTexture &getMaskedMap();
 
     enum ScreenClickedArea {
         MAP,
@@ -75,17 +83,13 @@ public:
         RIGHT_MOUSE_PRESSED
     };
 
-    void mouseMoved(int mouseX, int mouseY, bool bLeftButton, bool bRightButton) override;
+
 
     void update();
 
-    void keyPressed(int key) override;
+    void onKeyPressed(const SDL_KeyboardEvent &keyboardEvent) override;
 
-    void keyReleased(int key) override;
-
-    void specialKeyPressed(int key) override;
-
-    void specialKeyReleased(int key) override;
+    void changeLevel(const LevelIndex &levelIndex);
 
 private:
     ScreenClickedArea getClickedScreenArea(int mouseX, int mouseY);
@@ -104,17 +108,32 @@ private:
 
     void updateUI();
 
+    void activateButton(int buttonIndex);
+
+    inline int getSelectedButtonJobCount();
+    /*
+     * private fields
+     */
     bool paused = false;
     bool speedUp = false;
 
-    std::unique_ptr<MaskedTexturedQuad> map;
+    std::unique_ptr<MaskedTexturedQuad> _map;
 
-    MaskManager *maskManager = nullptr;
+    std::map<Difficulties::Mode, std::unique_ptr<IMaskManager>> _maskManagers;
+    Difficulties::Mode _currentDifficultyMode;
+
     int posX=0, posY=0;
 
     MouseStates mouseState = MouseStates::NONE;
     ScreenMovedArea screenMovedArea = NONE_AREA;
 
+    std::unique_ptr<LevelRunner> _levelRunner;
+    Cursor _cursor;
+    UserInterface _ui;
+    JobAssigner _jobAssigner;
+    ParticleSystemManager _particleSystemManager;
+    Scroller _scroller;
+    ShaderManager* _shaderManager;
 };
 
 #endif // _SCENE_INCLUDE

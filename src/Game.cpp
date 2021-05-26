@@ -1,43 +1,44 @@
-#include "Game.h"
-#include "Menu.h"
+#include <memory>
+#include "EventCreator.h"
 
-void Game::init() {
-    bPlay = true;
-    hardMode = false;
-    glClearColor(0.f, 0.f, 0.f, 1.0f);
+#include "Game.h"
+
+
+Game::Game() : bPlay(true), _dmode(Difficulties::Mode::Easy),
+                prevTime(prevTime) {
+
+    glClearColor(0.f, 0.f, 0.f, 1.0f);  //TODO glClearColor here???
+    _soundManager = std::make_unique<SoundManager>();
+
+    _shaderManager = std::make_unique<ShaderManager>();
+    _stateManager = std::make_unique<StateManager>(this, _shaderManager.get());
+
     initSpriteSheets();
-    ShaderManager::getInstance().init();
     hardModeIndicator = Sprite::createSprite(glm::ivec2(20, 20), glm::vec2(136. / 256, 160. / 256),
-                                             &ShaderManager::getInstance().getShaderProgram(),
+                                             &_shaderManager->getShaderProgram(),
                                              &Game::spriteSheets().skullSprite);
     hardModeIndicator->setPosition(glm::vec2(CAMERA_WIDTH - 26, 5));
 
-    gameState = &Menu::getInstance();
-    gameState->init();
+}
+
+void Game::init() {
+
+
 }
 
 bool Game::update(int deltaTime) {
-    gameState->update(deltaTime);
-
+    _stateManager->update(deltaTime);
     return bPlay;
 }
 
 void Game::render() {
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    gameState->render();
-    if (hardMode) {
+    _stateManager->render();
+    if (_dmode == Difficulties::Mode::Hard) {
         hardModeIndicator->render();
     }
 
-}
-
-GameState *Game::getGameState() {
-    return gameState;
-}
-
-void Game::setGameState(GameState *state) {
-    gameState = state;
 }
 
 void Game::initSpriteSheets() {
@@ -116,72 +117,76 @@ void Game::changeBplay() {
     bPlay = !bPlay;
 }
 
-bool Game::isHardMode() const {
-    return hardMode;
+Difficulties::Mode Game::getDifficultyMode() const {
+    return _dmode;
 }
 
 void Game::swapDifficultyMode() {
-    hardMode = !hardMode;
+    _dmode = (_dmode == Difficulties::Mode::Easy)?Difficulties::Mode::Hard: Difficulties::Mode::Easy;
 }
 
-const SoundManager *Game::getSoundManager() const {
-    return &soundManager;
+SoundManager *Game::getSoundManager() const {
+    return _soundManager.get();
 }
 
-// Same for mouse button presses or releases
-void Game::mouseCallback(int button, int state, int x, int y) {
-    switch(state) {
-        case GLUT_DOWN:
-            Game::instance()->getGameState()->mousePress(button);
-            break;
-        case GLUT_UP:
-            Game::instance()->getGameState()->mouseRelease(button);
+
+StateManager *Game::getStateManager() {
+    return _stateManager.get();
+}
+
+void Game::onUserEvent(const SDL_UserEvent &event) {
+    switch (event.code) {
+        case UPDATE_EVENT: {
+            int delay = *(int *) event.data1;
+            update(delay);
+        }
             break;
         default:
-            break;
+            _stateManager->onUserEvent(event);
     }
+
 }
 
-Game *Game::instance() {
-    static Game G(glutGet(GLUT_ELAPSED_TIME));
-    return &G;
-}
 
-void Game::drawCallback() {
-    Game::instance()->render();
-    glutSwapBuffers();
-}
+//Game *Game::instance() {
+//    static Game G;
+//    return &G;
+//}
 
-void Game::idleCallback() {
-    int currentTime = glutGet(GLUT_ELAPSED_TIME);
-    int deltaTime = currentTime - Game::instance()->prevTime;
+//void Game::drawCallback() {
+//    Game::instance()->render();
+//}
 
-    if (static_cast<float>(deltaTime) > TIME_PER_FRAME) {
-        // Every time we enter here is equivalent to a game loop execution
-        if (!Game::instance()->update(deltaTime))
-            exit(0);
-        Game::instance()->prevTime = currentTime;
-        glutPostRedisplay();
-    }
-}
+//void Game::idleCallback() {
+//    int currentTime = glutGet(GLUT_ELAPSED_TIME);
+//    int deltaTime = currentTime - Game::instance()->prevTime;
+//
+//    if (static_cast<float>(deltaTime) > TIME_PER_FRAME) {
+//        // Every time we enter here is equivalent to a game loop execution
+//        if (!Game::instance()->update(deltaTime))
+//            exit(0);
+//        Game::instance()->prevTime = currentTime;
+//        glutPostRedisplay();
+//    }
+//}
 
-void Game::keyboardDownCallback(unsigned char key, int x, int y) {
-
-    Game::instance()->getGameState()->keyPressed(key);
-}
-
-void Game::keyboardUpCallback(unsigned char key, int x, int y) {
-    Game::instance()->getGameState()->keyReleased(key);
-}
-
-void Game::specialDownCallback(int key, int x, int y) {
-    Game::instance()->getGameState()->specialKeyPressed(key);
-}
-
-void Game::specialUpCallback(int key, int x, int y) {
-    Game::instance()->getGameState()->specialKeyReleased(key);
-}
-
-void Game::motionCallback(int x, int y) {
-    Game::instance()->getGameState()->mouseMove(x, y);
-}
+//void Game::keyboardDownCallback(unsigned char key, int x, int y) {
+//
+////    Game::instance()->getGameState()->keyPressed(key);
+//}
+//
+//void Game::keyboardUpCallback(unsigned char key, int x, int y) {
+////    Game::instance()->getGameState()->keyReleased(key);
+//}
+//
+//void Game::specialDownCallback(int key, int x, int y) {
+////    Game::instance()->getGameState()->specialKeyPressed(key);
+//}
+//
+//void Game::specialUpCallback(int key, int x, int y) {
+////    Game::instance()->getGameState()->specialKeyReleased(key);
+//}
+//
+//void Game::motionCallback(int x, int y) {
+////    Game::instance()->getGameState()->mouseMove(x, y);
+//}

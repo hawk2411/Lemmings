@@ -1,24 +1,21 @@
 #ifndef _RESULTS_INCLUDE
 #define _RESULTS_INCLUDE
 
+#include "ShaderManager.h"
 #include "GameState.h"
 #include "Sprite.h"
 #include "PurplePercentageDisplay.h"
+#include "LevelIndex.h"
 
 class Results : public GameState {
 
 public:
+    Results(Game *game, const LevelIndex& levelIndex);
+
     enum ResultsButtonName {
         RETRY,
         CONTINUE,
         MENU
-    };
-
-
-    static Results &getInstance() {
-        static Results instance; // Guaranteed to be destroyed.
-        // Instantiated on first use.
-        return instance;
     };
 
     void init() override;
@@ -29,28 +26,24 @@ public:
 
     void setPercentages(int goalPercentage, int currentPercentage);
 
-    int getSelectedButtonIndex() const;
-
     int getSelectedButton();
 
     void changeSelectedButtonLeft();
 
     void changeSelectedButtonRight();
 
-    void keyPressed(int key) override;
-
-    void keyReleased(int key) override;
-
-    void specialKeyPressed(int key) override;
-
-    void specialKeyReleased(int key) override;
+    void onKeyPressed(const SDL_KeyboardEvent &keyboardEvent) override;
 
     void mouseMoved(int mouseX, int mouseY, bool bLeftButton, bool bRightButton) override;
+
+    void changeLevel(const LevelIndex& levelIndex);
 
 private:
     void initButtons();
 
     void renderButtons();
+
+    vector<ResultsButtonName> possibleButtons;
 
     Texture backgroundTexture;
     std::unique_ptr<Sprite> background;
@@ -62,10 +55,11 @@ private:
     std::unique_ptr<Sprite> retryButton;
     std::unique_ptr<Sprite> menuButton;
 
-    int selectedButton;
-    bool passedLevel;
+    int selectedButton{};
+    bool passedLevel{};
 
-    vector<ResultsButtonName> possibleButtons;
+    LevelIndex _levelIndex;
+    ShaderManager* _shaderManager;
 
 };
 

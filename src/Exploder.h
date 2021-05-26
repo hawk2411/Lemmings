@@ -7,11 +7,11 @@
 
 class Exploder : public Job {
 public:
-    Exploder(Jobs jobs);
+    Exploder(SoundManager *soundManager);
 
     void initAnims(ShaderProgram &shaderProgram);
 
-    void updateStateMachine(int deltaTime);
+    void updateStateMachine(int deltaTime, Level *levelAttributes, IMaskManager *mask);
 
     void setWalkingRight(bool value);
 
@@ -27,7 +27,7 @@ private:
 private:
     ExploderState state;
 
-    void explode();
+    void explode(IMaskManager *mask);
 };
 
 

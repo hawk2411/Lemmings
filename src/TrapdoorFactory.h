@@ -3,18 +3,12 @@
 
 #include "Sprite.h"
 #include "Trapdoor.h"
+#include "ShaderManager.h"
 
 class TrapdoorFactory {
 
 public:
-
-    static TrapdoorFactory &instance() {
-        static TrapdoorFactory instance; // Guaranteed to be destroyed.
-        // Instantiated on first use.
-        return instance;
-    };
-
-    Trapdoor *createTrapdoor(string type);
+    static Trapdoor *createTrapdoor(const string &type, ShaderManager *shaderManager);
 
 };
 

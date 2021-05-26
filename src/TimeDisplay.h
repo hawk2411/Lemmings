@@ -2,10 +2,11 @@
 #define _TIMEDISPLAY_INCLUDE
 
 #include "Sprite.h"
+#include "ShaderManager.h"
 
 class TimeDisplay {
 public:
-    void init();
+    void init(ShaderManager *shaderManager);
 
     void displayTime(int time);
 

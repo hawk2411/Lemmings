@@ -1,22 +1,21 @@
 #ifndef _INFOLEVEL_INCLUDE
 #define _INFOLEVEL_INCLUDE
 
-#include "GameState.h"
 #include "Texture.h"
 #include "Sprite.h"
 #include "Word.h"
 #include "IKeyboardManager.h"
 #include "IMouseManager.h"
 
+#include "LevelModes.h"
+#include "GameState.h"
+#include "Game.h"
+#include "LevelIndex.h"
+
 class InfoLevel : public GameState{
 
 public:
-    static InfoLevel &instance() {
-        static InfoLevel instance;
-        return instance;
-    };
-
-    InfoLevel();
+    explicit InfoLevel(Game* game, const LevelIndex& index);
     ~InfoLevel() override;
 
     // GameState override
@@ -27,42 +26,31 @@ public:
 
     void render()override;
 
-    void setLevel(int level, int mode);
+    void setLevel(LevelModes::Mode levelMode, int numLevel);
     //===================================================================
     //KeyboardManager override
-
-    void keyPressed(int key) override;
-
-    void keyReleased(int key) override;
-
-    void specialKeyPressed(int key) override;
-
-    void specialKeyReleased(int key) override;
-    //===================================================================
-    int getMode() const;
-
-    int getLevel() const;
+    void onKeyPressed(const SDL_KeyboardEvent &keyboardEvent) override;;
 
     void mouseMoved(int mouseX, int mouseY, bool bLeftButton, bool bRightButton) override;
+
+    //===================================================================
+
 
 private:
 
     // Functions
     void initTextures();
 
-    void initSprites();
-
     // Parametres
-    Texture _InfoLevelTexture;
-    std::unique_ptr<Sprite> _InfoLevelSprite;
+    Texture _infoLevelTexture;
+    std::unique_ptr<Sprite> _infoLevelSprite;
     std::unique_ptr<Sprite> _leftKey;
     std::unique_ptr<Sprite> _rightKey;
-    Word *_playWord{};
-    Word *_menuWord{};
+    std::unique_ptr<Word> _playWord;
+    std::unique_ptr<Word> _menuWord;
 
-    int _mode{};
-    int _level{};
-
+    LevelIndex _levelIndex;
+    ShaderManager* _shaderManager;
 };
 
 

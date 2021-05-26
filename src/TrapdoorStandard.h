@@ -9,7 +9,8 @@
 class TrapdoorStandard : public Trapdoor {
 
 public:
-    virtual void init();
+    explicit TrapdoorStandard(ShaderManager* shaderManager);
+    void init() override;
 
 };
 

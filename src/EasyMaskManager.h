@@ -1,29 +1,25 @@
 #ifndef _EASYMASKMANAGER_INCLUDE
 #define _EASYMASKMANAGER_INCLUDE
 
-#include "MaskManager.h"
+#include "IMaskManager.h"
 
-class EasyMaskManager : public MaskManager {
+class EasyMaskManager : public IMaskManager {
 public:
-    static EasyMaskManager &getInstance() {
-        static EasyMaskManager instance; // Guaranteed to be destroyed.
-        // Instantiated on first use.
-        return instance;
-    };
+    explicit EasyMaskManager(Level* level): IMaskManager(level){}
 
-    void init();
+    void init() override;
 
-    void update();
+    void update(int time) override;
 
-    void eraseMask(int x, int y);
+    void eraseMask(int x, int y, int time) override;
 
-    void applyMask(int x, int y);
+    void applyMask(int x, int y) override;
 
-    void eraseSpecialMask(int x, int y);
+    void eraseSpecialMask(int x, int y) override;
 
-    void applySpecialMask(int x, int y);
+    void applySpecialMask(int x, int y) override;
 
-    char getPixel(int x, int y);
+    char getPixel(int x, int y) override;
 
 };
 

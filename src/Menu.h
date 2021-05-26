@@ -6,16 +6,16 @@
 #include "GameState.h"
 #include "Sprite.h"
 #include "Sound.h"
+#include "Game.h"
+#include "LevelModes.h"
+#include "LevelIndex.h"
+
+class Game;
 
 class Menu : public GameState {
 
 public:
-    static Menu &getInstance() {
-        static Menu instance;
-        return instance;
-    };
-
-    Menu();
+    explicit Menu(Game *game, const LevelIndex &levelIndex);
 
     ~Menu() override;
 
@@ -29,25 +29,20 @@ public:
 
     void changeModeDown();
 
-    int getMode() const;
+    LevelModes::Mode getMode() const;
 
     void endMusic();
 
-    void keyPressed(int key) override;
-    void keyReleased(int key)  override {}
-    void specialKeyPressed(int key) override;
-    void specialKeyReleased(int key) override {}
 
     void mouseMoved(int mouseX, int mouseY, bool bLeftButton, bool bRightButton) override;
+
+    void onKeyPressed(const SDL_KeyboardEvent &keyboardEvent) override;
 
 
 private:
 
     // Functions
-
     void initTextures();
-
-    void changeMode();
 
     // Parametres
 
@@ -67,9 +62,7 @@ private:
     std::unique_ptr<Sprite> menuMode;
     std::unique_ptr<Sprite> menuPlaying;
 
-    int mode; // 0 = FUN, 1 = TRICKY, 2 = TAXING TODO change to enum
-
-    float currentTime;
+    LevelIndex _levelIndex;
 
     glm::vec2 modePositions[3] = {
             glm::vec2(0, 0),
@@ -78,6 +71,7 @@ private:
     };
 
     unique_ptr<Sound> music;
+    ShaderManager *_shaderManager;
 };
 
 

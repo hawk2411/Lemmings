@@ -7,11 +7,11 @@
 
 class Digger : public Job {
 public:
-    Digger(Jobs jobs);
+    Digger(SoundManager *soundManager);
 
     void initAnims(ShaderProgram &shaderProgram);
 
-    void updateStateMachine(int deltaTime);
+    void updateStateMachine(int deltaTime, Level *levelAttributes, IMaskManager *mask);
 
     void setWalkingRight(bool value);
 
@@ -19,9 +19,9 @@ public:
 
 
 private:
-    void dig();
+    void dig(IMaskManager *mask);
 
-    bool canDig()const;
+    bool canDig(IMaskManager *mask) const;
 
 private:
     enum DiggerState {

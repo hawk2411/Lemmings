@@ -3,18 +3,24 @@
 #include "Game.h"
 #include "ShaderManager.h"
 
-void DoorHell::init() {
-    doorSprite = Sprite::createSprite(glm::vec2(41, 32), glm::vec2(1.f / 3, 1.f / 8),
-                                      &ShaderManager::getInstance().getShaderProgram(),
-                                      &Game::spriteSheets().doorSprites);
+DoorHell::DoorHell(ShaderManager *shaderManager) : Door(shaderManager) {
 
-    escapeOffset = glm::vec2(13, 16);
+    _doorSprite = Sprite::createSprite(glm::vec2(41, 32), glm::vec2(1.f / 3, 1.f / 8),
+                                       &_shaderManager->getShaderProgram(),
+                                       &Game::spriteSheets().doorSprites);
 
-    doorSprite->setNumberAnimations(1);
+    _escapeOffset = glm::vec2(13, 16);
 
-    doorSprite->setAnimationSpeed(0, 12);
+    _doorSprite->setNumberAnimations(1);
+
+    _doorSprite->setAnimationSpeed(0, 12);
     for (int i = 2; i < 8; i++) {
-        doorSprite->addKeyframe(0, glm::vec2(2.f / 3, float(i) / 8));
+        _doorSprite->addKeyframe(0, glm::vec2(2.f / 3, float(i) / 8));
     }
-    doorSprite->changeAnimation(0);
+
+    _doorSprite->changeAnimation(0);
+}
+
+void DoorHell::init() {
+    _doorSprite->changeAnimation(0);
 }

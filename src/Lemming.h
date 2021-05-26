@@ -5,7 +5,10 @@
 #include "Sprite.h"
 #include "Job.h"
 #include "Countdown.h"
-
+#include "Level.h"
+#include "IMaskManager.h"
+#include "SoundManager.h"
+#include "ShaderManager.h"
 
 
 // Lemming is basically a Sprite that represents one lemming. As such it has
@@ -15,13 +18,11 @@
 class Lemming {
 
 public:
-    Lemming() {};
+    Lemming(const glm::vec2 &initialPosition, SoundManager *soundManager, ShaderManager *shaderManager);
 
-    Lemming(const glm::vec2 &initialPosition);
+    void update(int deltaTime, Level *levelAttributes, IMaskManager *mask);
 
-    void update(int deltaTime);
-
-    void render();
+    void render(const glm::vec2 &cameraPos);
 
     void changeJob(Jobs nextJob);
 
@@ -37,19 +38,20 @@ public:
 
     Job *getJob();
 
-    void writeDestiny();
+    void writeDestiny(int deltaTime);
 
 private:
     Job *_job;
     //Sprite *sprite;
-    Countdown *countdown;
-    ShaderProgram *shaderProgram;
+    Countdown _countdown;
+    ShaderManager *_shaderManager;
     bool walkingRight = true; // is marked true when the lemmings walks in right direction
-    bool alive;
-    bool isSaved;
-    glm::vec2 position;
+    bool _alive;
+    bool _isSaved;
+    glm::vec2 _position{};
+    SoundManager* _soundManager;
 
-    bool outOfMap();
+    bool outOfMap(const glm::vec2 &levelSize);
 
 };
 

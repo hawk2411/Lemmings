@@ -6,7 +6,7 @@
 
 class PercentageDisplay {
 public:
-    void init();
+    void init(ShaderManager *shaderManager);
 
     void displayPercentage(int num);
 

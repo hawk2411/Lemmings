@@ -20,28 +20,23 @@ public:
         NONE
     };
 
-
-    static JobAssigner &getInstance() {
-        static JobAssigner instance; // Guaranteed to be destroyed.
-        // Instantiated on first use.
-        return instance;
-    };
-
     void deleteJobToAssign();
 
     void offerJob(JobNames jobName);
 
     bool hasJobToAssign();
 
-    void assigJobLemming(int lemmingIndex);
 
+    Jobs getJobToAssign() const { return jobToAssign; };
+
+    static int jobNameToIndex(JobNames jobName);
+
+    JobNames getLastOfferedJob() const { return lastOfferedJob; }
+
+    void setLastOfferedJob(JobNames newJobName) { lastOfferedJob = newJobName; }
 
 private:
-    void decreaseOfferedJobCount();
 
-    int getJobCount(JobNames jobName);
-
-    int jobNameToIndex(JobNames jobName);
 
     Jobs jobToAssign = Jobs::UNKNOWN;
     JobNames lastOfferedJob = NONE;

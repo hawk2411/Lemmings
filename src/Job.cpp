@@ -21,22 +21,22 @@ enum LemmingAnims
 };
 */
 
-Job::Job(Jobs currentJob): isFinished(false), _currentJob(currentJob), _nextJob(Jobs::UNKNOWN), walkingRight(true){
+Job::Job(Jobs currentJob, SoundManager* soundManager ): isFinished(false), _currentJob(currentJob), _nextJob(Jobs::UNKNOWN), walkingRight(true), _soundManager(soundManager){
 }
 
 Job::~Job() {
 
 }
 
-int Job::collisionFloor(int maxFall) const {
+int Job::collisionFloor(int maxFall, const VariableTexture &maskedMap) const {
     bool bContact = false;
     int fall = 0;
-    glm::ivec2 posBase = jobSprite->getPosition();
+    glm::ivec2 posBase = _jobSprite->getPosition();
 
     posBase += glm::ivec2(7, 16);
     while ((fall < maxFall) && !bContact) {
-        if ((Scene::getInstance().getMaskedMap().pixel(posBase.x, posBase.y + fall) == 0) &&
-            (Scene::getInstance().getMaskedMap().pixel(posBase.x + 1, posBase.y + fall) == 0))
+        if ((maskedMap.pixel(posBase.x, posBase.y + fall) == 0) &&
+            (maskedMap.pixel(posBase.x + 1, posBase.y + fall) == 0))
             fall += 1;
         else
             bContact = true;
@@ -45,12 +45,12 @@ int Job::collisionFloor(int maxFall) const {
     return fall;
 }
 
-bool Job::collision() const {
-    glm::ivec2 posBase = jobSprite->getPosition();
+bool Job::collision(const VariableTexture &maskedMap) const {
+    glm::ivec2 posBase = _jobSprite->getPosition();
 
     posBase += glm::ivec2(7, 15);
-    if ((Scene::getInstance().getMaskedMap().pixel(posBase.x, posBase.y) == 0) &&
-        (Scene::getInstance().getMaskedMap().pixel(posBase.x + 1, posBase.y) == 0))
+    if ((maskedMap.pixel(posBase.x, posBase.y) == 0) &&
+        (maskedMap.pixel(posBase.x + 1, posBase.y) == 0))
         return false;
 
     return true;
@@ -67,7 +67,7 @@ Jobs Job::getNextJob()const {
 
 
 Sprite *Job::sprite() {
-    return jobSprite.get();
+    return _jobSprite.get();
 }
 
 void Job::setWalkingRight(bool value) {

@@ -1,9 +1,9 @@
 #include "NumDisplayButton.h"
 #include "ButtonNumFactory.h"
 
-void NumDisplayButton::initAux() {
-    leftNum = ButtonNumFactory::instance().createNum();
-    rightNum = ButtonNumFactory::instance().createNum();
+void NumDisplayButton::initAux(ShaderManager *shaderManager) {
+    leftNum = ButtonNumFactory::createNum(shaderManager);
+    rightNum = ButtonNumFactory::createNum(shaderManager);
 }
 
 void NumDisplayButton::displayNumAux(int firstDigit, int secondDigit) {

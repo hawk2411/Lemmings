@@ -34,7 +34,8 @@ add_executable(lemmings src/main.cpp
         src/InfoLevel.cpp
         src/Miner.cpp
         src/Button.cpp
-        src/UI.cpp
+        src/UserInterface.h
+        src/UserInterface.cpp
         src/MaskedTexturedQuad.cpp
         src/TrapdoorFactory.cpp
         src/main.cpp
@@ -47,7 +48,7 @@ add_executable(lemmings src/main.cpp
         src/ParticleFactory.cpp
         src/DoorEgypt.cpp
         src/Escaper.cpp
-        src/LevelManager.cpp
+        src/LevelRunner.cpp
         src/ParticleSystem.cpp
         src/Exploder.cpp
         src/VariableTexture.cpp
@@ -85,6 +86,12 @@ add_executable(lemmings src/main.cpp
         src/SoundManager.cpp
         src/Sound.cpp
         src/LemmingsException.cpp
+        src/TimerEventService.h
+        src/TimerEventService.cpp
+        src/EventCreator.h
+        src/EventCreator.cpp
+        src/LevelIndex.h
+        src/LevelIndex.cpp
         libs/SOIL/src/image_helper.c
         libs/SOIL/src/image_helper.h
         libs/SOIL/src/image_DXT.h
@@ -94,14 +101,12 @@ add_executable(lemmings src/main.cpp
         libs/SOIL/src/stb_image_aug.c
         libs/SOIL/src/stb_image_aug.h
         libs/SOIL/src/stbi_DDS_aug.h
-        libs/SOIL/src/stbi_DDS_aug_c.h
-
-        )
+        libs/SOIL/src/stbi_DDS_aug_c.h)
 
 
 find_package(OpenGL REQUIRED)
-find_package(GLUT REQUIRED)
-#find_package(SDL2 REQUIRED)
+#find_package(GLUT REQUIRED)
+find_package(SDL2 REQUIRED)
 find_package(GLEW REQUIRED)
 find_package(Freetype REQUIRED)
 find_package(fmod REQUIRED)
@@ -118,5 +123,7 @@ message("FMOD_OPUS_LIBRARY ${FMOD_OPUS_LIBRARY}")
 
 #-fuse-ld=gold
 #${GLM_INCLUDE_DIRS}
-include_directories(${OPENGL_INCLUDE_DIRS} ${GLUT_INCLUDE_DIRS} ${GLEW_INCLUDE_DIRS} ${FMOD_INCLUDE_DIR})
-target_link_libraries(${CMAKE_PROJECT_NAME} ${GLUT_LIBRARY} ${OPENGL_LIBRARIES} ${GLEW_LIBRARIES} ${GLM_LIBRARIES} ${FMOD_CORE_LIBRARY} ${FMOD_STUDIO_LIBRARY})
+#${GLUT_INCLUDE_DIRS}
+#${GLUT_LIBRARY}
+include_directories(${OPENGL_INCLUDE_DIRS} ${SDL2_INCLUDE_DIRS}  ${GLEW_INCLUDE_DIRS} ${FMOD_INCLUDE_DIR})
+target_link_libraries(${CMAKE_PROJECT_NAME} ${OPENGL_LIBRARIES} ${SDL2_LIBRARIES} ${GLEW_LIBRARIES} ${GLM_LIBRARIES} ${FMOD_CORE_LIBRARY} ${FMOD_STUDIO_LIBRARY})

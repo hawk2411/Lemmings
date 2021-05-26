@@ -1,13 +1,17 @@
 #ifndef _MASKMANAGER_INCLUDE
 #define _MASKMANAGER_INCLUDE
 
-class MaskManager {
+#include "Level.h"
+
+class IMaskManager {
 public:
+    explicit IMaskManager(Level *level) : _level(level) {}
+
     virtual void init() = 0;
 
-    virtual void update() = 0;
+    virtual void update(int time) = 0;
 
-    virtual void eraseMask(int x, int y) = 0;
+    virtual void eraseMask(int x, int y, int time) = 0;
 
     virtual void applyMask(int x, int y) = 0;
 
@@ -17,6 +21,10 @@ public:
 
     virtual char getPixel(int x, int y) = 0;
 
+    virtual void changeLevel(Level *level) {_level = level;};
+
+protected:
+    Level *_level;
 };
 
 

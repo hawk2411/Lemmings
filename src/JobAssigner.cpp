@@ -1,7 +1,4 @@
 #include "JobAssigner.h"
-#include "JobFactory.h"
-#include "Scene.h"
-#include "LevelManager.h"
 
 void JobAssigner::deleteJobToAssign() {
     jobToAssign = Jobs::UNKNOWN;
@@ -54,33 +51,6 @@ bool JobAssigner::hasJobToAssign() {
     return lastOfferedJob != NONE;
 }
 
-void JobAssigner::assigJobLemming(int lemmingIndex) {
-    if (lemmingIndex != -1) {
-        if (LevelManager::getInstance().assignJob(lemmingIndex, jobToAssign)) {
-            jobToAssign = Jobs::UNKNOWN;
-
-            decreaseOfferedJobCount();
-
-            if (getJobCount(lastOfferedJob) > 0) {
-                offerJob(lastOfferedJob);
-            } else {
-                lastOfferedJob = NONE;
-
-            }
-        }
-    }
-}
-
-void JobAssigner::decreaseOfferedJobCount() {
-
-    LevelManager::getInstance().decreaseJobCount(jobNameToIndex(lastOfferedJob));
-
-}
-
-int JobAssigner::getJobCount(JobNames jobName) {
-    return LevelManager::getInstance().getJobCount(jobNameToIndex(lastOfferedJob));
-}
-
 int JobAssigner::jobNameToIndex(JobNames jobName) {
     int index;
     switch (jobName) {
@@ -108,7 +78,7 @@ int JobAssigner::jobNameToIndex(JobNames jobName) {
         case JobAssigner::MINER:
             index = 6;
             break;
-        case JobAssigner::NONE:
+        default:
             index = -1;
             break;
     }

@@ -13,10 +13,10 @@ class Walker : public Job {
 
 
 public:
-    Walker(Jobs jobId):Job(jobId){}
+    Walker(SoundManager *soundManager);
     void initAnims(ShaderProgram &shaderProgram) override;
 
-    void updateStateMachine(int deltaTime) override;
+    void updateStateMachine(int deltaTime, Level *levelAttributes, IMaskManager *mask) override;
 
     void setWalkingRight(bool value) override;
 
@@ -29,7 +29,7 @@ private:
     };
 
 private:
-    WalkerState state;
+    WalkerState _state;
 };
 
 #endif // _WALKER_INCLUDE

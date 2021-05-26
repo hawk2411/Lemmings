@@ -3,9 +3,9 @@
 #include "ShaderManager.h"
 
 
-std::unique_ptr<Sprite> KeyFactory::createLeftKey(glm::ivec2 size) {
+unique_ptr<Sprite> KeyFactory::createLeftKey(ShaderProgram *shaderProgram, glm::ivec2 size) {
     auto keySprite = Sprite::createSprite(size, glm::vec2(63. / 128, 36. / 128),
-                                          &ShaderManager::getInstance().getShaderProgram(),
+                                          shaderProgram,
                                           &Game::spriteSheets().keySprites);
     keySprite->setNumberAnimations(1);
 
@@ -18,9 +18,9 @@ std::unique_ptr<Sprite> KeyFactory::createLeftKey(glm::ivec2 size) {
 
 }
 
-std::unique_ptr<Sprite> KeyFactory::createRightKey(glm::ivec2 size) {
+unique_ptr<Sprite> KeyFactory::createRightKey(ShaderProgram *shaderProgram, glm::ivec2 size) {
     auto keySprite = Sprite::createSprite(size, glm::vec2(63. / 128, 36. / 128),
-                                          &ShaderManager::getInstance().getShaderProgram(),
+                                          shaderProgram,
                                           &Game::spriteSheets().keySprites);
     keySprite->setNumberAnimations(1);
 
@@ -32,9 +32,9 @@ std::unique_ptr<Sprite> KeyFactory::createRightKey(glm::ivec2 size) {
     return keySprite;
 }
 
-std::unique_ptr<Sprite> KeyFactory::createEscapeKey(glm::ivec2 size) {
+std::unique_ptr<Sprite> KeyFactory::createEscapeKey(ShaderProgram *shaderProgram, glm::ivec2 size) {
     auto keySprite = Sprite::createSprite(size, glm::vec2(63. / 128, 36. / 128),
-                                          &ShaderManager::getInstance().getShaderProgram(),
+                                          shaderProgram,
                                           &Game::spriteSheets().keySprites);
     keySprite->setNumberAnimations(1);
 

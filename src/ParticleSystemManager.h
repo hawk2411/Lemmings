@@ -7,19 +7,13 @@
 
 class ParticleSystemManager {
 public:
-    static ParticleSystemManager &getInstance() {
-        static ParticleSystemManager instance; // Guaranteed to be destroyed.
-        // Instantiated on first use.
-        return instance;
-    };
-
     void init();
 
-    void createNewParticleSystem(glm::vec2 position);
+    void createNewParticleSystem( ShaderProgram* shaderProgram, glm::vec2 position);
 
     void update(int deltaTime);
 
-    void render();
+    void render(glm::vec2 cameraPos);
 
     bool finished();
 

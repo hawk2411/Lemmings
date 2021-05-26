@@ -1,16 +1,12 @@
 #ifndef _CURSOR_INCLUDE
 #define _CURSOR_INCLUDE
 
-
+#include "ShaderManager.h"
 #include "Sprite.h"
 
 class Cursor {
 public:
-    static Cursor &getInstance() {
-        static Cursor instance; // Guaranteed to be destroyed.
-        // Instantiated on first use.
-        return instance;
-    };
+    explicit Cursor(ShaderManager* shaderManager);
 
     void init();
 

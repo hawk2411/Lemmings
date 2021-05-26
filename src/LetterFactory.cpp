@@ -3,9 +3,9 @@
 #include "ShaderManager.h"
 
 
-std::unique_ptr<Sprite> LetterFactory::createLetter(char c) {
+unique_ptr<Sprite> LetterFactory::createLetter(char c, ShaderManager *shaderManager) {
     auto letterSprite = Sprite::createSprite(glm::ivec2(9, 12), glm::vec2(18. / 32, 24. / 4096),
-                                             &ShaderManager::getInstance().getShaderProgram(),
+                                             &shaderManager->getShaderProgram(),
                                              &Game::spriteSheets().greenNumLetters);
     letterSprite->setNumberAnimations(1);
 

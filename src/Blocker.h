@@ -11,11 +11,11 @@
 
 class Blocker : public Job {
 public:
-    Blocker(Jobs jobs);
+    Blocker(SoundManager *soundManager);
 
     void initAnims(ShaderProgram &shaderProgram) override;
 
-    void updateStateMachine(int deltaTime) override;
+    void updateStateMachine(int deltaTime, Level *levelAttributes, IMaskManager *mask) override;
 
     void setWalkingRight(bool value) override;
 
@@ -24,7 +24,7 @@ public:
     }
 
 private:
-    enum BlockerState {
+    enum class BlockerState {
         BLOCKING_STATE
     };
 

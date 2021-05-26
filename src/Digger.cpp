@@ -7,61 +7,61 @@
 #define JUMP_HEIGHT 96
 #define FALL_STEP 4
 
-Digger::Digger(Jobs jobs) : Job(jobs) {
+Digger::Digger(SoundManager *soundManager) : Job(Jobs::DIGGER, soundManager) {
 
 }
 
 
 void Digger::initAnims(ShaderProgram &shaderProgram) {
-    jobSprite = Sprite::createSprite(glm::ivec2(16, 16), glm::vec2(1.f / 16, 1.f / 14), &shaderProgram,
-                                     &Game::spriteSheets().lemmingAnimations,
-                                     &Game::spriteSheets().rotatedLemmingAnimations);
-    jobSprite->setNumberAnimations(1);
+    _jobSprite = Sprite::createSprite(glm::ivec2(16, 16), glm::vec2(1.f / 16, 1.f / 14), &shaderProgram,
+                                      &Game::spriteSheets().lemmingAnimations,
+                                      &Game::spriteSheets().rotatedLemmingAnimations);
+    _jobSprite->setNumberAnimations(1);
 
     // DIGGER
-    jobSprite->setAnimationSpeed(0, 12);
+    _jobSprite->setAnimationSpeed(0, 12);
     for (int i = 0; i < 8; i++)
-        jobSprite->addKeyframe(0, glm::vec2(float(i) / 16, 8.0f / 14));
+        _jobSprite->addKeyframe(0, glm::vec2(float(i) / 16, 8.0f / 14));
 
 
     state = DIGGING_STATE;
-    jobSprite->changeAnimation(0);
+    _jobSprite->changeAnimation(0);
 }
 
 void Digger::setWalkingRight(bool value) {
     walkingRight = value;
 }
 
-void Digger::updateStateMachine(int deltaTime) {
+void Digger::updateStateMachine(int deltaTime, Level *levelAttributes, IMaskManager *mask) {
 
     switch (state) {
 
         case DIGGING_STATE:
-            if (!canDig()) {
+            if (!canDig(mask)) {
                 isFinished = true;
 
-                int fall = collisionFloor(3);
+                int fall = collisionFloor(3, levelAttributes->maskedMap);
                 if (fall >= 3) {
                     _nextJob = Jobs::FALLER;;
                 } else {
                     _nextJob = Jobs::WALKER;
                 }
-            } else if (jobSprite->isInFirstFrame() || jobSprite->getAnimationCurrentFrame() == 4) {
-                dig();
+            } else if (_jobSprite->isInFirstFrame() || _jobSprite->getAnimationCurrentFrame() == 4) {
+                dig(mask);
             }
 
     }
 }
 
-bool Digger::canDig() const {
-    glm::ivec2 posBase = jobSprite->getPosition();
+bool Digger::canDig(IMaskManager *mask) const {
+    glm::ivec2 posBase = _jobSprite->getPosition();
 
     posBase +=  glm::ivec2(4, 14);
     for (int j = 0; j < 3; ++j) {
         for (int i = 0; i < 9; ++i) {
             int x = posBase.x + i;
             int y = posBase.y + j;
-            if (Scene::getInstance().getPixel(x, y) == -1) {
+            if (mask->getPixel(x, y) == -1) {
                 return true;
             }
         }
@@ -69,9 +69,9 @@ bool Digger::canDig() const {
     return false;
 }
 
-void Digger::dig() {
+void Digger::dig(IMaskManager *mask) {
 
-    glm::ivec2 posBase = jobSprite->getPosition();
+    glm::ivec2 posBase = _jobSprite->getPosition();
 
     posBase += glm::ivec2(4, 14);
 
@@ -79,10 +79,10 @@ void Digger::dig() {
 
     for (int i = 0; i < 9; ++i) {
         int x = posBase.x + i;
-        Scene::getInstance().eraseMask(x, y);
+        mask->eraseMask(x, y, 0);
     }
 
-    jobSprite->incPosition(glm::ivec2(0, 1));
+    _jobSprite->incPosition(glm::ivec2(0, 1));
 }
 
 

@@ -4,55 +4,147 @@
 #include "Results.h"
 #include "Credits.h"
 #include "Instructions.h"
+//#include "LevelRunner.h"
+#include "EventCreator.h"
 #include "Game.h"
+
 #include "StateManager.h"
-#include "LevelManager.h"
+#include "InfoLevel.h"
+#include "LevelIndex.h"
+
+StateManager::StateManager(Game *game, ShaderManager *shaderManager) : _currentState(States::Type::Menu),
+                                                                       _shaderManager(shaderManager) {
+
+    LevelIndex levelIndex{LevelModes::Mode::FUN_MODE, 1};
+    _gameStates.insert(std::make_pair(States::Type::Menu, unique_ptr<GameState>(new Menu(game, levelIndex))));
+    _gameStates.insert(std::make_pair(States::Type::Scene, unique_ptr<GameState>(new Scene(game,
+                                                                                           game->getSoundManager(),
+                                                                                           levelIndex))));
+    _gameStates.insert(std::make_pair(States::Type::SceneInfo,
+                                      unique_ptr<GameState>(new InfoLevel(game, levelIndex))));
+    _gameStates.insert(std::make_pair(States::Type::Result, unique_ptr<GameState>(new Results(game, levelIndex))));
+    _gameStates.insert(std::make_pair(States::Type::Instruction, unique_ptr<GameState>(new Instructions(game))));
+    _gameStates.insert(std::make_pair(States::Type::Credits, unique_ptr<GameState>(new Credits(game))));
+    setCurrentState(States::Type::Menu);
+}
 
 void StateManager::changeMenu() {
-    Menu::getInstance().init();
-    Game::instance()->setGameState(&Menu::getInstance());
-}
-
-void StateManager::changeInfo(int levelMode, int levelNum) {
-    InfoLevel::instance().init();
-    InfoLevel::instance().setLevel(levelNum, levelMode);
-    Game::instance()->setGameState(&InfoLevel::instance());
-}
-
-void StateManager::changeScene(int levelMode, int levelNum) {
-    string modeName;
-    switch (levelMode) {
-        case FUN_MODE:
-            modeName = "fun";
-            break;
-        case TRICKY_MODE:
-            modeName = "tricky";
-            break;
-        case TAXING_MODE:
-            modeName = "taxing";
-            break;
-    }
-//    modeName="fun";
-//    levelNum=4;
-
-    LevelManager::getInstance().init(modeName, levelNum);
-    Scene::getInstance().init();
-    Game::instance()->setGameState(&Scene::getInstance());
+    _currentState = States::Type::Menu;
+    _gameStates[_currentState]->init();
 
 }
 
-void StateManager::changeResults(int goalPercentage, int currentPercentage) {
-    Results::getInstance().init();
-    Results::getInstance().setPercentages(goalPercentage, currentPercentage);
-    Game::instance()->setGameState(&Results::getInstance());
+//
+void StateManager::changeInfo(LevelModes::Mode levelMode, int levelNum) {
+    _currentState = States::Type::SceneInfo;
+    _gameStates[_currentState]->init();
+    dynamic_cast<InfoLevel *>(_gameStates[_currentState].get())->setLevel(levelMode, levelNum);
+
+}
+
+
+void StateManager::changeScene(const LevelIndex &lvlIndex) {
+    _currentState = States::Type::Scene;
+    dynamic_cast<Scene *>(_gameStates[_currentState].get())->changeLevel(lvlIndex);
+    _gameStates[_currentState]->init();
+}
+
+//
+void StateManager::changeResults(ResultStatistic statistic, LevelIndex levelIndex) {
+    _currentState = States::Type::Result;
+    auto *results = dynamic_cast<Results *>(_gameStates[_currentState].get());
+    results->setPercentages(statistic.goalPercentage, statistic.currentPercentage);
+    results->changeLevel(levelIndex);
+
+    _gameStates[States::Type::Result]->init();
 }
 
 void StateManager::changeCredits() {
-    Credits::instance().init();
-    Game::instance()->setGameState(&Credits::instance());
+    _currentState = States::Type::Credits;
+    _gameStates[_currentState]->init();
 }
 
 void StateManager::changeInstructions() {
-    Instructions::getInstance().init();
-    Game::instance()->setGameState(&Instructions::getInstance());
+    _currentState = States::Type::Instruction;
+    _gameStates[_currentState]->init();
 }
+
+GameState *StateManager::getCurrentGameState() {
+    return _gameStates[_currentState].get();
+}
+
+void StateManager::update(int deltaTime) {
+    _gameStates[_currentState]->update(deltaTime);
+}
+
+void StateManager::render() {
+    _gameStates[_currentState]->render();
+}
+
+void StateManager::setCurrentState(States::Type current) {
+    _currentState = current;
+    auto it_key = _gameStates.find(current);
+
+    if (it_key == _gameStates.end()) {
+        return;
+    }
+    _gameStates[current]->init();
+
+}
+
+void StateManager::onUserEvent(const SDL_UserEvent &event) {
+    switch (event.code) {
+        case CHANGE_TO_CREDITS:
+            changeCredits();
+            break;
+        case CHANGE_TO_MENU:
+            changeMenu();
+            break;
+        case CHANGE_TO_INSTRUCTION:
+            changeInstructions();
+            break;
+        case CHANGE_TO_INFO: {
+            auto *levelIndex = static_cast<LevelIndex *>(event.data1);
+
+            changeInfo(levelIndex->mode, levelIndex->levelNo);
+            delete levelIndex;
+        }
+            break;
+        case CHANGE_TO_SCENE: {
+            auto *levelIndex = static_cast<LevelIndex *>(event.data1);
+
+            changeScene(*levelIndex);
+            delete levelIndex;
+            break;
+        }
+        case CHANGE_TO_RESULT: {
+            auto *statistic = static_cast<ResultStatistic *>(event.data1);
+            auto *levelIndex = static_cast<LevelIndex *>(event.data2);
+
+            changeResults(*statistic, *levelIndex);
+            delete statistic;
+            delete levelIndex;
+        }
+    }
+}
+
+void StateManager::onKeyPressed(const SDL_KeyboardEvent &event) {
+    _gameStates[_currentState]->onKeyPressed(event);
+}
+
+void StateManager::onMouseMove(const SDL_MouseMotionEvent &mouseMotionEvent) {
+    _gameStates[_currentState]->onMouseMove(mouseMotionEvent);
+}
+
+void StateManager::onMouseButtonDown(const SDL_MouseButtonEvent &mouseButtonEvent) {
+    _gameStates[_currentState]->onMouseButtonDown(mouseButtonEvent);
+}
+
+void StateManager::onMouseButtonUp(const SDL_MouseButtonEvent &mouseButtonEvent) {
+    _gameStates[_currentState]->onMouseButtonUp(mouseButtonEvent);
+}
+
+
+
+
+

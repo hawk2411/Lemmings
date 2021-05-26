@@ -1,8 +1,9 @@
 #include "NumDisplay.h"
+#include "ShaderManager.h"
 
 
-void NumDisplay::init() {
-    initAux();
+void NumDisplay::init(ShaderManager *shaderManager) {
+    initAux(shaderManager);
 
     setPosition(glm::vec2(0, 0));
 }

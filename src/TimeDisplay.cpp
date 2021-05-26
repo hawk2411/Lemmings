@@ -1,11 +1,11 @@
 #include "TimeDisplay.h"
 #include "GreenNumFactory.h"
 
-void TimeDisplay::init() {
-    minutes = GreenNumFactory::instance().createNum();
-    hyphen = GreenNumFactory::instance().createSymbol('-');
-    firstDigitSeconds = GreenNumFactory::instance().createNum();
-    secondDigitSeconds = GreenNumFactory::instance().createNum();
+void TimeDisplay::init(ShaderManager *shaderManager) {
+    minutes = GreenNumFactory::createNum(shaderManager);
+    hyphen = GreenNumFactory::createSymbol('-', shaderManager);
+    firstDigitSeconds = GreenNumFactory::createNum(shaderManager);
+    secondDigitSeconds = GreenNumFactory::createNum(shaderManager);
     setPosition(glm::vec2(0, 0));
 
 }

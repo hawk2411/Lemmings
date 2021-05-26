@@ -1,16 +1,16 @@
 #include <iostream>
+#include "LemmingsException.h"
 #include "TrapdoorFactory.h"
 #include "Game.h"
 #include "TrapdoorStandard.h"
 #include "TrapdoorHell.h"
 
-Trapdoor *TrapdoorFactory::createTrapdoor(string type) {
-    Trapdoor *trapdoor;
+Trapdoor *TrapdoorFactory::createTrapdoor(const string &type, ShaderManager *shaderManager) {
     if (type == "standard") {
-        trapdoor = new TrapdoorStandard();
-    } else if (type == "hell") {
-        trapdoor = new TrapdoorHell();
-
+        return  new TrapdoorStandard(shaderManager);
     }
-    return trapdoor;
+    if (type == "hell") {
+        return new TrapdoorHell(shaderManager);
+    }
+    throw LemmingsException("Unknown trap door type.");
 }

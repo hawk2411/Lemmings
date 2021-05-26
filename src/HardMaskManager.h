@@ -1,38 +1,32 @@
 #ifndef _HARDMASKMANAGER_INCLUDE
 #define _HARDMASKMANAGER_INCLUDE
 
-#include "MaskManager.h"
-
 #include <vector>
+#include "IMaskManager.h"
 
-class HardMaskManager : public MaskManager {
+class HardMaskManager : public IMaskManager {
 public:
+    explicit HardMaskManager(Level* level) : IMaskManager(level){}
 
-    static HardMaskManager &getInstance() {
-        static HardMaskManager instance; // Guaranteed to be destroyed.
-        // Instantiated on first use.
-        return instance;
-    };
+    void init() override;
 
-    void init();
+    void update(int time) override;
 
-    void update();
+    void eraseMask(int x, int y, int time) override;
 
-    void eraseMask(int x, int y);
+    void applyMask(int x, int y) override;
 
-    void applyMask(int x, int y);
+    void eraseSpecialMask(int x, int y) override;
 
-    void eraseSpecialMask(int x, int y);
+    void applySpecialMask(int x, int y) override;
 
-    void applySpecialMask(int x, int y);
-
-    char getPixel(int x, int y);
+    char getPixel(int x, int y) override;
 
 private:
     void regenerateMask(int x, int y);
 
-    std::vector<std::vector<int>> timeWhenDissapear;
-    std::vector<std::vector<int>> timeToAppear;
+    std::vector<std::vector<int>> _timeWhenDisappear;
+    std::vector<std::vector<int>> _timeToAppear;
 };
 
 

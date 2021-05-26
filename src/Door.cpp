@@ -3,26 +3,28 @@
 #include "Game.h"
 
 
+Door::Door(ShaderManager *shaderManager) : _shaderManager(shaderManager) {}
+
 void Door::update(int deltaTime) {
-    doorSprite->update(deltaTime);
+    _doorSprite->update(deltaTime);
 }
 
-void Door::render() {
-    glm::vec2 oldPosition = doorSprite->getPosition();
-    doorSprite->setPosition(doorSprite->getPosition() - Level::currentLevel().getLevelAttributes()->cameraPos);
-    doorSprite->render();
-    doorSprite->setPosition(oldPosition);
+void Door::render(glm::vec2 cameraPos) {
+    glm::vec2 oldPosition = _doorSprite->getPosition();
+    _doorSprite->setPosition(_doorSprite->getPosition() - cameraPos);
+    _doorSprite->render();
+    _doorSprite->setPosition(oldPosition);
 }
+
 
 void Door::setPosition(glm::vec2 position) {
-    doorSprite->setPosition(position);
+    _doorSprite->setPosition(position);
 }
 
-
 glm::vec2 Door::getPosition() const {
-    return doorSprite->getPosition();
+    return _doorSprite->getPosition();
 }
 
 glm::vec2 Door::getEscapePosition() const {
-    return doorSprite->getPosition() + escapeOffset;
+    return _doorSprite->getPosition() + _escapeOffset;
 }

@@ -7,11 +7,11 @@
 
 class Basher : public Job {
 public:
-    Basher(Jobs jobs);
+    Basher(SoundManager *soundManager);
 
     void initAnims(ShaderProgram &shaderProgram) override;
 
-    void updateStateMachine(int deltaTime) override;
+    void updateStateMachine(int deltaTime, Level *levelAttributes, IMaskManager *mask) override;
 
     void setWalkingRight(bool value) override;
 
@@ -21,9 +21,9 @@ public:
 
 
 private:
-    bool bashRight();
+    bool bashRight(IMaskManager *mask, int time);
 
-    bool bashLeft();
+    bool bashLeft(IMaskManager *mask, int time);
 
 private:
     enum BasherState {

@@ -4,58 +4,57 @@
 #include "ShaderManager.h"
 #include "JobFactory.h"
 #include "Utils.h"
+#include "IMaskManager.h"
 
 #define JUMP_ANGLE_STEP 4
 #define JUMP_HEIGHT 96
 #define FALL_STEP 4
 
 
-Lemming::Lemming(const glm::vec2 &initialPosition) {
-    this->shaderProgram = &ShaderManager::getInstance().getShaderProgram();
-    _job = JobFactory::instance().createFallerJob();
-    _job->initAnims(*shaderProgram);
-    _job->sprite()->setPosition(initialPosition);
-    countdown = nullptr;
-    alive = true;
-    isSaved = false;
+Lemming::Lemming(const glm::vec2 &initialPosition, SoundManager *soundManager, ShaderManager *shaderManager)
+        : _soundManager(soundManager), _shaderManager(shaderManager), _countdown(shaderManager) {
+    _job = JobFactory::createJob(Jobs::FALLER, _soundManager);
+    _job->initAnims(_shaderManager->getShaderProgram());
+    _position = initialPosition;
+    _job->sprite()->setPosition(_position);
+    _alive = true;
+    _isSaved = false;
 }
 
-void Lemming::update(int deltaTime) {
+void Lemming::update(int deltaTime, Level *levelAttributes, IMaskManager *mask) {
     if (_job->sprite()->update(deltaTime) == 0) {
         return;
     }
 
-    if (outOfMap()) {
-        alive = false;
+    if (outOfMap(levelAttributes->levelSize)) {
+        _alive = false;
         delete _job;
         //lemming no longer has a job
         return;
     }
-    if (countdown != nullptr && countdown->isOver()) {
+    if (_countdown.isStarted() && _countdown.isOver()) {
         changeJob(Jobs::EXPLODER);
-        delete countdown;
-        countdown = nullptr;
         return;
     }
     //still not nuked
-    _job->updateStateMachine(deltaTime);
+    _job->updateStateMachine(deltaTime, levelAttributes, mask);
 
-    if (countdown != nullptr) {
+    if (_countdown.isStarted()) {
         //countdown for nuke is running
-        countdown->setPosition(glm::vec2(6, -8) + _job->sprite()->getPosition());
-        countdown->update(deltaTime);
+        _countdown.setPosition(glm::vec2(6, -8) + _job->sprite()->getPosition());
+        _countdown.update(deltaTime);
     }
 
     if (_job->finished()) {
         if (_job->getNextJob() == Jobs::UNKNOWN) {
             if (_job->getCurrentJob() == Jobs::ESCAPER) {
-                isSaved = true;
+                _isSaved = true;
             } else {
                 cout << "is finished but not alive" << endl;
-                alive = false;
+                _alive = false;
             }
         }
-        if (alive && !isSaved) {
+        if (_alive && !_isSaved) {
             changeJob(_job->getNextJob());
         }
 
@@ -63,15 +62,13 @@ void Lemming::update(int deltaTime) {
 
 }
 
-void Lemming::render() {
+void Lemming::render(const glm::vec2 &cameraPos) {
     glm::vec2 oldPosition = _job->sprite()->getPosition();
-    _job->sprite()->setPosition(oldPosition - Level::currentLevel().getLevelAttributes()->cameraPos);
+    _job->sprite()->setPosition(oldPosition - cameraPos);
     _job->sprite()->render();
     _job->sprite()->setPosition(oldPosition);
 
-    if (countdown != nullptr) {
-        countdown->render();
-    }
+    _countdown.render(cameraPos);
 }
 
 void Lemming::changeJob(Jobs nextJob) {
@@ -81,11 +78,11 @@ void Lemming::changeJob(Jobs nextJob) {
         oldPosition = _job->sprite()->getPosition();
         delete _job;
     }
-    _job = JobFactory::instance().createJob(nextJob);
+    _job = JobFactory::createJob(nextJob, _soundManager);
     if(_job == nullptr)
         return;
 
-    _job->initAnims(*shaderProgram);
+    _job->initAnims(_shaderManager->getShaderProgram());
     _job->setWalkingRight(walkingRight);
     _job->sprite()->setPosition(oldPosition);
 }
@@ -99,11 +96,11 @@ Job *Lemming::getJob() {
 }
 
 bool Lemming::dead() const {
-    return !alive;
+    return !_alive;
 }
 
 bool Lemming::saved() const {
-    return isSaved;
+    return _isSaved;
 }
 
 bool Lemming::isWalkingRight() const {
@@ -115,12 +112,10 @@ void Lemming::setWalkingRight(bool value) {
     _job->setWalkingRight(value);
 }
 
-void Lemming::writeDestiny() {
-    countdown = new Countdown();
+void Lemming::writeDestiny(int deltaTime) {
+    _countdown.start(deltaTime);
 }
 
-bool Lemming::outOfMap() {
-    return !Utils::insideRectangle(_job->sprite()->getPosition(), glm::vec2(0, 0),
-                                   glm::vec2(Level::currentLevel().getLevelAttributes()->levelSize.x,
-                                             Level::currentLevel().getLevelAttributes()->levelSize.y));
+bool Lemming::outOfMap(const glm::vec2 &levelSize) {
+    return !Utils::insideRectangle(_job->sprite()->getPosition(), glm::vec2(0, 0), levelSize);
 }

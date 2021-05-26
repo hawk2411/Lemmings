@@ -7,7 +7,9 @@
 class DoorEgypt : public Door {
 
 public:
-    virtual void init();
+    explicit DoorEgypt(ShaderManager *shaderManager);
+
+    void init() override;
 };
 
 

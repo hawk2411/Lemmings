@@ -8,9 +8,9 @@ void ParticleSystemManager::init() {
     particleSystems.resize(0);
 }
 
-void ParticleSystemManager::createNewParticleSystem(glm::vec2 position) {
+void ParticleSystemManager::createNewParticleSystem( ShaderProgram* shaderProgram, glm::vec2 position) {
 
-    ParticleSystem *particleSystem = new ParticleSystem();
+    ParticleSystem *particleSystem = new ParticleSystem(shaderProgram);
     particleSystem->setPosition(position);
     particleSystems.push_back(particleSystem);
 }
@@ -23,10 +23,10 @@ void ParticleSystemManager::update(int deltaTime) {
     }
 }
 
-void ParticleSystemManager::render() {
+void ParticleSystemManager::render(glm::vec2 cameraPos) {
     for (int i = 0; i < particleSystems.size(); ++i) {
         if (particleSystems[i]->notFinished()) {
-            particleSystems[i]->render();
+            particleSystems[i]->render(cameraPos);
         }
     }
 }

@@ -1,39 +1,62 @@
-#include "Countdown.h"
 #include "ButtonNumFactory.h"
 #include "Level.h"
-#include "LevelManager.h"
+#include "Countdown.h"
 
-#define MAX_SEC 5
+const int MAX_SEC = 5;
 
-Countdown::Countdown() {
-    goalTime = MAX_SEC + LevelManager::getInstance().getCurrentTime();
-    countNum = ButtonNumFactory::instance().createNum();
-    countNum->changeAnimation(MAX_SEC);
-    over = false;
+Countdown::Countdown(ShaderManager *shaderManager) : _shaderManager(shaderManager) {
+    _over = false;
+    _countNum = ButtonNumFactory::createNum(_shaderManager);
+    _countNum->changeAnimation(MAX_SEC);
+    _goalTime = 0;
+    _isStarted = false;
 }
 
-void Countdown::render() {
-    glm::vec2 oldPosition = countNum->getPosition();
-    countNum->setPosition(oldPosition - Level::currentLevel().getLevelAttributes()->cameraPos);
-    countNum->render();
-    countNum->setPosition(oldPosition);
+void Countdown::render(const glm::vec2 &cameraPos) {
+
+    if(!_isStarted) {
+        return;
+    }
+
+    glm::vec2 oldPosition = _countNum->getPosition();
+    _countNum->setPosition(oldPosition - cameraPos);
+    _countNum->render();
+    _countNum->setPosition(oldPosition);
 
 }
 
 void Countdown::setPosition(glm::vec2 position) {
-    countNum->setPosition(position);
+    _countNum->setPosition(position);
 }
 
 void Countdown::update(int deltaTime) {
-    int currentTime = LevelManager::getInstance().getCurrentTime();
-    int currentSec = goalTime - currentTime;
+    if(!_isStarted) {
+        return;
+    }
+    int currentSec = _goalTime - deltaTime;
     if (currentSec <= 0) {
-        over = true;
+        _over = true;
     } else {
-        countNum->changeAnimation(currentSec);
+        _countNum->changeAnimation(currentSec);
     }
 }
 
-bool Countdown::isOver() {
-    return over;
+
+void Countdown::start(int goalTime) {
+    _goalTime = MAX_SEC + goalTime;
+    _isStarted = true;
+}
+
+bool Countdown::isOver() const {
+    return _over;
+}
+
+
+void Countdown::reset(){
+    _goalTime = 0;
+    _isStarted = false;
+}
+
+bool Countdown::isStarted() const {
+    return _isStarted;
 }

@@ -78,11 +78,11 @@ void Sprite::render() const {
     glEnable(GL_TEXTURE_2D);
     shaderProgram->setTextureUnit("tex", 0);
     glActiveTexture(GL_TEXTURE0);
-    const Texture* current = _spriteSheet;
-    if(currentAnimation < 0 || currentAnimation >= _rotated.size()) {
+    const Texture *current = _spriteSheet;
+    if (currentAnimation < 0 || currentAnimation >= _rotated.size()) {
         _spriteSheet->use();
     } else {
-        _rotated[currentAnimation]?_rotatedSpriteSheet->use():_spriteSheet->use();
+        _rotated[currentAnimation] ? _rotatedSpriteSheet->use() : _spriteSheet->use();
     }
     glBindVertexArray(vao);
     glEnableVertexAttribArray(posLocation);

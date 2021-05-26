@@ -1,32 +1,30 @@
-#ifndef _LEVELMANAGER_INCLUDE
-#define _LEVELMANAGER_INCLUDE
+#ifndef _LEVEL_RUNNER_INCLUDE
+#define _LEVEL_RUNNER_INCLUDE
 
 #include <set>
+#include "SoundManager.h"
 #include "Lemming.h"
 #include "Level.h"
 #include "Door.h"
 #include "Trapdoor.h"
 #include "Sound.h"
+//#include "IMaskManager.h"
+#include "LevelIndex.h"
 
-class LevelManager {
+class LevelRunner {
 
 public:
-    static LevelManager &getInstance() {
-        static LevelManager instance;
-        return instance;
-    };
-
-    LevelManager();
-    ~LevelManager();
+    LevelRunner(SoundManager *soundManager, ShaderManager * shaderManager, const LevelIndex& levelIndex);
+    ~LevelRunner();
 
 
-    void init(string levelMode, int levelNum);
+    void changeLevel(const LevelIndex &levelIndex);
 
-    void update(int deltaTime);
+    void update(int deltaTime, IMaskManager *currentMask);
 
     void render();
 
-    bool finished();
+    bool finished() const;
 
     int getNumLemmingsAlive();
 
@@ -48,30 +46,31 @@ public:
 
     void apocalypse();
 
-    int getReleaseRate();
+    int getReleaseRate() const;
 
-    int getMinReleaseRate();
+    int getMinReleaseRate() const;
 
     void decreaseReleaseRate();
 
     void increaseReleaseRate();
 
-    int getActualLevel();
+    int getActualLevel() const;
 
-    int getActualMode();
+    LevelModes::Mode getActualMode()const;
 
     int getJobCount(int index);
 
     void decreaseJobCount(int index);
 
     void endMusic();
-
+    Level* getLevelAttributes()const{return _levelStartValues.get();}
 
 private:
     void spawnLemmings();
 
+    std::unique_ptr<Level> _levelStartValues;
 
-    int *_jobCount;
+
     set<Lemming *> _lemmings;    //TODO why the fuck is this a set? Are they sorted?
 
     int _deadLemmings;
@@ -81,8 +80,7 @@ private:
     int _minReleaseRate;
     int _availableLemmings;
 
-    int _actualLevel;
-    int _actualMode;
+    LevelIndex _levelIndex;
 
     int _goalTime;
     float _currentTime;
@@ -92,17 +90,16 @@ private:
     bool _finishedLevel;
 
     bool _exploding;
-
-    Door *_door;
-    Trapdoor *_trapdoor;
+    SoundManager *_soundManager;
+    ShaderManager *_shaderManager;
 
     unique_ptr<Sound> _music;
-    unique_ptr<Sound> _dooropen;
+    unique_ptr<Sound> _dooropenSound;
 
 
     void finishLevel();
 
-    void updateLemmings(int deltaTime);
+    void updateLemmings(int deltaTime, IMaskManager *currentMask);
 
     void renderLemmings();
 
@@ -110,4 +107,4 @@ private:
     void clearLemmings();
 };
 
-#endif // _LEVELMANAGER_INCLUDE
+#endif // _LEVEL_RUNNER_INCLUDE

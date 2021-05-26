@@ -3,19 +3,20 @@
 
 #include <glm/glm.hpp>
 #include "ShaderProgram.h"
-#include "MaskedTexturedQuad.h"
+
 
 
 class ShaderManager {
 
 public:
-    static ShaderManager &getInstance() {
-        static ShaderManager instance;
+    ShaderManager();
 
-        return instance;
-    }
+//    static ShaderManager &getInstance() {
+//        static ShaderManager instance;
+//
+//        return instance;
+//    }
 
-    void init();
 
     ShaderProgram &getShaderProgram();
 
@@ -28,6 +29,7 @@ public:
     glm::mat4 getProjectionMatrix();
 
 private:
+
     ShaderProgram _simpleTexProgram, _maskedTexProgram;
     glm::mat4 _projection;
     glm::mat4 _modelView;
