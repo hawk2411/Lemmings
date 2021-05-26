@@ -15,14 +15,14 @@
 StateManager::StateManager(Game *game, ShaderManager *shaderManager) : _currentState(States::Type::Menu),
                                                                        _shaderManager(shaderManager) {
 
-    LevelIndex lidx{LevelModes::Mode::FUN_MODE, 2};
-    _gameStates.insert(std::make_pair(States::Type::Menu, unique_ptr<GameState>(new Menu(game, lidx))));
+    LevelIndex levelIndex{LevelModes::Mode::FUN_MODE, 1};
+    _gameStates.insert(std::make_pair(States::Type::Menu, unique_ptr<GameState>(new Menu(game, levelIndex))));
     _gameStates.insert(std::make_pair(States::Type::Scene, unique_ptr<GameState>(new Scene(game,
                                                                                            game->getSoundManager(),
-                                                                                           lidx))));
+                                                                                           levelIndex))));
     _gameStates.insert(std::make_pair(States::Type::SceneInfo,
-                                      unique_ptr<GameState>(new InfoLevel(game, lidx))));
-    _gameStates.insert(std::make_pair(States::Type::Result, unique_ptr<GameState>(new Results(game, lidx))));
+                                      unique_ptr<GameState>(new InfoLevel(game, levelIndex))));
+    _gameStates.insert(std::make_pair(States::Type::Result, unique_ptr<GameState>(new Results(game, levelIndex))));
     _gameStates.insert(std::make_pair(States::Type::Instruction, unique_ptr<GameState>(new Instructions(game))));
     _gameStates.insert(std::make_pair(States::Type::Credits, unique_ptr<GameState>(new Credits(game))));
     setCurrentState(States::Type::Menu);

@@ -2,7 +2,6 @@
 #include "Game.h"
 #include "ShaderManager.h"
 #include "LevelRunner.h"
-#include "StateManager.h"
 #include "EventCreator.h"
 
 #include "Results.h"

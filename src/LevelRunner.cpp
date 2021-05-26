@@ -30,7 +30,7 @@ LevelRunner::~LevelRunner() = default;
 
 
 void LevelRunner::changeLevel(const LevelIndex &levelIndex) {
-
+    _levelIndex = levelIndex;
     _levelStartValues = std::make_unique<Level>(_shaderManager, levelIndex.mode, levelIndex.levelNo);
     _currentTime = 0.0f;
 
@@ -126,7 +126,7 @@ int LevelRunner::getPercentageSavedLemmings() {
 }
 
 int LevelRunner::getPercentageTotalLemmings() {
-    return _goalLemmingNum;
+    return _levelStartValues->goalLemmings;
 }
 
 void LevelRunner::stopSpawningLemmings() {
