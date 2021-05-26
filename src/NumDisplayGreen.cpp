@@ -1,9 +1,9 @@
 #include "NumDisplayGreen.h"
 #include "GreenNumFactory.h"
 
-void NumDisplayGreen::initAux() {
-    leftNum = GreenNumFactory::instance().createNum();
-    rightNum = GreenNumFactory::instance().createNum();
+void NumDisplayGreen::initAux(ShaderManager *shaderManager) {
+    leftNum = GreenNumFactory::createNum(nullptr);
+    rightNum = GreenNumFactory::createNum(nullptr);
 
 }
 

@@ -8,7 +8,9 @@
 class TrapdoorHell : public Trapdoor {
 
 public:
-    virtual void init();
+    TrapdoorHell(ShaderManager *shaderManager);
+
+    void init() override;
 
 };
 

@@ -15,7 +15,7 @@ Game::Game() : bPlay(true), _dmode(Difficulties::Mode::Easy),
 
     initSpriteSheets();
     hardModeIndicator = Sprite::createSprite(glm::ivec2(20, 20), glm::vec2(136. / 256, 160. / 256),
-                                             &ShaderManager::getInstance().getShaderProgram(),
+                                             &_shaderManager->getShaderProgram(),
                                              &Game::spriteSheets().skullSprite);
     hardModeIndicator->setPosition(glm::vec2(CAMERA_WIDTH - 26, 5));
 

@@ -1,12 +1,12 @@
 #ifndef _CURSOR_INCLUDE
 #define _CURSOR_INCLUDE
 
-
+#include "ShaderManager.h"
 #include "Sprite.h"
 
 class Cursor {
 public:
-    Cursor();
+    explicit Cursor(ShaderManager* shaderManager);
 
     void init();
 

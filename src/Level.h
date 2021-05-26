@@ -9,11 +9,11 @@
 #include "Door.h"
 #include "Trapdoor.h"
 #include "LevelModes.h"
-
+#include "ShaderManager.h"
 
 struct Level {
 
-    Level(LevelModes::Mode difficulty, int levelNo);
+    Level(ShaderManager *shaderManager, LevelModes::Mode difficulty, int levelNo);
 
 //    static Level &currentLevel() {
 //        static Level currentLevel;
@@ -49,6 +49,7 @@ private:
     void initFromFile(const string &file);
 
     static std::string getFilename(LevelModes::Mode levelMode, int levelNo);
+    ShaderManager* _shaderManager;
 };
 
 #endif // _LEVEL_INCLUDE

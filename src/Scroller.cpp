@@ -1,7 +1,10 @@
+#include "common_defs.h"
 #include "Scroller.h"
-#include "Level.h"
+
 
 #define SCROLL_BASE_DISPLACEMENT 5
+
+Scroller::Scroller(bool scrolled) : scrolled(scrolled) {}
 
 void Scroller::scrollLeft(glm::vec2 cameraPos, int levelSize ) {
     int scrollDisplacement = -SCROLL_BASE_DISPLACEMENT;
@@ -30,3 +33,5 @@ void Scroller::scroll(int scrollDisplacement, glm::vec2 cameraPos, int levelSize
         scrolled = true;
     }
 }
+
+

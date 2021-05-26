@@ -7,7 +7,7 @@
 
 #define PI 3.14159265359
 
-Particle::Particle(ParticleColor color):_position(0,0), _speed(0,0) {
+Particle::Particle(ParticleColor color, ShaderProgram* shaderProgram):_position(0,0), _speed(0,0) {
     glm::vec2 coordTex;
     switch (color) {
         case PINK:
@@ -23,7 +23,7 @@ Particle::Particle(ParticleColor color):_position(0,0), _speed(0,0) {
             coordTex = glm::vec2(0, 0);
     }
     _sprite = Sprite::createSprite(glm::ivec2(1, 1), glm::vec2(0.25, 1.),
-                                   &ShaderManager::getInstance().getShaderProgram(),
+                                   shaderProgram,
                                    &Game::spriteSheets().particleSprites);
     _sprite->setNumberAnimations(1);
     _sprite->addKeyframe(0, coordTex);

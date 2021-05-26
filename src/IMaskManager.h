@@ -1,5 +1,6 @@
 #ifndef _MASKMANAGER_INCLUDE
 #define _MASKMANAGER_INCLUDE
+
 #include "Level.h"
 
 class IMaskManager {
@@ -20,8 +21,10 @@ public:
 
     virtual char getPixel(int x, int y) = 0;
 
+    virtual void changeLevel(Level *level) {_level = level;};
+
 protected:
-    Level * _level;
+    Level *_level;
 };
 
 

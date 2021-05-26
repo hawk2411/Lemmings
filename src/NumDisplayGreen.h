@@ -5,12 +5,12 @@
 
 class NumDisplayGreen : public NumDisplay {
 public:
-    void setPosition(glm::vec2 position);
+    void setPosition(glm::vec2 position) override;
 
 private:
-    void initAux();
+    void initAux(ShaderManager *shaderManager) override;
 
-    void displayNumAux(int firstDigit, int secondDigit);
+    void displayNumAux(int firstDigit, int secondDigit) override;
 
 };
 

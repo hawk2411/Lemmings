@@ -10,15 +10,19 @@
 
 #include "StateManager.h"
 #include "InfoLevel.h"
+#include "LevelIndex.h"
 
 StateManager::StateManager(Game *game, ShaderManager *shaderManager) : _currentState(States::Type::Menu),
                                                                        _shaderManager(shaderManager) {
 
-    _gameStates.insert(std::make_pair(States::Type::Menu, unique_ptr<GameState>(new Menu(game))));
-    _gameStates.insert( std::make_pair(States::Type::Scene, unique_ptr<GameState>(new Scene(game, game->getSoundManager()))));
+    LevelIndex lidx{LevelModes::Mode::FUN_MODE, 2};
+    _gameStates.insert(std::make_pair(States::Type::Menu, unique_ptr<GameState>(new Menu(game, lidx))));
+    _gameStates.insert(std::make_pair(States::Type::Scene, unique_ptr<GameState>(new Scene(game,
+                                                                                           game->getSoundManager(),
+                                                                                           lidx))));
     _gameStates.insert(std::make_pair(States::Type::SceneInfo,
-                                      unique_ptr<GameState>(new InfoLevel(game, LevelModes::Mode::FUN_MODE, 0))));
-    _gameStates.insert( std::make_pair(States::Type::Result, unique_ptr<GameState>(new Results(game, LevelModes::Mode::FUN_MODE, 0))));
+                                      unique_ptr<GameState>(new InfoLevel(game, lidx))));
+    _gameStates.insert(std::make_pair(States::Type::Result, unique_ptr<GameState>(new Results(game, lidx))));
     _gameStates.insert(std::make_pair(States::Type::Instruction, unique_ptr<GameState>(new Instructions(game))));
     _gameStates.insert(std::make_pair(States::Type::Credits, unique_ptr<GameState>(new Credits(game))));
     setCurrentState(States::Type::Menu);
@@ -39,20 +43,20 @@ void StateManager::changeInfo(LevelModes::Mode levelMode, int levelNum) {
 }
 
 
-void StateManager::changeScene(LevelModes::Mode levelMode, int levelNum) {
-    _currentState= States::Type::Scene;
-
-
-    dynamic_cast<Scene*>(_gameStates[_currentState].get())->setLevel(levelMode, levelNum);
+void StateManager::changeScene(const LevelIndex &lvlIndex) {
+    _currentState = States::Type::Scene;
+    dynamic_cast<Scene *>(_gameStates[_currentState].get())->changeLevel(lvlIndex);
     _gameStates[_currentState]->init();
-
 }
 
 //
-void StateManager::changeResults(int goalPercentage, int currentPercentage) {
-    dynamic_cast<Results*>(_gameStates[States::Type::Result].get())->setPercentages(goalPercentage, currentPercentage);
-    _gameStates[States::Type::Result]->init();
+void StateManager::changeResults(ResultStatistic statistic, LevelIndex levelIndex) {
     _currentState = States::Type::Result;
+    auto *results = dynamic_cast<Results *>(_gameStates[_currentState].get());
+    results->setPercentages(statistic.goalPercentage, statistic.currentPercentage);
+    results->changeLevel(levelIndex);
+
+    _gameStates[States::Type::Result]->init();
 }
 
 void StateManager::changeCredits() {
@@ -100,22 +104,26 @@ void StateManager::onUserEvent(const SDL_UserEvent &event) {
             changeInstructions();
             break;
         case CHANGE_TO_INFO: {
-            int *mode = static_cast<int *>(event.data1);
-            int *number = static_cast<int *>(event.data2);
+            auto *levelIndex = static_cast<LevelIndex *>(event.data1);
 
-            changeInfo(LevelModes::getFromInt(*mode), *number);
-            delete mode;
-            delete number;
+            changeInfo(levelIndex->mode, levelIndex->levelNo);
+            delete levelIndex;
         }
             break;
         case CHANGE_TO_SCENE: {
-            int *mode = static_cast<int *>(event.data1);
-            int *number = static_cast<int *>(event.data2);
+            auto *levelIndex = static_cast<LevelIndex *>(event.data1);
 
-            changeScene(LevelModes::getFromInt(*mode), *number);
-            delete mode;
-            delete number;
+            changeScene(*levelIndex);
+            delete levelIndex;
             break;
+        }
+        case CHANGE_TO_RESULT: {
+            auto *statistic = static_cast<ResultStatistic *>(event.data1);
+            auto *levelIndex = static_cast<LevelIndex *>(event.data2);
+
+            changeResults(*statistic, *levelIndex);
+            delete statistic;
+            delete levelIndex;
         }
     }
 }

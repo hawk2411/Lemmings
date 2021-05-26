@@ -3,12 +3,13 @@
 
 #include <glm/glm.hpp>
 #include "Sprite.h"
+#include "ShaderManager.h"
 
 class Countdown {
 
 public:
 
-    Countdown();
+    Countdown(ShaderManager *shaderManager);
 
     void render(const glm::vec2 &cameraPos);
 
@@ -26,6 +27,7 @@ public:
 
 private:
     std::unique_ptr<Sprite> _countNum;
+    ShaderManager* _shaderManager;
     int _goalTime;
     bool _over;
     bool _isStarted;

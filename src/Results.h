@@ -1,14 +1,16 @@
 #ifndef _RESULTS_INCLUDE
 #define _RESULTS_INCLUDE
 
+#include "ShaderManager.h"
 #include "GameState.h"
 #include "Sprite.h"
 #include "PurplePercentageDisplay.h"
+#include "LevelIndex.h"
 
 class Results : public GameState {
 
 public:
-    Results(Game *game, LevelModes::Mode levelMode, int level) : GameState(game), _levelMode(levelMode), _level(level) {}
+    Results(Game *game, const LevelIndex& levelIndex);
 
     enum ResultsButtonName {
         RETRY,
@@ -24,8 +26,6 @@ public:
 
     void setPercentages(int goalPercentage, int currentPercentage);
 
-    int getSelectedButtonIndex() const;
-
     int getSelectedButton();
 
     void changeSelectedButtonLeft();
@@ -36,7 +36,7 @@ public:
 
     void mouseMoved(int mouseX, int mouseY, bool bLeftButton, bool bRightButton) override;
 
-    void setLevel(LevelModes::Mode mode, int level){ _levelMode= mode; _level = level;}
+    void changeLevel(const LevelIndex& levelIndex);
 
 private:
     void initButtons();
@@ -58,8 +58,8 @@ private:
     int selectedButton{};
     bool passedLevel{};
 
-    LevelModes::Mode _levelMode;
-    int _level;
+    LevelIndex _levelIndex;
+    ShaderManager* _shaderManager;
 
 };
 

@@ -3,6 +3,8 @@
 #include <map>
 #include "ShaderManager.h"
 #include "GameState.h"
+#include "Scene.h"
+#include "LevelIndex.h"
 
 struct States {
     enum class Type {
@@ -24,9 +26,9 @@ public:
 //
     void changeInfo(LevelModes::Mode levelMode, int levelNum);
 //
-    void changeScene(LevelModes::Mode levelMode, int levelNum);
+    void changeScene(const LevelIndex &lvlIndex);
 //
-    void changeResults(int goalPercentage, int currentPercentage);
+    void changeResults(ResultStatistic statistic, LevelIndex levelIndex);
 //
     void changeCredits();
 //

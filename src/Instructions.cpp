@@ -2,80 +2,80 @@
 #include "Utils.h"
 #include "ShaderManager.h"
 #include "KeyFactory.h"
-#include "StateManager.h"
 #include "Game.h"
 #include "EventCreator.h"
 
 Instructions::Instructions(Game *game) : actualPage(0),
                                          _onlyLeft(false),
-                                         _onlyRight(true), GameState(game) {
+                                         _onlyRight(true), GameState(game),
+                                         _shaderManager(game->getShaderManager()) {
 
     _music = make_unique<Sound>(game->getSoundManager(), "sounds/InstructionsSong.ogg",
                                 FMOD_LOOP_NORMAL | FMOD_CREATESTREAM);
-    _leftKey = KeyFactory::createLeftKey();
-    _rightKey = KeyFactory::createRightKey();
+    _leftKey = KeyFactory::createLeftKey(nullptr);
+    _rightKey = KeyFactory::createRightKey(nullptr);
     _instructionsLevelTexture.loadFromFile("images/menu/menuBackground.png", TEXTURE_PIXEL_FORMAT_RGBA);
     _instructionsLevelTexture.setMinFilter(GL_NEAREST);
     _instructionsLevelTexture.setMagFilter(GL_NEAREST);
-    _instructionsWord = make_unique<Word>("INSTRUCTIONS");
-    _escapeKey = KeyFactory::createEscapeKey();
+    _instructionsWord = make_unique<Word>("INSTRUCTIONS", _shaderManager);
+    _escapeKey = KeyFactory::createEscapeKey(&_shaderManager->getShaderProgram());
     _instructionsLevelSprite = Sprite::createSprite(glm::vec2(CAMERA_WIDTH, CAMERA_HEIGHT), glm::vec2(1.f, 1.f),
-                                                    &ShaderManager::getInstance().getShaderProgram(),
+                                                    &_game->getShaderManager()->getShaderProgram(),
                                                     &_instructionsLevelTexture);
-    _instructionPages.push_back(make_unique<Word>("Welcome to Lemmings!"));
-    _instructionPages.push_back(make_unique<Word>("Your goal is to save as"));
-    _instructionPages.push_back(make_unique<Word>("many Lemmings as possible."));
-    _instructionPages.push_back(make_unique<Word>("In order to do that, assign"));
-    _instructionPages.push_back(make_unique<Word>("JOBS to your Lemmings and get"));
-    _instructionPages.push_back(make_unique<Word>("them to the level exit."));
-    _instructionPages.push_back(make_unique<Word>("To assign jobs to Lemmings,"));
-    _instructionPages.push_back(make_unique<Word>("just click in the"));
-    _instructionPages.push_back(make_unique<Word>("corresponding button on"));
-    _instructionPages.push_back(make_unique<Word>("the bottom of the screen"));
-    _instructionPages.push_back(make_unique<Word>("and then click into a Lemming."));
-    _instructionPages.push_back(make_unique<Word>("Next lets see all the jobs!"));
-    _instructionPages.push_back(make_unique<Word>("WALKER"));
-    _instructionPages.push_back(make_unique<Word>("The Walker is very simple:"));
-    _instructionPages.push_back(make_unique<Word>("He walks."));
-    _instructionPages.push_back(make_unique<Word>("FALLER"));
-    _instructionPages.push_back(make_unique<Word>("His destiny is to follow the"));
-    _instructionPages.push_back(make_unique<Word>("laws of the gravity. CAUTION!"));
-    _instructionPages.push_back(make_unique<Word>("BLOCKER"));
-    _instructionPages.push_back(make_unique<Word>("He will block every Lemming in"));
-    _instructionPages.push_back(make_unique<Word>("sight with his strong hands."));
-    _instructionPages.push_back(make_unique<Word>("CLIMBER"));
-    _instructionPages.push_back(make_unique<Word>("His destiny is to defy the"));
-    _instructionPages.push_back(make_unique<Word>("laws of the gravity. GG"));
-    _instructionPages.push_back(make_unique<Word>("FLOATER"));
-    _instructionPages.push_back(make_unique<Word>("Unlike FALLER, he will not"));
-    _instructionPages.push_back(make_unique<Word>("die from falling."));
-    _instructionPages.push_back(make_unique<Word>("BOMBER"));
-    _instructionPages.push_back(make_unique<Word>("He likes explosions. A lot."));
-    _instructionPages.push_back(make_unique<Word>("KABOOM!"));
-    _instructionPages.push_back(make_unique<Word>("BUILDER"));
-    _instructionPages.push_back(make_unique<Word>("He builds stairs to help"));
-    _instructionPages.push_back(make_unique<Word>("other Lemmings to go on."));
-    _instructionPages.push_back(make_unique<Word>("DIGGER"));
-    _instructionPages.push_back(make_unique<Word>("He will eventually arrive"));
-    _instructionPages.push_back(make_unique<Word>("to the center of the earth."));
-    _instructionPages.push_back(make_unique<Word>("BASHER"));
-    _instructionPages.push_back(make_unique<Word>("He will clear the way"));
-    _instructionPages.push_back(make_unique<Word>("in a straight line."));
-    _instructionPages.push_back(make_unique<Word>("MINER"));
-    _instructionPages.push_back(make_unique<Word>("He is looking for gold"));
-    _instructionPages.push_back(make_unique<Word>("in a diagonal direction."));
-    _instructionPages.push_back(make_unique<Word>("Finally, if you feel confident"));
-    _instructionPages.push_back(make_unique<Word>("enough you can activate hard"));
-    _instructionPages.push_back(make_unique<Word>("mode by pressing H in the"));
-    _instructionPages.push_back(make_unique<Word>("MENU. You will notice that"));
-    _instructionPages.push_back(make_unique<Word>("HARD MODE is active seeing a"));
-    _instructionPages.push_back(make_unique<Word>("skull in the top right corner."));
-    _instructionPages.push_back(make_unique<Word>("In hard mode the map"));
-    _instructionPages.push_back(make_unique<Word>("regenerates itself over time,"));
-    _instructionPages.push_back(make_unique<Word>("so be carefull!"));
-    _instructionPages.push_back(make_unique<Word>(""));
-    _instructionPages.push_back(make_unique<Word>(""));
-    _instructionPages.push_back(make_unique<Word>(""));
+    _instructionPages.push_back(make_unique<Word>("Welcome to Lemmings!", _shaderManager));
+    _instructionPages.push_back(make_unique<Word>("Your goal is to save as", _shaderManager));
+    _instructionPages.push_back(make_unique<Word>("many Lemmings as possible.", _shaderManager));
+    _instructionPages.push_back(make_unique<Word>("In order to do that, assign", _shaderManager));
+    _instructionPages.push_back(make_unique<Word>("JOBS to your Lemmings and get", _shaderManager));
+    _instructionPages.push_back(make_unique<Word>("them to the level exit.", _shaderManager));
+    _instructionPages.push_back(make_unique<Word>("To assign jobs to Lemmings,", _shaderManager));
+    _instructionPages.push_back(make_unique<Word>("just click in the", _shaderManager));
+    _instructionPages.push_back(make_unique<Word>("corresponding button on", _shaderManager));
+    _instructionPages.push_back(make_unique<Word>("the bottom of the screen", _shaderManager));
+    _instructionPages.push_back(make_unique<Word>("and then click into a Lemming.", _shaderManager));
+    _instructionPages.push_back(make_unique<Word>("Next lets see all the jobs!", _shaderManager));
+    _instructionPages.push_back(make_unique<Word>("WALKER", _shaderManager));
+    _instructionPages.push_back(make_unique<Word>("The Walker is very simple:", _shaderManager));
+    _instructionPages.push_back(make_unique<Word>("He walks.", _shaderManager));
+    _instructionPages.push_back(make_unique<Word>("FALLER", _shaderManager));
+    _instructionPages.push_back(make_unique<Word>("His destiny is to follow the", _shaderManager));
+    _instructionPages.push_back(make_unique<Word>("laws of the gravity. CAUTION!", _shaderManager));
+    _instructionPages.push_back(make_unique<Word>("BLOCKER", _shaderManager));
+    _instructionPages.push_back(make_unique<Word>("He will block every Lemming in", _shaderManager));
+    _instructionPages.push_back(make_unique<Word>("sight with his strong hands.", _shaderManager));
+    _instructionPages.push_back(make_unique<Word>("CLIMBER", _shaderManager));
+    _instructionPages.push_back(make_unique<Word>("His destiny is to defy the", _shaderManager));
+    _instructionPages.push_back(make_unique<Word>("laws of the gravity. GG", _shaderManager));
+    _instructionPages.push_back(make_unique<Word>("FLOATER", _shaderManager));
+    _instructionPages.push_back(make_unique<Word>("Unlike FALLER, he will not", _shaderManager));
+    _instructionPages.push_back(make_unique<Word>("die from falling.", _shaderManager));
+    _instructionPages.push_back(make_unique<Word>("BOMBER", _shaderManager));
+    _instructionPages.push_back(make_unique<Word>("He likes explosions. A lot.", _shaderManager));
+    _instructionPages.push_back(make_unique<Word>("KABOOM!", _shaderManager));
+    _instructionPages.push_back(make_unique<Word>("BUILDER", _shaderManager));
+    _instructionPages.push_back(make_unique<Word>("He builds stairs to help", _shaderManager));
+    _instructionPages.push_back(make_unique<Word>("other Lemmings to go on.", _shaderManager));
+    _instructionPages.push_back(make_unique<Word>("DIGGER", _shaderManager));
+    _instructionPages.push_back(make_unique<Word>("He will eventually arrive", _shaderManager));
+    _instructionPages.push_back(make_unique<Word>("to the center of the earth.", _shaderManager));
+    _instructionPages.push_back(make_unique<Word>("BASHER", _shaderManager));
+    _instructionPages.push_back(make_unique<Word>("He will clear the way", _shaderManager));
+    _instructionPages.push_back(make_unique<Word>("in a straight line.", _shaderManager));
+    _instructionPages.push_back(make_unique<Word>("MINER", _shaderManager));
+    _instructionPages.push_back(make_unique<Word>("He is looking for gold", _shaderManager));
+    _instructionPages.push_back(make_unique<Word>("in a diagonal direction.", _shaderManager));
+    _instructionPages.push_back(make_unique<Word>("Finally, if you feel confident", _shaderManager));
+    _instructionPages.push_back(make_unique<Word>("enough you can activate hard", _shaderManager));
+    _instructionPages.push_back(make_unique<Word>("mode by pressing H in the", _shaderManager));
+    _instructionPages.push_back(make_unique<Word>("MENU. You will notice that", _shaderManager));
+    _instructionPages.push_back(make_unique<Word>("HARD MODE is active seeing a", _shaderManager));
+    _instructionPages.push_back(make_unique<Word>("skull in the top right corner.", _shaderManager));
+    _instructionPages.push_back(make_unique<Word>("In hard mode the map", _shaderManager));
+    _instructionPages.push_back(make_unique<Word>("regenerates itself over time,", _shaderManager));
+    _instructionPages.push_back(make_unique<Word>("so be carefull!", _shaderManager));
+    _instructionPages.push_back(make_unique<Word>("", _shaderManager));
+    _instructionPages.push_back(make_unique<Word>("", _shaderManager));
+    _instructionPages.push_back(make_unique<Word>("", _shaderManager));
 
 }
 
@@ -149,11 +149,11 @@ void Instructions::init() {
 }
 
 void Instructions::update(int deltaTime) {
-    _currentTime +=  static_cast<float>(deltaTime);
+    _currentTime += static_cast<float>(deltaTime);
 }
 
 void Instructions::render() {
-    ShaderManager::getInstance().useShaderProgram();
+    _shaderManager->useShaderProgram();
     _instructionsLevelSprite->render();
     for (int i = actualPage; i < Utils::min(actualPage + LINES_PAGE, _instructionPages.size()); ++i) {
         _instructionPages[i]->render();

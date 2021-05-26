@@ -10,10 +10,10 @@ enum CursorStates {
     RIGHT
 };
 
-Cursor::Cursor() {
+Cursor::Cursor(ShaderManager* shaderManager) {
 
     cursorSprite = Sprite::createSprite(glm::ivec2(12, 12), glm::vec2(29. / 32, 29. / 128),
-                                        &ShaderManager::getInstance().getShaderProgram(),
+                                        &shaderManager->getShaderProgram(),
                                         &Game::spriteSheets().cursorSprites);
 
 }

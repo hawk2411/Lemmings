@@ -1,13 +1,14 @@
 #ifndef _SCENE_INCLUDE
 #define _SCENE_INCLUDE
 
-#include "GameState.h"
 #include <glm/glm.hpp>
 #include <vector>
 #include <map>
+#include "GameState.h"
 #include "ParticleSystemManager.h"
 #include "Difficulties.h"
 #include "MaskedTexturedQuad.h"
+#include "LevelIndex.h"
 #include "UserInterface.h"
 #include "Word.h"
 #include "IMaskManager.h"
@@ -16,15 +17,20 @@
 #include "JobAssigner.h"
 #include "Scroller.h"
 
+
 // Scene contains all the entities of our game.
 // It is responsible for updating and render them.
 
+struct ResultStatistic {
+    int goalPercentage;
+    int currentPercentage;
+};
 
 class Scene : public GameState {
 
 public:
 
-    Scene(Game *game, SoundManager *soundManager );
+    Scene(Game *game, SoundManager *soundManager, const LevelIndex& levelIndex);
 
     void mouseMoved(int mouseX, int mouseY, bool bLeftButton, bool bRightButton) override;
 
@@ -83,7 +89,7 @@ public:
 
     void onKeyPressed(const SDL_KeyboardEvent &keyboardEvent) override;
 
-    void setLevel(LevelModes::Mode mode, int i);
+    void changeLevel(const LevelIndex &levelIndex);
 
 private:
     ScreenClickedArea getClickedScreenArea(int mouseX, int mouseY);
@@ -127,6 +133,7 @@ private:
     JobAssigner _jobAssigner;
     ParticleSystemManager _particleSystemManager;
     Scroller _scroller;
+    ShaderManager* _shaderManager;
 };
 
 #endif // _SCENE_INCLUDE

@@ -8,13 +8,7 @@ class LetterFactory {
 
 public:
 
-    static LetterFactory &instance() {
-        static LetterFactory instance; // Guaranteed to be destroyed.
-        // Instantiated on first use.
-        return instance;
-    };
-
-    std::unique_ptr<Sprite> createLetter(char c);
+    static unique_ptr<Sprite> createLetter(char c, ShaderManager *shaderManager);
 
 };
 

@@ -1,13 +1,13 @@
 #ifndef _HARDMASKMANAGER_INCLUDE
 #define _HARDMASKMANAGER_INCLUDE
 
-#include "IMaskManager.h"
-
 #include <vector>
+#include "IMaskManager.h"
 
 class HardMaskManager : public IMaskManager {
 public:
     explicit HardMaskManager(Level* level) : IMaskManager(level){}
+
     void init() override;
 
     void update(int time) override;
@@ -25,8 +25,8 @@ public:
 private:
     void regenerateMask(int x, int y);
 
-    std::vector<std::vector<int>> timeWhenDisappear;
-    std::vector<std::vector<int>> timeToAppear;
+    std::vector<std::vector<int>> _timeWhenDisappear;
+    std::vector<std::vector<int>> _timeToAppear;
 };
 
 

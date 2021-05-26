@@ -2,9 +2,12 @@
 #define _TRAPDOOR_INCLUDE
 
 #include "Sprite.h"
+#include "ShaderManager.h"
+
 class Trapdoor {
 
 public:
+    explicit Trapdoor(ShaderManager* shaderManager);
     virtual void init() = 0;
 
     void update(int deltaTime);
@@ -20,10 +23,10 @@ public:
     bool isOpened() const;
 
 protected:
-    std::unique_ptr<Sprite> trapdoorSprite;
-    glm::vec2 enterOffset;
-
+    std::unique_ptr<Sprite> _trapdoorSprite;
+    glm::vec2 _enterOffset{};
     bool opened = false;
+    ShaderManager* _shaderManager;
 };
 
 

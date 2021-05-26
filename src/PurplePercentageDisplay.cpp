@@ -1,11 +1,11 @@
 #include "PurplePercentageDisplay.h"
 #include "PurpleNumFactory.h"
 
-void PurplePercentageDisplay::init() {
-    firstNum = PurpleNumFactory::instance().createNum();
-    secondNum = PurpleNumFactory::instance().createNum();
-    thirdNum = PurpleNumFactory::instance().createNum();
-    percentage = PurpleNumFactory::instance().createSymbol('%');
+void PurplePercentageDisplay::init(ShaderManager *shaderManager) {
+    firstNum = PurpleNumFactory::createNum(shaderManager);
+    secondNum = PurpleNumFactory::createNum(shaderManager);
+    thirdNum = PurpleNumFactory::createNum(shaderManager);
+    percentage = PurpleNumFactory::createSymbol('%', shaderManager);
     setPosition(glm::vec2(0, 0));
 
 }

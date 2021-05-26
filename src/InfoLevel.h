@@ -10,11 +10,12 @@
 #include "LevelModes.h"
 #include "GameState.h"
 #include "Game.h"
+#include "LevelIndex.h"
 
 class InfoLevel : public GameState{
 
 public:
-    explicit InfoLevel(Game* game, LevelModes::Mode mode, int level);
+    explicit InfoLevel(Game* game, const LevelIndex& index);
     ~InfoLevel() override;
 
     // GameState override
@@ -33,9 +34,6 @@ public:
     void mouseMoved(int mouseX, int mouseY, bool bLeftButton, bool bRightButton) override;
 
     //===================================================================
-    LevelModes::Mode getMode() const;
-
-    int getLevel() const;
 
 
 private:
@@ -51,9 +49,8 @@ private:
     std::unique_ptr<Word> _playWord;
     std::unique_ptr<Word> _menuWord;
 
-    LevelModes::Mode _mode;
-    int _level;
-
+    LevelIndex _levelIndex;
+    ShaderManager* _shaderManager;
 };
 
 

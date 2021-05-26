@@ -1,6 +1,7 @@
 #ifndef _UI_INCLUDE
 #define _UI_INCLUDE
 
+#include "LevelRunner.h"
 #include "Button.h"
 #include "Texture.h"
 #include "Sprite.h"
@@ -8,10 +9,12 @@
 #include "NumDisplayGreen.h"
 #include "PercentageDisplay.h"
 #include "TimeDisplay.h"
-#include "LevelRunner.h"
+
 
 class UserInterface {
 public:
+    explicit UserInterface(ShaderManager *shaderManager);
+
     void init();
 
     void update(LevelRunner *levelRunner);
@@ -33,25 +36,26 @@ private:
 
     glm::vec2 _position;
 
-    Button buttons[NUM_BUTTONS];
+    Button _buttons[NUM_BUTTONS];
 
-    Texture backgroundTexture;
-    std::unique_ptr<Sprite> background;
+    Texture _backgroundTexture;
+    std::unique_ptr<Sprite> _background;
 
-    std::unique_ptr<Sprite> jobName;
+    std::unique_ptr<Sprite> _jobName;
 
-    std::unique_ptr<Sprite> outWord;
-    NumDisplayGreen numberOutLemmings;
+    std::unique_ptr<Sprite> _outWord;
+    NumDisplayGreen _numberOutLemmings;
 
-    std::unique_ptr<Sprite> inWord;
-    PercentageDisplay numberInLemmings;
+    std::unique_ptr<Sprite> _inWord;
+    PercentageDisplay _numberInLemmings;
 
-    std::unique_ptr<Sprite> timeWord;
-    TimeDisplay time;
+    std::unique_ptr<Sprite> _timeWord;
+    TimeDisplay _time;
 
     int _selectedButton;
-    Texture selectFrameTexture;
+    Texture _selectFrameTexture;
     std::unique_ptr<Sprite> _selectFrame;
+    ShaderManager* _shaderManager;
 };
 
 #endif // _UI_INCLUDE

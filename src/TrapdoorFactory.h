@@ -3,11 +3,12 @@
 
 #include "Sprite.h"
 #include "Trapdoor.h"
+#include "ShaderManager.h"
 
 class TrapdoorFactory {
 
 public:
-    static Trapdoor *createTrapdoor(const string& type);
+    static Trapdoor *createTrapdoor(const string &type, ShaderManager *shaderManager);
 
 };
 

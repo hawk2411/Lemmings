@@ -7,7 +7,7 @@
 
 class ParticleSystem {
 public:
-    ParticleSystem();
+    ParticleSystem( ShaderProgram* shaderProgram);
 
     void setPosition(glm::vec2 position);
 

@@ -33,3 +33,4 @@ char EasyMaskManager::getPixel(int x, int y) {
     return _level->maskedMap.pixel(x, y);
 }
 
+

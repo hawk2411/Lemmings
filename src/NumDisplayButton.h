@@ -8,7 +8,7 @@ public:
     void setPosition(glm::vec2 position);
 
 private:
-    void initAux();
+    void initAux(ShaderManager *shaderManager);
 
     void displayNumAux(int firstDigit, int secondDigit);
 

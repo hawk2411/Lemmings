@@ -6,6 +6,7 @@
 class EasyMaskManager : public IMaskManager {
 public:
     explicit EasyMaskManager(Level* level): IMaskManager(level){}
+
     void init() override;
 
     void update(int time) override;

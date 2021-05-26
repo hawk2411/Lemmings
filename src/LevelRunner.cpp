@@ -5,33 +5,33 @@
 
 #include "LevelRunner.h"
 #include "IMaskManager.h"
+#include "LevelIndex.h"
 
-LevelRunner::LevelRunner(SoundManager *soundManager, LevelModes::Mode levelMode, int levelNo) : _deadLemmings(0),
-                                                                                                _savedLemmings(0),
-                                                                                                _goalLemmingNum(0),
-                                                                                                _releaseRate(0),
-                                                                                                _minReleaseRate(0),
-                                                                                                _availableLemmings(0),
-                                                                                                _actualLevel(0),
-                                                                                                _actualMode(0),
-                                                                                                _goalTime(0),
-                                                                                                _currentTime(0.0f),
-                                                                                                _lastTimeSpawnedLemming(0),
-                                                                                                _spawningLemmings(false),
-                                                                                                _finishedLevel(false),
-                                                                                                _exploding(false){
+LevelRunner::LevelRunner(SoundManager *soundManager, ShaderManager *shaderManager, const LevelIndex &levelIndex)
+        : _deadLemmings(0), _soundManager(soundManager), _shaderManager(shaderManager),
+          _savedLemmings(0),
+          _goalLemmingNum(0),
+          _releaseRate(0),
+          _minReleaseRate(0),
+          _availableLemmings(0),
+          _levelIndex(levelIndex),
+          _goalTime(0),
+          _currentTime(0.0f),
+          _lastTimeSpawnedLemming(0),
+          _spawningLemmings(false),
+          _finishedLevel(false),
+          _exploding(false) {
 
-    _soundManager = soundManager;
-    _dooropenSound = make_unique<Sound>(soundManager, "sounds/lemmingsEffects/Letsgo.ogg", FMOD_DEFAULT | FMOD_UNIQUE);
-    changeLevel(levelMode, levelNo);
+    _dooropenSound = make_unique<Sound>(_soundManager, "sounds/lemmingsEffects/Letsgo.ogg", FMOD_DEFAULT | FMOD_UNIQUE);
+    changeLevel(_levelIndex);
 }
 
 LevelRunner::~LevelRunner() = default;
 
 
-void LevelRunner::changeLevel(LevelModes::Mode levelMode, int levelNum) {
+void LevelRunner::changeLevel(const LevelIndex &levelIndex) {
 
-    _levelStartValues = std::make_unique<Level>(levelMode, levelNum);
+    _levelStartValues = std::make_unique<Level>(_shaderManager, levelIndex.mode, levelIndex.levelNo);
     _currentTime = 0.0f;
 
 
@@ -53,7 +53,7 @@ void LevelRunner::changeLevel(LevelModes::Mode levelMode, int levelNum) {
     _finishedLevel = false;
     _exploding = false;
 
-    string musicPath = "sounds/Lemming" + to_string(levelNum) + ".ogg";
+    string musicPath = "sounds/Lemming" + to_string(_levelIndex.levelNo) + ".ogg";
     _music = make_unique<Sound>(_soundManager, musicPath, FMOD_LOOP_NORMAL | FMOD_CREATESTREAM);
 
     _dooropenSound->playSound();
@@ -61,9 +61,9 @@ void LevelRunner::changeLevel(LevelModes::Mode levelMode, int levelNum) {
 }
 
 void LevelRunner::update(int deltaTime, IMaskManager *currentMask) {
-    _currentTime += deltaTime;
+    _currentTime += static_cast<float>(deltaTime);
 
-    if (_currentTime / 1000 >= _goalTime) {
+    if (static_cast<int>(_currentTime / 1000 ) >= _goalTime) {
         finishLevel();
     }
 
@@ -108,7 +108,7 @@ void LevelRunner::spawnLemmings() {
     if (elapsedTimeSinceLastLemming >= timeToNextLemming) {
         --_availableLemmings;
         _lastTimeSpawnedLemming = static_cast<int>(_currentTime);
-        auto *newLemming = new Lemming(_levelStartValues->_trapdoor->getEnterPosition(), _soundManager);
+        auto *newLemming = new Lemming(_levelStartValues->_trapdoor->getEnterPosition(), _soundManager, _shaderManager);
         newLemming->setWalkingRight(true);
         _lemmings.insert(newLemming);
 
@@ -142,12 +142,12 @@ int LevelRunner::getRemainingTime() {
 }
 
 
-int LevelRunner::getActualLevel() {
-    return _actualLevel;
+int LevelRunner::getActualLevel() const {
+    return _levelIndex.levelNo;
 }
 
-int LevelRunner::getActualMode() {
-    return _actualMode;
+LevelModes::Mode LevelRunner::getActualMode() const {
+    return _levelIndex.mode;
 }
 
 void LevelRunner::apocalypse() {
@@ -167,11 +167,11 @@ void LevelRunner::apocalypse() {
 }
 
 
-int LevelRunner::getReleaseRate() {
+int LevelRunner::getReleaseRate() const {
     return _releaseRate;
 }
 
-int LevelRunner::getMinReleaseRate() {
+int LevelRunner::getMinReleaseRate() const {
     return _minReleaseRate;
 }
 
@@ -202,7 +202,7 @@ int LevelRunner::getLemmingIndexInPos(int posX, int posY) {
 }
 
 string LevelRunner::getLemmingJobNameIndex(int index) {
-    if( index == -1)
+    if (index == -1)
         return "";
     auto it = _lemmings.begin();
     std::advance(it, index);

@@ -8,6 +8,7 @@
 #include "Level.h"
 #include "IMaskManager.h"
 #include "SoundManager.h"
+#include "ShaderManager.h"
 
 
 // Lemming is basically a Sprite that represents one lemming. As such it has
@@ -17,9 +18,9 @@
 class Lemming {
 
 public:
-    Lemming() {};
+    Lemming() : _countdown(nullptr) {};
 
-    Lemming(const glm::vec2 &initialPosition, SoundManager *soundManager);
+    Lemming(const glm::vec2 &initialPosition, SoundManager *soundManager, ShaderManager *shaderManager);
 
     void update(int deltaTime, Level *levelAttributes, IMaskManager *mask);
 
@@ -45,7 +46,7 @@ private:
     Job *_job;
     //Sprite *sprite;
     Countdown _countdown;
-    ShaderProgram *shaderProgram;
+    ShaderManager *_shaderManager;
     bool walkingRight = true; // is marked true when the lemmings walks in right direction
     bool _alive;
     bool _isSaved;

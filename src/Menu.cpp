@@ -4,33 +4,34 @@
 
 #include "Menu.h"
 #include "EventCreator.h"
+#include "LevelIndex.h"
 
-Menu::Menu(Game *game) : GameState(game), _mode(LevelModes::Mode::FUN_MODE) {
+Menu::Menu(Game *game, const LevelIndex &levelIndex) : GameState(game), _levelIndex(levelIndex), _shaderManager(_game->getShaderManager()) {
     music = make_unique<Sound>(_game->getSoundManager(), "sounds/MenuSong.ogg",
                                FMOD_LOOP_NORMAL | FMOD_CREATESTREAM);
 
     initTextures();
 
     menuBackground = Sprite::createSprite(glm::vec2(320, 230), glm::vec2(1.f, 1.f),
-                                          &ShaderManager::getInstance().getShaderProgram(), &menuTexture);
+                                          &_shaderManager->getShaderProgram(), &menuTexture);
     menuLogo = Sprite::createSprite(glm::vec2(250, 56), glm::vec2(1.f, 1.f),
-                                    &ShaderManager::getInstance().getShaderProgram(), &menuLogoTexture);
+                                    &_shaderManager->getShaderProgram(), &menuLogoTexture);
     menuPlaying = Sprite::createSprite(glm::vec2(111, 52), glm::vec2(1.f, 1.f),
-                                       &ShaderManager::getInstance().getShaderProgram(), &menuPlayingTexture);
+                                       &_shaderManager->getShaderProgram(), &menuPlayingTexture);
     menuHelp = Sprite::createSprite(glm::vec2(111, 52), glm::vec2(1.f, 1.f),
-                                    &ShaderManager::getInstance().getShaderProgram(), &menuHelpTexture);
+                                    &_shaderManager->getShaderProgram(), &menuHelpTexture);
     menuMode = Sprite::createSprite(glm::vec2(111, 52), glm::vec2(1.f, 256. / 1024),
-                                    &ShaderManager::getInstance().getShaderProgram(), &menuModeTexture);
+                                    &_shaderManager->getShaderProgram(), &menuModeTexture);
     menuMode->setNumberAnimations(3);
     for (int i = 0; i < 3; ++i) {
         menuMode->addKeyframe(i, modePositions[i]);
     }
-    menuMode->changeAnimation(LevelModes::convertToInt(_mode));
+    menuMode->changeAnimation(LevelModes::convertToInt(_levelIndex.mode));
 
     menuExit = Sprite::createSprite(glm::vec2(111, 52), glm::vec2(1.f, 1.f),
-                                    &ShaderManager::getInstance().getShaderProgram(), &menuExitTexture);
+                                    &_shaderManager->getShaderProgram(), &menuExitTexture);
     menuAbout = Sprite::createSprite(glm::vec2(111, 52), glm::vec2(1.f, 1.f),
-                                     &ShaderManager::getInstance().getShaderProgram(), &menuAboutTexture);
+                                     &_shaderManager->getShaderProgram(), &menuAboutTexture);
 }
 
 Menu::~Menu() = default;
@@ -52,11 +53,11 @@ void Menu::init() {
 
 void Menu::update(int deltaTime) {
     _currentTime += static_cast<float>(deltaTime);
-    menuMode->changeAnimation(LevelModes::convertToInt(_mode));
+    menuMode->changeAnimation(LevelModes::convertToInt(_levelIndex.mode));
 }
 
 void Menu::render() {
-    ShaderManager::getInstance().useShaderProgram();
+    _shaderManager->useShaderProgram();
     menuBackground->render();
     menuLogo->render();
     menuAbout->render();
@@ -100,12 +101,12 @@ void Menu::initTextures() {
 }
 
 void Menu::changeModeUp() {
-    switch (_mode) {
+    switch (_levelIndex.mode) {
         case LevelModes::Mode::FUN_MODE:
-            _mode = LevelModes::Mode::TRICKY_MODE;
+            _levelIndex.mode = LevelModes::Mode::TRICKY_MODE;
             break;
         case LevelModes::Mode::TRICKY_MODE:
-            _mode = LevelModes::Mode::TAXING_MODE;
+            _levelIndex.mode = LevelModes::Mode::TAXING_MODE;
             break;
         default:
             return;
@@ -113,12 +114,12 @@ void Menu::changeModeUp() {
 }
 
 void Menu::changeModeDown() {
-    switch (_mode) {
+    switch (_levelIndex.mode) {
         case LevelModes::Mode::TAXING_MODE:
-            _mode = LevelModes::Mode::TRICKY_MODE;
+            _levelIndex.mode = LevelModes::Mode::TRICKY_MODE;
             break;
         case LevelModes::Mode::TRICKY_MODE:
-            _mode = LevelModes::Mode::FUN_MODE;
+            _levelIndex.mode = LevelModes::Mode::FUN_MODE;
             break;
         default:
             return;
@@ -126,7 +127,7 @@ void Menu::changeModeDown() {
 }
 
 LevelModes::Mode Menu::getMode() const {
-    return _mode;
+    return _levelIndex.mode;
 }
 
 void Menu::endMusic() {
@@ -144,9 +145,7 @@ void Menu::onKeyPressed(const SDL_KeyboardEvent &keyboardEvent) {
             // key f1 go to playing
             endMusic();
             {
-                int *mode = new int(LevelModes::convertToInt(getMode()));
-                int *number = new int(1);
-                EventCreator::sendSimpleUserEvent(CHANGE_TO_INFO, mode, number);
+                EventCreator::sendSimpleUserEvent(CHANGE_TO_INFO,  new LevelIndex{_levelIndex.mode, _levelIndex.levelNo});
             }
             break;
         case SDLK_F2:

@@ -4,7 +4,7 @@
 #include "StateManager.h"
 #include "EventCreator.h"
 
-Credits::Credits(Game *game) : GameState(game) {
+Credits::Credits(Game *game) : GameState(game), _shaderManager(_game->getShaderManager()) {
     music = make_unique<Sound>(game->getSoundManager(), "sounds/CreditsSong.ogg",
                                FMOD_LOOP_NORMAL | FMOD_CREATESTREAM);
 
@@ -13,7 +13,7 @@ Credits::Credits(Game *game) : GameState(game) {
     creditsLevelTexture.setMagFilter(GL_NEAREST);
 
     creditsLevelSprite = Sprite::createSprite(glm::vec2(CAMERA_WIDTH, CAMERA_HEIGHT), glm::vec2(1.f, 1.f),
-                                              &ShaderManager::getInstance().getShaderProgram(), &creditsLevelTexture);
+                                              &_shaderManager->getShaderProgram(), &creditsLevelTexture);
 
 }
 
@@ -31,7 +31,7 @@ void Credits::update(int deltaTime) {
 }
 
 void Credits::render() {
-    ShaderManager::getInstance().useShaderProgram();
+    _shaderManager->useShaderProgram();
     creditsLevelSprite->render();
 }
 

@@ -8,13 +8,14 @@
 #include "Sound.h"
 #include "Game.h"
 #include "LevelModes.h"
+#include "LevelIndex.h"
 
 class Game;
 
 class Menu : public GameState {
 
 public:
-    explicit Menu(Game *game);
+    explicit Menu(Game *game, const LevelIndex &levelIndex);
 
     ~Menu() override;
 
@@ -61,7 +62,7 @@ private:
     std::unique_ptr<Sprite> menuMode;
     std::unique_ptr<Sprite> menuPlaying;
 
-    LevelModes::Mode _mode;
+    LevelIndex _levelIndex;
 
     glm::vec2 modePositions[3] = {
             glm::vec2(0, 0),
@@ -70,6 +71,7 @@ private:
     };
 
     unique_ptr<Sound> music;
+    ShaderManager *_shaderManager;
 };
 
 

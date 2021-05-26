@@ -6,12 +6,12 @@
 #include "ShaderManager.h"
 
 
-Button ButtonFactory::createButton(int buttonName) {
-    Button button = Button();
-    button.init();
+Button ButtonFactory::createButton(int buttonName, ShaderManager *shaderManager) {
+    Button button;
+    button.init(shaderManager);
 
     auto buttonSprite = Sprite::createSprite(glm::ivec2(15, 23), glm::vec2(15. / 128, 23. / 64),
-                                             &ShaderManager::getInstance().getShaderProgram(),
+                                             &shaderManager->getShaderProgram(),
                                              &Game::spriteSheets().buttonSprites);
     buttonSprite->setNumberAnimations(1);
 

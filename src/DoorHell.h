@@ -7,6 +7,8 @@
 class DoorHell : public Door {
 
 public:
+    explicit DoorHell(ShaderManager *shaderManager);
+
     void init() override;
 };
 

@@ -6,16 +6,20 @@
 #include "GameState.h"
 #include "EventCreator.h"
 #include "InfoLevel.h"
+#include "LevelIndex.h"
 
 
-InfoLevel::InfoLevel(Game * game, LevelModes::Mode mode, int level) : GameState(game), _mode(mode), _level(level){
+InfoLevel::InfoLevel(Game * game, const LevelIndex& index) : GameState(game), _levelIndex(index), _shaderManager(_game->getShaderManager()){
     initTextures();
 
-    _leftKey = KeyFactory::createLeftKey(glm::vec2(25, 15));
-    _menuWord = std::make_unique<Word>("MENU");
+    _leftKey = KeyFactory::createLeftKey(nullptr, glm::vec2(25, 15));
+    _menuWord = std::make_unique<Word>("MENU", _shaderManager);
 
-    _rightKey = KeyFactory::createRightKey(glm::vec2(25, 15));
-    _playWord = std::make_unique<Word>("PLAY");
+    _rightKey = KeyFactory::createRightKey(nullptr, glm::vec2(25, 15));
+    _playWord = std::make_unique<Word>("PLAY", _shaderManager);
+
+    _infoLevelSprite = Sprite::createSprite(glm::vec2(CAMERA_WIDTH, CAMERA_HEIGHT), glm::vec2(1.f, 1.f),
+                                            &_shaderManager->getShaderProgram(), &_infoLevelTexture);
 }
 
 InfoLevel::~InfoLevel() = default;
@@ -30,13 +34,12 @@ void InfoLevel::init() {
 }
 
 void InfoLevel::setLevel(LevelModes::Mode levelMode, int numLevel) {
-    _level = numLevel;
-    _mode = levelMode;
+    _levelIndex.mode = levelMode;
+    _levelIndex.levelNo = numLevel;
 
     initTextures();
 
-    _infoLevelSprite = Sprite::createSprite(glm::vec2(CAMERA_WIDTH, CAMERA_HEIGHT), glm::vec2(1.f, 1.f),
-                                            &ShaderManager::getInstance().getShaderProgram(), &_infoLevelTexture);
+
 }
 
 void InfoLevel::update(int deltaTime) {
@@ -44,7 +47,7 @@ void InfoLevel::update(int deltaTime) {
 }
 
 void InfoLevel::render() {
-    ShaderManager::getInstance().useShaderProgram();
+    _shaderManager->useShaderProgram();
 
     _infoLevelSprite->render();
     _menuWord->render();
@@ -55,19 +58,13 @@ void InfoLevel::render() {
 
 void InfoLevel::initTextures() {
 
-    _infoLevelTexture.loadFromFile("images/levels/" + LevelModes::convertToString(_mode) + to_string(_level) + "/info.png", TEXTURE_PIXEL_FORMAT_RGBA);
+    _infoLevelTexture.loadFromFile("images/levels/" + LevelModes::convertToString(_levelIndex.mode) + to_string(_levelIndex.levelNo) + "/info.png", TEXTURE_PIXEL_FORMAT_RGBA);
     _infoLevelTexture.setMinFilter(GL_NEAREST);
     _infoLevelTexture.setMagFilter(GL_NEAREST);
 
 }
 
-LevelModes::Mode InfoLevel::getMode() const {
-    return _mode;
-}
 
-int InfoLevel::getLevel() const {
-    return _level;
-}
 
 void InfoLevel::onKeyPressed(const SDL_KeyboardEvent &keyboardEvent) {
     switch (keyboardEvent.keysym.sym) {
@@ -75,9 +72,8 @@ void InfoLevel::onKeyPressed(const SDL_KeyboardEvent &keyboardEvent) {
             EventCreator::sendSimpleUserEvent(CHANGE_TO_MENU);
             break;
         case SDLK_RIGHT: {
-            int *mode = new int(LevelModes::convertToInt(getMode()));
-            int *number = new int(1);
-            EventCreator::sendSimpleUserEvent(CHANGE_TO_SCENE, mode, number);
+            auto *index = new LevelIndex(_levelIndex);
+            EventCreator::sendSimpleUserEvent(CHANGE_TO_SCENE, index);
             break;
         }
         case SDLK_LEFT:

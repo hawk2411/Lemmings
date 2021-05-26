@@ -11,11 +11,11 @@ class ShaderManager {
 public:
     ShaderManager();
 
-    static ShaderManager &getInstance() {
-        static ShaderManager instance;
-
-        return instance;
-    }
+//    static ShaderManager &getInstance() {
+//        static ShaderManager instance;
+//
+//        return instance;
+//    }
 
 
     ShaderProgram &getShaderProgram();

@@ -1,8 +1,6 @@
 #ifndef _COMMON_DEFS_INCLUDE
 #define _COMMON_DEFS_INCLUDE
 
-
-
 #define WINDOW_WIDTH 960
 #define WINDOW_HEIGHT 591
 

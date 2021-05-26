@@ -8,16 +8,17 @@
 #include "Door.h"
 #include "Trapdoor.h"
 #include "Sound.h"
-#include "IMaskManager.h"
+//#include "IMaskManager.h"
+#include "LevelIndex.h"
 
 class LevelRunner {
 
 public:
-    LevelRunner(SoundManager *soundManager, LevelModes::Mode levelMode, int levelNo);
+    LevelRunner(SoundManager *soundManager, ShaderManager * shaderManager, const LevelIndex& levelIndex);
     ~LevelRunner();
 
 
-    void changeLevel(LevelModes::Mode levelMode, int levelNum);
+    void changeLevel(const LevelIndex &levelIndex);
 
     void update(int deltaTime, IMaskManager *currentMask);
 
@@ -45,17 +46,17 @@ public:
 
     void apocalypse();
 
-    int getReleaseRate();
+    int getReleaseRate() const;
 
-    int getMinReleaseRate();
+    int getMinReleaseRate() const;
 
     void decreaseReleaseRate();
 
     void increaseReleaseRate();
 
-    int getActualLevel();
+    int getActualLevel() const;
 
-    int getActualMode();
+    LevelModes::Mode getActualMode()const;
 
     int getJobCount(int index);
 
@@ -79,8 +80,7 @@ private:
     int _minReleaseRate;
     int _availableLemmings;
 
-    int _actualLevel;
-    int _actualMode;
+    LevelIndex _levelIndex;
 
     int _goalTime;
     float _currentTime;
@@ -91,6 +91,7 @@ private:
 
     bool _exploding;
     SoundManager *_soundManager;
+    ShaderManager *_shaderManager;
 
     unique_ptr<Sound> _music;
     unique_ptr<Sound> _dooropenSound;

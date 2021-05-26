@@ -8,9 +8,9 @@ void ParticleSystemManager::init() {
     particleSystems.resize(0);
 }
 
-void ParticleSystemManager::createNewParticleSystem(glm::vec2 position) {
+void ParticleSystemManager::createNewParticleSystem( ShaderProgram* shaderProgram, glm::vec2 position) {
 
-    ParticleSystem *particleSystem = new ParticleSystem();
+    ParticleSystem *particleSystem = new ParticleSystem(shaderProgram);
     particleSystem->setPosition(position);
     particleSystems.push_back(particleSystem);
 }

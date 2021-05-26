@@ -1,8 +1,9 @@
 #include "Button.h"
+#include "ShaderManager.h"
 
 
-void Button::init() {
-    numDisplay.init();
+void Button::init(ShaderManager *shaderManager) {
+    numDisplay.init(shaderManager);
 
     setPosition(glm::vec2(0, 0));
 }
@@ -27,7 +28,7 @@ void Button::setPosition(glm::vec2 position) {
 
     numDisplay.setPosition(position);
 
-    if (buttonSprite != NULL) {
+    if (buttonSprite != nullptr) {
         buttonSprite->setPosition(position);
     }
 }

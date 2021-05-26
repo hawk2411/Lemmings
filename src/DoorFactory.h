@@ -3,11 +3,12 @@
 
 #include "Sprite.h"
 #include "Door.h"
+#include "ShaderManager.h"
 
 class DoorFactory {
 
 public:
-    static Door *createDoor(const string &type);
+    static Door *createDoor(const string &type, ShaderManager *shaderManager);
 };
 
 

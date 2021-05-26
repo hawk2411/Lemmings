@@ -6,6 +6,23 @@
 #include "EventCreator.h"
 
 #include "Results.h"
+#include "LevelIndex.h"
+
+Results::Results(Game *game, const LevelIndex& levelIndex ) : GameState(game), _levelIndex(levelIndex), _shaderManager(_game->getShaderManager()) {
+
+    background = Sprite::createSprite(glm::ivec2(CAMERA_WIDTH, CAMERA_HEIGHT), glm::vec2(1, 1),
+                                      &_game->getShaderManager()->getShaderProgram(), &backgroundTexture);
+    continueButton = Sprite::createSprite(glm::ivec2(77, 12), glm::vec2(144. / 256, 25. / 256),
+                                          &_game->getShaderManager()->getShaderProgram(),
+                                          &Game::spriteSheets().resultsWordSprites);
+    menuButton = Sprite::createSprite(glm::ivec2(77, 12), glm::vec2(144. / 256, 25. / 256),
+                                      &_game->getShaderManager()->getShaderProgram(),
+                                      &Game::spriteSheets().resultsWordSprites);
+    retryButton = Sprite::createSprite(glm::ivec2(77, 12), glm::vec2(144. / 256, 25. / 256),
+                                       &_game->getShaderManager()->getShaderProgram(),
+                                       &Game::spriteSheets().resultsWordSprites);
+}
+
 
 void Results::init() {
     _currentTime = 0.0f;
@@ -17,7 +34,7 @@ void Results::update(int deltaTime) {
 
 void Results::render() {
 
-    ShaderManager::getInstance().useShaderProgram();
+    _shaderManager->useShaderProgram();
 
     background->render();
 
@@ -25,10 +42,6 @@ void Results::render() {
     goalPercentageDisplay.render();
 
     renderButtons();
-}
-
-int Results::getSelectedButtonIndex() const {
-    return selectedButton;
 }
 
 int Results::getSelectedButton() {
@@ -52,7 +65,7 @@ void Results::changeSelectedButtonRight() {
 
 void Results::setPercentages(int goalPercentage, int currentPercentage) {
     passedLevel = currentPercentage >= goalPercentage;
-    string texturePath = "";
+    string texturePath;
     if (passedLevel) {
         possibleButtons = vector<ResultsButtonName>(3);
         possibleButtons[0] = RETRY;
@@ -85,15 +98,13 @@ void Results::setPercentages(int goalPercentage, int currentPercentage) {
     backgroundTexture.setMinFilter(GL_NEAREST);
     backgroundTexture.setMagFilter(GL_NEAREST);
 
-    background = Sprite::createSprite(glm::ivec2(CAMERA_WIDTH, CAMERA_HEIGHT), glm::vec2(1, 1),
-                                      &ShaderManager::getInstance().getShaderProgram(), &backgroundTexture);
     background->setPosition(glm::vec2(0, 0));
 
-    goalPercentageDisplay.init();
+    goalPercentageDisplay.init(_shaderManager);
     goalPercentageDisplay.displayPercentage(goalPercentage);
     goalPercentageDisplay.setPosition(glm::vec2(200, 49));
 
-    currentPercentageDisplay.init();
+    currentPercentageDisplay.init(_shaderManager);
     currentPercentageDisplay.displayPercentage(currentPercentage);
     currentPercentageDisplay.setPosition(glm::vec2(200, 61));
     initButtons();
@@ -101,25 +112,19 @@ void Results::setPercentages(int goalPercentage, int currentPercentage) {
 }
 
 void Results::initButtons() {
-    continueButton = Sprite::createSprite(glm::ivec2(77, 12), glm::vec2(144. / 256, 25. / 256),
-                                          &ShaderManager::getInstance().getShaderProgram(),
-                                          &Game::spriteSheets().resultsWordSprites);
+
     continueButton->setNumberAnimations(2);
     continueButton->addKeyframe(0, glm::vec2(0, 0));
     continueButton->addKeyframe(1, glm::vec2(0, 25. / 256));
     continueButton->changeAnimation(0);
 
-    menuButton = Sprite::createSprite(glm::ivec2(77, 12), glm::vec2(144. / 256, 25. / 256),
-                                      &ShaderManager::getInstance().getShaderProgram(),
-                                      &Game::spriteSheets().resultsWordSprites);
+
     menuButton->setNumberAnimations(2);
     menuButton->addKeyframe(0, glm::vec2(0, 50. / 256));
     menuButton->addKeyframe(1, glm::vec2(0, 75. / 256));
     menuButton->changeAnimation(0);
 
-    retryButton = Sprite::createSprite(glm::ivec2(77, 12), glm::vec2(144. / 256, 25. / 256),
-                                       &ShaderManager::getInstance().getShaderProgram(),
-                                       &Game::spriteSheets().resultsWordSprites);
+
     retryButton->setNumberAnimations(2);
     retryButton->addKeyframe(0, glm::vec2(0, 100. / 256));
     retryButton->addKeyframe(1, glm::vec2(0, 125. / 256));
@@ -178,33 +183,34 @@ void Results::onKeyPressed(const SDL_KeyboardEvent &keyboardEvent) {
             break;
         case SDLK_RETURN: {
             int selected = getSelectedButton();
-            int currentLevel = _level;
-            //int currentMode = LevelRunner::getInstance().getActualMode();
 
             switch (selected) {
                 case 0: // RETRY
-                    // TODO
-                    //StateManager::instance().changeInfo(currentMode, currentLevel);
-                    EventCreator::sendSimpleUserEvent(CHANGE_TO_INFO, new int(LevelModes::convertToInt(_levelMode)), new int(_level));
+                    EventCreator::sendSimpleUserEvent(CHANGE_TO_INFO, new LevelIndex(_levelIndex));;
                     break;
 
                 case 1: // CONTINUE
 
-                    switch (_levelMode) {
+                    switch (_levelIndex.mode) {
                         case LevelModes::Mode::FUN_MODE:
-                            if (currentLevel < 4) {
-                                EventCreator::sendSimpleUserEvent(CHANGE_TO_INFO, new int(LevelModes::convertToInt(_levelMode)), new int(_level+1));
-                            } else if (currentLevel == 4) {
-                                EventCreator::sendSimpleUserEvent(CHANGE_TO_INFO, new int(LevelModes::convertToInt(_levelMode)), new int(7));
-                            } else {
-                                EventCreator::sendSimpleUserEvent(CHANGE_TO_INFO, new int(LevelModes::convertToInt(LevelModes::Mode::TRICKY_MODE)), new int(1));
+                            if (_levelIndex.levelNo < 4) {
+                                EventCreator::sendSimpleUserEvent(CHANGE_TO_INFO,
+                                                                  new LevelIndex{ _levelIndex.mode, _levelIndex.levelNo+1});
+                                break;
                             }
+                            if (_levelIndex.levelNo == 4) {
+                                EventCreator::sendSimpleUserEvent(CHANGE_TO_INFO,
+                                                                  new LevelIndex { _levelIndex.mode, 7});
+                                break;
+                            }
+                            EventCreator::sendSimpleUserEvent(CHANGE_TO_INFO, new LevelIndex{LevelModes::Mode::TRICKY_MODE , 1});
+
                             break;
                         case LevelModes::Mode::TRICKY_MODE:
-                            if (currentLevel < 3) {
-                                EventCreator::sendSimpleUserEvent(CHANGE_TO_INFO, new int(LevelModes::convertToInt(_levelMode)), new int(_level+1));
+                            if (_levelIndex.levelNo < 3) {
+                                EventCreator::sendSimpleUserEvent(CHANGE_TO_INFO, new LevelIndex{_levelIndex.mode, _levelIndex.levelNo});
                             } else {
-                                EventCreator::sendSimpleUserEvent(CHANGE_TO_INFO, new int(LevelModes::convertToInt(LevelModes::Mode::TAXING_MODE)), new int(1));
+                                EventCreator::sendSimpleUserEvent(CHANGE_TO_INFO, new LevelIndex{LevelModes::Mode::TAXING_MODE, 1});
                             }
                             break;
                         case LevelModes::Mode::TAXING_MODE:
@@ -217,8 +223,15 @@ void Results::onKeyPressed(const SDL_KeyboardEvent &keyboardEvent) {
                 case 2: // MENU
                     EventCreator::sendSimpleUserEvent(CHANGE_TO_MENU);
                     break;
+                default:
+                    break;
             }
         }
-        break;
+            break;
     }
 }
+
+void Results::changeLevel(const LevelIndex &levelIndex) {
+    _levelIndex = levelIndex;
+}
+

@@ -99,6 +99,8 @@ public:
 
     StateManager *getStateManager();
 
+    ShaderManager *getShaderManager()const{return _shaderManager.get();}
+
 private:
     unique_ptr<SoundManager> _soundManager;
     unique_ptr<StateManager> _stateManager;

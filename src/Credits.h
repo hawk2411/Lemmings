@@ -34,6 +34,7 @@ private:
     Texture creditsLevelTexture;
     std::unique_ptr<Sprite> creditsLevelSprite;
     unique_ptr<Sound> music;
+    ShaderManager *_shaderManager;
 };
 
 

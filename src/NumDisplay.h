@@ -3,6 +3,7 @@
 
 #include "Texture.h"
 #include "Sprite.h"
+#include "ShaderManager.h"
 
 // Lemming is basically a Sprite that represents one lemming. As such it has
 // all properties it needs to track its movement and collisions.
@@ -11,7 +12,7 @@
 class NumDisplay {
 
 public:
-    void init();
+    void init(ShaderManager *shaderManager);
 
     void displayNum(int num);
 
@@ -20,7 +21,7 @@ public:
     virtual void setPosition(glm::vec2 position) = 0;
 
 protected:
-    virtual void initAux() = 0;
+    virtual void initAux(ShaderManager *shaderManager) = 0;
 
     virtual void displayNumAux(int firstDigit, int secondDigit) = 0;
 

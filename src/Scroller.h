@@ -7,6 +7,8 @@
 class Scroller {
 
 public:
+    Scroller(bool scrolled);
+
     void scrollLeft(glm::vec2 cameraPos, int levelSize);
 
     void scrollRight(glm::vec2 cameraPos, int levelSize);

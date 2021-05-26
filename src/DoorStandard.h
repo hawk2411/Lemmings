@@ -7,6 +7,8 @@
 class DoorStandard : public Door {
 
 public:
+    explicit DoorStandard(ShaderManager *shaderManager);
+
     void init() override;
 };
 

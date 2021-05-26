@@ -90,6 +90,8 @@ add_executable(lemmings src/main.cpp
         src/TimerEventService.cpp
         src/EventCreator.h
         src/EventCreator.cpp
+        src/LevelIndex.h
+        src/LevelIndex.cpp
         libs/SOIL/src/image_helper.c
         libs/SOIL/src/image_helper.h
         libs/SOIL/src/image_DXT.h
@@ -99,9 +101,7 @@ add_executable(lemmings src/main.cpp
         libs/SOIL/src/stb_image_aug.c
         libs/SOIL/src/stb_image_aug.h
         libs/SOIL/src/stbi_DDS_aug.h
-        libs/SOIL/src/stbi_DDS_aug_c.h
-
-        src/TimerEventService.cpp src/TimerEventService.h)
+        libs/SOIL/src/stbi_DDS_aug_c.h)
 
 
 find_package(OpenGL REQUIRED)

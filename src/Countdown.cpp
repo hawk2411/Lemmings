@@ -4,9 +4,9 @@
 
 const int MAX_SEC = 5;
 
-Countdown::Countdown() {
+Countdown::Countdown(ShaderManager *shaderManager) : _shaderManager(shaderManager) {
     _over = false;
-    _countNum = ButtonNumFactory::instance().createNum();
+    _countNum = ButtonNumFactory::createNum(_shaderManager);
     _countNum->changeAnimation(MAX_SEC);
     _goalTime = 0;
     _isStarted = false;

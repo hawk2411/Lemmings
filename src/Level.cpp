@@ -9,7 +9,7 @@
 #include "TrapdoorFactory.h"
 #include "LevelModes.h"
 
-Level::Level(LevelModes::Mode difficulty, int levelNo): _actualLevel(levelNo), _actualMode(difficulty) {
+Level::Level(ShaderManager* shaderManager, LevelModes::Mode difficulty, int levelNo): _actualLevel(levelNo), _actualMode(difficulty), _shaderManager(shaderManager) {
 
     initFromFile(getFilename(difficulty, levelNo));
 }
@@ -59,7 +59,7 @@ void Level::initFromFile(const string &file) {
                 iss >> trapdoorPosX >> trapdoorPosY >> trapdoorType;
 
                 _trapdoorPos = glm::vec2(trapdoorPosX, trapdoorPosY);
-                _trapdoor = std::unique_ptr<Trapdoor>(TrapdoorFactory::createTrapdoor(trapdoorType));
+                _trapdoor = std::unique_ptr<Trapdoor>(TrapdoorFactory::createTrapdoor(trapdoorType, _shaderManager));
                 break;
             }
             case 4: // DOOR_POS DOOR_TYPE(standard, egypt, maya, hell)
@@ -69,7 +69,7 @@ void Level::initFromFile(const string &file) {
                 iss >> doorPosX >> doorPosY >> doorType;
 
                 _doorPos = glm::vec2(doorPosX, doorPosY);
-                _door = unique_ptr<Door>(DoorFactory::createDoor(doorType));
+                _door = unique_ptr<Door>(DoorFactory::createDoor(doorType, _shaderManager));
                 break;
             }
             case 5: // LEVEL CAMERA POS
