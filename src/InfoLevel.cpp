@@ -12,10 +12,10 @@
 InfoLevel::InfoLevel(Game * game, const LevelIndex& index) : GameState(game), _levelIndex(index), _shaderManager(_game->getShaderManager()){
     initTextures();
 
-    _leftKey = KeyFactory::createLeftKey(nullptr, glm::vec2(25, 15));
+    _leftKey = KeyFactory::createLeftKey(&_shaderManager->getShaderProgram(), glm::vec2(25, 15));
     _menuWord = std::make_unique<Word>("MENU", _shaderManager);
 
-    _rightKey = KeyFactory::createRightKey(nullptr, glm::vec2(25, 15));
+    _rightKey = KeyFactory::createRightKey(&_shaderManager->getShaderProgram(), glm::vec2(25, 15));
     _playWord = std::make_unique<Word>("PLAY", _shaderManager);
 
     _infoLevelSprite = Sprite::createSprite(glm::vec2(CAMERA_WIDTH, CAMERA_HEIGHT), glm::vec2(1.f, 1.f),

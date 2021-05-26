@@ -12,8 +12,8 @@ Instructions::Instructions(Game *game) : actualPage(0),
 
     _music = make_unique<Sound>(game->getSoundManager(), "sounds/InstructionsSong.ogg",
                                 FMOD_LOOP_NORMAL | FMOD_CREATESTREAM);
-    _leftKey = KeyFactory::createLeftKey(nullptr);
-    _rightKey = KeyFactory::createRightKey(nullptr);
+    _leftKey = KeyFactory::createLeftKey(&_shaderManager->getShaderProgram());
+    _rightKey = KeyFactory::createRightKey(&_shaderManager->getShaderProgram());
     _instructionsLevelTexture.loadFromFile("images/menu/menuBackground.png", TEXTURE_PIXEL_FORMAT_RGBA);
     _instructionsLevelTexture.setMinFilter(GL_NEAREST);
     _instructionsLevelTexture.setMagFilter(GL_NEAREST);

@@ -12,7 +12,6 @@ enum FallerAnims {
 
 Faller::Faller(SoundManager *soundManager) : Job(Jobs::FALLER, soundManager),
                    state(FallerState::FALLING_RIGHT_STATE),
-                   deathEffect(nullptr),
                    currentDistance(0),
                    dead(false) {
     deathEffect = make_unique<Sound>(soundManager, "sounds/lemmingsEffects/SPLAT.WAV",

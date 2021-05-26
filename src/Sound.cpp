@@ -2,11 +2,7 @@
 // Created by hawk on 14.05.21.
 //
 
-#include <sstream>
-#include <utility>
-#include <iostream>
 #include <fmod_errors.h>
-#include <stdio.h>
 #include "SoundManager.h"
 #include "Sound.h"
 #include "LemmingsException.h"

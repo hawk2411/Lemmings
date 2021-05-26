@@ -18,8 +18,6 @@
 class Lemming {
 
 public:
-    Lemming() : _countdown(nullptr) {};
-
     Lemming(const glm::vec2 &initialPosition, SoundManager *soundManager, ShaderManager *shaderManager);
 
     void update(int deltaTime, Level *levelAttributes, IMaskManager *mask);
@@ -50,7 +48,7 @@ private:
     bool walkingRight = true; // is marked true when the lemmings walks in right direction
     bool _alive;
     bool _isSaved;
-    glm::vec2 _position;
+    glm::vec2 _position{};
     SoundManager* _soundManager;
 
     bool outOfMap(const glm::vec2 &levelSize);

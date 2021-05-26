@@ -12,7 +12,7 @@
 
 
 Lemming::Lemming(const glm::vec2 &initialPosition, SoundManager *soundManager, ShaderManager *shaderManager)
-        : _soundManager(soundManager), _shaderManager(shaderManager), _countdown(nullptr) {
+        : _soundManager(soundManager), _shaderManager(shaderManager), _countdown(shaderManager) {
     _job = JobFactory::createJob(Jobs::FALLER, _soundManager);
     _job->initAnims(_shaderManager->getShaderProgram());
     _position = initialPosition;

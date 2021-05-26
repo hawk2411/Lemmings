@@ -5,7 +5,7 @@
 
 
 Game::Game() : bPlay(true), _dmode(Difficulties::Mode::Easy),
-               hardModeIndicator(nullptr), prevTime(prevTime) {
+                prevTime(prevTime) {
 
     glClearColor(0.f, 0.f, 0.f, 1.0f);  //TODO glClearColor here???
     _soundManager = std::make_unique<SoundManager>();
