@@ -33,11 +33,16 @@ void Countdown::update(int deltaTime) {
     if(!_isStarted) {
         return;
     }
-    int currentSec = _goalTime - deltaTime;
-    if (currentSec <= 0) {
+    _currentTime += static_cast<float>(deltaTime);
+    //TODO check if this is really correct.
+    if( _currentTime > 300.f) {
+        _currentTime=0.0f;
+        _goalTime--;
+    }
+    if (_goalTime <= 0) {
         _over = true;
     } else {
-        _countNum->changeAnimation(currentSec);
+        _countNum->changeAnimation(_goalTime);
     }
 }
 

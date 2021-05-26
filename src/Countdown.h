@@ -31,7 +31,7 @@ private:
     int _goalTime;
     bool _over;
     bool _isStarted;
-
+    float _currentTime = 0.0f;
 };
 
 #endif // _COUNTDOWN_INCLUDE

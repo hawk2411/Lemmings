@@ -72,6 +72,10 @@ void Lemming::render(const glm::vec2 &cameraPos) {
 }
 
 void Lemming::changeJob(Jobs nextJob) {
+    if(_job != nullptr && _job->getCurrentJob() == nextJob) {
+        //not necessary to create the same job.
+        return;
+    }
     glm::ivec2 oldPosition;
     if(_job) {
         walkingRight = _job->isWalkingRight();
