@@ -91,6 +91,8 @@ public:
 
     void changeLevel(const LevelIndex &levelIndex);
 
+    void createNewParticleSystem(glm::vec2 vec);
+
 private:
     ScreenClickedArea getClickedScreenArea(int mouseX, int mouseY);
 

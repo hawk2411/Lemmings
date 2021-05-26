@@ -420,3 +420,7 @@ void Scene::activateButton(int buttonIndex) {
 int Scene::getSelectedButtonJobCount() {
     return _levelRunner->getLevelAttributes()->lemmingsProJob[_ui.getSelectedButton() - 2];
 }
+
+void Scene::createNewParticleSystem(glm::vec2 vec) {
+    _particleSystemManager.createNewParticleSystem(&_shaderManager->getMaskedShaderProgram(), vec);
+}

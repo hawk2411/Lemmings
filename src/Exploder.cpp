@@ -37,7 +37,7 @@ void Exploder::initAnims(ShaderProgram &shaderProgram) {
     }
 
 
-    state = EXPLODER_STATE;
+    _state = EXPLODER_STATE;
     _jobSprite->changeAnimation(EXPLODER);
 
 }
@@ -48,10 +48,10 @@ void Exploder::setWalkingRight(bool value) {
 
 void Exploder::updateStateMachine(int deltaTime, Level *levelAttributes, IMaskManager *mask) {
 
-    switch (state) {
+    switch (_state) {
         case EXPLODER_STATE:
             if (_jobSprite->isInLastFrame()) {
-                state = BURNING_DEATH_STATE;
+                _state = BURNING_DEATH_STATE;
                 _jobSprite->changeAnimation(BURNING_DEATH);
             }
             break;
@@ -85,7 +85,7 @@ void Exploder::explode(IMaskManager *mask) {
         }
     }
     posBase += glm::ivec2(8, 15);
-    auto eventData = new glm::vec2(posBase);
+    auto *eventData = new glm::vec2(posBase);
     EventCreator::sendSimpleUserEvent(CREATE_NEW_PARTICLE_SYSTEM, eventData);
 }
 

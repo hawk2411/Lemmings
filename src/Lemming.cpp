@@ -34,30 +34,32 @@ void Lemming::update(int deltaTime, Level *levelAttributes, IMaskManager *mask) 
     }
     if (_countdown.isStarted() && _countdown.isOver()) {
         changeJob(Jobs::EXPLODER);
-        return;
+        _countdown.reset();
     }
-    //still not nuked
-    _job->updateStateMachine(deltaTime, levelAttributes, mask);
+    else {
+        //still not nuked
+        _job->updateStateMachine(deltaTime, levelAttributes, mask);
 
-    if (_countdown.isStarted()) {
-        //countdown for nuke is running
-        _countdown.setPosition(glm::vec2(6, -8) + _job->sprite()->getPosition());
-        _countdown.update(deltaTime);
-    }
+        if (_countdown.isStarted()) {
+            //countdown for nuke is running
+            _countdown.setPosition(glm::vec2(6, -8) + _job->sprite()->getPosition());
+            _countdown.update(deltaTime);
+        }
 
-    if (_job->finished()) {
-        if (_job->getNextJob() == Jobs::UNKNOWN) {
-            if (_job->getCurrentJob() == Jobs::ESCAPER) {
-                _isSaved = true;
-            } else {
-                cout << "is finished but not alive" << endl;
-                _alive = false;
+        if (_job->finished()) {
+            if (_job->getNextJob() == Jobs::UNKNOWN) {
+                if (_job->getCurrentJob() == Jobs::ESCAPER) {
+                    _isSaved = true;
+                } else {
+                    cout << "is finished but not alive" << endl;
+                    _alive = false;
+                }
             }
-        }
-        if (_alive && !_isSaved) {
-            changeJob(_job->getNextJob());
-        }
+            if (_alive && !_isSaved) {
+                changeJob(_job->getNextJob());
+            }
 
+        }
     }
 
 }

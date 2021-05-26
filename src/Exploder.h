@@ -25,7 +25,7 @@ private:
 
 
 private:
-    ExploderState state;
+    ExploderState _state;
 
     void explode(IMaskManager *mask);
 };

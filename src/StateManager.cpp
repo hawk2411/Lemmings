@@ -51,6 +51,9 @@ void StateManager::changeScene(const LevelIndex &lvlIndex) {
 
 //
 void StateManager::changeResults(ResultStatistic statistic, LevelIndex levelIndex) {
+    if(_currentState == States::Type::Result) {
+        return;
+    }
     _currentState = States::Type::Result;
     auto *results = dynamic_cast<Results *>(_gameStates[_currentState].get());
     results->setPercentages(statistic.goalPercentage, statistic.currentPercentage);
@@ -124,6 +127,14 @@ void StateManager::onUserEvent(const SDL_UserEvent &event) {
             changeResults(*statistic, *levelIndex);
             delete statistic;
             delete levelIndex;
+        }
+        case CREATE_NEW_PARTICLE_SYSTEM: {
+            auto *posBase = static_cast<glm::vec2 *>(event.data1);
+            if(_currentState == States::Type::Scene) {
+                auto *scene = dynamic_cast<Scene *>(_gameStates[_currentState].get());
+                scene->createNewParticleSystem(*posBase);
+            }
+            //delete posBase;
         }
     }
 }
