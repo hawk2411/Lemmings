@@ -18,10 +18,10 @@ public:
     bool notFinished() const;
 
 private:
-    vector<Particle *> particles;
+    vector<Particle *> _particles;
     int numParticles;
-    float currentTime = 0.f;
-    bool alive;
+    float _currentTime = 0.f;
+    bool _alive;
 };
 
 

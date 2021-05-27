@@ -127,14 +127,7 @@ void StateManager::onUserEvent(const SDL_UserEvent &event) {
             changeResults(*statistic, *levelIndex);
             delete statistic;
             delete levelIndex;
-        }
-        case CREATE_NEW_PARTICLE_SYSTEM: {
-            auto *posBase = static_cast<glm::vec2 *>(event.data1);
-            if(_currentState == States::Type::Scene) {
-                auto *scene = dynamic_cast<Scene *>(_gameStates[_currentState].get());
-                scene->createNewParticleSystem(*posBase);
-            }
-            //delete posBase;
+            break;
         }
     }
 }

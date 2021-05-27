@@ -11,9 +11,9 @@
 #define FALL_STEP 4
 
 
-Lemming::Lemming(const glm::vec2 &initialPosition, SoundManager *soundManager, ShaderManager *shaderManager)
-        : _soundManager(soundManager), _shaderManager(shaderManager), _countdown(shaderManager) {
-    _job = JobFactory::createJob(Jobs::FALLER, _soundManager);
+Lemming::Lemming(const glm::vec2 &initialPosition, SoundManager *soundManager, ShaderManager *shaderManager, ParticleSystemManager* particleSystemManager)
+        : _soundManager(soundManager), _shaderManager(shaderManager), _countdown(shaderManager), _particleSystemManager(particleSystemManager) {
+    _job = JobFactory::createJob(Jobs::FALLER, _soundManager, _particleSystemManager);
     _job->initAnims(_shaderManager->getShaderProgram());
     _position = initialPosition;
     _job->sprite()->setPosition(_position);
@@ -84,7 +84,7 @@ void Lemming::changeJob(Jobs nextJob) {
         oldPosition = _job->sprite()->getPosition();
         delete _job;
     }
-    _job = JobFactory::createJob(nextJob, _soundManager);
+    _job = JobFactory::createJob(nextJob, _soundManager, _particleSystemManager);
     if(_job == nullptr)
         return;
 
@@ -122,6 +122,6 @@ void Lemming::writeDestiny(int deltaTime) {
     _countdown.start(deltaTime);
 }
 
-bool Lemming::outOfMap(const glm::vec2 &levelSize) {
+bool Lemming::outOfMap(const glm::vec2 &levelSize)const {
     return !Utils::insideRectangle(_job->sprite()->getPosition(), glm::vec2(0, 0), levelSize);
 }

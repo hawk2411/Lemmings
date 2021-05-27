@@ -11,10 +11,15 @@
 #include "LevelIndex.h"
 
 Scene::Scene(Game *game, SoundManager *soundManager, const LevelIndex &levelIndex)
-        : GameState(game), _scroller(false), _shaderManager(_game->getShaderManager()), _ui(_game->getShaderManager()),
-          _cursor(_game->getShaderManager()) {
+        : GameState(game),
+          _scroller(false),
+          _shaderManager(_game->getShaderManager()),
+          _ui(_game->getShaderManager()),
+          _cursor(_game->getShaderManager()),
+          _particleSystemManager(&_game->getShaderManager()->getShaderProgram()) {
 
-    _levelRunner = std::make_unique<LevelRunner>(soundManager, _game->getShaderManager(), levelIndex);
+    _levelRunner = std::make_unique<LevelRunner>(soundManager, _game->getShaderManager(), &_particleSystemManager,
+                                                 levelIndex);
 
     _maskManagers.insert(std::make_pair(Difficulties::Mode::Easy, std::unique_ptr<IMaskManager>(
             new EasyMaskManager(_levelRunner->getLevelAttributes()))));
@@ -27,7 +32,6 @@ Scene::Scene(Game *game, SoundManager *soundManager, const LevelIndex &levelInde
 
 void Scene::init() {
     _cursor.init();
-
     _particleSystemManager.init();
 
     initMap();
@@ -421,6 +425,3 @@ int Scene::getSelectedButtonJobCount() {
     return _levelRunner->getLevelAttributes()->lemmingsProJob[_ui.getSelectedButton() - 2];
 }
 
-void Scene::createNewParticleSystem(glm::vec2 vec) {
-    _particleSystemManager.createNewParticleSystem(&_shaderManager->getMaskedShaderProgram(), vec);
-}

@@ -10,11 +10,13 @@
 #include "Sound.h"
 //#include "IMaskManager.h"
 #include "LevelIndex.h"
+#include "ParticleSystemManager.h"
 
 class LevelRunner {
 
 public:
-    LevelRunner(SoundManager *soundManager, ShaderManager * shaderManager, const LevelIndex& levelIndex);
+    LevelRunner(SoundManager *soundManager, ShaderManager *shaderManager, ParticleSystemManager *particleSystemManager, const LevelIndex &levelIndex);
+
     ~LevelRunner();
 
 
@@ -56,18 +58,34 @@ public:
 
     int getActualLevel() const;
 
-    LevelModes::Mode getActualMode()const;
+    LevelModes::Mode getActualMode() const;
 
     int getJobCount(int index);
 
     void decreaseJobCount(int index);
 
     void endMusic();
-    Level* getLevelAttributes()const{return _levelStartValues.get();}
+
+    Level *getLevelAttributes() const { return _levelStartValues.get(); }
 
 private:
+    /*
+     * functions
+     */
     void spawnLemmings();
 
+    void finishLevel();
+
+    void updateLemmings(int deltaTime, IMaskManager *currentMask);
+
+    void renderLemmings();
+
+
+    void clearLemmings();
+
+    /*
+     * fields
+     */
     std::unique_ptr<Level> _levelStartValues;
 
 
@@ -92,19 +110,11 @@ private:
     bool _exploding;
     SoundManager *_soundManager;
     ShaderManager *_shaderManager;
-
+    ParticleSystemManager* _particleSystemManager;
     unique_ptr<Sound> _music;
     unique_ptr<Sound> _dooropenSound;
 
 
-    void finishLevel();
-
-    void updateLemmings(int deltaTime, IMaskManager *currentMask);
-
-    void renderLemmings();
-
-
-    void clearLemmings();
 };
 
 #endif // _LEVEL_RUNNER_INCLUDE

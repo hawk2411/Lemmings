@@ -81,10 +81,10 @@ private:
     GLuint vbo;
     GLint posLocation, texCoordLocation;
     glm::vec2 _pos;
-    int currentAnimation, currentKeyframe;
-    float timeAnimation;
-    glm::vec2 texCoordDispl;
-    vector<AnimKeyframes> animations;
+    int _currentAnimation, _currentKeyframe;
+    float _timeAnimation;
+    glm::vec2 _texCoordDispl;
+    vector<AnimKeyframes> _animations;
     vector<bool> _rotated;
     bool iterated;
 

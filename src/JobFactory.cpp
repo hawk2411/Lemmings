@@ -12,6 +12,7 @@
 #include "Climber.h"
 #include "Builder.h"
 
+
 Job *JobFactory::createWalkerJob(SoundManager *soundManager) {
     return new Walker(soundManager);
 }
@@ -24,8 +25,8 @@ Job *JobFactory::createEscaperJob(SoundManager *soundManager) {
     return new Escaper(soundManager);
     }
 
-Job *JobFactory::createExploderJob(SoundManager *soundManager) {
-    return new Exploder(soundManager);
+Job *JobFactory::createExploderJob(SoundManager *soundManager, ParticleSystemManager* particleSystemManager) {
+    return new Exploder(soundManager, particleSystemManager);
     }
 
 Job *JobFactory::createMinerJob(SoundManager *soundManager) {
@@ -56,7 +57,7 @@ Job *JobFactory::createBuilderJob(SoundManager *soundManager) {
     return new Builder(soundManager);
 }
 
-Job *JobFactory::createJob(Jobs jobToCreate, SoundManager *soundManager) {
+Job *JobFactory::createJob(Jobs jobToCreate, SoundManager *soundManager, ParticleSystemManager* particleSystemManager) {
     switch(jobToCreate)
     {
         case Jobs::WALKER:
@@ -66,7 +67,7 @@ Job *JobFactory::createJob(Jobs jobToCreate, SoundManager *soundManager) {
         case Jobs::ESCAPER:
             return createEscaperJob(soundManager);
         case Jobs::EXPLODER:
-            return createExploderJob(soundManager);
+            return createExploderJob(soundManager, particleSystemManager);
         case Jobs::MINER:
             return createMinerJob(soundManager);
         case Jobs::FLOATER:

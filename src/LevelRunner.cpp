@@ -7,8 +7,8 @@
 #include "IMaskManager.h"
 #include "LevelIndex.h"
 
-LevelRunner::LevelRunner(SoundManager *soundManager, ShaderManager *shaderManager, const LevelIndex &levelIndex)
-        : _deadLemmings(0), _soundManager(soundManager), _shaderManager(shaderManager),
+LevelRunner::LevelRunner(SoundManager *soundManager, ShaderManager *shaderManager, ParticleSystemManager* particleSystemManager, const LevelIndex &levelIndex)
+        : _deadLemmings(0), _soundManager(soundManager), _shaderManager(shaderManager), _particleSystemManager(particleSystemManager),
           _savedLemmings(0),
           _goalLemmingNum(0),
           _releaseRate(0),
@@ -108,7 +108,7 @@ void LevelRunner::spawnLemmings() {
     if (elapsedTimeSinceLastLemming >= timeToNextLemming) {
         --_availableLemmings;
         _lastTimeSpawnedLemming = static_cast<int>(_currentTime);
-        auto *newLemming = new Lemming(_levelStartValues->_trapdoor->getEnterPosition(), _soundManager, _shaderManager);
+        auto *newLemming = new Lemming(_levelStartValues->_trapdoor->getEnterPosition(), _soundManager, _shaderManager, _particleSystemManager);
         newLemming->setWalkingRight(true);
         _lemmings.insert(newLemming);
 
@@ -245,7 +245,6 @@ void LevelRunner::updateLemmings(int deltaTime, IMaskManager *currentMask) {
 
         bool saved = currentLemming->saved();
         bool dead = currentLemming->dead();
-
         if (saved) {
             _lemmings.erase(current);
             ++_savedLemmings;

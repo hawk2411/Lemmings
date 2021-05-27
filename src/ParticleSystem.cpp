@@ -4,30 +4,30 @@
 #include <random>
 
 ParticleSystem::ParticleSystem( ShaderProgram* shaderProgram) {
-    alive = true;
+    _alive = true;
 
     numParticles = rand() % 16 + 10;
-    particles.resize(numParticles);
+    _particles.resize(numParticles);
 
     for (int i = 0; i < numParticles; ++i) {
-        particles[i] = ParticleFactory::createParticle(shaderProgram);
+        _particles[i] = ParticleFactory::createParticle(shaderProgram);
     }
 }
 
 void ParticleSystem::setPosition(glm::vec2 position) {
     for (int i = 0; i < numParticles; ++i) {
-        particles[i]->setPosition(position);
+        _particles[i]->setPosition(position);
     }
 }
 
 
 void ParticleSystem::update(int deltaTime) {
-    currentTime += deltaTime;
-    if (currentTime / 1000 > 2) {
-        alive = false;
+    _currentTime += deltaTime;
+    if (_currentTime / 1000 > 2) {
+        _alive = false;
     } else {
         for (int i = 0; i < numParticles; ++i) {
-            particles[i]->update(deltaTime);
+            _particles[i]->update(deltaTime);
         }
     }
 
@@ -35,10 +35,10 @@ void ParticleSystem::update(int deltaTime) {
 
 void ParticleSystem::render(glm::vec2 cameraPos) {
     for (int i = 0; i < numParticles; ++i) {
-        particles[i]->render(cameraPos);
+        _particles[i]->render(cameraPos);
     }
 }
 
 bool ParticleSystem::notFinished() const {
-    return alive;
+    return _alive;
 }

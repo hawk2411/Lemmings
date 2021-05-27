@@ -3,11 +3,11 @@
 
 
 #include "Job.h"
-
+#include "ParticleSystemManager.h"
 
 class Exploder : public Job {
 public:
-    Exploder(SoundManager *soundManager);
+    Exploder(SoundManager *soundManager, ParticleSystemManager* particleSystemManager);
 
     void initAnims(ShaderProgram &shaderProgram);
 
@@ -23,9 +23,8 @@ private:
         BURNING_DEATH_STATE
     };
 
-
-private:
     ExploderState _state;
+    ParticleSystemManager* _particleSystemManager;
 
     void explode(IMaskManager *mask);
 };

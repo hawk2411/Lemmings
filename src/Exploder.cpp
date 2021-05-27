@@ -12,7 +12,10 @@ enum ExploderAnims {
     BURNING_DEATH
 };
 
-Exploder::Exploder(SoundManager *soundManager) : Job(Jobs::EXPLODER, soundManager) {
+Exploder::Exploder(SoundManager *soundManager, ParticleSystemManager *particleSystemManager) :
+        Job(Jobs::EXPLODER,
+            soundManager),
+        _particleSystemManager(particleSystemManager), _state(EXPLODER_STATE) {
 
 }
 
@@ -57,9 +60,9 @@ void Exploder::updateStateMachine(int deltaTime, Level *levelAttributes, IMaskMa
             break;
         case BURNING_DEATH_STATE:
             if (_jobSprite->isInLastFrame()) {
-                explode(mask);
                 isFinished = true;
                 _nextJob = Jobs::UNKNOWN;
+                explode(mask);
             }
 
             break;
@@ -73,7 +76,7 @@ void Exploder::explode(IMaskManager *mask) {
         for (int j = 0; j < 22; ++j) {
             int offset;
             if (j >= 15) {
-                offset = Utils::max(j - 17, 0);
+                offset = std::max<int>(j - 17, 0);
             } else {
                 offset = 15 - 2 * j;
             }
@@ -85,8 +88,7 @@ void Exploder::explode(IMaskManager *mask) {
         }
     }
     posBase += glm::ivec2(8, 15);
-    auto *eventData = new glm::vec2(posBase);
-    EventCreator::sendSimpleUserEvent(CREATE_NEW_PARTICLE_SYSTEM, eventData);
+    _particleSystemManager->createNewParticleSystem(posBase);
 }
 
 
