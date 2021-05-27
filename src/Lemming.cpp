@@ -51,7 +51,6 @@ void Lemming::update(int deltaTime, Level *levelAttributes, IMaskManager *mask) 
                 if (_job->getCurrentJob() == Jobs::ESCAPER) {
                     _isSaved = true;
                 } else {
-                    cout << "is finished but not alive" << endl;
                     _alive = false;
                 }
             }
