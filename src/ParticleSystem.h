@@ -1,9 +1,7 @@
 #ifndef _PARTICLESYSTEM_INCLUDE
 #define _PARTICLESYSTEM_INCLUDE
 
-
 #include "Particle.h"
-
 
 class ParticleSystem {
 public:
@@ -19,7 +17,6 @@ public:
 
 private:
     vector<std::unique_ptr<Particle>> _particles;
-    int numParticles;
     float _currentTime = 0.f;
     bool _alive;
 };
