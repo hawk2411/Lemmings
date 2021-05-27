@@ -7,7 +7,7 @@
 
 class ParticleSystem {
 public:
-    ParticleSystem( ShaderProgram* shaderProgram);
+    explicit ParticleSystem(ShaderProgram* shaderProgram);
 
     void setPosition(glm::vec2 position);
 
@@ -18,7 +18,7 @@ public:
     bool notFinished() const;
 
 private:
-    vector<Particle *> _particles;
+    vector<std::unique_ptr<Particle>> _particles;
     int numParticles;
     float _currentTime = 0.f;
     bool _alive;
