@@ -81,7 +81,7 @@ int main(int argc, char **argv) {
         SDL_GL_SwapWindow(window);
 
     }
-
+    SDL_Quit();
     return 0;
 }
 

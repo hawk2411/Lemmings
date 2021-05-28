@@ -50,7 +50,6 @@ private:
      * fields
      */
     Job *_job;
-    //Sprite *sprite;
     Countdown _countdown;
     ShaderManager *_shaderManager;
     bool walkingRight = true; // is marked true when the lemmings walks in right direction
