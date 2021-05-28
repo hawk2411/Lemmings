@@ -101,9 +101,9 @@ void LevelRunner::spawnLemmings() {
     if (elapsedTimeSinceLastLemming >= timeToNextLemming) {
         --_availableLemmings;
         _lastTimeSpawnedLemming = static_cast<int>(_currentTime);
-        auto *newLemming = new Lemming(_levelStartValues->_trapdoor->getEnterPosition(), _soundManager, _shaderManager, _particleSystemManager);
+        auto newLemming = std::make_unique<Lemming>(_levelStartValues->_trapdoor->getEnterPosition(), _soundManager, _shaderManager, _particleSystemManager);
         newLemming->setWalkingRight(true);
-        _lemmings.insert(newLemming);
+        _lemmings.insert(std::move(newLemming));
 
     }
 
@@ -152,10 +152,8 @@ void LevelRunner::apocalypse() {
     _spawningLemmings = false;
     _deadLemmings += _availableLemmings;
 
-    std::set<Lemming *>::iterator it;
-    for (it = _lemmings.begin(); it != _lemmings.end(); ++it) {
-        Lemming *currentLemming = *it;
-        currentLemming->writeDestiny(0);
+    for (auto& lemming : _lemmings) {
+        lemming->writeDestiny(0);
     }
 }
 
@@ -180,10 +178,9 @@ void LevelRunner::increaseReleaseRate() {
 int LevelRunner::getLemmingIndexInPos(int posX, int posY) {
     int i = -1;
     std::set<Lemming *>::iterator it;
-    for (it = _lemmings.begin(); it != _lemmings.end(); ++it) {
+    for (const auto& lemming : _lemmings) {
         ++i;
-        Lemming *currentLemming = *it;
-        glm::vec2 lemmingPosition = currentLemming->getPosition();
+        glm::vec2 lemmingPosition = lemming->getPosition();
         glm::vec2 lemmingSize = glm::vec2(16);
         if (Utils::insideRectangle(glm::vec2(posX, posY) + _levelStartValues->cameraPos,
                                    lemmingPosition, lemmingSize)) {
@@ -199,16 +196,14 @@ string LevelRunner::getLemmingJobNameIndex(int index) {
         return "";
     auto it = _lemmings.begin();
     std::advance(it, index);
-    Lemming *currentLemming = *it;
-    return currentLemming->getJob()->getName();
+    return it->get()->getJob()->getName();
 }
 
 bool LevelRunner::assignJob(int lemmingIndex, Jobs jobToAssign) {
-    auto it = _lemmings.begin();
-    std::advance(it, lemmingIndex);
-    Lemming *currentLemming = *it;
+    auto currentLemming = _lemmings.begin();
+    std::advance(currentLemming, lemmingIndex);
 
-    Jobs lemmingActualJob = currentLemming->getJob()->getCurrentJob();
+    Jobs lemmingActualJob = currentLemming->get()->getJob()->getCurrentJob();
     if (jobToAssign == lemmingActualJob) {
         return false;
     }
@@ -218,9 +213,9 @@ bool LevelRunner::assignJob(int lemmingIndex, Jobs jobToAssign) {
     }
 
     if (jobToAssign == Jobs::EXPLODER) {
-        currentLemming->writeDestiny(0);
+        currentLemming->get()->writeDestiny(0);
     } else {
-        currentLemming->changeJob(jobToAssign);
+        currentLemming->get()->changeJob(jobToAssign);
     }
     return true;
 }
@@ -233,11 +228,10 @@ void LevelRunner::updateLemmings(int deltaTime, IMaskManager *currentMask) {
     auto it = _lemmings.begin();
     while (it != _lemmings.end()) {
         auto current = it++;
-        Lemming *currentLemming = *current;
-        currentLemming->update(deltaTime, getLevelAttributes(), currentMask);
+        current->get()->update(deltaTime, getLevelAttributes(), currentMask);
 
-        bool saved = currentLemming->saved();
-        bool dead = currentLemming->dead();
+        bool saved = current->get()->saved();
+        bool dead = current->get()->dead();
         if (saved) {
             _lemmings.erase(current);
             ++_savedLemmings;
@@ -249,10 +243,8 @@ void LevelRunner::updateLemmings(int deltaTime, IMaskManager *currentMask) {
 }
 
 void LevelRunner::renderLemmings() {
-    std::set<Lemming *>::iterator it;
-    for (it = _lemmings.begin(); it != _lemmings.end(); ++it) {
-        Lemming *currentLemming = *it;
-        currentLemming->render(_levelStartValues->cameraPos);
+    for(auto& lemming: _lemmings) {
+        lemming->render(_levelStartValues->cameraPos);
     }
 }
 
@@ -272,9 +264,6 @@ void LevelRunner::endMusic() {
 }
 
 void LevelRunner::clearLemmings() {
-    for (auto *lemmming: _lemmings) {
-        delete lemmming;
-    }
     _lemmings.clear();
 }
 

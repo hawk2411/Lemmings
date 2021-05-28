@@ -89,7 +89,7 @@ private:
     std::unique_ptr<Level> _levelStartValues;
 
 
-    set<Lemming *> _lemmings;    //TODO why the fuck is this a set? Are they sorted?
+    set<std::unique_ptr<Lemming>> _lemmings;
 
     int _deadLemmings;
     int _savedLemmings;
