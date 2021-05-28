@@ -13,7 +13,7 @@
 
 Lemming::Lemming(const glm::vec2 &initialPosition, SoundManager *soundManager, ShaderManager *shaderManager, ParticleSystemManager* particleSystemManager)
         : _soundManager(soundManager), _shaderManager(shaderManager), _countdown(shaderManager), _particleSystemManager(particleSystemManager) {
-    _job = JobFactory::createJob(Jobs::FALLER, _soundManager, _particleSystemManager);
+    _job = std::unique_ptr<Job>(JobFactory::createJob(Jobs::FALLER, _soundManager, _particleSystemManager));
     _job->initAnims(_shaderManager->getShaderProgram());
     _position = initialPosition;
     _job->sprite()->setPosition(_position);
@@ -28,7 +28,7 @@ void Lemming::update(int deltaTime, Level *levelAttributes, IMaskManager *mask) 
 
     if (outOfMap(levelAttributes->levelSize)) {
         _alive = false;
-        delete _job;
+        _job.reset(nullptr);
         //lemming no longer has a job
         return;
     }
@@ -81,10 +81,10 @@ void Lemming::changeJob(Jobs nextJob) {
     if(_job) {
         walkingRight = _job->isWalkingRight();
         oldPosition = _job->sprite()->getPosition();
-        delete _job;
+        _job.reset(nullptr);
     }
-    _job = JobFactory::createJob(nextJob, _soundManager, _particleSystemManager);
-    if(_job == nullptr)
+    _job = std::unique_ptr<Job>(JobFactory::createJob(nextJob, _soundManager, _particleSystemManager));
+    if(!_job)
         return;
 
     _job->initAnims(_shaderManager->getShaderProgram());
@@ -97,7 +97,7 @@ glm::vec2 Lemming::getPosition() const {
 }
 
 Job *Lemming::getJob() {
-    return _job;
+    return _job.get();
 }
 
 bool Lemming::dead() const {
