@@ -93,14 +93,11 @@ private:
 
     int _deadLemmings;
     int _savedLemmings;
-    int _goalLemmingNum;
     int _releaseRate;
-    int _minReleaseRate;
     int _availableLemmings;
 
     LevelIndex _levelIndex;
 
-    int _goalTime;
     float _currentTime;
     int _lastTimeSpawnedLemming;
 
@@ -113,8 +110,6 @@ private:
     ParticleSystemManager* _particleSystemManager;
     unique_ptr<Sound> _music;
     unique_ptr<Sound> _dooropenSound;
-
-
 };
 
 #endif // _LEVEL_RUNNER_INCLUDE

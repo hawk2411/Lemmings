@@ -10,12 +10,9 @@
 LevelRunner::LevelRunner(SoundManager *soundManager, ShaderManager *shaderManager, ParticleSystemManager* particleSystemManager, const LevelIndex &levelIndex)
         : _deadLemmings(0), _soundManager(soundManager), _shaderManager(shaderManager), _particleSystemManager(particleSystemManager),
           _savedLemmings(0),
-          _goalLemmingNum(0),
           _releaseRate(0),
-          _minReleaseRate(0),
           _availableLemmings(0),
           _levelIndex(levelIndex),
-          _goalTime(0),
           _currentTime(0.0f),
           _lastTimeSpawnedLemming(0),
           _spawningLemmings(false),
@@ -23,7 +20,7 @@ LevelRunner::LevelRunner(SoundManager *soundManager, ShaderManager *shaderManage
           _exploding(false) {
 
     _dooropenSound = make_unique<Sound>(_soundManager, "sounds/lemmingsEffects/Letsgo.ogg", FMOD_DEFAULT | FMOD_UNIQUE);
-    changeLevel(_levelIndex);
+
 }
 
 LevelRunner::~LevelRunner() = default;
@@ -31,16 +28,13 @@ LevelRunner::~LevelRunner() = default;
 
 void LevelRunner::changeLevel(const LevelIndex &levelIndex) {
     _levelIndex = levelIndex;
-    _levelStartValues = std::make_unique<Level>(_shaderManager, levelIndex.mode, levelIndex.levelNo);
-    _currentTime = 0.0f;
+    _levelStartValues = std::make_unique<Level>(_shaderManager, _levelIndex.mode, _levelIndex.levelNo);
 
+    _currentTime = 0.0f;
 
     clearLemmings();
 
     _releaseRate = _levelStartValues->releaseRate;
-    _minReleaseRate = _levelStartValues->minReleaseRate;
-
-    _goalTime = _levelStartValues->time;
     _currentTime = 0.0f;
     _lastTimeSpawnedLemming = -3500;
 
@@ -55,7 +49,6 @@ void LevelRunner::changeLevel(const LevelIndex &levelIndex) {
 
     string musicPath = "sounds/Lemming" + to_string(_levelIndex.levelNo) + ".ogg";
     _music = make_unique<Sound>(_soundManager, musicPath, FMOD_LOOP_NORMAL | FMOD_CREATESTREAM);
-
     _dooropenSound->playSound();
     _dooropenSound->setVolume(1.0f);
 }
@@ -63,7 +56,7 @@ void LevelRunner::changeLevel(const LevelIndex &levelIndex) {
 void LevelRunner::update(int deltaTime, IMaskManager *currentMask) {
     _currentTime += static_cast<float>(deltaTime);
 
-    if (static_cast<int>(_currentTime / 1000 ) >= _goalTime) {
+    if (static_cast<int>(_currentTime / 1000 ) >= _levelStartValues->time) {
         finishLevel();
     }
 
@@ -138,7 +131,7 @@ int LevelRunner::getCurrentTime() {
 }
 
 int LevelRunner::getRemainingTime() {
-    return _goalTime - getCurrentTime();
+    return _levelStartValues->time - getCurrentTime();
 }
 
 
@@ -172,12 +165,12 @@ int LevelRunner::getReleaseRate() const {
 }
 
 int LevelRunner::getMinReleaseRate() const {
-    return _minReleaseRate;
+    return _levelStartValues->minReleaseRate;
 }
 
 
 void LevelRunner::decreaseReleaseRate() {
-    _releaseRate = Utils::max(_minReleaseRate, _releaseRate - 5);
+    _releaseRate = Utils::max( _levelStartValues->minReleaseRate, _releaseRate - 5);
 }
 
 void LevelRunner::increaseReleaseRate() {
@@ -275,6 +268,7 @@ void LevelRunner::decreaseJobCount(int index) {
 
 void LevelRunner::endMusic() {
     _music->stopSound();
+    _dooropenSound->stopSound();
 }
 
 void LevelRunner::clearLemmings() {
@@ -283,3 +277,4 @@ void LevelRunner::clearLemmings() {
     }
     _lemmings.clear();
 }
+

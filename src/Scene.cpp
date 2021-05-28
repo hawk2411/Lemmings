@@ -64,10 +64,11 @@ void Scene::update(int deltaTime) {
     updateUI();
 
     if (_levelRunner->finished() && _particleSystemManager.finished()) {
+        _levelRunner->endMusic();
         auto *resultStatistic = new ResultStatistic{_levelRunner->getPercentageTotalLemmings(),
                                                     _levelRunner->getPercentageSavedLemmings()};
         auto *levelIndex = new LevelIndex{_levelRunner->getActualMode(), _levelRunner->getActualLevel()};
-        _levelRunner->endMusic();
+
 
         EventCreator::sendSimpleUserEvent(CHANGE_TO_RESULT, resultStatistic, levelIndex);
     }
@@ -198,6 +199,7 @@ void Scene::buildStep(glm::vec2 position) {
 
 void Scene::onKeyPressed(const SDL_KeyboardEvent &keyboardEvent) {
     if (keyboardEvent.keysym.sym == SDLK_ESCAPE) {
+        _levelRunner->endMusic();
         _game->getStateManager()->changeMenu();
     }
 
@@ -338,11 +340,9 @@ void Scene::updateCursorPosition() {
 }
 
 void Scene::changeLevel(const LevelIndex &levelIndex) {
-    // TODO why is nothing happen here?
-    if (_levelRunner->getActualMode() != levelIndex.mode || _levelRunner->getActualLevel() != levelIndex.levelNo) {
-        _levelRunner->changeLevel(levelIndex);
-        _maskManagers[_currentDifficultyMode]->changeLevel(_levelRunner->getLevelAttributes());
-    }
+    _levelRunner->changeLevel(levelIndex);
+    _maskManagers[_currentDifficultyMode]->changeLevel(_levelRunner->getLevelAttributes());
+    init();
 }
 
 
