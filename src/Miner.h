@@ -7,7 +7,7 @@
 
 class Miner : public Job {
 public:
-    Miner(SoundManager *soundManager);
+    Miner();
 
     void initAnims(ShaderProgram &shaderProgram) override;
 

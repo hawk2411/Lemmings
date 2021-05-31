@@ -2,20 +2,19 @@
 #define _LEVEL_RUNNER_INCLUDE
 
 #include <set>
+#include "MusicFabric.hpp"
 #include "SoundManager.h"
 #include "Lemming.h"
 #include "Level.h"
 #include "Door.h"
 #include "Trapdoor.h"
-#include "Sound.h"
-//#include "IMaskManager.h"
 #include "LevelIndex.h"
 #include "ParticleSystemManager.h"
 
 class LevelRunner {
 
 public:
-    LevelRunner(SoundManager *soundManager, ShaderManager *shaderManager, ParticleSystemManager *particleSystemManager, const LevelIndex &levelIndex);
+    LevelRunner(ShaderManager *shaderManager, ParticleSystemManager *particleSystemManager, const LevelIndex &levelIndex);
 
     ~LevelRunner();
 
@@ -105,11 +104,11 @@ private:
     bool _finishedLevel;
 
     bool _exploding;
-    SoundManager *_soundManager;
     ShaderManager *_shaderManager;
     ParticleSystemManager* _particleSystemManager;
-    unique_ptr<Sound> _music;
-    unique_ptr<Sound> _dooropenSound;
+    music_ptr_t music_;
+    sound_ptr_t dooropenSound_;
+    int channel_;
 };
 
 #endif // _LEVEL_RUNNER_INCLUDE

@@ -1,6 +1,5 @@
 #include "Floater.h"
 #include "Game.h"
-#include "Scene.h"
 
 
 enum FloaterAnims {
@@ -9,7 +8,7 @@ enum FloaterAnims {
     FLOATER_OPENING_RIGHT, FLOATER_OPENING_LEFT, FLOATER_FALLING_RIGHT, FLOATER_FALLING_LEFT
 };
 
-Floater::Floater(SoundManager *soundManager) : Job(Jobs::FLOATER, soundManager) {
+Floater::Floater() : Job(Jobs::FLOATER), state(WALKING_RIGHT_STATE) {
 
 }
 

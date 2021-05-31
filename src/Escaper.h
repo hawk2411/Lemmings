@@ -3,12 +3,12 @@
 
 
 #include "Job.h"
-#include "Sound.h"
+#include "MusicFabric.hpp"
 
 
 class Escaper : public Job {
 public:
-    Escaper(SoundManager *soundManager);
+    Escaper();
 
     void initAnims(ShaderProgram &shaderProgram);
 
@@ -26,7 +26,7 @@ private:
 
 private:
     EscaperState state;
-    unique_ptr<Sound> escapeEfect;
+    sound_ptr_t escapeEffect_;
 };
 
 

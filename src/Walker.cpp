@@ -1,6 +1,5 @@
 #include "Walker.h"
 #include "Game.h"
-#include "Scene.h"
 
 #define JUMP_ANGLE_STEP 4
 #define JUMP_HEIGHT 96
@@ -11,7 +10,7 @@ enum WalkerAnims {
     WALKING_LEFT, WALKING_RIGHT
 };
 
-Walker::Walker(SoundManager *soundManager) : Job(Jobs::WALKER, soundManager), _state(WALKING_RIGHT_STATE){}
+Walker::Walker() : Job(Jobs::WALKER), _state(WALKING_RIGHT_STATE){}
 
 void Walker::initAnims(ShaderProgram &shaderProgram) {
     _jobSprite = Sprite::createSprite(glm::ivec2(16, 16), glm::vec2(1.f / 16, 1.f / 14), &shaderProgram,

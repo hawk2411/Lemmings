@@ -11,7 +11,7 @@ enum BasherAnims {
     BASHER_RIGHT, BASHER_LEFT
 };
 
-Basher::Basher(SoundManager *soundManager) : Job(Jobs::BASHER, soundManager) {
+Basher::Basher() : Job(Jobs::BASHER), state(BASHING_RIGHT_STATE) {
 
 }
 

@@ -7,32 +7,32 @@
 
 class JobFactory {
 private:
-    static Job *createWalkerJob(SoundManager *soundManager);
+    static Job *createWalkerJob();
 
-    static Job *createDiggerJob(SoundManager *soundManager);
+    static Job *createDiggerJob();
 
-    static Job *createEscaperJob(SoundManager *soundManager);
+    static Job *createEscaperJob();
 
-    static Job *createExploderJob(SoundManager *soundManager, ParticleSystemManager* particleSystemManager);
+    static Job *createExploderJob(ParticleSystemManager* particleSystemManager);
 
-    static Job *createMinerJob(SoundManager *soundManager);
+    static Job *createMinerJob();
 
-    static Job *createFloaterJob(SoundManager *soundManager);
+    static Job *createFloaterJob();
 
-    static Job *createBasherJob(SoundManager *soundManager);
+    static Job *createBasherJob();
 
-    static Job *createBlockerJob(SoundManager *soundManager);
+    static Job *createBlockerJob();
 
-    static Job *createFallerJob(SoundManager *soundManager);
+    static Job *createFallerJob();
 
-    static Job *createClimberJob(SoundManager *soundManager);
+    static Job *createClimberJob();
 
-    static Job *createBuilderJob(SoundManager *soundManager);
+    static Job *createBuilderJob();
 
 
 public:
 
-    static Job *createJob(Jobs jobToCreate, SoundManager *soundManager, ParticleSystemManager* particleSystemManager);
+    static Job *createJob(Jobs jobToCreate, ParticleSystemManager* particleSystemManager);
 };
 
 

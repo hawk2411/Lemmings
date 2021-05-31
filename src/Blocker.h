@@ -11,7 +11,7 @@
 
 class Blocker : public Job {
 public:
-    Blocker(SoundManager *soundManager);
+    explicit Blocker();
 
     void initAnims(ShaderProgram &shaderProgram) override;
 

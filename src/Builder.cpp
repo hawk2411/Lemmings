@@ -10,7 +10,7 @@ enum BuilderAnims {
     NOSTEPS
 };
 
-Builder::Builder(SoundManager *soundManager) : Job(Jobs::BUILDER, soundManager) {
+Builder::Builder() : Job(Jobs::BUILDER) {
     state = BUILDING_RIGHT_STATE;
 }
 

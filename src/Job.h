@@ -28,7 +28,7 @@ enum class Jobs{
 class Job {
 
 public:
-    explicit Job(Jobs currentJob, SoundManager* soundManager);
+    explicit Job(Jobs currentJob);
 
     virtual ~Job();
 
@@ -61,7 +61,6 @@ protected:
     Jobs _currentJob;
     Jobs _nextJob;
     bool walkingRight;
-    SoundManager* _soundManager;
 };
 
 #endif // _JOB_INCLUDE

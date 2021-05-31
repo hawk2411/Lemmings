@@ -4,20 +4,19 @@
 #include "Game.h"
 
 
-Game::Game() : bPlay(true), _dmode(Difficulties::Mode::Easy),
-                prevTime(prevTime) {
+Game::Game() : bPlay_(true), dmode_(Difficulties::Mode::Easy) {
 
     glClearColor(0.f, 0.f, 0.f, 1.0f);  //TODO glClearColor here???
-    _soundManager = std::make_unique<SoundManager>();
+    soundManager_ = std::make_unique<SoundManager>();
 
-    _shaderManager = std::make_unique<ShaderManager>();
-    _stateManager = std::make_unique<StateManager>(this, _shaderManager.get());
+    shaderManager_ = std::make_unique<ShaderManager>();
+    stateManager_ = std::make_unique<StateManager>(this, shaderManager_.get());
 
     initSpriteSheets();
-    hardModeIndicator = Sprite::createSprite(glm::ivec2(20, 20), glm::vec2(136. / 256, 160. / 256),
-                                             &_shaderManager->getShaderProgram(),
-                                             &Game::spriteSheets().skullSprite);
-    hardModeIndicator->setPosition(glm::vec2(CAMERA_WIDTH - 26, 5));
+    hardModeIndicator_ = Sprite::createSprite(glm::ivec2(20, 20), glm::vec2(136. / 256, 160. / 256),
+                                              &shaderManager_->getShaderProgram(),
+                                              &Game::spriteSheets().skullSprite);
+    hardModeIndicator_->setPosition(glm::vec2(CAMERA_WIDTH - 26, 5));
 
 }
 
@@ -27,16 +26,16 @@ void Game::init() {
 }
 
 bool Game::update(int deltaTime) {
-    _stateManager->update(deltaTime);
-    return bPlay;
+    stateManager_->update(deltaTime);
+    return bPlay_;
 }
 
 void Game::render() {
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    _stateManager->render();
-    if (_dmode == Difficulties::Mode::Hard) {
-        hardModeIndicator->render();
+    stateManager_->render();
+    if (dmode_ == Difficulties::Mode::Hard) {
+        hardModeIndicator_->render();
     }
 
 }
@@ -114,24 +113,24 @@ void Game::initSpriteSheets() {
 }
 
 void Game::changeBplay() {
-    bPlay = !bPlay;
+    bPlay_ = !bPlay_;
 }
 
 Difficulties::Mode Game::getDifficultyMode() const {
-    return _dmode;
+    return dmode_;
 }
 
 void Game::swapDifficultyMode() {
-    _dmode = (_dmode == Difficulties::Mode::Easy)?Difficulties::Mode::Hard: Difficulties::Mode::Easy;
+    dmode_ = (dmode_ == Difficulties::Mode::Easy) ? Difficulties::Mode::Hard : Difficulties::Mode::Easy;
 }
 
 SoundManager *Game::getSoundManager() const {
-    return _soundManager.get();
+    return soundManager_.get();
 }
 
 
 StateManager *Game::getStateManager() {
-    return _stateManager.get();
+    return stateManager_.get();
 }
 
 void Game::onUserEvent(const SDL_UserEvent &event) {
@@ -142,51 +141,6 @@ void Game::onUserEvent(const SDL_UserEvent &event) {
         }
             break;
         default:
-            _stateManager->onUserEvent(event);
+            stateManager_->onUserEvent(event);
     }
-
 }
-
-
-//Game *Game::instance() {
-//    static Game G;
-//    return &G;
-//}
-
-//void Game::drawCallback() {
-//    Game::instance()->render();
-//}
-
-//void Game::idleCallback() {
-//    int currentTime = glutGet(GLUT_ELAPSED_TIME);
-//    int deltaTime = currentTime - Game::instance()->prevTime;
-//
-//    if (static_cast<float>(deltaTime) > TIME_PER_FRAME) {
-//        // Every time we enter here is equivalent to a game loop execution
-//        if (!Game::instance()->update(deltaTime))
-//            exit(0);
-//        Game::instance()->prevTime = currentTime;
-//        glutPostRedisplay();
-//    }
-//}
-
-//void Game::keyboardDownCallback(unsigned char key, int x, int y) {
-//
-////    Game::instance()->getGameState()->keyPressed(key);
-//}
-//
-//void Game::keyboardUpCallback(unsigned char key, int x, int y) {
-////    Game::instance()->getGameState()->keyReleased(key);
-//}
-//
-//void Game::specialDownCallback(int key, int x, int y) {
-////    Game::instance()->getGameState()->specialKeyPressed(key);
-//}
-//
-//void Game::specialUpCallback(int key, int x, int y) {
-////    Game::instance()->getGameState()->specialKeyReleased(key);
-//}
-//
-//void Game::motionCallback(int x, int y) {
-////    Game::instance()->getGameState()->mouseMove(x, y);
-//}

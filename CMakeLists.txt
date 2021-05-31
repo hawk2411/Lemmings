@@ -84,7 +84,6 @@ add_executable(lemmings src/main.cpp
         src/ButtonNumFactory.cpp
         src/Word.cpp
         src/SoundManager.cpp
-        src/Sound.cpp
         src/LemmingsException.cpp
         src/TimerEventService.h
         src/TimerEventService.cpp
@@ -92,6 +91,7 @@ add_executable(lemmings src/main.cpp
         src/EventCreator.cpp
         src/LevelIndex.h
         src/LevelIndex.cpp
+        src/MusicFabric.hpp
         libs/SOIL/src/image_helper.c
         libs/SOIL/src/image_helper.h
         libs/SOIL/src/image_DXT.h
@@ -105,25 +105,9 @@ add_executable(lemmings src/main.cpp
 
 
 find_package(OpenGL REQUIRED)
-#find_package(GLUT REQUIRED)
 find_package(SDL2 REQUIRED)
 find_package(GLEW REQUIRED)
 find_package(Freetype REQUIRED)
-find_package(fmod REQUIRED)
 
-#set(GLM_INCLUDE_DIRS ${CMAKE_SOURCE_DIR}/libs/glm)
-#message("GLM include  ${GLM_INCLUDE_DIRS} ")
-message("GLM libs ${GLM_LIBRARIES}")
-message("Fmod include dir: ${FMOD_INCLUDE_DIR}")
-message("Fmod core lib dir: ${FMOD_CORE_LIBRARY}")
-message("Fmod studio lib ${FMOD_STUDIO_LIBRARY}")
-message("FMOD_FSBANK_LIBRARY ${FMOD_FSBANK_LIBRARY}")
-message("FMOD_FSBVORBIS_LIBRARY ${FMOD_FSBVORBIS_LIBRARY}")
-message("FMOD_OPUS_LIBRARY ${FMOD_OPUS_LIBRARY}")
-
-#-fuse-ld=gold
-#${GLM_INCLUDE_DIRS}
-#${GLUT_INCLUDE_DIRS}
-#${GLUT_LIBRARY}
-include_directories(${OPENGL_INCLUDE_DIRS} ${SDL2_INCLUDE_DIRS}  ${GLEW_INCLUDE_DIRS} ${FMOD_INCLUDE_DIR})
-target_link_libraries(${CMAKE_PROJECT_NAME} ${OPENGL_LIBRARIES} ${SDL2_LIBRARIES} ${GLEW_LIBRARIES} ${GLM_LIBRARIES} ${FMOD_CORE_LIBRARY} ${FMOD_STUDIO_LIBRARY})
+include_directories(${OPENGL_INCLUDE_DIRS} ${SDL2_INCLUDE_DIRS}  ${GLEW_INCLUDE_DIRS})
+target_link_libraries(${CMAKE_PROJECT_NAME} ${OPENGL_LIBRARIES} ${SDL2_LIBRARIES} ${GLEW_LIBRARIES}  SDL2_mixer)

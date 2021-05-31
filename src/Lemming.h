@@ -18,7 +18,7 @@
 class Lemming {
 
 public:
-    Lemming(const glm::vec2 &initialPosition, SoundManager *soundManager, ShaderManager *shaderManager, ParticleSystemManager* particleSystemManager);
+    Lemming(const glm::vec2 &initialPosition, ShaderManager *shaderManager, ParticleSystemManager* particleSystemManager);
 
     void update(int deltaTime, Level *levelAttributes, IMaskManager *mask);
 
@@ -56,7 +56,6 @@ private:
     bool _alive;
     bool _isSaved;
     glm::vec2 _position{};
-    SoundManager* _soundManager;
     ParticleSystemManager* _particleSystemManager;
 
 };

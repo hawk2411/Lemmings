@@ -1,6 +1,5 @@
 #include "Climber.h"
 #include "Game.h"
-#include "JobFactory.h"
 
 
 enum ClimberAnims {
@@ -9,7 +8,7 @@ enum ClimberAnims {
     LEDGING_LEFT, LEDGING_RIGHT
 };
 
-Climber::Climber(SoundManager* soundManager) : Job(Jobs::CLIMBER, soundManager) {
+Climber::Climber() : Job(Jobs::CLIMBER) {
     state = CLIMBING_RIGHT_STATE;
 }
 

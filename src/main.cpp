@@ -1,21 +1,17 @@
 #define GLEW_STATIC
 
 #include <GL/glew.h>
-
 #define SDL_MAIN_HANDLED
 #include <SDL2/SDL.h>
-
+#include <SDL_mixer.h>
 #include <iostream>
-#include <cstdint>
 #include <ctime>
-#include <random>
-
 #include "TimerEventService.h"
 #include "Game.h"
 
 
 //Remove console (only works in Visual Studio)
-#pragma comment(linker, "/subsystem:\"windows\" /entry:\"mainCRTStartup\"")
+//#pragma comment(linker, "/subsystem:\"windows\" /entry:\"mainCRTStartup\"")
 
 int main(int argc, char **argv) {
     srand(time(0));
@@ -81,6 +77,7 @@ int main(int argc, char **argv) {
         SDL_GL_SwapWindow(window);
 
     }
+
     SDL_Quit();
     return 0;
 }

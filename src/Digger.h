@@ -7,7 +7,7 @@
 
 class Digger : public Job {
 public:
-    Digger(SoundManager *soundManager);
+    Digger();
 
     void initAnims(ShaderProgram &shaderProgram);
 

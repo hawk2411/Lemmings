@@ -1,10 +1,7 @@
 #include "Game.h"
-#include "Scene.h"
 #include "Utils.h"
 #include "ParticleSystemManager.h"
-#include "LevelRunner.h"
 #include "EventCreator.h"
-
 #include "Exploder.h"
 
 enum ExploderAnims {
@@ -12,9 +9,8 @@ enum ExploderAnims {
     BURNING_DEATH
 };
 
-Exploder::Exploder(SoundManager *soundManager, ParticleSystemManager *particleSystemManager) :
-        Job(Jobs::EXPLODER,
-            soundManager),
+Exploder::Exploder(ParticleSystemManager *particleSystemManager) :
+        Job(Jobs::EXPLODER),
         _particleSystemManager(particleSystemManager), _state(EXPLODER_STATE) {
 
 }

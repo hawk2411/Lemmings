@@ -1,6 +1,5 @@
 #include "Miner.h"
 #include "Game.h"
-#include "Scene.h"
 #include "Utils.h"
 
 
@@ -13,7 +12,7 @@ enum MinerAnims {
     MINER_RIGHT, MINER_LEFT
 };
 
-Miner::Miner(SoundManager *soundManager) : Job(Jobs::MINER, soundManager) {
+Miner::Miner() : Job(Jobs::MINER), state(MINER_RIGHT_STATE) {
 
 }
 

@@ -1,17 +1,12 @@
-#include <fmod_studio.h>
 #include "Escaper.h"
 #include "Game.h"
-#include "Scene.h"
-#include "SoundManager.h"
 
 
 enum EscaperAnims {
     ESCAPING
 };
 
-Escaper::Escaper(SoundManager *soundManager) : Job(Jobs::ESCAPER, soundManager) {
-    escapeEfect = make_unique<Sound>(soundManager, "sounds/lemmingsEffects/YIPPEE.WAV",
-                                                                FMOD_DEFAULT | FMOD_CREATESTREAM | FMOD_UNIQUE);
+Escaper::Escaper() : Job(Jobs::ESCAPER), escapeEffect_(createSound("sounds/lemmingsEffects/YIPPEE.WAV")), state(ESCAPING_STATE) {
 
 }
 
@@ -29,9 +24,8 @@ void Escaper::initAnims(ShaderProgram &shaderProgram) {
     state = ESCAPING_STATE;
     _jobSprite->changeAnimation(ESCAPING);
 
-
-    escapeEfect->playSound();
-    escapeEfect->setVolume(0.8f);
+    Mix_PlayChannel(-1, escapeEffect_.get(), 0);
+    Mix_VolumeChunk(escapeEffect_.get(), MIX_MAX_VOLUME);
 }
 
 void Escaper::setWalkingRight(bool value) {

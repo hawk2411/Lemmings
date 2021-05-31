@@ -30,7 +30,7 @@ class Scene : public GameState {
 
 public:
 
-    Scene(Game *game, SoundManager *soundManager, const LevelIndex& levelIndex);
+    Scene(Game *game, const LevelIndex& levelIndex);
 
     void mouseMoved(int mouseX, int mouseY, bool bLeftButton, bool bRightButton) override;
 

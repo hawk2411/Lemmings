@@ -1,13 +1,12 @@
 #include "Digger.h"
 #include "Game.h"
-#include "Scene.h"
 
 
 #define JUMP_ANGLE_STEP 4
 #define JUMP_HEIGHT 96
 #define FALL_STEP 4
 
-Digger::Digger(SoundManager *soundManager) : Job(Jobs::DIGGER, soundManager) {
+Digger::Digger() : Job(Jobs::DIGGER) {
 
 }
 

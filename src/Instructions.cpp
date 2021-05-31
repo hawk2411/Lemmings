@@ -8,10 +8,10 @@
 Instructions::Instructions(Game *game) : actualPage(0),
                                          _onlyLeft(false),
                                          _onlyRight(true), GameState(game),
-                                         _shaderManager(game->getShaderManager()) {
+                                         _shaderManager(game->getShaderManager()),
+                                         music_(createMusic("sounds/InstructionsSong.ogg"))
+                                         {
 
-    _music = make_unique<Sound>(game->getSoundManager(), "sounds/InstructionsSong.ogg",
-                                FMOD_LOOP_NORMAL | FMOD_CREATESTREAM);
     _leftKey = KeyFactory::createLeftKey(&_shaderManager->getShaderProgram());
     _rightKey = KeyFactory::createRightKey(&_shaderManager->getShaderProgram());
     _instructionsLevelTexture.loadFromFile("images/menu/menuBackground.png", TEXTURE_PIXEL_FORMAT_RGBA);
@@ -86,8 +86,8 @@ void Instructions::init() {
     _onlyRight = true;
     _onlyLeft = false;
     actualPage = 0;
-    _music->playSound();
-    _music->setVolume(1.f);
+    Mix_PlayMusic(music_.get(), -1);
+    Mix_VolumeMusic(MIX_MAX_VOLUME);
     _rightKey->setPosition(glm::vec2(230, 160));
     _leftKey->setPosition(glm::vec2(200, 160));
     _escapeKey->setPosition(glm::vec2(30, 160));
@@ -190,7 +190,7 @@ void Instructions::passPageRight() {
 
 
 void Instructions::endMusic() {
-    _music->stopSound();
+    Mix_HaltMusic();
 }
 
 void Instructions::mouseMoved(int mouseX, int mouseY, bool bLeftButton, bool bRightButton) {

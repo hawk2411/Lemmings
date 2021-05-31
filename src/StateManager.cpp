@@ -18,7 +18,6 @@ StateManager::StateManager(Game *game, ShaderManager *shaderManager) : _currentS
     LevelIndex levelIndex{LevelModes::Mode::FUN_MODE, 1};
     _gameStates.insert(std::make_pair(States::Type::Menu, unique_ptr<GameState>(new Menu(game, levelIndex))));
     _gameStates.insert(std::make_pair(States::Type::Scene, unique_ptr<GameState>(new Scene(game,
-                                                                                           game->getSoundManager(),
                                                                                            levelIndex))));
     _gameStates.insert(std::make_pair(States::Type::SceneInfo,
                                       unique_ptr<GameState>(new InfoLevel(game, levelIndex))));
@@ -51,7 +50,7 @@ void StateManager::changeScene(const LevelIndex &lvlIndex) {
 
 //
 void StateManager::changeResults(ResultStatistic statistic, LevelIndex levelIndex) {
-    if(_currentState == States::Type::Result) {
+    if (_currentState == States::Type::Result) {
         return;
     }
     _currentState = States::Type::Result;

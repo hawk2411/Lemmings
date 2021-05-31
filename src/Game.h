@@ -41,19 +41,19 @@ public:
     };
 
     void onKeyPressed(const SDL_KeyboardEvent &event) {
-        _stateManager->onKeyPressed(event);
+        stateManager_->onKeyPressed(event);
     }
 
     void onMousMove(const SDL_MouseMotionEvent &mouseMotionEvent) {
-        _stateManager->onMouseMove(mouseMotionEvent);
+        stateManager_->onMouseMove(mouseMotionEvent);
     }
 
     void onMouseButtonDown(const SDL_MouseButtonEvent &mouseButtonEvent) {
-        _stateManager->onMouseButtonDown(mouseButtonEvent);
+        stateManager_->onMouseButtonDown(mouseButtonEvent);
     }
 
     void onMouseButtonUp(const SDL_MouseButtonEvent &mouseButtonEvent) {
-        _stateManager->onMouseButtonUp(mouseButtonEvent);
+        stateManager_->onMouseButtonUp(mouseButtonEvent);
     }
 
     //******************************************************************************************
@@ -99,18 +99,16 @@ public:
 
     StateManager *getStateManager();
 
-    ShaderManager *getShaderManager()const{return _shaderManager.get();}
+    ShaderManager *getShaderManager()const{return shaderManager_.get();}
 
 private:
-    unique_ptr<SoundManager> _soundManager;
-    unique_ptr<StateManager> _stateManager;
-    unique_ptr<ShaderManager> _shaderManager;
-    bool bPlay; // Continue to play game?
-    Difficulties::Mode _dmode;
+    unique_ptr<SoundManager> soundManager_;
+    unique_ptr<StateManager> stateManager_;
+    unique_ptr<ShaderManager> shaderManager_;
+    bool bPlay_; // Continue to play game?
+    Difficulties::Mode dmode_;
 
-
-    int prevTime;
-    std::unique_ptr<Sprite> hardModeIndicator;
+    std::unique_ptr<Sprite> hardModeIndicator_;
 
 
 };

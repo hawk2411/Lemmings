@@ -1,15 +1,13 @@
 #include "ShaderManager.h"
 #include "Game.h"
-#include "StateManager.h"
+//#include "StateManager.h"
 
 #include "Menu.h"
 #include "EventCreator.h"
 #include "LevelIndex.h"
 
-Menu::Menu(Game *game, const LevelIndex &levelIndex) : GameState(game), _levelIndex(levelIndex), _shaderManager(_game->getShaderManager()) {
-    music = make_unique<Sound>(_game->getSoundManager(), "sounds/MenuSong.ogg",
-                               FMOD_LOOP_NORMAL | FMOD_CREATESTREAM);
-
+Menu::Menu(Game *game, const LevelIndex &levelIndex) : GameState(game), _levelIndex(levelIndex), _shaderManager(_game->getShaderManager()), music_(
+        createMusic("sounds/MenuSong.ogg")) {
     initTextures();
 
     menuBackground = Sprite::createSprite(glm::vec2(320, 230), glm::vec2(1.f, 1.f),
@@ -45,9 +43,8 @@ void Menu::init() {
     menuAbout->setPosition(glm::vec2(80, 130));
     menuExit->setPosition(glm::vec2(171, 130));
 
-    music->playSound();
-    music->setVolume(1.0f);
-
+    Mix_PlayMusic(music_.get(),0);
+    Mix_VolumeMusic(MIX_MAX_VOLUME);
 }
 
 
@@ -131,7 +128,7 @@ LevelModes::Mode Menu::getMode() const {
 }
 
 void Menu::endMusic() {
-    music->stopSound();
+    Mix_HaltMusic();
 }
 
 void Menu::mouseMoved(int mouseX, int mouseY, bool bLeftButton, bool bRightButton) {

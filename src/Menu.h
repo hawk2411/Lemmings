@@ -5,7 +5,7 @@
 #include "ShaderProgram.h"
 #include "GameState.h"
 #include "Sprite.h"
-#include "Sound.h"
+#include "MusicFabric.hpp"
 #include "Game.h"
 #include "LevelModes.h"
 #include "LevelIndex.h"
@@ -31,7 +31,7 @@ public:
 
     LevelModes::Mode getMode() const;
 
-    void endMusic();
+    static void endMusic();
 
 
     void mouseMoved(int mouseX, int mouseY, bool bLeftButton, bool bRightButton) override;
@@ -70,7 +70,7 @@ private:
             glm::vec2(0, 0.5)
     };
 
-    unique_ptr<Sound> music;
+    music_ptr_t music_;
     ShaderManager *_shaderManager;
 };
 

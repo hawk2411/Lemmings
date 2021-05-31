@@ -13,75 +13,75 @@
 #include "Builder.h"
 
 
-Job *JobFactory::createWalkerJob(SoundManager *soundManager) {
-    return new Walker(soundManager);
+Job *JobFactory::createWalkerJob() {
+    return new Walker();
 }
 
-Job *JobFactory::createDiggerJob(SoundManager *soundManager) {
-    return new Digger(soundManager);
+Job *JobFactory::createDiggerJob() {
+    return new Digger();
 }
 
-Job *JobFactory::createEscaperJob(SoundManager *soundManager) {
-    return new Escaper(soundManager);
+Job *JobFactory::createEscaperJob() {
+    return new Escaper();
     }
 
-Job *JobFactory::createExploderJob(SoundManager *soundManager, ParticleSystemManager* particleSystemManager) {
-    return new Exploder(soundManager, particleSystemManager);
+Job *JobFactory::createExploderJob( ParticleSystemManager* particleSystemManager) {
+    return new Exploder(particleSystemManager);
     }
 
-Job *JobFactory::createMinerJob(SoundManager *soundManager) {
-    return new Miner(soundManager);
+Job *JobFactory::createMinerJob() {
+    return new Miner();
     }
 
-Job *JobFactory::createFloaterJob(SoundManager *soundManager) {
-    return new Floater(soundManager);
+Job *JobFactory::createFloaterJob() {
+    return new Floater();
 }
 
-Job *JobFactory::createBasherJob(SoundManager *soundManager) {
-    return new Basher(soundManager);
+Job *JobFactory::createBasherJob() {
+    return new Basher();
 }
 
-Job *JobFactory::createBlockerJob(SoundManager *soundManager) {
-    return new Blocker(soundManager);
+Job *JobFactory::createBlockerJob() {
+    return new Blocker();
 }
 
-Job *JobFactory::createFallerJob(SoundManager *soundManager) {
-    return new Faller(soundManager);
+Job *JobFactory::createFallerJob() {
+    return new Faller();
 }
 
-Job *JobFactory::createClimberJob(SoundManager *soundManager) {
-    return new Climber(soundManager);
+Job *JobFactory::createClimberJob() {
+    return new Climber();
 }
 
-Job *JobFactory::createBuilderJob(SoundManager *soundManager) {
-    return new Builder(soundManager);
+Job *JobFactory::createBuilderJob() {
+    return new Builder();
 }
 
-Job *JobFactory::createJob(Jobs jobToCreate, SoundManager *soundManager, ParticleSystemManager* particleSystemManager) {
+Job *JobFactory::createJob(Jobs jobToCreate,  ParticleSystemManager* particleSystemManager) {
     switch(jobToCreate)
     {
         case Jobs::WALKER:
-            return createWalkerJob(soundManager);
+            return createWalkerJob();
         case Jobs::DIGGER:
-            return createDiggerJob(soundManager);
+            return createDiggerJob();
         case Jobs::ESCAPER:
-            return createEscaperJob(soundManager);
+            return createEscaperJob();
         case Jobs::EXPLODER:
-            return createExploderJob(soundManager, particleSystemManager);
+            return createExploderJob(particleSystemManager);
         case Jobs::MINER:
-            return createMinerJob(soundManager);
+            return createMinerJob();
         case Jobs::FLOATER:
-            return createFloaterJob(soundManager);
+            return createFloaterJob();
         case Jobs::BASHER:
-            return createBasherJob(soundManager);
+            return createBasherJob();
         case Jobs::BLOCKER:
-            return createBlockerJob(soundManager);
+            return createBlockerJob();
         case Jobs::FALLER:
-            return createFallerJob(soundManager);
+            return createFallerJob();
         case Jobs::CLIMBER:
-            return createClimberJob(soundManager);
+            return createClimberJob();
         case Jobs::BUILDER:
-            return createBuilderJob(soundManager);
+            return createBuilderJob();
         default:
             return nullptr;
     }

@@ -1,7 +1,6 @@
+#include "MusicFabric.hpp"
 #include "Faller.h"
 #include "Game.h"
-#include "Scene.h"
-#include "JobFactory.h"
 
 enum FallerAnims {
     FALLING_RIGHT, FALLING_LEFT,
@@ -10,16 +9,13 @@ enum FallerAnims {
 
 #define FATAL_FALLING_DISTANCE 65
 
-Faller::Faller(SoundManager *soundManager) : Job(Jobs::FALLER, soundManager),
+Faller::Faller() : Job(Jobs::FALLER),
                    state(FallerState::FALLING_RIGHT_STATE),
                    currentDistance(0),
-                   dead(false) {
-    deathEffect = make_unique<Sound>(soundManager, "sounds/lemmingsEffects/SPLAT.WAV",
-                                     FMOD_DEFAULT | FMOD_CREATESTREAM | FMOD_UNIQUE);
+                   dead(false) , deathEffect_(createSound("sounds/lemmingsEffects/SPLAT.WAV")) {
 }
 
-Faller::~Faller() {
-}
+Faller::~Faller() = default;
 
 void Faller::initAnims(ShaderProgram &shaderProgram) {
     _jobSprite = Sprite::createSprite(glm::ivec2(16, 16), glm::vec2(1.f / 16, 1.f / 14), &shaderProgram,
@@ -77,8 +73,8 @@ void Faller::updateStateMachine(int deltaTime, Level *levelAttributes, IMaskMana
                 if (dead) {
                     state = FallerState::FALLING_DEATH_STATE;
                     _jobSprite->changeAnimation(FALLING_DEATH);
-                    deathEffect->playSound();
-                    deathEffect->setVolume(0.8f);
+                    Mix_PlayChannel(-1, deathEffect_.get(), 0),
+                    Mix_VolumeChunk(deathEffect_.get(), MIX_MAX_VOLUME);
                 } else {
                     isFinished = true;
                     _nextJob = Jobs::WALKER;
