@@ -38,9 +38,9 @@ void Builder::initAnims(ShaderProgram &shaderProgram) {
 }
 
 void Builder::setWalkingRight(bool value) {
-    walkingRight = value;
+    _walkingRight = value;
 
-    if (walkingRight) {
+    if (_walkingRight) {
         _jobSprite->changeAnimation(BUILDING_RIGHT);
         state = BUILDING_RIGHT_STATE;
     } else {
@@ -73,7 +73,7 @@ void Builder::updateStateMachine(int deltaTime, Level *levelAttributes, IMaskMan
             break;
         case NOSTEPS_STATE:
             if (_jobSprite->isInLastFrame()) {
-                isFinished = true;
+                _isFinished = true;
                 _nextJob = Jobs::WALKER;
             }
             break;

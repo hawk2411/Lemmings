@@ -46,9 +46,9 @@ public:
 
     void changeAnimation(int animId);
 
-    int animation() const;
+    std::size_t animation() const;
 
-    int getAnimationCurrentFrame() const;
+    std::size_t getAnimationCurrentFrame() const;
 
     bool isInLastFrame() const;
 
@@ -59,14 +59,14 @@ public:
     void setPosition(const glm::vec2 &newPos);
 
     //glm::vec2 position() const;
-    glm::vec2 getPosition() const {return _pos;}
+    glm::vec2 getPosition() const {return pos_;}
     glm::vec2 incPosition(glm::vec2 v){
-        _pos += v;
-        return _pos;
+        pos_ += v;
+        return pos_;
     }
     glm::vec2 decPosition(glm::vec2 v){
-        _pos -= v;
-        return _pos;
+        pos_ -= v;
+        return pos_;
     }
 
     //glm::vec2 &position();
@@ -74,19 +74,19 @@ public:
     void setIterated(bool isIterated);
 
 private:
-    const Texture *const _spriteSheet;
-    const Texture *const _rotatedSpriteSheet;
-    ShaderProgram *shaderProgram;
-    GLuint vao;
-    GLuint vbo;
-    GLint posLocation, texCoordLocation;
-    glm::vec2 _pos;
-    int _currentAnimation, _currentKeyframe;
-    float _timeAnimation;
-    glm::vec2 _texCoordDispl;
-    vector<AnimKeyframes> _animations;
-    vector<bool> _rotated;
-    bool iterated;
+    const Texture *const spriteSheet_;
+    const Texture *const rotatedSpriteSheet_;
+    ShaderProgram *shaderProgram_;
+    GLuint vao_;
+    GLuint vbo_;
+    GLint posLocation_, texCoordLocation_;
+    glm::vec2 pos_;
+    std::size_t currentAnimation_, currentKeyframe_;
+    float timeAnimation_;
+    glm::vec2 texCoordDispl_;
+    vector<AnimKeyframes> animations_;
+    vector<bool> rotated_;
+    bool iterated_;
 
 };
 

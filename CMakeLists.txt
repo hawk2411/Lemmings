@@ -83,7 +83,6 @@ add_executable(lemmings src/main.cpp
         src/TimeDisplay.cpp
         src/ButtonNumFactory.cpp
         src/Word.cpp
-        src/SoundManager.cpp
         src/LemmingsException.cpp
         src/TimerEventService.h
         src/TimerEventService.cpp

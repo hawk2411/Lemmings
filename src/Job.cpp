@@ -21,7 +21,7 @@ enum LemmingAnims
 };
 */
 
-Job::Job(Jobs currentJob): isFinished(false), _currentJob(currentJob), _nextJob(Jobs::UNKNOWN), walkingRight(true){
+Job::Job(Jobs currentJob): _isFinished(false), _currentJob(currentJob), _nextJob(Jobs::UNKNOWN), _walkingRight(true){
 }
 
 Job::~Job() = default;
@@ -56,7 +56,7 @@ bool Job::collision(const VariableTexture &maskedMap) const {
 
 
 bool Job::finished() const {
-    return isFinished;
+    return _isFinished;
 }
 
 Jobs Job::getNextJob()const {
@@ -69,11 +69,11 @@ Sprite *Job::sprite() {
 }
 
 void Job::setWalkingRight(bool value) {
-    walkingRight = value;
+    _walkingRight = value;
 }
 
 bool Job::isWalkingRight() const {
-    return walkingRight;
+    return _walkingRight;
 }
 
 /*

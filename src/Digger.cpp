@@ -28,7 +28,7 @@ void Digger::initAnims(ShaderProgram &shaderProgram) {
 }
 
 void Digger::setWalkingRight(bool value) {
-    walkingRight = value;
+    _walkingRight = value;
 }
 
 void Digger::updateStateMachine(int deltaTime, Level *levelAttributes, IMaskManager *mask) {
@@ -37,10 +37,10 @@ void Digger::updateStateMachine(int deltaTime, Level *levelAttributes, IMaskMana
 
         case DIGGING_STATE:
             if (!canDig(mask)) {
-                isFinished = true;
+                _isFinished = true;
 
-                int fall = collisionFloor(3, levelAttributes->maskedMap);
-                if (fall >= 3) {
+                int fall = collisionFloor(DEFAULT_MAX_FALL, levelAttributes->maskedMap);
+                if (fall >= DEFAULT_MAX_FALL) {
                     _nextJob = Jobs::FALLER;;
                 } else {
                     _nextJob = Jobs::WALKER;

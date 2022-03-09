@@ -26,7 +26,7 @@ void Blocker::initAnims(ShaderProgram &shaderProgram) {
 }
 
 void Blocker::setWalkingRight(bool value) {
-    walkingRight = value;
+    _walkingRight = value;
 }
 
 void Blocker::updateStateMachine(int deltaTime, Level *levelAttributes, IMaskManager *mask) {

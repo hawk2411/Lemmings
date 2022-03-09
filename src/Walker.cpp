@@ -1,16 +1,11 @@
 #include "Walker.h"
 #include "Game.h"
 
-#define JUMP_ANGLE_STEP 4
-#define JUMP_HEIGHT 96
-#define FALL_STEP 4
-
-
 enum WalkerAnims {
     WALKING_LEFT, WALKING_RIGHT
 };
 
-Walker::Walker() : Job(Jobs::WALKER), _state(WALKING_RIGHT_STATE){}
+Walker::Walker() : Job(Jobs::WALKER), _state(WALKING_RIGHT_STATE) {}
 
 void Walker::initAnims(ShaderProgram &shaderProgram) {
     _jobSprite = Sprite::createSprite(glm::ivec2(16, 16), glm::vec2(1.f / 16, 1.f / 14), &shaderProgram,
@@ -31,9 +26,9 @@ void Walker::initAnims(ShaderProgram &shaderProgram) {
 }
 
 void Walker::setWalkingRight(bool value) {
-    walkingRight = value;
+    _walkingRight = value;
 
-    if (walkingRight) {
+    if (_walkingRight) {
         _jobSprite->changeAnimation(WALKING_RIGHT);
         _state = WALKING_RIGHT_STATE;
     } else {
@@ -43,60 +38,36 @@ void Walker::setWalkingRight(bool value) {
 }
 
 void Walker::updateStateMachine(int deltaTime, Level *levelAttributes, IMaskManager *mask) {
-    int fall;
 
-    switch (_state) {
-        case WALKING_LEFT_STATE:
-            _jobSprite->incPosition(glm::vec2(-1, -2));
+    auto next_pos = glm::vec2((_state == WALKING_LEFT_STATE) ? -1 : 1, -2);
 
-            if (collision(levelAttributes->maskedMap)) {
-                _jobSprite->decPosition(glm::vec2(-1, -2));
-                _jobSprite->changeAnimation(WALKING_RIGHT);
-                _state = WALKING_RIGHT_STATE;
-                setWalkingRight(true);
-            } else {
-                fall = collisionFloor(4, levelAttributes->maskedMap);
-                if (fall < 4) {
-                    _jobSprite->incPosition(glm::vec2(0, fall));
-
-                    if (_jobSprite->getPosition() ==
-                        levelAttributes->_door->getEscapePosition()) {
-                        isFinished = true;
-                        _nextJob = Jobs::ESCAPER;
-                    }
-                } else {
-                    isFinished = true;
-                    _nextJob = Jobs::FALLER;
-                }
-            }
-            break;
-        case WALKING_RIGHT_STATE:
-            _jobSprite->incPosition(glm::vec2(1, -2));
-
-            if (collision(levelAttributes->maskedMap)) {
-                _jobSprite->decPosition(glm::vec2(1, -2));
-                _jobSprite->changeAnimation(WALKING_LEFT);
-                _state = WALKING_LEFT_STATE;
-                setWalkingRight(false);
-
-            } else {
-                fall = collisionFloor(4, levelAttributes->maskedMap);
-                if (fall < 4) {
-                    _jobSprite->incPosition(glm::vec2(0, fall));
-
-                    if (_jobSprite->getPosition() ==
-                        levelAttributes->_door->getEscapePosition()) {
-                        isFinished = true;
-                        _nextJob = Jobs::ESCAPER;
-                    }
-                } else {
-                    isFinished = true;
-                    _nextJob = Jobs::FALLER;
-                }
-
-            }
-            break;
+    _jobSprite->incPosition(next_pos);
+    if (collision(levelAttributes->maskedMap)) {
+        _jobSprite->decPosition(next_pos);  //step back
+        turn_around();
+        return;
     }
+
+    int fall = collisionFloor(DEFAULT_MAX_FALL + 1, levelAttributes->maskedMap);
+    if (fall < DEFAULT_MAX_FALL + 1) {
+        _jobSprite->incPosition(glm::vec2(0, fall));    //move down to the floor
+
+        if (_jobSprite->getPosition() == levelAttributes->_door->getEscapePosition()) {
+            _isFinished = true;
+            _nextJob = Jobs::ESCAPER;
+        }
+    } else {
+        _isFinished = true;
+        _nextJob = Jobs::FALLER;
+    }
+
+}
+
+void Walker::turn_around() {
+    bool isWalkingLeft = (_state == WALKING_LEFT_STATE);
+    _jobSprite->changeAnimation(isWalkingLeft ? WALKING_RIGHT : WALKING_LEFT);
+    _state = isWalkingLeft ? WALKING_RIGHT_STATE : WALKING_LEFT_STATE;
+    setWalkingRight(isWalkingLeft);
 }
 
 

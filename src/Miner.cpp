@@ -47,9 +47,9 @@ void Miner::initAnims(ShaderProgram &shaderProgram) {
 }
 
 void Miner::setWalkingRight(bool value) {
-    walkingRight = value;
+    _walkingRight = value;
 
-    if (walkingRight) {
+    if (_walkingRight) {
         state = MINER_RIGHT_STATE;
         _jobSprite->changeAnimation(MINER_RIGHT);
     } else {
@@ -59,16 +59,14 @@ void Miner::setWalkingRight(bool value) {
 }
 
 void Miner::updateStateMachine(int deltaTime, Level *levelAttributes, IMaskManager *mask) {
-    int fall;
-
     switch (state) {
 
         case MINER_RIGHT_STATE:
 
             if (!canMineRight(mask)) {
-                isFinished = true;
+                _isFinished = true;
 
-                int fall = collisionFloor(3, levelAttributes->maskedMap);
+                int fall = collisionFloor(DEFAULT_MAX_FALL, levelAttributes->maskedMap);
                 if (fall >= 3) {
                     _nextJob = Jobs::FALLER;
                 } else {
@@ -81,9 +79,9 @@ void Miner::updateStateMachine(int deltaTime, Level *levelAttributes, IMaskManag
             break;
         case MINER_LEFT_STATE:
             if (!canMineLeft(mask)) {
-                isFinished = true;
+                _isFinished = true;
 
-                int fall = collisionFloor(3, levelAttributes->maskedMap);
+                int fall = collisionFloor(DEFAULT_MAX_FALL, levelAttributes->maskedMap);
                 if (fall >= 3) {
                     _nextJob = Jobs::FALLER;
                 } else {

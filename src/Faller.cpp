@@ -44,9 +44,9 @@ void Faller::initAnims(ShaderProgram &shaderProgram) {
 }
 
 void Faller::setWalkingRight(bool value) {
-    walkingRight = value;
+    _walkingRight = value;
 
-    if (walkingRight) {
+    if (_walkingRight) {
         _jobSprite->changeAnimation(FALLING_RIGHT);
         state = FallerState::FALLING_RIGHT_STATE;
     } else {
@@ -61,7 +61,7 @@ void Faller::updateStateMachine(int deltaTime, Level *levelAttributes, IMaskMana
     switch (state) {
         case FallerState::FALLING_LEFT_STATE:
         case FallerState::FALLING_RIGHT_STATE:
-            fall = collisionFloor(3, levelAttributes->maskedMap);
+            fall = collisionFloor(DEFAULT_MAX_FALL, levelAttributes->maskedMap);
             if (fall > 0) {
                 _jobSprite->incPosition(glm::vec2(0, fall));
                 currentDistance += fall;
@@ -76,7 +76,7 @@ void Faller::updateStateMachine(int deltaTime, Level *levelAttributes, IMaskMana
                     Mix_PlayChannel(-1, deathEffect_.get(), 0),
                     Mix_VolumeChunk(deathEffect_.get(), MIX_MAX_VOLUME);
                 } else {
-                    isFinished = true;
+                    _isFinished = true;
                     _nextJob = Jobs::WALKER;
                 }
             }
@@ -84,7 +84,7 @@ void Faller::updateStateMachine(int deltaTime, Level *levelAttributes, IMaskMana
 
         case FallerState::FALLING_DEATH_STATE:
             if (_jobSprite->isInLastFrame()) {
-                isFinished = true;
+                _isFinished = true;
                 if (_nextJob != Jobs::UNKNOWN) {
                     _nextJob = Jobs::UNKNOWN;
                 }

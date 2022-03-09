@@ -50,9 +50,9 @@ void Climber::initAnims(ShaderProgram &shaderProgram) {
 }
 
 void Climber::setWalkingRight(bool value) {
-    walkingRight = value;
+    _walkingRight = value;
 
-    if (walkingRight) {
+    if (_walkingRight) {
         _jobSprite->changeAnimation(WALKING_RIGHT);
         state = WALKING_RIGHT_STATE;
     } else {
@@ -73,7 +73,7 @@ void Climber::updateStateMachine(int deltaTime, Level *levelAttributes, IMaskMan
                 _jobSprite->changeAnimation(CLIMBING_LEFT);
                 state = CLIMBING_LEFT_STATE;
             } else {
-                fall = collisionFloor(3, levelAttributes->maskedMap);
+                fall = collisionFloor(DEFAULT_MAX_FALL, levelAttributes->maskedMap);
                 if (fall > 0) {
                     _jobSprite->incPosition(glm::vec2(0, 1));
                 }
@@ -83,12 +83,12 @@ void Climber::updateStateMachine(int deltaTime, Level *levelAttributes, IMaskMan
 
                 if (fall > 2) {
 
-                    isFinished = true;
+                    _isFinished = true;
                     _nextJob = Jobs::FALLER;
                 } else {
                     if (_jobSprite->getPosition() ==
                         levelAttributes->_door->getEscapePosition()) {
-                        isFinished = true;
+                        _isFinished = true;
                         _nextJob = Jobs::ESCAPER;
                     }
                 }
@@ -103,17 +103,17 @@ void Climber::updateStateMachine(int deltaTime, Level *levelAttributes, IMaskMan
                 state = CLIMBING_RIGHT_STATE;
 
             } else {
-                fall = collisionFloor(3, levelAttributes->maskedMap);
+                fall = collisionFloor(DEFAULT_MAX_FALL, levelAttributes->maskedMap);
                 if (fall < 3) {
                     _jobSprite->incPosition(glm::vec2(0, fall));
 
                     if (_jobSprite->getPosition() ==
                         levelAttributes->_door->getEscapePosition()) {
-                        isFinished = true;
+                        _isFinished = true;
                         _nextJob = Jobs::ESCAPER;
                     }
                 } else {
-                    isFinished = true;
+                    _isFinished = true;
                     _nextJob = Jobs::FALLER;
                 }
 
@@ -152,7 +152,7 @@ void Climber::climbLeft(Level *level) {
     if (level->maskedMap.pixel(static_cast<int>(_jobSprite->getPosition().x) + 7,
                                static_cast<int>(_jobSprite->getPosition().y) + 1) != 0) {
         _jobSprite->incPosition(glm::vec2(2, 0));
-        isFinished = true;
+        _isFinished = true;
         _nextJob = Jobs::FALLER;
     } else if (level->maskedMap.pixel(static_cast<int>(posBase.x) - 1, static_cast<int>(posBase.y) - 3) == 0) {
         _jobSprite->changeAnimation(LEDGING_LEFT);
@@ -170,7 +170,7 @@ void Climber::climbRight(Level *level) {
     if (level->maskedMap.pixel(static_cast<int>(_jobSprite->getPosition().x) + 8,
                                static_cast<int>(_jobSprite->getPosition().y) + 1) != 0) {
         _jobSprite->incPosition(glm::vec2(-2, 0));
-        isFinished = true;
+        _isFinished = true;
         _nextJob = Jobs::FALLER;
     } else if (level->maskedMap.pixel(static_cast<int>(posBase.x) + 1, static_cast<int>(posBase.y) - 3) == 0) {
         _jobSprite->changeAnimation(LEDGING_RIGHT);

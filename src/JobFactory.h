@@ -3,7 +3,6 @@
 
 #include "ParticleSystemManager.h"
 #include "Job.h"
-#include "SoundManager.h"
 
 class JobFactory {
 private:

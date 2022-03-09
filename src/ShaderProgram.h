@@ -48,9 +48,9 @@ public:
     const string &log() const;
 
 private:
-    GLuint programId;
-    bool linked;
-    string errorLog;
+    GLuint _programId;
+    bool _linked;
+    string _errorLog;
 
 };
 

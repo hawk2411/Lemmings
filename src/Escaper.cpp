@@ -29,7 +29,7 @@ void Escaper::initAnims(ShaderProgram &shaderProgram) {
 }
 
 void Escaper::setWalkingRight(bool value) {
-    walkingRight = value;
+    _walkingRight = value;
 }
 
 void Escaper::updateStateMachine(int deltaTime, Level *levelAttributes, IMaskManager *mask) {
@@ -38,7 +38,7 @@ void Escaper::updateStateMachine(int deltaTime, Level *levelAttributes, IMaskMan
         case ESCAPING_STATE:
 
             if (_jobSprite->isInLastFrame()) {
-                isFinished = true;
+                _isFinished = true;
                 _nextJob = Jobs::UNKNOWN;
 
             }

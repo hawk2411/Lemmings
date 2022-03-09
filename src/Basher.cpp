@@ -2,11 +2,6 @@
 #include "Game.h"
 #include "Utils.h"
 
-#define JUMP_ANGLE_STEP 4
-#define JUMP_HEIGHT 96
-#define FALL_STEP 4
-
-
 enum BasherAnims {
     BASHER_RIGHT, BASHER_LEFT
 };
@@ -36,8 +31,8 @@ void Basher::initAnims(ShaderProgram &shaderProgram) {
 }
 
 void Basher::setWalkingRight(bool value) {
-    walkingRight = value;
-    if (walkingRight) {
+    _walkingRight = value;
+    if (_walkingRight) {
         _jobSprite->changeAnimation(BASHER_RIGHT);
         state = BASHING_RIGHT_STATE;
     } else {
@@ -53,7 +48,7 @@ void Basher::updateStateMachine(int deltaTime, Level *levelAttributes, IMaskMana
         case BASHING_RIGHT_STATE:
 
             if (!bashRight(mask, deltaTime)) {
-                isFinished = true;
+                _isFinished = true;
                 _nextJob = Jobs::WALKER;
             }
 
@@ -63,7 +58,7 @@ void Basher::updateStateMachine(int deltaTime, Level *levelAttributes, IMaskMana
         case BASHING_LEFT_STATE:
 
             if (!bashLeft(mask, deltaTime)) {
-                isFinished = true;
+                _isFinished = true;
                 _nextJob = Jobs::WALKER;
             }
     }

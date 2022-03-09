@@ -7,7 +7,6 @@
 Game::Game() : bPlay_(true), dmode_(Difficulties::Mode::Easy) {
 
     glClearColor(0.f, 0.f, 0.f, 1.0f);  //TODO glClearColor here???
-    soundManager_ = std::make_unique<SoundManager>();
 
     shaderManager_ = std::make_unique<ShaderManager>();
     stateManager_ = std::make_unique<StateManager>(this, shaderManager_.get());
@@ -123,11 +122,6 @@ Difficulties::Mode Game::getDifficultyMode() const {
 void Game::swapDifficultyMode() {
     dmode_ = (dmode_ == Difficulties::Mode::Easy) ? Difficulties::Mode::Hard : Difficulties::Mode::Easy;
 }
-
-SoundManager *Game::getSoundManager() const {
-    return soundManager_.get();
-}
-
 
 StateManager *Game::getStateManager() {
     return stateManager_.get();

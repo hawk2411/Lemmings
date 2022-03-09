@@ -7,8 +7,6 @@
 
 // Lemming is basically a Sprite that represents one lemming. As such it has
 // all properties it needs to track its movement and collisions.
-
-
 class Walker : public Job {
 
 
@@ -28,6 +26,7 @@ private:
         WALKING_LEFT_STATE, WALKING_RIGHT_STATE
     };
 
+    void turn_around();
 private:
     WalkerState _state;
 };

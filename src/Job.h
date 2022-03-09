@@ -4,7 +4,6 @@
 #include "Sprite.h"
 #include "Level.h"
 #include "IMaskManager.h"
-#include "SoundManager.h"
 
 // Lemming is basically a Sprite that represents one lemming. As such it has
 // all properties it needs to track its movement and collisions.
@@ -24,6 +23,7 @@ enum class Jobs{
     BUILDER
 };
 
+const int DEFAULT_MAX_FALL = 3;
 
 class Job {
 
@@ -57,10 +57,13 @@ protected:
     bool collision(const VariableTexture &maskedMap) const;
 
     unique_ptr<Sprite> _jobSprite;
-    bool isFinished;
+    bool _isFinished;
     Jobs _currentJob;
     Jobs _nextJob;
-    bool walkingRight;
+    bool _walkingRight;
+    const int _max_columns = 16;
+    const int _max_rows = 14;
+
 };
 
 #endif // _JOB_INCLUDE

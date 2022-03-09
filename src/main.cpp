@@ -36,6 +36,12 @@ int main(int argc, char **argv) {
         return -1;
     }
 
+    int audio_rate = 22050; Uint16 audio_format = AUDIO_S16SYS; int audio_channels = 2; int audio_buffers = 4096;
+    if(Mix_OpenAudio(audio_rate, audio_format, audio_channels, audio_buffers) != 0) {
+        std::cerr << "Unable to initialize audio: " << Mix_GetError() <<"\n";
+        return -1;
+    }
+
     bool close = false;
     //StopWatch stopWatch;
 
@@ -77,7 +83,8 @@ int main(int argc, char **argv) {
         SDL_GL_SwapWindow(window);
 
     }
-
+    Mix_CloseAudio();
+    SDL_GL_DeleteContext(glContext);
     SDL_Quit();
     return 0;
 }

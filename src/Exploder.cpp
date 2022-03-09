@@ -42,7 +42,7 @@ void Exploder::initAnims(ShaderProgram &shaderProgram) {
 }
 
 void Exploder::setWalkingRight(bool value) {
-    walkingRight = value;
+    _walkingRight = value;
 }
 
 void Exploder::updateStateMachine(int deltaTime, Level *levelAttributes, IMaskManager *mask) {
@@ -56,7 +56,7 @@ void Exploder::updateStateMachine(int deltaTime, Level *levelAttributes, IMaskMa
             break;
         case BURNING_DEATH_STATE:
             if (_jobSprite->isInLastFrame()) {
-                isFinished = true;
+                _isFinished = true;
                 _nextJob = Jobs::UNKNOWN;
                 explode(mask);
             }

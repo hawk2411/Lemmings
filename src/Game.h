@@ -4,7 +4,6 @@
 #include <GL/glew.h>
 #include <SDL2/SDL.h>
 #include "Sprite.h"
-#include "SoundManager.h"
 #include "ShaderManager.h"
 #include "StateManager.h"
 #include "Difficulties.h"
@@ -95,14 +94,11 @@ public:
 
     void swapDifficultyMode();
 
-    SoundManager *getSoundManager() const;
-
     StateManager *getStateManager();
 
     ShaderManager *getShaderManager()const{return shaderManager_.get();}
 
 private:
-    unique_ptr<SoundManager> soundManager_;
     unique_ptr<StateManager> stateManager_;
     unique_ptr<ShaderManager> shaderManager_;
     bool bPlay_; // Continue to play game?

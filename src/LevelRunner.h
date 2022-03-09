@@ -3,7 +3,6 @@
 
 #include <set>
 #include "MusicFabric.hpp"
-#include "SoundManager.h"
 #include "Lemming.h"
 #include "Level.h"
 #include "Door.h"
