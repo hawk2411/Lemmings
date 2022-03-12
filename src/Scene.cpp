@@ -37,8 +37,8 @@ void Scene::init() {
     initMap();
     initUI();
 
-    paused = false;
-    speedUp = false;
+    _paused = false;
+    _speedUp = false;
 
 }
 
@@ -51,11 +51,11 @@ void Scene::update(int deltaTime) {
         _scroller.setScroll(false);
     }
 
-    if (paused) {
+    if (_paused) {
         return;
     }
 
-    if (speedUp) {
+    if (_speedUp) {
         deltaTime = 4 * deltaTime;
     }
 
@@ -94,19 +94,19 @@ VariableTexture &Scene::getMaskedMap() {
 }
 
 void Scene::changePauseStatus() {
-    paused = !paused;
+    _paused = !_paused;
 }
 
 void Scene::changeSpeedUpStatus() {
-    speedUp = !speedUp;
+    _speedUp = !_speedUp;
 }
 
 bool Scene::isPaused() const {
-    return paused;
+    return _paused;
 }
 
 bool Scene::isSpeedUp() const {
-    return speedUp;
+    return _speedUp;
 }
 
 
@@ -141,20 +141,20 @@ void Scene::updateUI() {
 void Scene::update() {
     updateCursorPosition();
 
-    if (screenMovedArea == ScreenMovedArea::SCROLL_AREA_LEFT) {
+    if (_screenMovedArea == ScreenMovedArea::SCROLL_AREA_LEFT) {
         _scroller.scrollLeft(_levelRunner->getLevelAttributes()->cameraPos,
                              static_cast<int>(_levelRunner->getLevelAttributes()->levelSize.x));
         _cursor.setScrollLeftCursor();
         return;
     }
-    if (screenMovedArea == ScreenMovedArea::SCROLL_AREA_RIGHT) {
+    if (_screenMovedArea == ScreenMovedArea::SCROLL_AREA_RIGHT) {
         _scroller.scrollRight(_levelRunner->getLevelAttributes()->cameraPos,
                               static_cast<int>(_levelRunner->getLevelAttributes()->levelSize.x));
         _cursor.setScrollRightCursor();
         return;
     }
-    if (screenMovedArea == ScreenMovedArea::LEVEL) {
-        int lemmingIndex = _levelRunner->getLemmingIndexInPos(posX, posY);
+    if (_screenMovedArea == ScreenMovedArea::LEVEL) {
+        int lemmingIndex = _levelRunner->getLemmingIndexInPos(_posX, _posY);
         _ui.changeDisplayedJob(_levelRunner->getLemmingJobNameIndex(lemmingIndex));
 
         if (lemmingIndex != -1) {
@@ -191,9 +191,10 @@ void Scene::applySpecialMask(int x, int y) {
 
 void Scene::buildStep(glm::vec2 position) {
     for (int i = 0; i < 5; ++i) {
-        Utils::changeTexelColor(_levelRunner->getLevelAttributes()->levelTexture.getId(), position.x + i,
-                                position.y, 120, 77, 0, 255);
-        applyMask(position.x + i, position.y);
+        Utils::changeTexelColor(_levelRunner->getLevelAttributes()->levelTexture.getId(),
+                                static_cast<GLint>(position.x) + i,
+                                static_cast<GLint>(position.y), 120, 77, 0, 255);
+        applyMask(static_cast<GLint>(position.x) + i, static_cast<GLint>(position.y));
     }
 }
 
@@ -206,20 +207,17 @@ void Scene::onKeyPressed(const SDL_KeyboardEvent &keyboardEvent) {
 }
 
 void Scene::mouseMoved(int mouseX, int mouseY, bool bLeftButton, bool bRightButton) {
-    posX = mouseX;
-    posY = mouseY;
+    _posX = mouseX;
+    _posY = mouseY;
 
     ScreenClickedArea screenClickedArea = getClickedScreenArea(mouseX, mouseY);
-    screenMovedArea = getMovedScreenArea(mouseX, mouseY);
-    if (screenMovedArea == SCROLL_AREA_LEFT) {
-        int a = 2;
-    }
+    _screenMovedArea = getMovedScreenArea(mouseX, mouseY);
 
-    switch (mouseState) {
+    switch (_mouseState) {
 
         case LEFT_MOUSE_PRESSED:
             if (!bLeftButton) {
-                mouseState = MouseStates::NONE;
+                _mouseState = MouseStates::NONE;
 
             }
             break;
@@ -227,33 +225,19 @@ void Scene::mouseMoved(int mouseX, int mouseY, bool bLeftButton, bool bRightButt
         case RIGHT_MOUSE_PRESSED:
 
             if (!bRightButton) {
-                mouseState = MouseStates::NONE;
+                _mouseState = MouseStates::NONE;
             }
             break;
 
         case MouseStates::NONE:
+            _mouseState = (bLeftButton) ? LEFT_MOUSE_PRESSED : RIGHT_MOUSE_PRESSED;
 
             if (bLeftButton) {
-                mouseState = LEFT_MOUSE_PRESSED;
-
                 if (screenClickedArea == ScreenClickedArea::UI) {
                     leftClickOnUI(mouseX, mouseY);
-                } else if (screenClickedArea == ScreenClickedArea::MAP) {
+                } else {
                     leftClickOnMap(mouseX, mouseY);
-                } else if (screenClickedArea == ScreenClickedArea::INFO) {
-
                 }
-
-            } else if (bRightButton) {
-                mouseState = RIGHT_MOUSE_PRESSED;
-
-                if (screenClickedArea == ScreenClickedArea::UI) {
-                } else if (screenClickedArea == ScreenClickedArea::MAP) {
-
-                }
-
-            } else {
-
             }
 
             break;
@@ -261,19 +245,10 @@ void Scene::mouseMoved(int mouseX, int mouseY, bool bLeftButton, bool bRightButt
 }
 
 Scene::ScreenClickedArea Scene::getClickedScreenArea(int mouseX, int mouseY) {
-    if (
-            0 <= mouseX
-            && mouseX < LEVEL_WIDTH
-            && 0 <= mouseY
-            && mouseY < LEVEL_HEIGHT
-            ) {
+    if (mouseX >= 0 && mouseX < LEVEL_WIDTH && mouseY >= 0 && mouseY < LEVEL_HEIGHT) {
         return ScreenClickedArea::MAP;
-    } else if (
-            0 <= mouseX
-            && mouseX < UI_WIDTH
-            && LEVEL_HEIGHT <= mouseY
-            && mouseY < LEVEL_HEIGHT + UI_HEIGHT
-            ) {
+    }
+    if (mouseX >= 0 && mouseX < UI_WIDTH && mouseY >= LEVEL_HEIGHT && mouseY < LEVEL_HEIGHT + UI_HEIGHT) {
         return ScreenClickedArea::UI;
     }
     throw std::runtime_error("Scene::getClickedScreenArea unknown behavior.");
@@ -281,15 +256,18 @@ Scene::ScreenClickedArea Scene::getClickedScreenArea(int mouseX, int mouseY) {
 
 
 Scene::ScreenMovedArea Scene::getMovedScreenArea(int mouseX, int mouseY) {
+
     if (0 <= mouseX && mouseX < SCROLL_WIDTH && mouseY < LEVEL_HEIGHT) {
         return ScreenMovedArea::SCROLL_AREA_LEFT;
-    } else if (LEVEL_WIDTH - SCROLL_WIDTH <= mouseX && mouseX < LEVEL_WIDTH && mouseY < LEVEL_HEIGHT) {
-        return ScreenMovedArea::SCROLL_AREA_RIGHT;
-    } else if (SCROLL_WIDTH <= mouseX && mouseX < LEVEL_WIDTH - SCROLL_WIDTH && mouseY < LEVEL_HEIGHT) {
-        return ScreenMovedArea::LEVEL;
-    } else {
-        return ScreenMovedArea::NONE_AREA;
     }
+    if (LEVEL_WIDTH - SCROLL_WIDTH <= mouseX && mouseX < LEVEL_WIDTH && mouseY < LEVEL_HEIGHT) {
+        return ScreenMovedArea::SCROLL_AREA_RIGHT;
+    }
+
+    return (SCROLL_WIDTH <= mouseX && mouseX < LEVEL_WIDTH - SCROLL_WIDTH && mouseY < LEVEL_HEIGHT)
+           ? ScreenMovedArea::LEVEL
+           : ScreenMovedArea::NONE_AREA;
+
 }
 
 
@@ -302,26 +280,29 @@ void Scene::leftClickOnUI(int posX, int posY) {
 
 void Scene::leftClickOnMap(int posX, int posY) {
 
-    if (_jobAssigner.hasJobToAssign()) {
+    if (!_jobAssigner.hasJobToAssign())
+        return;
 
-        int selectedLemmingIndex = _levelRunner->getLemmingIndexInPos(posX, posY);
-        //_jobAssigner.assignJobLemming(selectedLemmingIndex);
-        if (_levelRunner->assignJob(selectedLemmingIndex, _jobAssigner.getJobToAssign())) {
-            auto jobName = _jobAssigner.getLastOfferedJob();
-            int jobIndex = _jobAssigner.jobNameToIndex(jobName);
-            _levelRunner->decreaseJobCount(jobIndex);
-            if (_levelRunner->getJobCount(jobIndex) > 0) {
-                _jobAssigner.offerJob(jobName);
-            } else {
-                _jobAssigner.setLastOfferedJob(JobAssigner::NONE);
-            }
-            //_jobAssigner.assignJobLemming(selectedLemmingIndex);
-        }
+    int selectedLemmingIndex = _levelRunner->getLemmingIndexInPos(posX, posY);
+    if (selectedLemmingIndex < 0) {
+        return;
+    }
+    if (!_levelRunner->assignJob(selectedLemmingIndex, _jobAssigner.getJobToAssign())) {
+        return;
+    }
+
+    auto jobName = _jobAssigner.getLastOfferedJob();
+    int jobIndex = JobAssigner::jobNameToIndex(jobName);
+    _levelRunner->decreaseJobCount(jobIndex);
+    if (_levelRunner->getJobCount(jobIndex) > 0) {
+        _jobAssigner.offerJob(jobName);
+    } else {
+        _jobAssigner.setLastOfferedJob(JobAssigner::NONE);
     }
 }
 
 void Scene::updateCursorPosition() {
-    glm::vec2 cursorPosition = glm::vec2(posX, posY) - glm::vec2(6, 6);
+    glm::vec2 cursorPosition = glm::vec2(_posX, _posY) - glm::vec2(6, 6);
 
     if (cursorPosition.x < 0) {
         cursorPosition.x = 0;

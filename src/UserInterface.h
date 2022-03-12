@@ -27,7 +27,7 @@ public:
 
     void changeSelectedButton(int selectedButton);
 
-    void changeDisplayedJob(string lemmingJobName);
+    void changeDisplayedJob(const string& lemmingJobName);
 
     int getSelectedButton()const{return _selectedButton;}
 

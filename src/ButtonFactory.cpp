@@ -58,6 +58,7 @@ Button ButtonFactory::createButton(int buttonName, ShaderManager *shaderManager)
             textureCoord = glm::vec2(96. / 128, 0);
             break;
         default:
+            throw std::runtime_error("unknown button id");
             break;
     }
 

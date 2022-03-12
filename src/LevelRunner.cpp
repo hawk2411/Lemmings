@@ -205,6 +205,10 @@ string LevelRunner::getLemmingJobNameIndex(int index) {
 bool LevelRunner::assignJob(int lemmingIndex, Jobs jobToAssign) {
     auto currentLemming = _lemmings.begin();
     std::advance(currentLemming, lemmingIndex);
+    if(currentLemming == _lemmings.end()) {
+        return false;
+    }
+
 
     Jobs lemmingActualJob = currentLemming->get()->getJob()->getCurrentJob();
     if (jobToAssign == lemmingActualJob) {
