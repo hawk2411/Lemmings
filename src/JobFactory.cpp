@@ -85,5 +85,4 @@ Job *JobFactory::createJob(Jobs jobToCreate,  ParticleSystemManager* particleSys
         default:
             return nullptr;
     }
-    return nullptr;
 }

@@ -1,5 +1,4 @@
 #include "Instructions.h"
-#include "Utils.h"
 #include "ShaderManager.h"
 #include "KeyFactory.h"
 #include "Game.h"
@@ -155,7 +154,7 @@ void Instructions::update(int deltaTime) {
 void Instructions::render() {
     _shaderManager->useShaderProgram();
     _instructionsLevelSprite->render();
-    for (int i = actualPage; i < Utils::min(actualPage + LINES_PAGE, _instructionPages.size()); ++i) {
+    for (int i = actualPage; i < std::min(static_cast<std::size_t>(actualPage + LINES_PAGE), _instructionPages.size()); ++i) {
         _instructionPages[i]->render();
     }
     if (!_onlyRight) {
@@ -208,7 +207,7 @@ void Instructions::onKeyPressed(const SDL_KeyboardEvent &keyboardEvent) {
             break;
         case SDLK_LEFT:
             passPageLeft();
-            break;;
+            break;
     }
 }
 

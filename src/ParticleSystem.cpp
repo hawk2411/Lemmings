@@ -24,7 +24,7 @@ void ParticleSystem::update(int deltaTime) {
         return;
     }
     for (auto &particle : _particles) {
-        particle->update(deltaTime);
+        particle->update();
     }
 }
 

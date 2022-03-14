@@ -36,7 +36,7 @@ private:
 
 
 private:
-    MinerState state;
+    MinerState _state;
 };
 
 

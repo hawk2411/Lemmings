@@ -4,9 +4,6 @@
 
 #include "Job.h"
 
-#define MAX_STEPS 12
-
-
 class Builder : public Job {
 
 
@@ -26,9 +23,6 @@ private:
         BUILDING_LEFT_STATE, BUILDING_RIGHT_STATE, NOSTEPS_STATE
     };
 
-private:
-    BuilderState state;
-
     void buildLeft(Level *attributes, IMaskManager *mask);
 
     void buildRight(Level *attributes, IMaskManager *mask);
@@ -37,9 +31,15 @@ private:
 
     bool cannotBuildLeft(IMaskManager *mask);
 
-    int buildedSteps = 0;
+    static void buildStep(glm::vec2 position, Level *attributes, IMaskManager *mask);
 
-    void buildStep(glm::vec2 position, Level *attributes, IMaskManager *mask);
+    BuilderState _state;
+
+    int _buildedSteps = 0;
+
+
+    const unsigned MAX_STEPS = 12;
+
 };
 
 #endif // _BUILDER_INCLUDE

@@ -8,7 +8,7 @@
 // Lemming is basically a Sprite that represents one lemming. As such it has
 // all properties it needs to track its movement and collisions.
 
-enum class Jobs{
+enum class Jobs {
     UNKNOWN,
     WALKER,
     DIGGER,
@@ -30,6 +30,8 @@ class Job {
 public:
     explicit Job(Jobs currentJob);
 
+    Job();
+
     virtual ~Job();
 
     virtual void updateStateMachine(int deltaTime, Level *levelAttributes, IMaskManager *mask) = 0;
@@ -38,9 +40,9 @@ public:
 
     bool finished() const;
 
-    Jobs getNextJob()const;
+    Jobs getNextJob() const;
 
-    Jobs getCurrentJob()const{return _currentJob;}
+    Jobs getCurrentJob() const { return _currentJob; }
 
     Sprite *sprite();
 
@@ -57,10 +59,10 @@ protected:
     bool collision(const VariableTexture &maskedMap) const;
 
     unique_ptr<Sprite> _jobSprite;
-    bool _isFinished;
+    bool _isFinished{};
     Jobs _currentJob;
     Jobs _nextJob;
-    bool _walkingRight;
+    bool _walkingRight{};
     const int _max_columns = 16;
     const int _max_rows = 14;
 

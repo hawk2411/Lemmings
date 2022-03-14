@@ -1,6 +1,5 @@
 #include <iostream>
 #include "DoorFactory.h"
-#include "Game.h"
 #include "DoorStandard.h"
 #include "DoorEgypt.h"
 #include "DoorMaya.h"
@@ -10,7 +9,7 @@
 Door *DoorFactory::createDoor(const string &type, ShaderManager *shaderManager) {
     if (type == "standard") {
         return new DoorStandard(shaderManager);
-    };
+    }
     if (type == "egypt") {
         return new DoorEgypt(shaderManager);
     }

@@ -2,17 +2,11 @@
 #include "Game.h"
 #include "Utils.h"
 
-
-#define JUMP_ANGLE_STEP 4
-#define JUMP_HEIGHT 96
-#define FALL_STEP 4
-
-
 enum MinerAnims {
     MINER_RIGHT, MINER_LEFT
 };
 
-Miner::Miner() : Job(Jobs::MINER), state(MINER_RIGHT_STATE) {
+Miner::Miner() : Job(Jobs::MINER), _state(MINER_RIGHT_STATE) {
 
 }
 
@@ -40,7 +34,7 @@ void Miner::initAnims(ShaderProgram &shaderProgram) {
             _jobSprite->addKeyframe(MINER_LEFT, glm::vec2(((23 - float(i)) / 16), 9.0f / 14), true);
         }
 
-    state = MINER_RIGHT_STATE;
+    _state = MINER_RIGHT_STATE;
     _jobSprite->changeAnimation(MINER_RIGHT);
 
 
@@ -50,16 +44,16 @@ void Miner::setWalkingRight(bool value) {
     _walkingRight = value;
 
     if (_walkingRight) {
-        state = MINER_RIGHT_STATE;
+        _state = MINER_RIGHT_STATE;
         _jobSprite->changeAnimation(MINER_RIGHT);
     } else {
-        state = MINER_LEFT_STATE;
+        _state = MINER_LEFT_STATE;
         _jobSprite->changeAnimation(MINER_LEFT);
     }
 }
 
 void Miner::updateStateMachine(int deltaTime, Level *levelAttributes, IMaskManager *mask) {
-    switch (state) {
+    switch (_state) {
 
         case MINER_RIGHT_STATE:
 
@@ -179,44 +173,44 @@ bool Miner::canMineRight(IMaskManager *mask) {
     int y = posBase.y;
 
     for (int i = 0; i < 3; ++i) {
-        if (mask->getPixel(x + i, y) == -1) {
+        if (mask->isPositionABorder(x + i, y)) {
             return true;
         }
-        if (mask->getPixel(x + i, y - (i + 1)) == -1) {
+        if (mask->isPositionABorder(x + i, y - (i + 1))) {
             return true;
         }
-        if (mask->getPixel(x + i, y - (i + 2)) == -1) {
+        if (mask->isPositionABorder(x + i, y - (i + 2))) {
             return true;
         }
-        if (mask->getPixel(x + i, y - 12) == -1) {
+        if (mask->isPositionABorder(x + i, y - 12)) {
             return true;
         }
-        if (mask->getPixel(x + i, y - 11) == -1) {
+        if (mask->isPositionABorder(x + i, y - 11)) {
             return true;
         }
-        if (mask->getPixel(x + i, y - 10) == -1) {
+        if (mask->isPositionABorder(x + i, y - 10)) {
             return true;
         }
 
     }
 
     for (int i = 0; i < 12; i += 11) {
-        if (mask->getPixel(x + 3, y - i) == -1) {
+        if (mask->isPositionABorder(x + 3, y - i)) {
             return true;
         }
-        if (mask->getPixel(x + 3, y - (i + 1)) == -1) {
+        if (mask->isPositionABorder(x + 3, y - (i + 1))) {
             return true;
         }
     }
 
     for (int i = 1; i < 12; ++i) {
-        if (mask->getPixel(x + 4, y - i) == -1) {
+        if (mask->isPositionABorder(x + 4, y - i)) {
             return true;
         }
     }
 
     for (int i = 2; i < 11; ++i) {
-        if (mask->getPixel(x + 5, y - i) == -1) {
+        if (mask->isPositionABorder(x + 5, y - i)) {
             return true;
         }
     }
@@ -234,33 +228,33 @@ bool Miner::canMineLeft(IMaskManager *mask) {
     int y = posBase.y;
 
     for (int i = 1; i < 11; ++i) {
-        if (mask->getPixel(x, y - i) == -1) {
+        if (mask->isPositionABorder(x, y - i) ) {
             return true;
         }
     }
 
     for (int i = 0; i < 12; ++i) {
-        if (mask->getPixel(x + 1, y - i) == -1) {
+        if (mask->isPositionABorder(x + 1, y - i)) {
             return true;
         }
     }
 
     for (int i = 0; i < 12; i += 11) {
-        if (mask->getPixel(x + 2, y - i) == -1) {
+        if (mask->isPositionABorder(x + 2, y - i)) {
             return true;
         }
-        if (mask->getPixel(x + 2, y - (i + 1)) == -1) {
+        if (mask->isPositionABorder(x + 2, y - (i + 1))) {
             return true;
         }
     }
 
     for (int i = 2; i < 6; ++i) {
         for (int j = 0; j < 13; j += 12) {
-            if (mask->getPixel(x + i, y - j) == -1) {
+            if (mask->isPositionABorder(x + i, y - j)) {
                 return true;
             }
 
-            if (mask->getPixel(x + i, y - (j + 1)) == -1) {
+            if (mask->isPositionABorder(x + i, y - (j + 1))) {
                 return true;
             }
         }

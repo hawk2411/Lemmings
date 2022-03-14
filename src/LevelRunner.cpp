@@ -1,4 +1,3 @@
-#include "Game.h"
 #include "StateManager.h"
 #include "ParticleSystemManager.h"
 #include "Utils.h"
@@ -20,9 +19,9 @@ LevelRunner::LevelRunner(ShaderManager *shaderManager,
           _spawningLemmings(false),
           _finishedLevel(false),
           _exploding(false),
-          music_(nullptr, Mix_FreeMusic),
-          dooropenSound_(createSound("sounds/lemmingsEffects/Letsgo.ogg")),
-          channel_(-1) {}
+          _music(nullptr, Mix_FreeMusic),
+          _dooropenSound(createSound("sounds/lemmingsEffects/Letsgo.ogg")),
+          _channel(-1) {}
 
 LevelRunner::~LevelRunner() = default;
 
@@ -49,9 +48,9 @@ void LevelRunner::changeLevel(const LevelIndex &levelIndex) {
     _exploding = false;
 
     const string musicPath = "sounds/Lemming" + to_string(_levelIndex.levelNo) + ".ogg";
-    music_ = createMusic(musicPath);
-    channel_ = Mix_PlayChannel(-1, dooropenSound_.get(), 0);
-    Mix_VolumeChunk(dooropenSound_.get(), MIX_MAX_VOLUME);
+    _music = createMusic(musicPath);
+    _channel = Mix_PlayChannel(-1, _dooropenSound.get(), 0);
+    Mix_VolumeChunk(_dooropenSound.get(), MIX_MAX_VOLUME);
 }
 
 void LevelRunner::update(int deltaTime, IMaskManager *currentMask) {
@@ -63,11 +62,11 @@ void LevelRunner::update(int deltaTime, IMaskManager *currentMask) {
 
     if (!_levelStartValues->_trapdoor->isOpened()) {
         _levelStartValues->_trapdoor->update(deltaTime);
-        if (_levelStartValues->_trapdoor->isOpened() && channel_ != -1) {
+        if (_levelStartValues->_trapdoor->isOpened() && _channel != -1) {
             _currentTime = 0;
-            Mix_HaltChannel(channel_);
-            channel_ = -1;
-            Mix_PlayMusic(music_.get(), -1);
+            Mix_HaltChannel(_channel);
+            _channel = -1;
+            Mix_PlayMusic(_music.get(), -1);
             Mix_VolumeMusic(MIX_MAX_VOLUME);
         }
         return;
@@ -113,15 +112,15 @@ void LevelRunner::spawnLemmings() {
     _spawningLemmings = _availableLemmings != 0;
 }
 
-int LevelRunner::getNumLemmingsAlive() {
-    return _lemmings.size();
+int LevelRunner::getNumLemmingsAlive() const {
+    return static_cast<int>(_lemmings.size());
 }
 
-int LevelRunner::getPercentageSavedLemmings() {
-    return float(_savedLemmings) / _levelStartValues->numLemmings * 100;
+int LevelRunner::getPercentageSavedLemmings()const {
+    return _savedLemmings / _levelStartValues->numLemmings * 100;
 }
 
-int LevelRunner::getPercentageTotalLemmings() {
+int LevelRunner::getPercentageTotalLemmings()const {
     return _levelStartValues->goalLemmings;
 }
 
@@ -129,8 +128,8 @@ void LevelRunner::stopSpawningLemmings() {
     _spawningLemmings = false;
 }
 
-int LevelRunner::getCurrentTime() {
-    return _currentTime / 1000;
+int LevelRunner::getCurrentTime() const {
+    return static_cast<int>(_currentTime / 1000.0);
 }
 
 int LevelRunner::getRemainingTime() {
@@ -266,9 +265,9 @@ void LevelRunner::decreaseJobCount(int index) {
 
 
 void LevelRunner::endMusic() {
-    if (channel_ != -1) {
-        Mix_HaltChannel(channel_);
-        channel_ = -1;
+    if (_channel != -1) {
+        Mix_HaltChannel(_channel);
+        _channel = -1;
     }
     Mix_HaltMusic();
 }

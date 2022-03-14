@@ -1,6 +1,5 @@
 #include <iostream>
 #include "Game.h"
-#include "Scene.h"
 #include "ButtonFactory.h"
 #include "Sprite.h"
 #include "ShaderManager.h"
@@ -59,7 +58,6 @@ Button ButtonFactory::createButton(int buttonName, ShaderManager *shaderManager)
             break;
         default:
             throw std::runtime_error("unknown button id");
-            break;
     }
 
     buttonSprite->addKeyframe(0, textureCoord);

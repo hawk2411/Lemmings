@@ -68,7 +68,7 @@ void Texture::createEmptyTexture(int width, int height) {
     glGenTextures(1, &_texId);
     glBindTexture(GL_TEXTURE_2D, _texId);
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, width, height, 0, GL_RED, GL_UNSIGNED_BYTE, 0);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, width, height, 0, GL_RED, GL_UNSIGNED_BYTE, nullptr);
     glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
 }
 

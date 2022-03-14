@@ -77,8 +77,8 @@ void Exploder::explode(IMaskManager *mask) {
                 offset = 15 - 2 * j;
             }
             if (i >= offset && i < 16 - offset) {
-                int x = posBase.x + i;
-                int y = posBase.y + j;
+                int x = static_cast<int>(posBase.x) + i;
+                int y = static_cast<int>(posBase.y) + j;
                 mask->eraseSpecialMask(x, y);
             }
         }

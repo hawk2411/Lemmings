@@ -14,7 +14,7 @@
 //#pragma comment(linker, "/subsystem:\"windows\" /entry:\"mainCRTStartup\"")
 
 int main(int argc, char **argv) {
-    srand(time(0));
+    srand(time(nullptr));
 
     SDL_Init(SDL_INIT_EVERYTHING);
 

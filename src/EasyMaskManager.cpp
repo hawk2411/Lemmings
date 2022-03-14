@@ -1,5 +1,4 @@
 #include "EasyMaskManager.h"
-#include "Level.h"
 
 void EasyMaskManager::init() {
 
@@ -28,9 +27,4 @@ void EasyMaskManager::eraseSpecialMask(int x, int y) {
 void EasyMaskManager::applySpecialMask(int x, int y) {
     _level->maskedMap.setPixel(x, y, 200);
 }
-
-char EasyMaskManager::getPixel(int x, int y) {
-    return _level->maskedMap.pixel(x, y);
-}
-
 

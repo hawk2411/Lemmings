@@ -10,11 +10,11 @@ class Escaper : public Job {
 public:
     Escaper();
 
-    void initAnims(ShaderProgram &shaderProgram);
+    void initAnims(ShaderProgram &shaderProgram) override;
 
-    void updateStateMachine(int deltaTime, Level *levelAttributes, IMaskManager *mask);
+    void updateStateMachine(int deltaTime, Level *levelAttributes, IMaskManager *mask) override;
 
-    void setWalkingRight(bool value);
+    void setWalkingRight(bool value) override;
 
     string getName() const override {return "ESCAPER";}
 

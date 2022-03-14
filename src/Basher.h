@@ -32,7 +32,7 @@ private:
 
 
 private:
-    BasherState state;
+    BasherState _state;
 };
 
 

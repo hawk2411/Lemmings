@@ -3,10 +3,11 @@
 
 #include <vector>
 #include "IMaskManager.h"
+#include "EasyMaskManager.h"
 
-class HardMaskManager : public IMaskManager {
+class HardMaskManager : public EasyMaskManager  {
 public:
-    explicit HardMaskManager(Level* level) : IMaskManager(level){}
+    explicit HardMaskManager(Level* level) : EasyMaskManager(level){}
 
     void init() override;
 
@@ -15,12 +16,6 @@ public:
     void eraseMask(int x, int y, int time) override;
 
     void applyMask(int x, int y) override;
-
-    void eraseSpecialMask(int x, int y) override;
-
-    void applySpecialMask(int x, int y) override;
-
-    char getPixel(int x, int y) override;
 
 private:
     void regenerateMask(int x, int y);

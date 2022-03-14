@@ -58,7 +58,7 @@ public:
 
     bool isSpeedUp() const;
 
-    char getPixel(int x, int y);
+    unsigned char getPixel(int x, int y);
 
 
     VariableTexture &getMaskedMap();

@@ -1,7 +1,6 @@
 //
 // Created by hawk on 16.05.21.
 //
-#include "common_defs.h"
 #include "LemmingsException.h"
 #include "TimerEventService.h"
 

@@ -26,9 +26,9 @@ protected:
     virtual void displayNumAux(int firstDigit, int secondDigit) = 0;
 
 protected:
-    glm::vec2 position;
-    std::unique_ptr<Sprite> leftNum;
-    std::unique_ptr<Sprite> rightNum;
+    glm::vec2 _position;
+    std::unique_ptr<Sprite> _leftNum;
+    std::unique_ptr<Sprite> _rightNum;
 
 };
 

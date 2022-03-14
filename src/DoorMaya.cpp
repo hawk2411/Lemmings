@@ -1,4 +1,3 @@
-#include <iostream>
 #include "DoorMaya.h"
 #include "Game.h"
 #include "ShaderManager.h"

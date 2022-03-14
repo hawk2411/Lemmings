@@ -4,12 +4,10 @@
 #include "Results.h"
 #include "Credits.h"
 #include "Instructions.h"
-//#include "LevelRunner.h"
 #include "EventCreator.h"
 #include "Game.h"
 
 #include "StateManager.h"
-#include "InfoLevel.h"
 #include "LevelIndex.h"
 
 StateManager::StateManager(Game *game, ShaderManager *shaderManager) : _currentState(States::Type::Menu),

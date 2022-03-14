@@ -1,9 +1,6 @@
-#include <iostream>
 #include "Door.h"
-#include "Game.h"
 
-
-Door::Door(ShaderManager *shaderManager) : _shaderManager(shaderManager) {}
+Door::Door(ShaderManager *shaderManager) : _shaderManager(shaderManager), _escapeOffset(13,16) {}
 
 void Door::update(int deltaTime) {
     _doorSprite->update(deltaTime);

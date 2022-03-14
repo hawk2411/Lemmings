@@ -1,4 +1,3 @@
-#include <iostream>
 #include "DoorHell.h"
 #include "Game.h"
 #include "ShaderManager.h"

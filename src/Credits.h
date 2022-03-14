@@ -31,11 +31,11 @@ public:
 
 private:
 
-    // Parametres
-    Texture creditsLevelTexture;
-    std::unique_ptr<Sprite> creditsLevelSprite;
+    // Parameters
+    Texture _creditsLevelTexture;
+    std::unique_ptr<Sprite> _creditsLevelSprite;
     ShaderManager *_shaderManager;
-    music_ptr_t music_;
+    music_ptr_t _music;
 };
 
 

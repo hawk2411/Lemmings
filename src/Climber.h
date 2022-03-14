@@ -31,7 +31,7 @@ private:
     };
 
 private:
-    CLimberState state;
+    CLimberState _state;
 
     void climbLeft(Level *level);
 

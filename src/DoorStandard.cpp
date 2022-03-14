@@ -1,4 +1,3 @@
-#include <iostream>
 #include "DoorStandard.h"
 #include "Game.h"
 #include "ShaderManager.h"

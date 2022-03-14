@@ -1,9 +1,7 @@
 #include "Particle.h"
 #include "ShaderManager.h"
 #include "Game.h"
-#include <ctime>
-#include <random>
-#include <math.h>
+#include <cmath>
 
 #define PI 3.14159265359
 
@@ -29,7 +27,7 @@ Particle::Particle(ParticleColor color, ShaderProgram* shaderProgram):_position(
     _sprite->addKeyframe(0, coordTex);
     _sprite->changeAnimation(0);
 
-    float angle = (rand() % 180) * PI / 180;
+    auto angle = static_cast<float>((rand() % 180) * PI / 180);
     _speed = glm::vec2(2.5 * cos(angle), -5 * sin(angle));
 }
 
@@ -37,7 +35,7 @@ void Particle::setPosition(glm::vec2 position) {
     _position = position;
 }
 
-void Particle::update(int deltaTime) {
+void Particle::update() {
     _position += _speed;
     _sprite->setPosition(_position);
     _speed += glm::vec2(0, 0.25);

@@ -26,11 +26,11 @@ public:
 
     bool finished() const;
 
-    int getNumLemmingsAlive();
+    int getNumLemmingsAlive() const;
 
-    int getPercentageSavedLemmings();
+    int getPercentageSavedLemmings()const;
 
-    int getPercentageTotalLemmings();
+    int getPercentageTotalLemmings()const;
 
     void stopSpawningLemmings();
 
@@ -40,7 +40,7 @@ public:
 
     string getLemmingJobNameIndex(int index);
 
-    int getCurrentTime();
+    int getCurrentTime() const;
 
     int getRemainingTime();
 
@@ -105,9 +105,9 @@ private:
     bool _exploding;
     ShaderManager *_shaderManager;
     ParticleSystemManager* _particleSystemManager;
-    music_ptr_t music_;
-    sound_ptr_t dooropenSound_;
-    int channel_;
+    music_ptr_t _music;
+    sound_ptr_t _dooropenSound;
+    int _channel;
 };
 
 #endif // _LEVEL_RUNNER_INCLUDE

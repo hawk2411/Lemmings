@@ -1,5 +1,4 @@
 #include "ParticleFactory.h"
-#include <ctime>
 #include <random>
 
 Particle *ParticleFactory::createParticle(ShaderProgram* shaderProgram) {

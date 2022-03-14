@@ -5,7 +5,6 @@
 #ifndef LEMMINGS_TIMEREVENTSERVICE_H
 #define LEMMINGS_TIMEREVENTSERVICE_H
 
-#define SDL_MAIN_HANDLED
 #include <SDL2/SDL.h>
 
 class TimerEventService {

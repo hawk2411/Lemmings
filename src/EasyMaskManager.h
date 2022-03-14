@@ -19,8 +19,6 @@ public:
 
     void applySpecialMask(int x, int y) override;
 
-    char getPixel(int x, int y) override;
-
 };
 
 

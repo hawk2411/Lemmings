@@ -14,8 +14,7 @@ VariableTexture::VariableTexture() :
         _widthTex(0),
         _heightTex(0),
         _texId(0),
-        _format{}
-        {}
+        _format{} {}
 
 VariableTexture::~VariableTexture() {
     if (_image)
@@ -105,7 +104,7 @@ void VariableTexture::setMagFilter(GLint value) {
 }
 
 void VariableTexture::use() const {
-    if(!_image)
+    if (!_image)
         return;
 
     glEnable(GL_TEXTURE_2D);
@@ -129,12 +128,14 @@ void VariableTexture::use() const {
 }
 
 unsigned char VariableTexture::pixel(unsigned int x, unsigned int y) const {
-    if (_format == TEXTURE_PIXEL_FORMAT_RGB)
-        return _image[3 * (y * _widthTex + x)];
-    else if (_format == TEXTURE_PIXEL_FORMAT_RGBA)
-        return _image[4 * (y * _widthTex + x)];
-    else
-        return _image[y * _widthTex + x];
+    switch (_format) {
+        case TEXTURE_PIXEL_FORMAT_RGB :
+            return _image[3 * (y * _widthTex + x)];
+        case TEXTURE_PIXEL_FORMAT_RGBA:
+            return _image[4 * (y * _widthTex + x)];
+        default:
+            return _image[y * _widthTex + x];
+    }
 }
 
 void VariableTexture::setPixel(unsigned int x, unsigned int y, unsigned char value) {

@@ -30,7 +30,7 @@ private:
 
 
 private:
-    BlockerState state;
+    BlockerState _state;
 };
 
 

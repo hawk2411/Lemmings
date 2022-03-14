@@ -8,7 +8,7 @@
 #include "StateManager.h"
 #include "Difficulties.h"
 
-const float TIME_PER_FRAME = 1000.f / 30.f; // Approx. 30 fps;
+//const float TIME_PER_FRAME = 1000.f / 30.f; // Approx. 30 fps;
 
 
 class Game {

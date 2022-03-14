@@ -1,7 +1,5 @@
-#include <iostream>
 #include "LemmingsException.h"
 #include "TrapdoorFactory.h"
-#include "Game.h"
 #include "TrapdoorStandard.h"
 #include "TrapdoorHell.h"
 

@@ -1,7 +1,6 @@
 #include <fstream>
 #include <sstream>
 #include <algorithm>
-#include <iterator>
 #include "LemmingsException.h"
 
 #include "Level.h"

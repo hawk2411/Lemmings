@@ -3,36 +3,36 @@
 
 
 void Button::init(ShaderManager *shaderManager) {
-    numDisplay.init(shaderManager);
+    _numDisplay.init(shaderManager);
 
     setPosition(glm::vec2(0, 0));
 }
 
 void Button::render() {
-    numDisplay.render();
-    buttonSprite->render();
+    _numDisplay.render();
+    _buttonSprite->render();
 }
 
 void Button::setSprite(std::unique_ptr<Sprite> sprite) {
 
-    buttonSprite = std::move(sprite);
-    buttonSprite->setPosition(position);
+    _buttonSprite = std::move(sprite);
+    _buttonSprite->setPosition(_position);
 }
 
 glm::vec2 Button::getPosition() {
-    return position;
+    return _position;
 }
 
 void Button::setPosition(glm::vec2 position) {
-    this->position = position;
+    this->_position = position;
 
-    numDisplay.setPosition(position);
+    _numDisplay.setPosition(position);
 
-    if (buttonSprite != nullptr) {
-        buttonSprite->setPosition(position);
+    if (_buttonSprite != nullptr) {
+        _buttonSprite->setPosition(position);
     }
 }
 
 void Button::setNum(int num) {
-    numDisplay.displayNum(num);
+    _numDisplay.displayNum(num);
 }

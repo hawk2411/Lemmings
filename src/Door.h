@@ -8,7 +8,7 @@
 class Door {
 
 public:
-    Door(ShaderManager *shaderManager);
+    explicit Door(ShaderManager *shaderManager);
 
     virtual void init() = 0;
 

@@ -177,7 +177,7 @@ void Scene::eraseSpecialMask(int x, int y) {
 
 }
 
-char Scene::getPixel(int x, int y) {
+unsigned char Scene::getPixel(int x, int y) {
     return _maskManagers[_currentDifficultyMode]->getPixel(x, y);
 }
 

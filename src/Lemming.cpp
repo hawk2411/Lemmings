@@ -1,15 +1,8 @@
-#include <iostream>
 #include "Lemming.h"
-#include "Game.h"
 #include "ShaderManager.h"
 #include "JobFactory.h"
 #include "Utils.h"
 #include "IMaskManager.h"
-
-#define JUMP_ANGLE_STEP 4
-#define JUMP_HEIGHT 96
-#define FALL_STEP 4
-
 
 Lemming::Lemming(const glm::vec2 &initialPosition, ShaderManager *shaderManager, ParticleSystemManager* particleSystemManager)
         : _shaderManager(shaderManager), _countdown(shaderManager), _particleSystemManager(particleSystemManager) {

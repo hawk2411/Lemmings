@@ -4,7 +4,7 @@
 
 #define SCROLL_BASE_DISPLACEMENT 5
 
-Scroller::Scroller(bool scrolled) : scrolled(scrolled) {}
+Scroller::Scroller(bool scrolled) : _scrolled(scrolled) {}
 
 void Scroller::scrollLeft(glm::vec2 cameraPos, int levelSize ) {
     int scrollDisplacement = -SCROLL_BASE_DISPLACEMENT;
@@ -18,11 +18,11 @@ void Scroller::scrollRight(glm::vec2 cameraPos, int levelSize) {
 }
 
 bool Scroller::isScrolled() const {
-    return scrolled;
+    return _scrolled;
 }
 
 void Scroller::setScroll(bool isScroll) {
-    scrolled = isScroll;
+    _scrolled = isScroll;
 }
 
 void Scroller::scroll(int scrollDisplacement, glm::vec2 cameraPos, int levelSize) {
@@ -30,7 +30,7 @@ void Scroller::scroll(int scrollDisplacement, glm::vec2 cameraPos, int levelSize
 
     if (static_cast<int>(cameraPos.x) + scrollDisplacement >= 0 && static_cast<int>(cameraPos.x) + scrollDisplacement <= maxCameraPosX) {
         cameraPos += glm::vec2(scrollDisplacement, 0);
-        scrolled = true;
+        _scrolled = true;
     }
 }
 

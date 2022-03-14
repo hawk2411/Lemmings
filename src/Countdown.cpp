@@ -1,8 +1,5 @@
 #include "ButtonNumFactory.h"
-#include "Level.h"
 #include "Countdown.h"
-
-const int MAX_SEC = 5;
 
 Countdown::Countdown(ShaderManager *shaderManager) : _shaderManager(shaderManager) {
     _over = false;

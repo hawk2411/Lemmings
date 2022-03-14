@@ -21,9 +21,9 @@ public:
     Shader();
 
     // These methods should be called with an active OpenGL context
-    void initFromSource(const ShaderType type, const string &source);
+    void initFromSource(ShaderType type, const string &source);
 
-    bool initFromFile(const ShaderType type, const string &filename);
+    bool initFromFile(ShaderType type, const string &filename);
 
     void free();
 
@@ -34,12 +34,12 @@ public:
     const string &log() const;
 
 private:
-    bool loadShaderSource(const string &filename, string &shaderSource);
+    static bool loadShaderSource(const string &filename, string &shaderSource);
 
 private:
-    GLuint shaderId;
-    bool compiled;
-    string errorLog;
+    GLuint _shaderId;
+    bool _compiled;
+    string _errorLog;
 
 };
 

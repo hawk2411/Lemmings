@@ -1,21 +1,22 @@
 #ifndef _COMMON_DEFS_INCLUDE
 #define _COMMON_DEFS_INCLUDE
 
-#define WINDOW_WIDTH 960
-#define WINDOW_HEIGHT 591
+const int WINDOW_WIDTH = 960;
+const int WINDOW_HEIGHT = 591;
 
-#define CAMERA_WIDTH 320
-#define CAMERA_HEIGHT 197
+const int CAMERA_WIDTH = 320;
+const int CAMERA_HEIGHT = 197;
 
-#define LEVEL_WIDTH 320
-#define LEVEL_HEIGHT 160
+const int LEVEL_WIDTH = 320;
+const int LEVEL_HEIGHT = 160;
 
-#define UI_WIDTH 320
-#define UI_HEIGHT 37
+const int UI_WIDTH = 320;
+const int UI_HEIGHT = 37;
 
-#define SCROLL_WIDTH 5
+const int SCROLL_WIDTH = 5;
 
 const int UPDATE_EVENT = 1;
+
 
 enum PixelFormat {
     TEXTURE_PIXEL_FORMAT_RGB, TEXTURE_PIXEL_FORMAT_RGBA, TEXTURE_PIXEL_FORMAT_L

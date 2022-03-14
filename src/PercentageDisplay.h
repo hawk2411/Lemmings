@@ -15,11 +15,11 @@ public:
     void setPosition(glm::vec2 newPosition);
 
 private:
-    glm::vec2 position;
-    std::unique_ptr<Sprite> firstNum;
-    std::unique_ptr<Sprite> secondNum;
-    std::unique_ptr<Sprite> thirdNum;
-    std::unique_ptr<Sprite> percentage;
+    glm::vec2 _position;
+    std::unique_ptr<Sprite> _firstNum;
+    std::unique_ptr<Sprite> _secondNum;
+    std::unique_ptr<Sprite> _thirdNum;
+    std::unique_ptr<Sprite> _percentage;
 
 };
 

@@ -23,8 +23,7 @@ public:
     void setCrossCursor();
 
 private:
-    glm::vec2 position = {};
-    std::unique_ptr<Sprite> cursorSprite = nullptr;
+    std::unique_ptr<Sprite> _cursorSprite;
 };
 
 
