@@ -82,10 +82,6 @@ public:
         RIGHT_MOUSE_PRESSED
     };
 
-
-
-    void update();
-
     void onKeyPressed(const SDL_KeyboardEvent &keyboardEvent) override;
 
     void changeLevel(const LevelIndex &levelIndex);
@@ -104,6 +100,8 @@ private:
     void initMap();
 
     void initUI();
+
+    void update();
 
     void updateUI();
 
