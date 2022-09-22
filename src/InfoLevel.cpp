@@ -58,7 +58,7 @@ void InfoLevel::render() {
 
 void InfoLevel::initTextures() {
 
-    _infoLevelTexture.loadFromFile("images/levels/" + LevelModes::convertToString(_levelIndex.mode) + to_string(_levelIndex.levelNo) + "/info.png", TEXTURE_PIXEL_FORMAT_RGBA);
+    _infoLevelTexture.loadFromFile("images/levels/" + LevelModes::convertToString(_levelIndex.mode) + to_string(_levelIndex.levelNo) + "/info.png", PixelFormat::TEXTURE_PIXEL_FORMAT_RGBA);
     _infoLevelTexture.setMinFilter(GL_NEAREST);
     _infoLevelTexture.setMagFilter(GL_NEAREST);
 

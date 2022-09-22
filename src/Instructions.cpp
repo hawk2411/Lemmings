@@ -13,7 +13,7 @@ Instructions::Instructions(Game *game) : actualPage(0),
 
     _leftKey = KeyFactory::createLeftKey(&_shaderManager->getShaderProgram());
     _rightKey = KeyFactory::createRightKey(&_shaderManager->getShaderProgram());
-    _instructionsLevelTexture.loadFromFile("images/menu/menuBackground.png", TEXTURE_PIXEL_FORMAT_RGBA);
+    _instructionsLevelTexture.loadFromFile("images/menu/menuBackground.png", PixelFormat::TEXTURE_PIXEL_FORMAT_RGBA);
     _instructionsLevelTexture.setMinFilter(GL_NEAREST);
     _instructionsLevelTexture.setMagFilter(GL_NEAREST);
     _instructionsWord = make_unique<Word>("INSTRUCTIONS", _shaderManager);

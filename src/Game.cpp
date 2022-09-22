@@ -41,72 +41,72 @@ void Game::render() {
 
 void Game::initSpriteSheets() {
 
-    Game::spriteSheets().greenNumLetters.loadFromFile("images/UI/lemm_font.png", TEXTURE_PIXEL_FORMAT_RGBA);
+    Game::spriteSheets().greenNumLetters.loadFromFile("images/UI/lemm_font.png", PixelFormat::TEXTURE_PIXEL_FORMAT_RGBA);
     Game::spriteSheets().greenNumLetters.setMinFilter(GL_NEAREST);
     Game::spriteSheets().greenNumLetters.setMagFilter(GL_NEAREST);
 
-    Game::spriteSheets().cursorSprites.loadFromFile("images/UI/cursor.png", TEXTURE_PIXEL_FORMAT_RGBA);
+    Game::spriteSheets().cursorSprites.loadFromFile("images/UI/cursor.png", PixelFormat::TEXTURE_PIXEL_FORMAT_RGBA);
     Game::spriteSheets().cursorSprites.setMinFilter(GL_NEAREST);
     Game::spriteSheets().cursorSprites.setMagFilter(GL_NEAREST);
 
-    Game::spriteSheets().lemmingAnimations.loadFromFile("images/lemming_anim.png", TEXTURE_PIXEL_FORMAT_RGBA);
+    Game::spriteSheets().lemmingAnimations.loadFromFile("images/lemming_anim.png", PixelFormat::TEXTURE_PIXEL_FORMAT_RGBA);
     Game::spriteSheets().lemmingAnimations.setMinFilter(GL_NEAREST);
     Game::spriteSheets().lemmingAnimations.setMagFilter(GL_NEAREST);
 
     Game::spriteSheets().rotatedLemmingAnimations.loadFromFile("images/rotated_lemming_anim.png",
-                                                               TEXTURE_PIXEL_FORMAT_RGBA);
+                                                               PixelFormat::TEXTURE_PIXEL_FORMAT_RGBA);
     Game::spriteSheets().rotatedLemmingAnimations.setMinFilter(GL_NEAREST);
     Game::spriteSheets().rotatedLemmingAnimations.setMagFilter(GL_NEAREST);
 
-    Game::spriteSheets().doorSprites.loadFromFile("images/levels/lemming_doors.png", TEXTURE_PIXEL_FORMAT_RGBA);
+    Game::spriteSheets().doorSprites.loadFromFile("images/levels/lemming_doors.png", PixelFormat::TEXTURE_PIXEL_FORMAT_RGBA);
     Game::spriteSheets().doorSprites.setMinFilter(GL_NEAREST);
     Game::spriteSheets().doorSprites.setMagFilter(GL_NEAREST);
 
-    Game::spriteSheets().trapdoorSprites.loadFromFile("images/levels/lemming_trapdoors.png", TEXTURE_PIXEL_FORMAT_RGBA);
+    Game::spriteSheets().trapdoorSprites.loadFromFile("images/levels/lemming_trapdoors.png", PixelFormat::TEXTURE_PIXEL_FORMAT_RGBA);
     Game::spriteSheets().trapdoorSprites.setMinFilter(GL_NEAREST);
     Game::spriteSheets().trapdoorSprites.setMagFilter(GL_NEAREST);
 
-    Game::spriteSheets().buttonSprites.loadFromFile("images/UI/buttons.png", TEXTURE_PIXEL_FORMAT_RGBA);
+    Game::spriteSheets().buttonSprites.loadFromFile("images/UI/buttons.png", PixelFormat::TEXTURE_PIXEL_FORMAT_RGBA);
     Game::spriteSheets().buttonSprites.setMinFilter(GL_NEAREST);
     Game::spriteSheets().buttonSprites.setMagFilter(GL_NEAREST);
 
-    Game::spriteSheets().numSprites.loadFromFile("images/UI/nums.png", TEXTURE_PIXEL_FORMAT_RGBA);
+    Game::spriteSheets().numSprites.loadFromFile("images/UI/nums.png", PixelFormat::TEXTURE_PIXEL_FORMAT_RGBA);
     Game::spriteSheets().numSprites.setMinFilter(GL_NEAREST);
     Game::spriteSheets().numSprites.setMagFilter(GL_NEAREST);
 
-    Game::spriteSheets().greenNumSprites.loadFromFile("images/UI/green_nums.png", TEXTURE_PIXEL_FORMAT_RGBA);
+    Game::spriteSheets().greenNumSprites.loadFromFile("images/UI/green_nums.png", PixelFormat::TEXTURE_PIXEL_FORMAT_RGBA);
     Game::spriteSheets().greenNumSprites.setMinFilter(GL_NEAREST);
     Game::spriteSheets().greenNumSprites.setMagFilter(GL_NEAREST);
 
-    Game::spriteSheets().purpleNumSprites.loadFromFile("images/results/pink_nums.png", TEXTURE_PIXEL_FORMAT_RGBA);
+    Game::spriteSheets().purpleNumSprites.loadFromFile("images/results/pink_nums.png", PixelFormat::TEXTURE_PIXEL_FORMAT_RGBA);
     Game::spriteSheets().purpleNumSprites.setMinFilter(GL_NEAREST);
     Game::spriteSheets().purpleNumSprites.setMagFilter(GL_NEAREST);
 
-    Game::spriteSheets().jobNamesSprites.loadFromFile("images/UI/work_names.png", TEXTURE_PIXEL_FORMAT_RGBA);
+    Game::spriteSheets().jobNamesSprites.loadFromFile("images/UI/work_names.png", PixelFormat::TEXTURE_PIXEL_FORMAT_RGBA);
     Game::spriteSheets().jobNamesSprites.setMinFilter(GL_NEAREST);
     Game::spriteSheets().jobNamesSprites.setMagFilter(GL_NEAREST);
 
-    Game::spriteSheets().infoWordSprites.loadFromFile("images/UI/reserved_words.png", TEXTURE_PIXEL_FORMAT_RGBA);
+    Game::spriteSheets().infoWordSprites.loadFromFile("images/UI/reserved_words.png", PixelFormat::TEXTURE_PIXEL_FORMAT_RGBA);
     Game::spriteSheets().infoWordSprites.setMinFilter(GL_NEAREST);
     Game::spriteSheets().infoWordSprites.setMagFilter(GL_NEAREST);
 
-    Game::spriteSheets().resultsWordSprites.loadFromFile("images/results/buttons.png", TEXTURE_PIXEL_FORMAT_RGBA);
+    Game::spriteSheets().resultsWordSprites.loadFromFile("images/results/buttons.png", PixelFormat::TEXTURE_PIXEL_FORMAT_RGBA);
     Game::spriteSheets().resultsWordSprites.setMinFilter(GL_NEAREST);
     Game::spriteSheets().resultsWordSprites.setMagFilter(GL_NEAREST);
 
-    Game::spriteSheets().stepSprite.loadFromFile("images/builderStep.png", TEXTURE_PIXEL_FORMAT_RGBA);
+    Game::spriteSheets().stepSprite.loadFromFile("images/builderStep.png", PixelFormat::TEXTURE_PIXEL_FORMAT_RGBA);
     Game::spriteSheets().stepSprite.setMinFilter(GL_NEAREST);
     Game::spriteSheets().stepSprite.setMagFilter(GL_NEAREST);
 
-    Game::spriteSheets().keySprites.loadFromFile("images/keys.png", TEXTURE_PIXEL_FORMAT_RGBA);
+    Game::spriteSheets().keySprites.loadFromFile("images/keys.png", PixelFormat::TEXTURE_PIXEL_FORMAT_RGBA);
     Game::spriteSheets().keySprites.setMinFilter(GL_NEAREST);
     Game::spriteSheets().keySprites.setMagFilter(GL_NEAREST);
 
-    Game::spriteSheets().particleSprites.loadFromFile("images/particles.png", TEXTURE_PIXEL_FORMAT_RGBA);
+    Game::spriteSheets().particleSprites.loadFromFile("images/particles.png", PixelFormat::TEXTURE_PIXEL_FORMAT_RGBA);
     Game::spriteSheets().particleSprites.setMinFilter(GL_NEAREST);
     Game::spriteSheets().particleSprites.setMagFilter(GL_NEAREST);
 
-    Game::spriteSheets().skullSprite.loadFromFile("images/UI/skull.png", TEXTURE_PIXEL_FORMAT_RGBA);
+    Game::spriteSheets().skullSprite.loadFromFile("images/UI/skull.png", PixelFormat::TEXTURE_PIXEL_FORMAT_RGBA);
     Game::spriteSheets().skullSprite.setMinFilter(GL_NEAREST);
     Game::spriteSheets().skullSprite.setMagFilter(GL_NEAREST);
 }

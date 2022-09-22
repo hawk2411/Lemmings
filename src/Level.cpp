@@ -86,11 +86,11 @@ void Level::initFromFile(const string &file) {
         }
         ++lineCount;
     }
-    levelTexture.loadFromFile(_mapTexturePath, TEXTURE_PIXEL_FORMAT_RGBA);
+    levelTexture.loadFromFile(_mapTexturePath, PixelFormat::TEXTURE_PIXEL_FORMAT_RGBA);
     levelTexture.setMinFilter(GL_NEAREST);
     levelTexture.setMagFilter(GL_NEAREST);
 
-    maskedMap.loadFromFile(_mapMaskPath, TEXTURE_PIXEL_FORMAT_L);
+    maskedMap.loadFromFile(_mapMaskPath, PixelFormat::TEXTURE_PIXEL_FORMAT_L);
     maskedMap.setMinFilter(GL_NEAREST);
     maskedMap.setMagFilter(GL_NEAREST);
 

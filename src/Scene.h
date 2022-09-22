@@ -101,7 +101,7 @@ private:
 
     void initUI();
 
-    void update();
+    void updateCursor();
 
     void updateUI();
 

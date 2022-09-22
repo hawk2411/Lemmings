@@ -68,31 +68,31 @@ void Menu::render() {
 
 void Menu::initTextures() {
 
-    _menuTexture.loadFromFile("images/menu/menuBackground.png", TEXTURE_PIXEL_FORMAT_RGBA);
+    _menuTexture.loadFromFile("images/menu/menuBackground.png", PixelFormat::TEXTURE_PIXEL_FORMAT_RGBA);
     _menuTexture.setMinFilter(GL_NEAREST);
     _menuTexture.setMagFilter(GL_NEAREST);
 
-    _menuLogoTexture.loadFromFile("images/menu/logo.png", TEXTURE_PIXEL_FORMAT_RGBA);
+    _menuLogoTexture.loadFromFile("images/menu/logo.png", PixelFormat::TEXTURE_PIXEL_FORMAT_RGBA);
     _menuLogoTexture.setMinFilter(GL_NEAREST);
     _menuLogoTexture.setMagFilter(GL_NEAREST);
 
-    _menuAboutTexture.loadFromFile("images/menu/aboutSprite.png", TEXTURE_PIXEL_FORMAT_RGBA);
+    _menuAboutTexture.loadFromFile("images/menu/aboutSprite.png", PixelFormat::TEXTURE_PIXEL_FORMAT_RGBA);
     _menuAboutTexture.setMinFilter(GL_NEAREST);
     _menuAboutTexture.setMagFilter(GL_NEAREST);
 
-    _menuHelpTexture.loadFromFile("images/menu/helpSprite.png", TEXTURE_PIXEL_FORMAT_RGBA);
+    _menuHelpTexture.loadFromFile("images/menu/helpSprite.png", PixelFormat::TEXTURE_PIXEL_FORMAT_RGBA);
     _menuHelpTexture.setMinFilter(GL_NEAREST);
     _menuHelpTexture.setMagFilter(GL_NEAREST);
 
-    _menuExitTexture.loadFromFile("images/menu/exitSprite.png", TEXTURE_PIXEL_FORMAT_RGBA);
+    _menuExitTexture.loadFromFile("images/menu/exitSprite.png", PixelFormat::TEXTURE_PIXEL_FORMAT_RGBA);
     _menuExitTexture.setMinFilter(GL_NEAREST);
     _menuExitTexture.setMagFilter(GL_NEAREST);
 
-    _menuModeTexture.loadFromFile("images/menu/modeSpriteSheet.png", TEXTURE_PIXEL_FORMAT_RGBA);
+    _menuModeTexture.loadFromFile("images/menu/modeSpriteSheet.png", PixelFormat::TEXTURE_PIXEL_FORMAT_RGBA);
     _menuModeTexture.setMinFilter(GL_NEAREST);
     _menuModeTexture.setMagFilter(GL_NEAREST);
 
-    _menuPlayingTexture.loadFromFile("images/menu/player1Sprite.png", TEXTURE_PIXEL_FORMAT_RGBA);
+    _menuPlayingTexture.loadFromFile("images/menu/player1Sprite.png", PixelFormat::TEXTURE_PIXEL_FORMAT_RGBA);
     _menuPlayingTexture.setMinFilter(GL_NEAREST);
     _menuPlayingTexture.setMagFilter(GL_NEAREST);
 }

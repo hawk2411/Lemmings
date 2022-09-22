@@ -43,9 +43,10 @@ void Scene::init() {
 }
 
 void Scene::update(int deltaTime) {
-    update();
+    updateCursor();
     _maskManagers[_currentDifficultyMode].get()->update(deltaTime);
 
+    //_scroller.isScrolled is set by the updateCursor() function
     if (_scroller.isScrolled()) {
         initMap();
         _scroller.setScroll(false);
@@ -138,7 +139,7 @@ void Scene::updateUI() {
     _ui.update(_levelRunner.get());
 }
 
-void Scene::update() {
+void Scene::updateCursor() {
     updateCursorPosition();
 
     if (_screenMovedArea == ScreenMovedArea::SCROLL_AREA_LEFT) {
@@ -154,15 +155,15 @@ void Scene::update() {
         return;
     }
     if (_screenMovedArea == ScreenMovedArea::LEVEL) {
+        //game main place
         int lemmingIndex = _levelRunner->getLemmingIndexInPos(_posX, _posY);
         _ui.changeDisplayedJob(_levelRunner->getLemmingJobNameIndex(lemmingIndex));
 
+        //is a lemming under the cursor
         if (lemmingIndex != -1) {
             _cursor.setFocusCursor();
-        } else {
-            _cursor.setCrossCursor();
+            return;
         }
-        return;
     }
     _cursor.setCrossCursor();
 

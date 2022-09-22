@@ -24,15 +24,15 @@ bool Texture::loadFromFile(const string &filename, PixelFormat format) {
     std::unique_ptr<unsigned char, decltype(&SOIL_free_image_data)> image(nullptr, SOIL_free_image_data);
 
     switch (format) {
-        case TEXTURE_PIXEL_FORMAT_RGB:
+        case PixelFormat::TEXTURE_PIXEL_FORMAT_RGB:
             image = std::unique_ptr<unsigned char, decltype(&SOIL_free_image_data)>(SOIL_load_image(filename.c_str(), &_widthTex, &_heightTex, nullptr, SOIL_LOAD_RGB),
                                                     SOIL_free_image_data);
             break;
-        case TEXTURE_PIXEL_FORMAT_RGBA:
+        case PixelFormat::TEXTURE_PIXEL_FORMAT_RGBA:
             image = std::unique_ptr<unsigned char, decltype(&SOIL_free_image_data)>(SOIL_load_image(filename.c_str(), &_widthTex, &_heightTex, nullptr, SOIL_LOAD_RGBA),
                                                                                     SOIL_free_image_data);
             break;
-        case TEXTURE_PIXEL_FORMAT_L:
+        case PixelFormat::TEXTURE_PIXEL_FORMAT_L:
             break;
     }
     if (!image)
@@ -41,13 +41,13 @@ bool Texture::loadFromFile(const string &filename, PixelFormat format) {
     glGenTextures(1, &_texId);
     glBindTexture(GL_TEXTURE_2D, _texId);
     switch (format) {
-        case TEXTURE_PIXEL_FORMAT_RGB:
+        case PixelFormat::TEXTURE_PIXEL_FORMAT_RGB:
             glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, _widthTex, _heightTex, 0, GL_RGB, GL_UNSIGNED_BYTE, image.get());
             break;
-        case TEXTURE_PIXEL_FORMAT_RGBA:
+        case PixelFormat::TEXTURE_PIXEL_FORMAT_RGBA:
             glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, _widthTex, _heightTex, 0, GL_RGBA, GL_UNSIGNED_BYTE, image.get());
             break;
-        case TEXTURE_PIXEL_FORMAT_L:
+        case PixelFormat::TEXTURE_PIXEL_FORMAT_L:
             break;
     }
     glGenerateMipmap(GL_TEXTURE_2D);

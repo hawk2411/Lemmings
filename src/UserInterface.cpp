@@ -8,7 +8,7 @@
 UserInterface::UserInterface(ShaderManager *shaderManager):
             _shaderManager(shaderManager), _position(0,0), _selectedButton(0) {
 
-    _backgroundTexture.loadFromFile("images/UI/black_frame.png", TEXTURE_PIXEL_FORMAT_RGBA);
+    _backgroundTexture.loadFromFile("images/UI/black_frame.png", PixelFormat::TEXTURE_PIXEL_FORMAT_RGBA);
     _backgroundTexture.setMinFilter(GL_NEAREST);
     _backgroundTexture.setMagFilter(GL_NEAREST);
 
@@ -21,7 +21,7 @@ UserInterface::UserInterface(ShaderManager *shaderManager):
     _inWord = PredefinedWordFactory::createInfoWord("IN", &_shaderManager->getShaderProgram());
 
     _timeWord = PredefinedWordFactory::createInfoWord("TIME", &_shaderManager->getShaderProgram());
-    _selectFrameTexture.loadFromFile("images/UI/white_frame.png", TEXTURE_PIXEL_FORMAT_RGBA);
+    _selectFrameTexture.loadFromFile("images/UI/white_frame.png", PixelFormat::TEXTURE_PIXEL_FORMAT_RGBA);
     _selectFrameTexture.setMinFilter(GL_NEAREST);
     _selectFrameTexture.setMagFilter(GL_NEAREST);
 

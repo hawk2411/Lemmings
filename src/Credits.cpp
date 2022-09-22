@@ -8,7 +8,7 @@
 Credits::Credits(Game *game) : GameState(game), _shaderManager(_game->getShaderManager()),
                                _music(createMusic("sounds/CreditsSong.ogg")) {
 
-    _creditsLevelTexture.loadFromFile("images/credits.png", TEXTURE_PIXEL_FORMAT_RGBA);
+    _creditsLevelTexture.loadFromFile("images/credits.png", PixelFormat::TEXTURE_PIXEL_FORMAT_RGBA);
     _creditsLevelTexture.setMinFilter(GL_NEAREST);
     _creditsLevelTexture.setMagFilter(GL_NEAREST);
 

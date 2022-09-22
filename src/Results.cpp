@@ -94,7 +94,7 @@ void Results::setPercentages(int goalPercentage, int currentPercentage) {
         }
     }
 
-    _backgroundTexture.loadFromFile(texturePath, TEXTURE_PIXEL_FORMAT_RGBA);
+    _backgroundTexture.loadFromFile(texturePath, PixelFormat::TEXTURE_PIXEL_FORMAT_RGBA);
     _backgroundTexture.setMinFilter(GL_NEAREST);
     _backgroundTexture.setMagFilter(GL_NEAREST);
 
