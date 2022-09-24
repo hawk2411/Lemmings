@@ -8,7 +8,7 @@
 class TrapdoorFactory {
 
 public:
-    static Trapdoor *createTrapdoor(const string &type, ShaderManager *shaderManager);
+    static std::unique_ptr<Trapdoor> createTrapdoor(const string &type, ShaderManager *shaderManager);
 
 };
 

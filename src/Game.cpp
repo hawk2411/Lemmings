@@ -1,5 +1,4 @@
 #include <memory>
-#include "EventCreator.h"
 
 #include "Game.h"
 

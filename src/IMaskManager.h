@@ -7,6 +7,8 @@ class IMaskManager {
 public:
     explicit IMaskManager(Level *level) : _level(level) {}
 
+    virtual ~IMaskManager() = default;
+
     virtual void init() = 0;
 
     virtual void update(int time) = 0;

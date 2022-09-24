@@ -37,19 +37,17 @@ void TimerEventService::stopEvents() {
 /* with the same code as before: */
 Uint32 TimerEventService::TimerCallback(Uint32 interval, void *param)
 {
+    TimerEventService::_interval = interval;
 
     SDL_Event event;
     SDL_UserEvent userevent;
-    TimerEventService::_interval = interval;
     /* In this example, our callback pushes a function
     into the queue, and causes our callback to be called again at the
     same interval: */
     SDL_memset(&userevent, 0, sizeof(userevent));
     userevent.type = SDL_USEREVENT;
-    userevent.code = *(Sint32* )param;  //copy int;
-
+    userevent.code = *static_cast<Sint32*>(param);  //copy int;
     userevent.data1 = &_interval;
-
     event.type = SDL_USEREVENT;
     event.user = userevent;
 

@@ -6,32 +6,32 @@
 
 class JobFactory {
 private:
-    static Job *createWalkerJob();
+    static std::unique_ptr<Job> createWalkerJob();
 
-    static Job *createDiggerJob();
+    static std::unique_ptr<Job> createDiggerJob();
 
-    static Job *createEscaperJob();
+    static std::unique_ptr<Job> createEscaperJob();
 
-    static Job *createExploderJob(ParticleSystemManager* particleSystemManager);
+    static std::unique_ptr<Job> createExploderJob(ParticleSystemManager* particleSystemManager);
 
-    static Job *createMinerJob();
+    static std::unique_ptr<Job> createMinerJob();
 
-    static Job *createFloaterJob();
+    static std::unique_ptr<Job> createFloaterJob();
 
-    static Job *createBasherJob();
+    static std::unique_ptr<Job> createBasherJob();
 
-    static Job *createBlockerJob();
+    static std::unique_ptr<Job> createBlockerJob();
 
-    static Job *createFallerJob();
+    static std::unique_ptr<Job> createFallerJob();
 
-    static Job *createClimberJob();
+    static std::unique_ptr<Job> createClimberJob();
 
-    static Job *createBuilderJob();
+    static std::unique_ptr<Job> createBuilderJob();
 
 
 public:
 
-    static Job *createJob(Jobs jobToCreate, ParticleSystemManager* particleSystemManager);
+    static std::unique_ptr<Job> createJob(Jobs jobToCreate, ParticleSystemManager* particleSystemManager);
 };
 
 

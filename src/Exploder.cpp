@@ -1,7 +1,6 @@
 #include "Game.h"
 #include "Utils.h"
 #include "ParticleSystemManager.h"
-#include "EventCreator.h"
 #include "Exploder.h"
 
 enum ExploderAnims {

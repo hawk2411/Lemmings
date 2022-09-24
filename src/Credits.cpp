@@ -1,8 +1,8 @@
+#include "UserEvent.h"
 #include "Credits.h"
 #include "ShaderManager.h"
 #include "Game.h"
 #include "StateManager.h"
-#include "EventCreator.h"
 #include "MusicFabric.hpp"
 
 Credits::Credits(Game *game) : GameState(game), _shaderManager(_game->getShaderManager()),
@@ -46,7 +46,7 @@ void Credits::mouseMoved(int mouseX, int mouseY, bool bLeftButton, bool bRightBu
 
 void Credits::onKeyPressed(const SDL_KeyboardEvent &keyboardEvent) {
     if (keyboardEvent.keysym.sym == SDLK_ESCAPE) {
-        EventCreator::sendSimpleUserEvent(CHANGE_TO_MENU, nullptr, nullptr);
+        UserEvent<CHANGE_TO_MENU>::sendEvent();
         endMusic();
     }
 }

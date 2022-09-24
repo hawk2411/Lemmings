@@ -13,51 +13,51 @@
 #include "Builder.h"
 
 
-Job *JobFactory::createWalkerJob() {
-    return new Walker();
+std::unique_ptr<Job> JobFactory::createWalkerJob() {
+    return std::make_unique<Walker>();
 }
 
-Job *JobFactory::createDiggerJob() {
-    return new Digger();
+std::unique_ptr<Job> JobFactory::createDiggerJob() {
+    return std::make_unique<Digger>();
 }
 
-Job *JobFactory::createEscaperJob() {
-    return new Escaper();
+std::unique_ptr<Job> JobFactory::createEscaperJob() {
+    return std::make_unique<Escaper>();
     }
 
-Job *JobFactory::createExploderJob( ParticleSystemManager* particleSystemManager) {
-    return new Exploder(particleSystemManager);
+std::unique_ptr<Job> JobFactory::createExploderJob(ParticleSystemManager* particleSystemManager) {
+    return std::make_unique<Exploder>(particleSystemManager);
     }
 
-Job *JobFactory::createMinerJob() {
-    return new Miner();
+std::unique_ptr<Job> JobFactory::createMinerJob() {
+    return std::make_unique<Miner>();
     }
 
-Job *JobFactory::createFloaterJob() {
-    return new Floater();
+std::unique_ptr<Job> JobFactory::createFloaterJob() {
+    return std::make_unique<Floater>();
 }
 
-Job *JobFactory::createBasherJob() {
-    return new Basher();
+std::unique_ptr<Job> JobFactory::createBasherJob() {
+    return std::make_unique<Basher>();
 }
 
-Job *JobFactory::createBlockerJob() {
-    return new Blocker();
+std::unique_ptr<Job> JobFactory::createBlockerJob() {
+    return std::make_unique<Blocker>();
 }
 
-Job *JobFactory::createFallerJob() {
-    return new Faller();
+std::unique_ptr<Job> JobFactory::createFallerJob() {
+    return std::make_unique<Faller>();
 }
 
-Job *JobFactory::createClimberJob() {
-    return new Climber();
+std::unique_ptr<Job> JobFactory::createClimberJob() {
+    return std::make_unique<Climber>();
 }
 
-Job *JobFactory::createBuilderJob() {
-    return new Builder();
+std::unique_ptr<Job> JobFactory::createBuilderJob() {
+    return std::make_unique<Builder>();
 }
 
-Job *JobFactory::createJob(Jobs jobToCreate,  ParticleSystemManager* particleSystemManager) {
+std::unique_ptr<Job> JobFactory::createJob(Jobs jobToCreate, ParticleSystemManager* particleSystemManager) {
     switch(jobToCreate)
     {
         case Jobs::WALKER:

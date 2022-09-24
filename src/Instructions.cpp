@@ -1,8 +1,8 @@
+#include "UserEvent.h"
 #include "Instructions.h"
 #include "ShaderManager.h"
 #include "KeyFactory.h"
 #include "Game.h"
-#include "EventCreator.h"
 
 Instructions::Instructions(Game *game) : actualPage(0),
                                          _onlyLeft(false),
@@ -200,7 +200,7 @@ void Instructions::onKeyPressed(const SDL_KeyboardEvent &keyboardEvent) {
     switch (keyboardEvent.keysym.sym) {
         case SDLK_ESCAPE:
             endMusic();
-            EventCreator::sendSimpleUserEvent(CHANGE_TO_MENU, nullptr, nullptr);
+            UserEvent<CHANGE_TO_MENU>::sendEvent();
             break;
         case SDLK_RIGHT:
             passPageRight();

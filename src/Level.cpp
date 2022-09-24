@@ -40,13 +40,13 @@ void Level::initFromFile(const string &file) {
             }
 
             case 1: // NUM_LEMMINGS GOAL_LEMMINGS TIME(secs)
-                iss >> numLemmings >> goalLemmings >> time;
+                iss >> _numLemmings >> _goalLemmings >> _time;
                 break;
 
             case 2: //  RELEASE_RATE JOB_COUNT [CLIMBER, FLOATER, EXPLODER, BLOCKER, BUILDER, BASHER, MINER, DIGGER]
-                iss >> releaseRate;
-                minReleaseRate = releaseRate;
-                for(int & lemmingsCount : lemmingsProJob) {
+                iss >> _releaseRate;
+                _minReleaseRate = _releaseRate;
+                for(int & lemmingsCount : _lemmingsProJob) {
                     iss >> lemmingsCount;
                 }
                 break;
@@ -58,7 +58,7 @@ void Level::initFromFile(const string &file) {
                 iss >> trapdoorPosX >> trapdoorPosY >> trapdoorType;
 
                 _trapdoorPos = glm::vec2(trapdoorPosX, trapdoorPosY);
-                _trapdoor = std::unique_ptr<Trapdoor>(TrapdoorFactory::createTrapdoor(trapdoorType, _shaderManager));
+                _trapdoor = TrapdoorFactory::createTrapdoor(trapdoorType, _shaderManager);
                 break;
             }
             case 4: // DOOR_POS DOOR_TYPE(standard, egypt, maya, hell)
@@ -68,7 +68,7 @@ void Level::initFromFile(const string &file) {
                 iss >> doorPosX >> doorPosY >> doorType;
 
                 _doorPos = glm::vec2(doorPosX, doorPosY);
-                _door = unique_ptr<Door>(DoorFactory::createDoor(doorType, _shaderManager));
+                _door = DoorFactory::createDoor(doorType, _shaderManager);
                 break;
             }
             case 5: // LEVEL CAMERA POS

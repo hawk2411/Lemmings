@@ -5,7 +5,7 @@
 #include "Utils.h"
 #include "HardMaskManager.h"
 #include "EasyMaskManager.h"
-#include "EventCreator.h"
+#include "UserEvent.h"
 
 #include "Scene.h"
 #include "LevelIndex.h"
@@ -66,12 +66,14 @@ void Scene::update(int deltaTime) {
 
     if (_levelRunner->finished() && _particleSystemManager.finished()) {
         _levelRunner->endMusic();
-        auto *resultStatistic = new ResultStatistic{_levelRunner->getPercentageTotalLemmings(),
-                                                    _levelRunner->getPercentageSavedLemmings()};
-        auto *levelIndex = new LevelIndex{_levelRunner->getActualMode(), _levelRunner->getActualLevel()};
 
-
-        EventCreator::sendSimpleUserEvent(CHANGE_TO_RESULT, resultStatistic, levelIndex);
+        UserEvent<CHANGE_TO_RESULT, ResultStatistic, LevelIndex>::sendEvent(
+                new ResultStatistic {
+                    _levelRunner->getPercentageTotalLemmings(),
+                    _levelRunner->getPercentageSavedLemmings()},
+                    new LevelIndex{_levelRunner->getActualMode(),
+                                   _levelRunner->getActualLevel() }
+                    );
     }
 
 }
@@ -333,12 +335,12 @@ void Scene::activateButton(int buttonIndex) {
 
     switch (buttonIndex) {
         case Button::MINUS_BUTTON:
-            if (_levelRunner->getLevelAttributes()->releaseRate) {
+            if (_levelRunner->getLevelAttributes()->_releaseRate) {
                 _levelRunner->decreaseReleaseRate();
             }
             break;
         case Button::PLUS_BUTTON:
-            if (_levelRunner->getLevelAttributes()->releaseRate) {
+            if (_levelRunner->getLevelAttributes()->_releaseRate) {
                 _levelRunner->increaseReleaseRate();
             }
             break;
@@ -404,6 +406,6 @@ void Scene::activateButton(int buttonIndex) {
 }
 
 int Scene::getSelectedButtonJobCount() {
-    return _levelRunner->getLevelAttributes()->lemmingsProJob[_ui.getSelectedButton() - 2];
+    return _levelRunner->getLevelAttributes()->_lemmingsProJob[_ui.getSelectedButton() - 2];
 }
 

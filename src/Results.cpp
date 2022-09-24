@@ -1,8 +1,8 @@
+#include "UserEvent.h"
 #include "Texture.h"
 #include "Game.h"
 #include "ShaderManager.h"
 #include "LevelRunner.h"
-#include "EventCreator.h"
 
 #include "Results.h"
 #include "LevelIndex.h"
@@ -186,7 +186,7 @@ void Results::onKeyPressed(const SDL_KeyboardEvent &keyboardEvent) {
 
             switch (selected) {
                 case 0: // RETRY
-                    EventCreator::sendSimpleUserEvent(CHANGE_TO_INFO, new LevelIndex(_levelIndex));
+                    UserEvent<CHANGE_TO_INFO, LevelIndex>::sendEvent(new LevelIndex(_levelIndex));
                     break;
 
                 case 1: // CONTINUE
@@ -194,34 +194,34 @@ void Results::onKeyPressed(const SDL_KeyboardEvent &keyboardEvent) {
                     switch (_levelIndex.mode) {
                         case LevelModes::Mode::FUN_MODE:
                             if (_levelIndex.levelNo < 4) {
-                                EventCreator::sendSimpleUserEvent(CHANGE_TO_INFO,
-                                                                  new LevelIndex{ _levelIndex.mode, _levelIndex.levelNo+1});
+                                UserEvent<CHANGE_TO_INFO, LevelIndex>::sendEvent(
+                                        new LevelIndex{ _levelIndex.mode, _levelIndex.levelNo+1});
                                 break;
                             }
                             if (_levelIndex.levelNo == 4) {
-                                EventCreator::sendSimpleUserEvent(CHANGE_TO_INFO,
+                                UserEvent<CHANGE_TO_INFO, LevelIndex>::sendEvent(
                                                                   new LevelIndex { _levelIndex.mode, 7});
                                 break;
                             }
-                            EventCreator::sendSimpleUserEvent(CHANGE_TO_INFO, new LevelIndex{LevelModes::Mode::TRICKY_MODE , 1});
+                            UserEvent<CHANGE_TO_INFO, LevelIndex>::sendEvent(new LevelIndex{LevelModes::Mode::TRICKY_MODE , 1});
 
                             break;
                         case LevelModes::Mode::TRICKY_MODE:
                             if (_levelIndex.levelNo < 3) {
-                                EventCreator::sendSimpleUserEvent(CHANGE_TO_INFO, new LevelIndex{_levelIndex.mode, _levelIndex.levelNo});
+                                UserEvent<CHANGE_TO_INFO, LevelIndex>::sendEvent(new LevelIndex{_levelIndex.mode, _levelIndex.levelNo});
                             } else {
-                                EventCreator::sendSimpleUserEvent(CHANGE_TO_INFO, new LevelIndex{LevelModes::Mode::TAXING_MODE, 1});
+                                UserEvent<CHANGE_TO_INFO, LevelIndex>::sendEvent( new LevelIndex{LevelModes::Mode::TAXING_MODE, 1});
                             }
                             break;
                         case LevelModes::Mode::TAXING_MODE:
-                            EventCreator::sendSimpleUserEvent(CHANGE_TO_MENU);
+                            UserEvent<CHANGE_TO_MENU>::sendEvent();
                             break;
                     }
 
                     break;
 
                 case 2: // MENU
-                    EventCreator::sendSimpleUserEvent(CHANGE_TO_MENU);
+                    UserEvent<CHANGE_TO_MENU>::sendEvent();
                     break;
                 default:
                     break;

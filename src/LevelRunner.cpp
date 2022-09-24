@@ -34,11 +34,11 @@ void LevelRunner::changeLevel(const LevelIndex &levelIndex) {
 
     clearLemmings();
 
-    _releaseRate = _levelStartValues->releaseRate;
+    _releaseRate = _levelStartValues->_releaseRate;
     _currentTime = 0.0f;
     _lastTimeSpawnedLemming = -3500;
 
-    _availableLemmings = _levelStartValues->numLemmings;
+    _availableLemmings = _levelStartValues->_numLemmings;
     _spawningLemmings = true;
 
     _deadLemmings = 0;
@@ -56,7 +56,7 @@ void LevelRunner::changeLevel(const LevelIndex &levelIndex) {
 void LevelRunner::update(int deltaTime, IMaskManager *currentMask) {
     _currentTime += static_cast<float>(deltaTime);
 
-    if (static_cast<int>(_currentTime / 1000 ) >= _levelStartValues->time) {
+    if (static_cast<int>(_currentTime / 1000 ) >= _levelStartValues->_time) {
         finishLevel();
     }
 
@@ -80,7 +80,7 @@ void LevelRunner::update(int deltaTime, IMaskManager *currentMask) {
     _levelStartValues->_door->update(deltaTime);
     _levelStartValues->_trapdoor->update(deltaTime);
 
-    if (_savedLemmings + _deadLemmings == _levelStartValues->numLemmings) {
+    if (_savedLemmings + _deadLemmings == _levelStartValues->_numLemmings) {
         finishLevel();
     }
 }
@@ -117,11 +117,11 @@ int LevelRunner::getNumLemmingsAlive() const {
 }
 
 int LevelRunner::getPercentageSavedLemmings()const {
-    return _savedLemmings / _levelStartValues->numLemmings * 100;
+    return _savedLemmings / _levelStartValues->_numLemmings * 100;
 }
 
 int LevelRunner::getPercentageTotalLemmings()const {
-    return _levelStartValues->goalLemmings;
+    return _levelStartValues->_goalLemmings;
 }
 
 void LevelRunner::stopSpawningLemmings() {
@@ -133,7 +133,7 @@ int LevelRunner::getCurrentTime() const {
 }
 
 int LevelRunner::getRemainingTime() {
-    return _levelStartValues->time - getCurrentTime();
+    return _levelStartValues->_time - getCurrentTime();
 }
 
 
@@ -165,12 +165,12 @@ int LevelRunner::getReleaseRate() const {
 }
 
 int LevelRunner::getMinReleaseRate() const {
-    return _levelStartValues->minReleaseRate;
+    return _levelStartValues->_minReleaseRate;
 }
 
 
 void LevelRunner::decreaseReleaseRate() {
-    _releaseRate = Utils::max(_levelStartValues->minReleaseRate, _releaseRate - 5);
+    _releaseRate = Utils::max(_levelStartValues->_minReleaseRate, _releaseRate - 5);
 }
 
 void LevelRunner::increaseReleaseRate() {
@@ -256,11 +256,11 @@ void LevelRunner::renderLemmings() {
 
 
 int LevelRunner::getJobCount(int index) {
-    return _levelStartValues->lemmingsProJob[index];
+    return _levelStartValues->_lemmingsProJob[index];
 }
 
 void LevelRunner::decreaseJobCount(int index) {
-    --_levelStartValues->lemmingsProJob[index];
+    --_levelStartValues->_lemmingsProJob[index];
 }
 
 

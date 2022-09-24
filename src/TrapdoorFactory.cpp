@@ -3,12 +3,12 @@
 #include "TrapdoorStandard.h"
 #include "TrapdoorHell.h"
 
-Trapdoor *TrapdoorFactory::createTrapdoor(const string &type, ShaderManager *shaderManager) {
+std::unique_ptr<Trapdoor> TrapdoorFactory::createTrapdoor(const string &type, ShaderManager *shaderManager) {
     if (type == "standard") {
-        return  new TrapdoorStandard(shaderManager);
+        return  std::make_unique<TrapdoorStandard>(shaderManager);
     }
     if (type == "hell") {
-        return new TrapdoorHell(shaderManager);
+        return std::make_unique<TrapdoorHell>(shaderManager);
     }
     throw LemmingsException("Unknown trap door type.");
 }

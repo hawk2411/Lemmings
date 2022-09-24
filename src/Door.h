@@ -10,6 +10,8 @@ class Door {
 public:
     explicit Door(ShaderManager *shaderManager);
 
+    virtual ~Door() = default;
+
     virtual void init() = 0;
 
     void update(int deltaTime);

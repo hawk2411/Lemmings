@@ -5,9 +5,16 @@ project(lemmings)
 # configure_file(${CMAKE_CURRENT_SOURCE_DIR}/shaders/basic_vert.glsl ${CMAKE_CURRENT_BINARY_DIR}/shaders/basic_vert.glsl COPYONLY)
 
 file(COPY ${CMAKE_SOURCE_DIR}/Game/images DESTINATION ${CMAKE_BINARY_DIR})
-file(COPY ${CMAKE_SOURCE_DIR}/Game/levels DESTINATION ${CMAKE_BINARY_DIR})
+#file(COPY ${CMAKE_SOURCE_DIR}/Game/levels DESTINATION ${CMAKE_BINARY_DIR})
 file(COPY ${CMAKE_SOURCE_DIR}/Game/shaders DESTINATION ${CMAKE_BINARY_DIR})
 file(COPY ${CMAKE_SOURCE_DIR}/Game/sounds DESTINATION ${CMAKE_BINARY_DIR})
+
+file(GLOB levelFiles "${CMAKE_SOURCE_DIR}/Game/levels/*.txt")
+foreach(file ${levelFiles})
+    get_filename_component(file_name ${file} NAME)
+    configure_file(${file} ${CMAKE_BINARY_DIR}/levels/${file_name} COPYONLY)
+endforeach()
+
 
 set(CMAKE_CXX_STANDARD 14)
 add_executable(lemmings src/main.cpp
@@ -86,8 +93,6 @@ add_executable(lemmings src/main.cpp
         src/LemmingsException.cpp
         src/TimerEventService.h
         src/TimerEventService.cpp
-        src/EventCreator.h
-        src/EventCreator.cpp
         src/LevelIndex.h
         src/LevelIndex.cpp
         src/MusicFabric.hpp
@@ -100,7 +105,7 @@ add_executable(lemmings src/main.cpp
         libs/SOIL/src/stb_image_aug.c
         libs/SOIL/src/stb_image_aug.h
         libs/SOIL/src/stbi_DDS_aug.h
-        libs/SOIL/src/stbi_DDS_aug_c.h)
+        libs/SOIL/src/stbi_DDS_aug_c.h src/ChangeSceneEvent.cpp src/UserEvent.h)
 
 
 find_package(OpenGL REQUIRED)

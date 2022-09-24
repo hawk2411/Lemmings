@@ -1,10 +1,10 @@
+#include "UserEvent.h"
 #include "Menu.h"
 #include "InfoLevel.h"
 #include "Scene.h"
 #include "Results.h"
 #include "Credits.h"
 #include "Instructions.h"
-#include "EventCreator.h"
 #include "Game.h"
 
 #include "StateManager.h"
@@ -104,26 +104,20 @@ void StateManager::onUserEvent(const SDL_UserEvent &event) {
             changeInstructions();
             break;
         case CHANGE_TO_INFO: {
-            auto *levelIndex = static_cast<LevelIndex *>(event.data1);
+            UserEvent<CHANGE_TO_INFO, LevelIndex> changeToInfoEvent(event.data1);
 
-            changeInfo(levelIndex->mode, levelIndex->levelNo);
-            delete levelIndex;
+            changeInfo(changeToInfoEvent.getData1()->mode, changeToInfoEvent.getData1()->levelNo);
         }
             break;
         case CHANGE_TO_SCENE: {
-            auto *levelIndex = static_cast<LevelIndex *>(event.data1);
+            UserEvent<CHANGE_TO_SCENE, LevelIndex> changeToSceneEvent(event.data1);
 
-            changeScene(*levelIndex);
-            delete levelIndex;
+            changeScene(*changeToSceneEvent.getData1());
             break;
         }
         case CHANGE_TO_RESULT: {
-            auto *statistic = static_cast<ResultStatistic *>(event.data1);
-            auto *levelIndex = static_cast<LevelIndex *>(event.data2);
-
-            changeResults(*statistic, *levelIndex);
-            delete statistic;
-            delete levelIndex;
+            UserEvent<CHANGE_TO_RESULT, ResultStatistic, LevelIndex> ev(event.data1, event.data2);
+            changeResults(*ev.getData1(), *ev.getData2());
             break;
         }
     }

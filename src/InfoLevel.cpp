@@ -4,10 +4,9 @@
 #include "KeyFactory.h"
 #include "StateManager.h"
 #include "GameState.h"
-#include "EventCreator.h"
 #include "InfoLevel.h"
 #include "LevelIndex.h"
-
+#include "UserEvent.h"
 
 InfoLevel::InfoLevel(Game * game, const LevelIndex& index) : GameState(game), _levelIndex(index), _shaderManager(_game->getShaderManager()){
     initTextures();
@@ -69,15 +68,14 @@ void InfoLevel::initTextures() {
 void InfoLevel::onKeyPressed(const SDL_KeyboardEvent &keyboardEvent) {
     switch (keyboardEvent.keysym.sym) {
         case SDLK_ESCAPE:
-            EventCreator::sendSimpleUserEvent(CHANGE_TO_MENU);
+            UserEvent<CHANGE_TO_MENU>::sendEvent();
             break;
         case SDLK_RIGHT: {
-            auto *index = new LevelIndex(_levelIndex);
-            EventCreator::sendSimpleUserEvent(CHANGE_TO_SCENE, index);
+            UserEvent<CHANGE_TO_SCENE, LevelIndex>::sendEvent(new LevelIndex(_levelIndex));
             break;
         }
         case SDLK_LEFT:
-            EventCreator::sendSimpleUserEvent(CHANGE_TO_MENU);
+            UserEvent<CHANGE_TO_MENU>::sendEvent();
             break;
     }
 }

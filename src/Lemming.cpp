@@ -6,7 +6,7 @@
 
 Lemming::Lemming(const glm::vec2 &initialPosition, ShaderManager *shaderManager, ParticleSystemManager* particleSystemManager)
         : _shaderManager(shaderManager), _countdown(shaderManager), _particleSystemManager(particleSystemManager) {
-    _job = std::unique_ptr<Job>(JobFactory::createJob(Jobs::FALLER,  _particleSystemManager));
+    _job = JobFactory::createJob(Jobs::FALLER,  _particleSystemManager);
     _job->initAnims(_shaderManager->getShaderProgram());
     _position = initialPosition;
     _job->sprite()->setPosition(_position);
@@ -76,7 +76,7 @@ void Lemming::changeJob(Jobs nextJob) {
         oldPosition = _job->sprite()->getPosition();
         _job.reset(nullptr);
     }
-    _job = std::unique_ptr<Job>(JobFactory::createJob(nextJob, _particleSystemManager));
+    _job = JobFactory::createJob(nextJob, _particleSystemManager);
     if(!_job)
         return;
 

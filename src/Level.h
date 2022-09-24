@@ -16,14 +16,14 @@ struct Level {
 
     Level(ShaderManager *shaderManager, LevelModes::Mode difficulty, int levelNo);
     ~Level(){std::cout << "Level destructor\n";}
-    int numLemmings{};
-    int goalLemmings{};
-    int time{};
+    int _numLemmings{};
+    int _goalLemmings{};
+    int _time{};
 
-    int releaseRate{};
-    int minReleaseRate{};
+    int _releaseRate{};
+    int _minReleaseRate{};
     static const size_t COUNT_JOBS = 8;
-    int lemmingsProJob[COUNT_JOBS]{};
+    int _lemmingsProJob[COUNT_JOBS]{};
     std::unique_ptr<Door> _door;
     std::unique_ptr<Trapdoor> _trapdoor;
 

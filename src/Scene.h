@@ -22,8 +22,8 @@
 // It is responsible for updating and render them.
 
 struct ResultStatistic {
-    int goalPercentage;
-    int currentPercentage;
+    int goalPercentage = 0;
+    int currentPercentage = 0;
 };
 
 class Scene : public GameState {

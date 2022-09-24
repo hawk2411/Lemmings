@@ -1,9 +1,8 @@
 #include "ShaderManager.h"
 #include "Game.h"
-//#include "StateManager.h"
 
+#include "UserEvent.h"
 #include "Menu.h"
-#include "EventCreator.h"
 #include "LevelIndex.h"
 
 Menu::Menu(Game *game, const LevelIndex &levelIndex) : GameState(game), _levelIndex(levelIndex), _shaderManager(_game->getShaderManager()), _music(
@@ -141,20 +140,18 @@ void Menu::onKeyPressed(const SDL_KeyboardEvent &keyboardEvent) {
         case SDLK_F1:
             // key f1 go to playing
             endMusic();
-            {
-                EventCreator::sendSimpleUserEvent(CHANGE_TO_INFO,  new LevelIndex{_levelIndex.mode, _levelIndex.levelNo});
-            }
+            UserEvent<CHANGE_TO_INFO, LevelIndex>::sendEvent(
+                    new LevelIndex{_levelIndex.mode, _levelIndex.levelNo});
             break;
         case SDLK_F2:
             // F2 go to Instructions
             endMusic();
-            EventCreator::sendSimpleUserEvent(CHANGE_TO_INSTRUCTION);
+            UserEvent<CHANGE_TO_INSTRUCTION>::sendEvent();
             break;
         case SDLK_F3:
             // F3 go to About
             endMusic();
-            EventCreator::sendSimpleUserEvent(CHANGE_TO_CREDITS);
-            //_game->getStateManager()->changeCredits();
+            UserEvent<CHANGE_TO_CREDITS>::sendEvent();
             break;
         case SDLK_UP:
             changeModeUp();
