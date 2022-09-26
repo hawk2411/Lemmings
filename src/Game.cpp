@@ -1,39 +1,30 @@
 #include <memory>
 
 #include "Game.h"
+#include "UserEvent.h"
 
-
-Game::Game() : bPlay_(true), dmode_(Difficulties::Mode::Easy) {
+Game::Game() : _continueGame(true), _difficultyMode(Difficulties::Mode::Easy) {
 
     glClearColor(0.f, 0.f, 0.f, 1.0f);  //TODO glClearColor here???
 
-    shaderManager_ = std::make_unique<ShaderManager>();
-    stateManager_ = std::make_unique<StateManager>(this, shaderManager_.get());
+    _shaderManager = std::make_unique<ShaderManager>();
+    _stateManager = std::make_unique<StateManager>(this, _shaderManager.get());
 
     initSpriteSheets();
-    hardModeIndicator_ = Sprite::createSprite(glm::ivec2(20, 20), glm::vec2(136. / 256, 160. / 256),
-                                              &shaderManager_->getShaderProgram(),
+    _hardModeIndicator = Sprite::createSprite(glm::ivec2(20, 20), glm::vec2(136. / 256, 160. / 256),
+                                              &_shaderManager->getShaderProgram(),
                                               &Game::spriteSheets().skullSprite);
-    hardModeIndicator_->setPosition(glm::vec2(CAMERA_WIDTH - 26, 5));
+    _hardModeIndicator->setPosition(glm::vec2(CAMERA_WIDTH - 26, 5));
 
 }
 
-void Game::init() {
-
-
-}
-
-bool Game::update(int deltaTime) {
-    stateManager_->update(deltaTime);
-    return bPlay_;
-}
 
 void Game::render() {
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    stateManager_->render();
-    if (dmode_ == Difficulties::Mode::Hard) {
-        hardModeIndicator_->render();
+    _stateManager->render();
+    if (_difficultyMode == Difficulties::Mode::Hard) {
+        _hardModeIndicator->render();
     }
 
 }
@@ -111,29 +102,21 @@ void Game::initSpriteSheets() {
 }
 
 void Game::changeBplay() {
-    bPlay_ = !bPlay_;
+    _continueGame = !_continueGame;
 }
 
 Difficulties::Mode Game::getDifficultyMode() const {
-    return dmode_;
+    return _difficultyMode;
 }
 
 void Game::swapDifficultyMode() {
-    dmode_ = (dmode_ == Difficulties::Mode::Easy) ? Difficulties::Mode::Hard : Difficulties::Mode::Easy;
+    _difficultyMode = (_difficultyMode == Difficulties::Mode::Easy) ? Difficulties::Mode::Hard : Difficulties::Mode::Easy;
 }
 
 StateManager *Game::getStateManager() {
-    return stateManager_.get();
+    return _stateManager.get();
 }
 
 void Game::onUserEvent(const SDL_UserEvent &event) {
-    switch (event.code) {
-        case UPDATE_EVENT: {
-            int delay = *(int *) event.data1;
-            update(delay);
-        }
-            break;
-        default:
-            stateManager_->onUserEvent(event);
-    }
+    _stateManager->onUserEvent(event);
 }

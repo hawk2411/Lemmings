@@ -8,10 +8,11 @@
 #include <ctime>
 #include "TimerEventService.h"
 #include "Game.h"
-
+#include "UserEvent.h"
 
 //Remove console (only works in Visual Studio)
 //#pragma comment(linker, "/subsystem:\"windows\" /entry:\"mainCRTStartup\"")
+
 
 int main(int argc, char **argv) {
     srand(time(nullptr));
@@ -44,45 +45,46 @@ int main(int argc, char **argv) {
 
     bool close = false;
     //StopWatch stopWatch;
-
     Game game;
-    game.init();
-    //SDL_SetWindowGrab(window, SDL_TRUE);
-    TimerEventService timerService;
-    int event_type = UPDATE_EVENT;
-    timerService.startEvents(event_type);
 
-    SDL_Event event;
-    while (!close) {
-        while (SDL_PollEvent(&event)) {
-            switch (event.type) {
-                case SDL_QUIT:
-                    game.changeBplay();
-                    close = true;
-                    break;
-                case SDL_KEYDOWN:
-                //case SDL_KEYUP:
-                    game.onKeyPressed(event.key);
-                    break;
-                case SDL_MOUSEMOTION:
-                    game.onMousMove(event.motion);
-                    break;
-                case SDL_MOUSEBUTTONDOWN:
-                    game.onMouseButtonDown(event.button);
-                    break;
-                case SDL_MOUSEBUTTONUP:
-                    game.onMouseButtonUp(event.button);
-                    break;
-                case SDL_USEREVENT:
-                    game.onUserEvent(event.user);
-                    break;
+    //SDL_SetWindowGrab(window, SDL_TRUE);
+    {
+        TimerEventService timerService(TimerEventService::DELAY);
+
+        SDL_Event event;
+        while (!close) {
+            while (SDL_PollEvent(&event)) {
+                switch (event.type) {
+                    case SDL_QUIT:
+                        game.changeBplay();
+                        close = true;
+                        break;
+                    case SDL_KEYDOWN:
+                        //case SDL_KEYUP:
+                        game.onKeyPressed(event.key);
+                        break;
+                    case SDL_MOUSEMOTION:
+                        game.onMousMove(event.motion);
+                        break;
+                    case SDL_MOUSEBUTTONDOWN:
+                        game.onMouseButtonDown(event.button);
+                        break;
+                    case SDL_MOUSEBUTTONUP:
+                        game.onMouseButtonUp(event.button);
+                        break;
+                    case SDL_USEREVENT:
+                        game.onUserEvent(event.user);
+                        break;
+                }
+
             }
+            game.render();
+            SDL_GL_SwapWindow(window);
 
         }
-        game.render();
-        SDL_GL_SwapWindow(window);
 
     }
+    //here TimerEvents stops
     Mix_CloseAudio();
     SDL_GL_DeleteContext(glContext);
     SDL_Quit();

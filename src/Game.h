@@ -17,7 +17,7 @@ public:
     /*
      * Constructor / Destructor
      */
-    explicit Game();
+    Game();
 
     struct SpriteSheets {
         Texture cursorSprites;
@@ -40,19 +40,19 @@ public:
     };
 
     void onKeyPressed(const SDL_KeyboardEvent &event) {
-        stateManager_->onKeyPressed(event);
+        _stateManager->onKeyPressed(event);
     }
 
     void onMousMove(const SDL_MouseMotionEvent &mouseMotionEvent) {
-        stateManager_->onMouseMove(mouseMotionEvent);
+        _stateManager->onMouseMove(mouseMotionEvent);
     }
 
     void onMouseButtonDown(const SDL_MouseButtonEvent &mouseButtonEvent) {
-        stateManager_->onMouseButtonDown(mouseButtonEvent);
+        _stateManager->onMouseButtonDown(mouseButtonEvent);
     }
 
     void onMouseButtonUp(const SDL_MouseButtonEvent &mouseButtonEvent) {
-        stateManager_->onMouseButtonUp(mouseButtonEvent);
+        _stateManager->onMouseButtonUp(mouseButtonEvent);
     }
 
     //******************************************************************************************
@@ -82,10 +82,6 @@ public:
 
     // *************************************************************************************************
 
-    void init();
-
-    bool update(int deltaTime);
-
     void render();
 
     void changeBplay();
@@ -96,15 +92,15 @@ public:
 
     StateManager *getStateManager();
 
-    ShaderManager *getShaderManager()const{return shaderManager_.get();}
+    ShaderManager *getShaderManager()const{return _shaderManager.get();}
 
 private:
-    unique_ptr<StateManager> stateManager_;
-    unique_ptr<ShaderManager> shaderManager_;
-    bool bPlay_; // Continue to play game?
-    Difficulties::Mode dmode_;
+    unique_ptr<StateManager> _stateManager;
+    unique_ptr<ShaderManager> _shaderManager;
+    bool _continueGame; // Continue to play game?
+    Difficulties::Mode _difficultyMode;
 
-    std::unique_ptr<Sprite> hardModeIndicator_;
+    std::unique_ptr<Sprite> _hardModeIndicator;
 
 
 };

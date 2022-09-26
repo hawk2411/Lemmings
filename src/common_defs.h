@@ -15,7 +15,6 @@ constexpr int UI_HEIGHT = 37;
 
 constexpr int SCROLL_WIDTH = 5;
 
-constexpr int UPDATE_EVENT = 1;
 
 
 enum class PixelFormat {

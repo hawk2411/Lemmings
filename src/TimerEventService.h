@@ -9,16 +9,17 @@
 
 class TimerEventService {
 public:
-    explicit TimerEventService();
-    void startEvents(Sint32 parameter, Uint32 delay = (33 / 10) * 10);
-    void stopEvents();
+    explicit TimerEventService(Uint32 delay);
+    ~TimerEventService();
+    SDL_TimerID startEvents(Uint32 delay);
+    bool stopEvents();
 
+    constexpr static Uint32 DELAY = 30;
 
 private:
     static Uint32 TimerCallback(Uint32 interval, void *param);
 
     SDL_TimerID _timer_id;
-    Sint32 _user_code;
     static Uint32 _interval;
 };
 

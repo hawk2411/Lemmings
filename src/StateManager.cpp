@@ -120,6 +120,11 @@ void StateManager::onUserEvent(const SDL_UserEvent &event) {
             changeResults(*ev.getData1(), *ev.getData2());
             break;
         }
+        case UPDATE_EVENT : {
+            UserEvent<UPDATE_EVENT, Uint32> ev(event.data1);
+            update(ev.getDelay());
+            break;
+        }
     }
 }
 
