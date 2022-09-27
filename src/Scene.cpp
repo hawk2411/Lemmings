@@ -213,15 +213,15 @@ void Scene::mouseMoved(int mouseX, int mouseY, bool bLeftButton, bool bRightButt
     _posX = mouseX;
     _posY = mouseY;
 
-    ScreenClickedArea screenClickedArea = getClickedScreenArea(mouseX, mouseY);
     _screenMovedArea = getMovedScreenArea(mouseX, mouseY);
 
+    //_mouseState allows selecting UI elements or lemming sprites directly after pressing the mouse button.
+    //If the user has not yet released the mouse button no selecting is possible
     switch (_mouseState) {
 
         case LEFT_MOUSE_PRESSED:
             if (!bLeftButton) {
                 _mouseState = MouseStates::NONE;
-
             }
             break;
 
@@ -233,16 +233,19 @@ void Scene::mouseMoved(int mouseX, int mouseY, bool bLeftButton, bool bRightButt
             break;
 
         case MouseStates::NONE:
-            _mouseState = (bLeftButton) ? LEFT_MOUSE_PRESSED : RIGHT_MOUSE_PRESSED;
-
-            if (bLeftButton) {
+            if(bLeftButton) {
+                _mouseState = LEFT_MOUSE_PRESSED;
+                ScreenClickedArea screenClickedArea = getClickedScreenArea(mouseX, mouseY);
                 if (screenClickedArea == ScreenClickedArea::UI) {
                     leftClickOnUI(mouseX, mouseY);
                 } else {
                     leftClickOnMap(mouseX, mouseY);
                 }
+                break;
             }
-
+            if(bRightButton) {
+                _mouseState = RIGHT_MOUSE_PRESSED;
+            }
             break;
     }
 }

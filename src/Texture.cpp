@@ -35,8 +35,9 @@ bool Texture::loadFromFile(const string &filename, PixelFormat format) {
         case PixelFormat::TEXTURE_PIXEL_FORMAT_L:
             break;
     }
-    if (!image)
+    if (!image) {
         return false;
+    }
 
     glGenTextures(1, &_texId);
     glBindTexture(GL_TEXTURE_2D, _texId);
