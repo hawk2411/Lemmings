@@ -40,11 +40,11 @@ public:
 
     void setNumberAnimations(int nAnimations);
 
-    void setAnimationSpeed(int animId, int keyframesPerSec);
+    void setAnimationSpeed(size_t animId, int keyframesPerSec);
 
-    void addKeyframe(int animId, const glm::vec2 &frame, bool isRotated = false);
+    void addKeyframe(size_t animId, const glm::vec2 &displacement, bool isRotated = false);
 
-    void changeAnimation(int animId);
+    void changeAnimation(size_t animId);
 
     std::size_t animation() const;
 

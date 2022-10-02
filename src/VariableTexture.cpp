@@ -1,4 +1,4 @@
-#include <SOIL/SOIL.h>
+#include <SOIL/src/SOIL.h>
 #include "VariableTexture.h"
 
 

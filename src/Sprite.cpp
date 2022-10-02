@@ -27,7 +27,7 @@ Sprite::Sprite(const glm::vec2 &quadSize, const glm::vec2 &sizeInSpriteSheet, Sh
         _spriteSheet(spriteSheetPar),
         _rotatedSpriteSheet(rotatedSpriteSheet),
         _shaderProgram(program),
-        _currentAnimation(-1),
+        _currentAnimation(0),
         _iterated(false),
         _currentKeyframe(0),
         _timeAnimation(0.0f) {
@@ -51,20 +51,18 @@ Sprite::Sprite(const glm::vec2 &quadSize, const glm::vec2 &sizeInSpriteSheet, Sh
 int Sprite::update(int deltaTime) {
     int frames = 0;
 
-    if (_currentAnimation >= 0) {
-        bool lastFrame = isInLastFrame();
+    bool lastFrame = isInLastFrame();
 
-        _timeAnimation += static_cast<float>(deltaTime);
-        while (_timeAnimation > _animations[_currentAnimation].milliSecsPerKeyframe) {
-            _timeAnimation -= _animations[_currentAnimation].milliSecsPerKeyframe;
-            _currentKeyframe = (_currentKeyframe + 1) % _animations[_currentAnimation].keyframeDispl.size();
-            frames++;
-        }
-        _texCoordDispl = _animations[_currentAnimation].keyframeDispl[_currentKeyframe];
+    _timeAnimation += static_cast<float>(deltaTime);
+    while (_timeAnimation > _animations[_currentAnimation].milliSecsPerKeyframe) {
+        _timeAnimation -= _animations[_currentAnimation].milliSecsPerKeyframe;
+        _currentKeyframe = (_currentKeyframe + 1) % _animations[_currentAnimation].keyframeDispl.size();
+        frames++;
+    }
+    _texCoordDispl = _animations[_currentAnimation].keyframeDispl[_currentKeyframe];
 
-        if (lastFrame && !isInLastFrame()) {
-            _iterated = true;
-        }
+    if (lastFrame && !isInLastFrame()) {
+        _iterated = true;
     }
 
     return frames;
@@ -101,20 +99,21 @@ void Sprite::setNumberAnimations(int nAnimations) {
     _rotated.resize(nAnimations);
 }
 
-void Sprite::setAnimationSpeed(int animId, int keyframesPerSec) {
-    if (animId < int(_animations.size()))
+void Sprite::setAnimationSpeed(size_t animId, int keyframesPerSec) {
+    if (animId < _animations.size()) {
         _animations[animId].milliSecsPerKeyframe = 1000.f / static_cast<float>(keyframesPerSec);
+    }
 }
 
-void Sprite::addKeyframe(int animId, const glm::vec2 &displacement, bool isRotated) {
-    if (animId < int(_animations.size())) {
-        _animations[animId].keyframeDispl.push_back(displacement);
+void Sprite::addKeyframe(size_t animId, const glm::vec2 &displacement, bool isRotated) {
+    if (animId < _animations.size()) {
+        _animations[animId].keyframeDispl.push_back(displacement);  //x is column and y row. lemmings_anim.png is organized in 16 sprites per row so: x = sprite number / 16
         _rotated[animId] = isRotated;
     }
 
 }
 
-void Sprite::changeAnimation(int animId) {
+void Sprite::changeAnimation(size_t animId) {
     if (animId < int(_animations.size())) {
         _currentAnimation = animId;
         _currentKeyframe = 0;

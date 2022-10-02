@@ -15,6 +15,8 @@ constexpr int UI_HEIGHT = 37;
 
 constexpr int SCROLL_WIDTH = 5;
 
+constexpr unsigned int LEMMINGS_PNG_COLUMNS = 16;
+constexpr unsigned int LEMMINGS_PNG_ROWS = 14;
 
 
 enum class PixelFormat {
