@@ -1,4 +1,5 @@
 #include <SOIL/src/SOIL.h>
+#include <SDL_image.h>
 #include "VariableTexture.h"
 
 
@@ -28,6 +29,7 @@ bool VariableTexture::loadFromFile(const string &filename, PixelFormat imageForm
     switch (_format) {
         case PixelFormat::TEXTURE_PIXEL_FORMAT_RGB:
             _image = SOIL_load_image(filename.c_str(), &_widthTex, &_heightTex, &channels, SOIL_LOAD_RGB);
+
             break;
         case PixelFormat::TEXTURE_PIXEL_FORMAT_RGBA:
             _image = SOIL_load_image(filename.c_str(), &_widthTex, &_heightTex, &channels, SOIL_LOAD_RGBA);

@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.17)
 project(lemmings)
 
+add_subdirectory(SDL_image)
 # configure_file(${CMAKE_CURRENT_SOURCE_DIR}/shaders/basic_frag.glsl ${CMAKE_CURRENT_BINARY_DIR}/shaders/basic_frag.glsl COPYONLY)
 # configure_file(${CMAKE_CURRENT_SOURCE_DIR}/shaders/basic_vert.glsl ${CMAKE_CURRENT_BINARY_DIR}/shaders/basic_vert.glsl COPYONLY)
 
@@ -15,6 +16,7 @@ foreach(file ${levelFiles})
     configure_file(${file} ${CMAKE_BINARY_DIR}/levels/${file_name} COPYONLY)
 endforeach()
 
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/SDL_image/cmake/")
 
 set(CMAKE_CXX_STANDARD 14)
 add_executable(lemmings src/main.cpp
@@ -109,9 +111,9 @@ add_executable(lemmings src/main.cpp
 
 
 find_package(OpenGL REQUIRED)
-find_package(SDL2 REQUIRED)
+find_package(SDL2 CONFIG COMPONENTS REQUIRED)
 find_package(GLEW REQUIRED)
 find_package(Freetype REQUIRED)
-message("Hallo: ${CMAKE_SOURCE_DIR}/libs")
-include_directories(${OPENGL_INCLUDE_DIRS} ${SDL2_INCLUDE_DIRS}  ${GLEW_INCLUDE_DIRS} ${CMAKE_SOURCE_DIR}/libs)
-target_link_libraries(${CMAKE_PROJECT_NAME} ${OPENGL_LIBRARIES} ${SDL2_LIBRARIES} ${GLEW_LIBRARIES}  SDL2_mixer)
+
+include_directories(${OPENGL_INCLUDE_DIRS} ${SDL2_INCLUDE_DIRS}  ${GLEW_INCLUDE_DIRS} ${CMAKE_SOURCE_DIR}/libs ${CMAKE_SOURCE_DIR}/SDL_image)
+target_link_libraries(${CMAKE_PROJECT_NAME} PUBLIC ${OPENGL_LIBRARIES} ${SDL2_LIBRARIES} ${GLEW_LIBRARIES}  SDL2_mixer SDL2_image)

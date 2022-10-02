@@ -20,7 +20,7 @@ Texture::~Texture() {
 }
 
 bool Texture::loadFromFile(const string &filename, PixelFormat format) {
-    //unsigned char *image = nullptr;
+
     std::unique_ptr<unsigned char, decltype(&SOIL_free_image_data)> image(nullptr, SOIL_free_image_data);
 
     switch (format) {

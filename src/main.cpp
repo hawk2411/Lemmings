@@ -4,6 +4,7 @@
 #define SDL_MAIN_HANDLED
 #include <SDL2/SDL.h>
 #include <SDL_mixer.h>
+#include <SDL_image.h>
 #include <iostream>
 #include <ctime>
 #include "TimerEventService.h"
@@ -18,7 +19,7 @@ int main(int argc, char **argv) {
     srand(time(nullptr));
 
     SDL_Init(SDL_INIT_EVERYTHING);
-
+    IMG_Init(IMG_INIT_PNG|IMG_INIT_JPG);
     SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8);
     SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
     SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8);
@@ -86,6 +87,7 @@ int main(int argc, char **argv) {
     }
     //here TimerEvents stops
     Mix_CloseAudio();
+    IMG_Quit();
     SDL_GL_DeleteContext(glContext);
     SDL_Quit();
     return 0;
