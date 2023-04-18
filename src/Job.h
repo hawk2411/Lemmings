@@ -66,10 +66,9 @@ protected:
     Jobs _currentJob;
     Jobs _nextJob;
     bool _walkingRight{};
-    const int _max_columns = 16;
-    const int _max_rows = 14;
-
-
+    static constexpr int _max_columns = 16;
+    static constexpr int _max_rows = 14;
+    static constexpr int _default_animation_speed = 12;
 };
 
 #endif // _JOB_INCLUDE
