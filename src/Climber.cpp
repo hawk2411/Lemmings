@@ -13,7 +13,7 @@ Climber::Climber() : Job(Jobs::CLIMBER) {
 }
 
 
-void Climber::initAnims(ShaderProgram &shaderProgram) {
+void Climber::initAnimations(ShaderProgram &shaderProgram) {
     _jobSprite = Sprite::createSprite(glm::ivec2(16, 16), glm::vec2(1.f / 16, 1.f / 14), &shaderProgram,
                                       &Game::spriteSheets().lemmingAnimations,
                                       &Game::spriteSheets().rotatedLemmingAnimations);

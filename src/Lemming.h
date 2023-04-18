@@ -51,7 +51,7 @@ private:
     std::unique_ptr<Job> _job;
     Countdown _countdown;
     ShaderManager *_shaderManager;
-    bool walkingRight = true; // is marked true when the lemmings walks in right direction
+    bool _walkingRight = true;
     bool _alive;
     bool _isSaved;
     glm::vec2 _position{};

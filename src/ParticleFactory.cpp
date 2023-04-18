@@ -1,18 +1,18 @@
 #include "ParticleFactory.h"
 #include <random>
 
-Particle *ParticleFactory::createParticle(ShaderProgram* shaderProgram) {
+std::unique_ptr<Particle> ParticleFactory::createParticle(ShaderProgram* shaderProgram) {
 
     int color = rand() % 3;
 
     switch (color) {
         case 0:
-            return new Particle(Particle::ParticleColor::BLUE, shaderProgram);
+            return std::make_unique<Particle>(Particle::ParticleColor::BLUE, shaderProgram);
         case 1:
-            return new Particle(Particle::ParticleColor::GREEN, shaderProgram);
+            return std::make_unique<Particle>(Particle::ParticleColor::GREEN, shaderProgram);
 
         case 2:
-            return new Particle(Particle::ParticleColor::PINK, shaderProgram);
+            return std::make_unique<Particle>(Particle::ParticleColor::PINK, shaderProgram);
 
         default:
             return nullptr;

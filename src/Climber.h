@@ -11,7 +11,7 @@ class Climber : public Job {
 public:
     Climber();
 
-    void initAnims(ShaderProgram &shaderProgram) override;
+    void initAnimations(ShaderProgram &shaderProgram) override;
 
     void updateStateMachine(int deltaTime, Level *levelAttributes, IMaskManager *mask) override;
 

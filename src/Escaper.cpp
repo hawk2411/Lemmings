@@ -11,7 +11,7 @@ Escaper::Escaper() : Job(Jobs::ESCAPER), escapeEffect_(createSound("sounds/lemmi
 
 }
 
-void Escaper::initAnims(ShaderProgram &shaderProgram) {
+void Escaper::initAnimations(ShaderProgram &shaderProgram) {
     _jobSprite = Sprite::createSprite(glm::ivec2(16, 16), glm::vec2(1.f / LEMMINGS_PNG_COLUMNS, 1.f / LEMMINGS_PNG_ROWS), &shaderProgram,
                                       &Game::spriteSheets().lemmingAnimations,
                                       &Game::spriteSheets().rotatedLemmingAnimations);

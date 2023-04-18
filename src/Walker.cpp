@@ -7,7 +7,7 @@ enum WalkerAnims {
 
 Walker::Walker() : Job(Jobs::WALKER), _state(WALKING_RIGHT_STATE) {}
 
-void Walker::initAnims(ShaderProgram &shaderProgram) {
+void Walker::initAnimations(ShaderProgram &shaderProgram) {
     _jobSprite = Sprite::createSprite(glm::ivec2(16, 16), glm::vec2(1.f / 16, 1.f / 14), &shaderProgram,
                                       &Game::spriteSheets().lemmingAnimations,
                                       &Game::spriteSheets().rotatedLemmingAnimations);

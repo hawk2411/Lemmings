@@ -9,7 +9,7 @@ class Exploder : public Job {
 public:
     explicit Exploder(ParticleSystemManager* particleSystemManager);
 
-    void initAnims(ShaderProgram &shaderProgram) override;
+    void initAnimations(ShaderProgram &shaderProgram) override;
 
     void updateStateMachine(int deltaTime, Level *levelAttributes, IMaskManager *mask) override;
 

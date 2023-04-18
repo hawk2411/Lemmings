@@ -32,23 +32,26 @@ public:
 
     Job();
 
-    virtual ~Job();
+    virtual ~Job() = default;
 
     virtual void updateStateMachine(int deltaTime, Level *levelAttributes, IMaskManager *mask) = 0;
 
-    virtual void initAnims(ShaderProgram &shaderProgram) = 0;
+    virtual void initAnimations(ShaderProgram &shaderProgram) = 0;
 
-    bool finished() const;
+    bool finished() const{return _isFinished;}
 
-    Jobs getNextJob() const;
+    void setFinished(bool isFinished) {_isFinished = isFinished;}
+
+    Jobs getNextJob() const {return _nextJob;}
+    void setNextJob(Jobs nextJob) { _nextJob = nextJob; }
 
     Jobs getCurrentJob() const { return _currentJob; }
 
-    Sprite *sprite();
+    Sprite *sprite() { return _jobSprite.get(); }
 
-    bool isWalkingRight() const;
+    bool isWalkingRight() const {return _walkingRight;}
 
-    virtual void setWalkingRight(bool value) = 0;
+    virtual void setWalkingRight(bool value) {_walkingRight = value;}
 
     virtual string getName() const = 0;
 
@@ -65,6 +68,7 @@ protected:
     bool _walkingRight{};
     const int _max_columns = 16;
     const int _max_rows = 14;
+
 
 };
 

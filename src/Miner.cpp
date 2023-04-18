@@ -10,7 +10,7 @@ Miner::Miner() : Job(Jobs::MINER), _state(MINER_RIGHT_STATE) {
 
 }
 
-void Miner::initAnims(ShaderProgram &shaderProgram) {
+void Miner::initAnimations(ShaderProgram &shaderProgram) {
     _jobSprite = Sprite::createSprite(glm::ivec2(16, 16), glm::vec2(1.f / 16, 1.f / 14), &shaderProgram,
                                       &Game::spriteSheets().lemmingAnimations,
                                       &Game::spriteSheets().rotatedLemmingAnimations);
@@ -53,119 +53,54 @@ void Miner::setWalkingRight(bool value) {
 }
 
 void Miner::updateStateMachine(int deltaTime, Level *levelAttributes, IMaskManager *mask) {
-    switch (_state) {
 
-        case MINER_RIGHT_STATE:
+    if(!_minerStates[_state]->canMine(this, mask)) {
+        _isFinished = true;
+        int fall = collisionFloor(DEFAULT_MAX_FALL, levelAttributes->maskedMap);
+        _nextJob = (fall >= 3) ? Jobs::FALLER : Jobs::WALKER;
 
-            if (!canMineRight(mask)) {
-                _isFinished = true;
-
-                int fall = collisionFloor(DEFAULT_MAX_FALL, levelAttributes->maskedMap);
-                if (fall >= 3) {
-                    _nextJob = Jobs::FALLER;
-                } else {
-                    _nextJob = Jobs::WALKER;
-                }
-            } else {
-                mineRight(mask);
-            }
-
-            break;
-        case MINER_LEFT_STATE:
-            if (!canMineLeft(mask)) {
-                _isFinished = true;
-
-                int fall = collisionFloor(DEFAULT_MAX_FALL, levelAttributes->maskedMap);
-                if (fall >= 3) {
-                    _nextJob = Jobs::FALLER;
-                } else {
-                    _nextJob = Jobs::WALKER;
-                }
-            } else {
-                mineLeft(mask);
-            }
+    } else {
+        _minerStates[_state]->doMine(this, mask);
     }
 }
 
 
-//void Miner::printMine() {
-//    glm::ivec2 posBase = _jobSprite->getPosition();
-//
-//    posBase += glm::ivec2(10, 16);
-//
-//    int x = posBase.x;
-//    int y = posBase.y;
-//
-//    for (int i = 0; i < 3; ++i) {
-//        Utils::changeTexelColor(Level::currentLevel().getLevelAttributes()->levelTexture.getId(), x + i, y, 120, 77, 0,
-//                                255);
-//        Scene::getInstance().applyMask(x + i, y);
-//
-//        Utils::changeTexelColor(Level::currentLevel().getLevelAttributes()->levelTexture.getId(), x + i, y - 12, 120,
-//                                77, 0, 255);
-//        Scene::getInstance().applyMask(x + i, y - 12);
-//    }
-//
-//    for (int i = 0; i < 12; i += 11) {
-//        Utils::changeTexelColor(Level::currentLevel().getLevelAttributes()->levelTexture.getId(), x + 3, y - i, 120, 77,
-//                                0, 255);
-//        Scene::getInstance().applyMask(x + 3, y - i);
-//
-//        Utils::changeTexelColor(Level::currentLevel().getLevelAttributes()->levelTexture.getId(), x + 3, y - (i + 1),
-//                                120, 77, 0, 255);
-//        Scene::getInstance().applyMask(x + 3, y - (i + 1));
-//    }
-//
-//    for (int i = 1; i < 12; ++i) {
-//        Utils::changeTexelColor(Level::currentLevel().getLevelAttributes()->levelTexture.getId(), x + 4, y - i, 120, 77,
-//                                0, 255);
-//        Scene::getInstance().applyMask(x + 4, y - i);
-//    }
-//
-//    for (int i = 2; i < 11; ++i) {
-//        Utils::changeTexelColor(Level::currentLevel().getLevelAttributes()->levelTexture.getId(), x + 5, y - i, 120, 77,
-//                                0, 255);
-//        Scene::getInstance().applyMask(x + 5, y - i);
-//    }
-//
-//}
-
-void Miner::mineRight(IMaskManager *mask) {
+void Miner::MinerRight::doMine(Job *job, IMaskManager *maskManager) {
     //printMine();
-    glm::ivec2 posBase = _jobSprite->getPosition();
+    glm::ivec2 posBase = job->sprite()->getPosition();
 
     posBase += glm::ivec2(10, 16);
 
-    if (_jobSprite->getAnimationCurrentFrame() == 2) {
+    if (job->sprite()->getAnimationCurrentFrame() == 2) {
         int x = posBase.x;
         int y = posBase.y;
 
         for (int i = 0; i < 4; ++i) {
-            mask->eraseMask(x + i, y, 0);
-            mask->eraseMask(x + i, y - (i + 1), 0);
-            mask->eraseMask(x + i, y - (i + 2), 0);
-            mask->eraseMask(x + i, y - 12, 0);
-            mask->eraseMask(x + i, y - 11, 0);
-            mask->eraseMask(x + i, y - 10, 0);
+            maskManager->eraseMask(x + i, y, 0);
+            maskManager->eraseMask(x + i, y - (i + 1), 0);
+            maskManager->eraseMask(x + i, y - (i + 2), 0);
+            maskManager->eraseMask(x + i, y - 12, 0);
+            maskManager->eraseMask(x + i, y - 11, 0);
+            maskManager->eraseMask(x + i, y - 10, 0);
         }
 
         for (int i = 0; i < 12; ++i) {
-            mask->eraseMask(x + 4, y - i, 0);
+            maskManager->eraseMask(x + 4, y - i, 0);
         }
 
         for (int i = 2; i < 11; ++i) {
-            mask->eraseMask(x + 5, y - i, 0);
+            maskManager->eraseMask(x + 5, y - i, 0);
         }
     }
-    if (_jobSprite->getAnimationCurrentFrame() == 17) {
-        _jobSprite->incPosition(glm::vec2(2, 1));
+    if (job->sprite()->getAnimationCurrentFrame() == 17) {
+        job->sprite()->incPosition(glm::vec2(2, 1));
 
     }
 
 }
 
-bool Miner::canMineRight(IMaskManager *mask) {
-    glm::ivec2 posBase = _jobSprite->getPosition();
+bool Miner::MinerRight::canMine(Job *job, IMaskManager *maskManager) {
+    glm::ivec2 posBase = job->sprite()->getPosition();
 
     posBase += glm::ivec2(10, 17);
 
@@ -173,44 +108,44 @@ bool Miner::canMineRight(IMaskManager *mask) {
     int y = posBase.y;
 
     for (int i = 0; i < 3; ++i) {
-        if (mask->isPositionABorder(x + i, y)) {
+        if (maskManager->isPositionABorder(x + i, y)) {
             return true;
         }
-        if (mask->isPositionABorder(x + i, y - (i + 1))) {
+        if (maskManager->isPositionABorder(x + i, y - (i + 1))) {
             return true;
         }
-        if (mask->isPositionABorder(x + i, y - (i + 2))) {
+        if (maskManager->isPositionABorder(x + i, y - (i + 2))) {
             return true;
         }
-        if (mask->isPositionABorder(x + i, y - 12)) {
+        if (maskManager->isPositionABorder(x + i, y - 12)) {
             return true;
         }
-        if (mask->isPositionABorder(x + i, y - 11)) {
+        if (maskManager->isPositionABorder(x + i, y - 11)) {
             return true;
         }
-        if (mask->isPositionABorder(x + i, y - 10)) {
+        if (maskManager->isPositionABorder(x + i, y - 10)) {
             return true;
         }
 
     }
 
     for (int i = 0; i < 12; i += 11) {
-        if (mask->isPositionABorder(x + 3, y - i)) {
+        if (maskManager->isPositionABorder(x + 3, y - i)) {
             return true;
         }
-        if (mask->isPositionABorder(x + 3, y - (i + 1))) {
+        if (maskManager->isPositionABorder(x + 3, y - (i + 1))) {
             return true;
         }
     }
 
     for (int i = 1; i < 12; ++i) {
-        if (mask->isPositionABorder(x + 4, y - i)) {
+        if (maskManager->isPositionABorder(x + 4, y - i)) {
             return true;
         }
     }
 
     for (int i = 2; i < 11; ++i) {
-        if (mask->isPositionABorder(x + 5, y - i)) {
+        if (maskManager->isPositionABorder(x + 5, y - i)) {
             return true;
         }
     }
@@ -218,9 +153,9 @@ bool Miner::canMineRight(IMaskManager *mask) {
     return false;
 }
 
+bool Miner::MinerLeft::canMine(Job *job, IMaskManager *maskManager) {
 
-bool Miner::canMineLeft(IMaskManager *mask) {
-    glm::ivec2 posBase = _jobSprite->getPosition();
+    glm::ivec2 posBase = job->sprite()->getPosition();
 
     posBase += glm::ivec2(0, 17);
 
@@ -228,33 +163,33 @@ bool Miner::canMineLeft(IMaskManager *mask) {
     int y = posBase.y;
 
     for (int i = 1; i < 11; ++i) {
-        if (mask->isPositionABorder(x, y - i) ) {
+        if (maskManager->isPositionABorder(x, y - i) ) {
             return true;
         }
     }
 
     for (int i = 0; i < 12; ++i) {
-        if (mask->isPositionABorder(x + 1, y - i)) {
+        if (maskManager->isPositionABorder(x + 1, y - i)) {
             return true;
         }
     }
 
     for (int i = 0; i < 12; i += 11) {
-        if (mask->isPositionABorder(x + 2, y - i)) {
+        if (maskManager->isPositionABorder(x + 2, y - i)) {
             return true;
         }
-        if (mask->isPositionABorder(x + 2, y - (i + 1))) {
+        if (maskManager->isPositionABorder(x + 2, y - (i + 1))) {
             return true;
         }
     }
 
     for (int i = 2; i < 6; ++i) {
         for (int j = 0; j < 13; j += 12) {
-            if (mask->isPositionABorder(x + i, y - j)) {
+            if (maskManager->isPositionABorder(x + i, y - j)) {
                 return true;
             }
 
-            if (mask->isPositionABorder(x + i, y - (j + 1))) {
+            if (maskManager->isPositionABorder(x + i, y - (j + 1))) {
                 return true;
             }
         }
@@ -262,42 +197,39 @@ bool Miner::canMineLeft(IMaskManager *mask) {
     return false;
 }
 
-void Miner::mineLeft(IMaskManager *mask) {
-    glm::ivec2 posBase = _jobSprite->getPosition();
+void Miner::MinerLeft::doMine(Job *job, IMaskManager *maskManager) {
+    
+    glm::ivec2 posBase = job->sprite()->getPosition();
     posBase += glm::ivec2(0, 16);
 
-    if (_jobSprite->getAnimationCurrentFrame() == 2) {
+    if (job->sprite()->getAnimationCurrentFrame() == 2) {
         int x = posBase.x;
         int y = posBase.y;
 
         for (int i = 1; i < 11; ++i) {
-            mask->eraseMask(x, y - i, 0);
+            maskManager->eraseMask(x, y - i, 0);
         }
 
         for (int i = 0; i < 12; ++i) {
-            mask->eraseMask(x + 1, y - i, 0);
+            maskManager->eraseMask(x + 1, y - i, 0);
         }
 
         for (int i = 0; i < 12; i += 11) {
-            mask->eraseMask(x + 2, y - i, 0);
-            mask->eraseMask(x + 2, y - (i + 1), 0);
+            maskManager->eraseMask(x + 2, y - i, 0);
+            maskManager->eraseMask(x + 2, y - (i + 1), 0);
         }
 
         for (int i = 2; i < 6; ++i) {
             for (int j = 0; j < 13; j += 12) {
-                mask->eraseMask(x + i, y - j, 0);
-                mask->eraseMask(x + i, y - (j + 1), 0);
+                maskManager->eraseMask(x + i, y - j, 0);
+                maskManager->eraseMask(x + i, y - (j + 1), 0);
             }
         }
     }
 
-    if (_jobSprite->getAnimationCurrentFrame() == 17) {
-        _jobSprite->incPosition(glm::vec2(-2, 1));
+    if (job->sprite()->getAnimationCurrentFrame() == 17) {
+        job->sprite()->incPosition(glm::vec2(-2, 1));
 
     }
+
 }
-
-
-
-
-

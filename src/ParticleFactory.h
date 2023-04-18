@@ -1,6 +1,7 @@
 #ifndef _PARTICLEFACTORY_INCLUDE
 #define _PARTICLEFACTORY_INCLUDE
 
+#pragma once
 #include "Particle.h"
 
 
@@ -8,7 +9,7 @@ class ParticleFactory {
 
 public:
 
-    static Particle *createParticle( ShaderProgram* shaderProgram);
+    static std::unique_ptr<Particle> createParticle( ShaderProgram* shaderProgram);
 
 };
 

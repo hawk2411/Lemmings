@@ -6,7 +6,7 @@ ParticleSystem::ParticleSystem(ShaderProgram *shaderProgram) {
 
     int numParticles = std::rand() % 16 + 10;
     for (int i = 0; i < numParticles; ++i) {
-        _particles.push_back(std::unique_ptr<Particle>(ParticleFactory::createParticle(shaderProgram)));
+        _particles.push_back(ParticleFactory::createParticle(shaderProgram));
     }
 }
 

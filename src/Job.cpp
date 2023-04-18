@@ -5,7 +5,7 @@ Job::Job() : _isFinished(false), _currentJob(Jobs::UNKNOWN), _nextJob(Jobs::UNKN
 Job::Job(Jobs currentJob) : _isFinished(false), _currentJob(currentJob), _nextJob(Jobs::UNKNOWN), _walkingRight(true) {
 }
 
-Job::~Job() = default;
+
 
 int Job::collisionFloor(int maxFall, const VariableTexture &maskedMap) const {
     bool bContact = false;
@@ -35,24 +35,3 @@ bool Job::collision(const VariableTexture &maskedMap) const {
     return true;
 }
 
-
-bool Job::finished() const {
-    return _isFinished;
-}
-
-Jobs Job::getNextJob() const {
-    return _nextJob;
-}
-
-
-Sprite *Job::sprite() {
-    return _jobSprite.get();
-}
-
-void Job::setWalkingRight(bool value) {
-    _walkingRight = value;
-}
-
-bool Job::isWalkingRight() const {
-    return _walkingRight;
-}
