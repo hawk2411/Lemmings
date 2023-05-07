@@ -15,12 +15,12 @@ void Basher::initAnimations(ShaderProgram &shaderProgram) {
     _jobSprite->setNumberAnimations(2);
 
     // BASHER
-    _jobSprite->setAnimationSpeed(BASHER_RIGHT, 12);
+    _jobSprite->setAnimationSpeed(BASHER_RIGHT, default_animation_speed);
     for (int i = 0; i < 32; i++) {
         _jobSprite->addKeyframe(BASHER_RIGHT,
                                 glm::vec2(float(i % 16) / 16, (6.0f + static_cast<float >(i) / 16) / 14));
     }
-    _jobSprite->setAnimationSpeed(BASHER_LEFT, 12);
+    _jobSprite->setAnimationSpeed(BASHER_LEFT, default_animation_speed);
     for (int i = 0; i < 32; i++) {
         _jobSprite->addKeyframe(BASHER_LEFT,
                                 glm::vec2((15 - float(i % 16)) / 16,

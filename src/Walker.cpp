@@ -14,12 +14,12 @@ void Walker::initAnimations(ShaderProgram &shaderProgram) {
     _jobSprite->setNumberAnimations(2);
 
     // WALKING
-    _jobSprite->setAnimationSpeed(WALKING_RIGHT, 12);
+    _jobSprite->setAnimationSpeed(WALKING_RIGHT, default_animation_speed);
     for (int i = 0; i < 8; i++) {
         _jobSprite->addKeyframe(WALKING_RIGHT, glm::vec2(float(i) / 16, 0.0f));
     }
 
-    _jobSprite->setAnimationSpeed(WALKING_LEFT, 12);
+    _jobSprite->setAnimationSpeed(WALKING_LEFT, default_animation_speed);
     for (int i = 0; i < 8; i++) {
         _jobSprite->addKeyframe(WALKING_LEFT, glm::vec2((15 - float(i)) / 16, 0.0f), true);
     }

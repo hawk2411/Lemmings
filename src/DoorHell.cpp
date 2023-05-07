@@ -12,7 +12,7 @@ DoorHell::DoorHell(ShaderManager *shaderManager) : Door(shaderManager) {
 
     _doorSprite->setNumberAnimations(1);
 
-    _doorSprite->setAnimationSpeed(0, 12);
+    _doorSprite->setAnimationSpeed(0, default_animation_speed);
     for (int i = 2; i < 8; i++) {
         _doorSprite->addKeyframe(0, glm::vec2(2.f / 3, float(i) / 8));
     }

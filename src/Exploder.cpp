@@ -23,13 +23,13 @@ void Exploder::initAnimations(ShaderProgram &shaderProgram) {
 
     // EXPLODER
 
-    _jobSprite->setAnimationSpeed(EXPLODER, 12);
+    _jobSprite->setAnimationSpeed(EXPLODER, default_animation_speed);
     for (int i = 0; i < 16; i++) {
         _jobSprite->addKeyframe(EXPLODER, glm::vec2(float(i) / 16, 10.0f / 14));
     }
 
     // BURNING_DEATH
-    _jobSprite->setAnimationSpeed(BURNING_DEATH, 12);
+    _jobSprite->setAnimationSpeed(BURNING_DEATH, default_animation_speed);
     for (int i = 0; i < 16; i++) {
         _jobSprite->addKeyframe(BURNING_DEATH, glm::vec2(float(i) / 16, 13.0f / 14));
     }

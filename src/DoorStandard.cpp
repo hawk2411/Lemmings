@@ -10,7 +10,7 @@ DoorStandard::DoorStandard(ShaderManager *shaderManager) : Door(shaderManager) {
 
     _doorSprite->setNumberAnimations(1);
 
-    _doorSprite->setAnimationSpeed(0, 12);
+    _doorSprite->setAnimationSpeed(0, default_animation_speed);
     for (int i = 0; i < 6; i++) {
         _doorSprite->addKeyframe(0, glm::vec2(float(i % 3) / 3, float(i / 3) / 8));
     }

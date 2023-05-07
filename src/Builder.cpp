@@ -21,15 +21,15 @@ void Builder::initAnimations(ShaderProgram &shaderProgram) {
     _jobSprite->setNumberAnimations(3);
 
     // BUILDER
-    _jobSprite->setAnimationSpeed(BUILDING_RIGHT, 12);
+    _jobSprite->setAnimationSpeed(BUILDING_RIGHT, default_animation_speed);
     for (int i = 0; i < 16; i++)
         _jobSprite->addKeyframe(BUILDING_RIGHT, glm::vec2(float(i) / 16, 5.0f / 14));
 
-    _jobSprite->setAnimationSpeed(BUILDING_LEFT, 12);
+    _jobSprite->setAnimationSpeed(BUILDING_LEFT, default_animation_speed);
     for (int i = 0; i < 16; i++)
         _jobSprite->addKeyframe(BUILDING_LEFT, glm::vec2(float(15 - i) / 16, 5.0f / 14), true);
 
-    _jobSprite->setAnimationSpeed(NOSTEPS, 12);
+    _jobSprite->setAnimationSpeed(NOSTEPS, default_animation_speed);
     for (int i = 0; i < 6; i++)
         _jobSprite->addKeyframe(NOSTEPS, glm::vec2(float(10 + i) / 16, 0));
 

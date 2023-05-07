@@ -11,7 +11,7 @@ void Digger::initAnimations(ShaderProgram &shaderProgram) {
     _jobSprite->setNumberAnimations(1);
 
     // DIGGER
-    _jobSprite->setAnimationSpeed(0, 12);
+    _jobSprite->setAnimationSpeed(0, default_animation_speed);
     for (int i = 0; i < 8; i++)
         _jobSprite->addKeyframe(0, glm::vec2(float(i) / 16, 8.0f / 14));
 

@@ -12,7 +12,7 @@ void Blocker::initAnimations(ShaderProgram &shaderProgram) {
     _jobSprite->setNumberAnimations(1);
 
     // BLOCKER
-    _jobSprite->setAnimationSpeed(0, 12);
+    _jobSprite->setAnimationSpeed(0, default_animation_speed);
     for (int i = 0; i < 16; i++)
         _jobSprite->addKeyframe(0, glm::vec2(float(i) / 16, 3.0f / 14));
 

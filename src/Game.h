@@ -8,6 +8,8 @@
 #include "StateManager.h"
 #include "Difficulties.h"
 
+constexpr int default_animation_speed = 12;
+
 //const float TIME_PER_FRAME = 1000.f / 30.f; // Approx. 30 fps;
 
 class Game {

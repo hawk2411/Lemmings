@@ -13,7 +13,7 @@ TrapdoorHell::TrapdoorHell(ShaderManager *shaderManager) : Trapdoor(shaderManage
 
     _trapdoorSprite->setNumberAnimations(1);
 
-    _trapdoorSprite->setAnimationSpeed(0, 12);
+    _trapdoorSprite->setAnimationSpeed(0, default_animation_speed);
     for (int i = 0; i < 10; i++) {
         _trapdoorSprite->addKeyframe(0, glm::vec2(0.5, float(i) / 10));
     }

@@ -22,16 +22,16 @@ void Cursor::init() {
 
     _cursorSprite->setNumberAnimations(4);
 
-    _cursorSprite->setAnimationSpeed(CROSS, 12);
+    _cursorSprite->setAnimationSpeed(CROSS, default_animation_speed);
     _cursorSprite->addKeyframe(CROSS, glm::vec2(0, 87. / 128));
 
-    _cursorSprite->setAnimationSpeed(FOCUS, 12);
+    _cursorSprite->setAnimationSpeed(FOCUS, default_animation_speed);
     _cursorSprite->addKeyframe(FOCUS, glm::vec2(0, 58. / 128));
 
-    _cursorSprite->setAnimationSpeed(LEFT, 12);
+    _cursorSprite->setAnimationSpeed(LEFT, default_animation_speed);
     _cursorSprite->addKeyframe(LEFT, glm::vec2(0, 0));
 
-    _cursorSprite->setAnimationSpeed(RIGHT, 12);
+    _cursorSprite->setAnimationSpeed(RIGHT, default_animation_speed);
     _cursorSprite->addKeyframe(RIGHT, glm::vec2(0, 29. / 128));
 
     _cursorSprite->changeAnimation(CROSS);

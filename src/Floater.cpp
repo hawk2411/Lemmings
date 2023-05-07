@@ -19,40 +19,40 @@ void Floater::initAnimations(ShaderProgram &shaderProgram) {
     _jobSprite->setNumberAnimations(10);
 
     // WALKING
-    _jobSprite->setAnimationSpeed(WALKING_RIGHT, 12);
+    _jobSprite->setAnimationSpeed(WALKING_RIGHT, default_animation_speed);
     for (int i = 0; i < 8; i++) {
         _jobSprite->addKeyframe(WALKING_RIGHT, glm::vec2(float(i) / 16, 0.0f));
     }
 
-    _jobSprite->setAnimationSpeed(WALKING_LEFT, 12);
+    _jobSprite->setAnimationSpeed(WALKING_LEFT, default_animation_speed);
     for (int i = 0; i < 8; i++) {
         _jobSprite->addKeyframe(WALKING_LEFT, glm::vec2((15 - float(i)) / 16, 0.0f), true);
     }
 
     // FALLING
-    _jobSprite->setAnimationSpeed(FALLING_RIGHT, 12);
+    _jobSprite->setAnimationSpeed(FALLING_RIGHT, default_animation_speed);
     for (int i = 0; i < 4; i++)
         _jobSprite->addKeyframe(FALLING_RIGHT, glm::vec2(float(i) / 16, 2.0f / 14));
 
-    _jobSprite->setAnimationSpeed(FALLING_LEFT, 12);
+    _jobSprite->setAnimationSpeed(FALLING_LEFT, default_animation_speed);
     for (int i = 0; i < 4; i++)
         _jobSprite->addKeyframe(FALLING_LEFT, glm::vec2((15 - float(i)) / 16, 2.0f / 14), true);
 
     // FLOATER
 
-    _jobSprite->setAnimationSpeed(FLOATER_OPENING_RIGHT, 12);
+    _jobSprite->setAnimationSpeed(FLOATER_OPENING_RIGHT, default_animation_speed);
     for (int i = 0; i < 4; i++)
         _jobSprite->addKeyframe(FLOATER_OPENING_RIGHT, glm::vec2(float(i + 4) / 16, 2.0f / 14));
 
-    _jobSprite->setAnimationSpeed(FLOATER_OPENING_LEFT, 12);
+    _jobSprite->setAnimationSpeed(FLOATER_OPENING_LEFT, default_animation_speed);
     for (int i = 0; i < 4; i++)
         _jobSprite->addKeyframe(FLOATER_OPENING_LEFT, glm::vec2((15 - float(i + 4)) / 16, 2.0f / 14), true);
 
-    _jobSprite->setAnimationSpeed(FLOATER_FALLING_RIGHT, 12);
+    _jobSprite->setAnimationSpeed(FLOATER_FALLING_RIGHT, default_animation_speed);
     for (int i = 0; i < 4; i++)
         _jobSprite->addKeyframe(FLOATER_FALLING_RIGHT, glm::vec2(float(i + 8) / 16, 2.0f / 14));
 
-    _jobSprite->setAnimationSpeed(FLOATER_FALLING_LEFT, 12);
+    _jobSprite->setAnimationSpeed(FLOATER_FALLING_LEFT, default_animation_speed);
     for (int i = 0; i < 4; i++)
         _jobSprite->addKeyframe(FLOATER_FALLING_LEFT, glm::vec2((15 - float(i + 8)) / 16, 2.0f / 14), true);
 

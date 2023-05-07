@@ -18,7 +18,7 @@ void Escaper::initAnimations(ShaderProgram &shaderProgram) {
     _jobSprite->setNumberAnimations(1);
 
     // ESCAPING
-    _jobSprite->setAnimationSpeed(EscaperAnims::ESCAPING, 12);
+    _jobSprite->setAnimationSpeed(EscaperAnims::ESCAPING, default_animation_speed);
     for (int i = 0; i < 7; i++)
         _jobSprite->addKeyframe(EscaperAnims::ESCAPING, glm::vec2(float(i + 1) / LEMMINGS_PNG_COLUMNS, 1.0f / LEMMINGS_PNG_ROWS));
 

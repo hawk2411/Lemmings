@@ -20,29 +20,29 @@ void Climber::initAnimations(ShaderProgram &shaderProgram) {
     _jobSprite->setNumberAnimations(6);
 
     // CLIMBER
-    _jobSprite->setAnimationSpeed(CLIMBING_RIGHT, 12);
+    _jobSprite->setAnimationSpeed(CLIMBING_RIGHT, default_animation_speed);
     for (int i = 0; i < 8; i++)
         _jobSprite->addKeyframe(CLIMBING_RIGHT, glm::vec2(float(i) / 16, 4.0f / 14));
 
-    _jobSprite->setAnimationSpeed(CLIMBING_LEFT, 12);
+    _jobSprite->setAnimationSpeed(CLIMBING_LEFT, default_animation_speed);
     for (int i = 0; i < 8; i++)
         _jobSprite->addKeyframe(CLIMBING_LEFT, glm::vec2(float(15 - i) / 16, 4.0f / 14), true);
 
-    _jobSprite->setAnimationSpeed(LEDGING_RIGHT, 12);
+    _jobSprite->setAnimationSpeed(LEDGING_RIGHT, default_animation_speed);
     for (int i = 0; i < 8; i++)
         _jobSprite->addKeyframe(LEDGING_RIGHT, glm::vec2(float(i + 8) / 16, 4.0f / 14));
 
-    _jobSprite->setAnimationSpeed(LEDGING_LEFT, 12);
+    _jobSprite->setAnimationSpeed(LEDGING_LEFT, default_animation_speed);
     for (int i = 0; i < 8; i++)
         _jobSprite->addKeyframe(LEDGING_LEFT, glm::vec2(float(7 - i) / 16, 4.0f / 14), true);
 
     // WALKING
-    _jobSprite->setAnimationSpeed(WALKING_RIGHT, 12);
+    _jobSprite->setAnimationSpeed(WALKING_RIGHT, default_animation_speed);
     for (int i = 0; i < 8; i++) {
         _jobSprite->addKeyframe(WALKING_RIGHT, glm::vec2(float(i) / 16, 0.0f));
     }
 
-    _jobSprite->setAnimationSpeed(WALKING_LEFT, 12);
+    _jobSprite->setAnimationSpeed(WALKING_LEFT, default_animation_speed);
     for (int i = 0; i < 8; i++) {
         _jobSprite->addKeyframe(WALKING_LEFT, glm::vec2(float(15 - i) / 16, 0.0f), true);
     }

@@ -18,7 +18,7 @@ void Miner::initAnimations(ShaderProgram &shaderProgram) {
 
 
     // MINER
-    _jobSprite->setAnimationSpeed(MINER_RIGHT, 12);
+    _jobSprite->setAnimationSpeed(MINER_RIGHT, default_animation_speed);
     for (int i = 0; i < 24; i++)
         if (i < 8) {
             _jobSprite->addKeyframe(MINER_RIGHT, glm::vec2(float(i + 8) / 16, 8.0f / 14));
@@ -26,7 +26,7 @@ void Miner::initAnimations(ShaderProgram &shaderProgram) {
             _jobSprite->addKeyframe(MINER_RIGHT, glm::vec2(float(i - 8) / 16, 9.0f / 14));
         }
 
-    _jobSprite->setAnimationSpeed(MINER_LEFT, 12);
+    _jobSprite->setAnimationSpeed(MINER_LEFT, default_animation_speed);
     for (int i = 0; i < 24; i++)
         if (i < 8) {
             _jobSprite->addKeyframe(MINER_LEFT, glm::vec2((15 - float(i + 8)) / 16, 8.0f / 14), true);

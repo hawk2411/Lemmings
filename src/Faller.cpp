@@ -24,17 +24,17 @@ void Faller::initAnimations(ShaderProgram &shaderProgram) {
     _jobSprite->setNumberAnimations(3);
 
     // FALLING
-    _jobSprite->setAnimationSpeed(FALLING_RIGHT, 12);
+    _jobSprite->setAnimationSpeed(FALLING_RIGHT, default_animation_speed);
     for (int i = 0; i < 4; i++)
         _jobSprite->addKeyframe(FALLING_RIGHT, glm::vec2(float(i) / 16, 2.0f / 14));
 
-    _jobSprite->setAnimationSpeed(FALLING_LEFT, 12);
+    _jobSprite->setAnimationSpeed(FALLING_LEFT, default_animation_speed);
     for (int i = 0; i < 4; i++)
         _jobSprite->addKeyframe(FALLING_LEFT, glm::vec2((15 - float(i)) / 16, 2.0f / 14), true);
 
 
     // FALLING_DEATH
-    _jobSprite->setAnimationSpeed(FALLING_DEATH, 12);
+    _jobSprite->setAnimationSpeed(FALLING_DEATH, default_animation_speed);
     for (int i = 0; i < 16; i++)
         _jobSprite->addKeyframe(FALLING_DEATH, glm::vec2(float(i) / 16, 11.0f / 14));
 
