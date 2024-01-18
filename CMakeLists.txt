@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.17)
+cmake_minimum_required(VERSION 3.16)
 project(lemmings)
 
 # configure_file(${CMAKE_CURRENT_SOURCE_DIR}/shaders/basic_frag.glsl ${CMAKE_CURRENT_BINARY_DIR}/shaders/basic_frag.glsl COPYONLY)
