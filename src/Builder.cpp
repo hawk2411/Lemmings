@@ -1,7 +1,6 @@
 #include "Builder.h"
 #include "Game.h"
 #include "ShaderManager.h"
-#include "JobFactory.h"
 #include "Utils.h"
 
 
@@ -10,8 +9,8 @@ enum BuilderAnims {
     NOSTEPS
 };
 
-Builder::Builder(SoundManager *soundManager) : Job(Jobs::BUILDER, soundManager) {
-    state = BUILDING_RIGHT_STATE;
+Builder::Builder() : Job(Jobs::BUILDER) {
+    _state = BUILDING_RIGHT_STATE;
 }
 
 
@@ -38,25 +37,23 @@ void Builder::initAnims(ShaderProgram &shaderProgram) {
 }
 
 void Builder::setWalkingRight(bool value) {
-    walkingRight = value;
+    _walkingRight = value;
 
-    if (walkingRight) {
+    if (_walkingRight) {
         _jobSprite->changeAnimation(BUILDING_RIGHT);
-        state = BUILDING_RIGHT_STATE;
+        _state = BUILDING_RIGHT_STATE;
     } else {
         _jobSprite->changeAnimation(BUILDING_LEFT);
-        state = BUILDING_LEFT_STATE;
+        _state = BUILDING_LEFT_STATE;
     }
 }
 
 void Builder::updateStateMachine(int deltaTime, Level *levelAttributes, IMaskManager *mask) {
-    int fall;
-
-    switch (state) {
+    switch (_state) {
         case BUILDING_LEFT_STATE:
             if (cannotBuildLeft(mask)) {
                 _jobSprite->changeAnimation(NOSTEPS);
-                state = NOSTEPS_STATE;
+                _state = NOSTEPS_STATE;
             } else {
                 buildLeft(levelAttributes, mask);
             }
@@ -64,7 +61,7 @@ void Builder::updateStateMachine(int deltaTime, Level *levelAttributes, IMaskMan
         case BUILDING_RIGHT_STATE:
             if (cannotBuildRight(mask)) {
                 _jobSprite->changeAnimation(NOSTEPS);
-                state = NOSTEPS_STATE;
+                _state = NOSTEPS_STATE;
 
             } else {
                 buildRight(levelAttributes, mask);
@@ -73,7 +70,7 @@ void Builder::updateStateMachine(int deltaTime, Level *levelAttributes, IMaskMan
             break;
         case NOSTEPS_STATE:
             if (_jobSprite->isInLastFrame()) {
-                isFinished = true;
+                _isFinished = true;
                 _nextJob = Jobs::WALKER;
             }
             break;
@@ -85,7 +82,7 @@ void Builder::buildLeft(Level *attributes, IMaskManager *mask) {
         glm::vec2 posBase = _jobSprite->getPosition() + glm::vec2(3, 15);
         buildStep(posBase, attributes, mask);
         _jobSprite->incPosition(glm::vec2(-2, -1));
-        ++buildedSteps;
+        ++_buildedSteps;
         _jobSprite->setIterated(false);
     }
 }
@@ -95,16 +92,16 @@ void Builder::buildRight(Level *attributes, IMaskManager *mask) {
         glm::vec2 posBase = _jobSprite->getPosition() + glm::vec2(8, 15);
         buildStep(posBase, attributes, mask);
         _jobSprite->incPosition(glm::vec2(2, -1));
-        ++buildedSteps;
+        ++_buildedSteps;
         _jobSprite->setIterated(false);
     }
 }
 
 void Builder::buildStep(glm::vec2 position, Level* attributes, IMaskManager* mask) {
     for (int i = 0; i < 5; ++i) {
-        Utils::changeTexelColor(attributes->levelTexture.getId(), position.x + i,
-                                position.y, 120, 77, 0, 255);
-        mask->applyMask(position.x + i, position.y);
+        Utils::changeTexelColor(attributes->levelTexture.getId(), static_cast<int>(position.x) + i,
+                                static_cast<int>(position.y), 120, 77, 0, 255);
+        mask->applyMask(static_cast<int>(position.x) + i, static_cast<int>(position.y));
     }
 }
 
@@ -114,11 +111,11 @@ bool Builder::cannotBuildRight(IMaskManager *mask) {
 
     glm::vec2 posBase = _jobSprite->getPosition() + glm::vec2(9, 15);
     for (int i = 0; i < 4; ++i) {
-        if (mask->getPixel(posBase.x + i, posBase.y) != 0) {
+        if (mask->getPixel(static_cast<int>(posBase.x) + i, static_cast<int>(posBase.y)) != 0) {
             obtured = true;
         }
     }
-    return buildedSteps >= MAX_STEPS || obtured;
+    return _buildedSteps >= MAX_STEPS || obtured;
 }
 
 bool Builder::cannotBuildLeft(IMaskManager *mask) {
@@ -127,9 +124,9 @@ bool Builder::cannotBuildLeft(IMaskManager *mask) {
 
     glm::vec2 posBase = _jobSprite->getPosition() + glm::vec2(3, 15);
     for (int i = 0; i < 4; ++i) {
-        if (mask->getPixel(posBase.x + i, posBase.y) != 0) {
+        if (mask->getPixel(static_cast<int>(posBase.x) + i, static_cast<int>(posBase.y)) != 0) {
             obtured = true;
         }
     }
-    return buildedSteps >= MAX_STEPS || obtured;
+    return _buildedSteps >= MAX_STEPS || obtured;
 }

@@ -4,12 +4,11 @@
 #include <GL/glew.h>
 #include <SDL2/SDL.h>
 #include "Sprite.h"
-#include "SoundManager.h"
 #include "ShaderManager.h"
 #include "StateManager.h"
 #include "Difficulties.h"
 
-const float TIME_PER_FRAME = 1000.f / 30.f; // Approx. 30 fps;
+//const float TIME_PER_FRAME = 1000.f / 30.f; // Approx. 30 fps;
 
 
 class Game {
@@ -18,7 +17,7 @@ public:
     /*
      * Constructor / Destructor
      */
-    explicit Game();
+    Game();
 
     struct SpriteSheets {
         Texture cursorSprites;
@@ -83,10 +82,6 @@ public:
 
     // *************************************************************************************************
 
-    void init();
-
-    bool update(int deltaTime);
-
     void render();
 
     void changeBplay();
@@ -95,22 +90,17 @@ public:
 
     void swapDifficultyMode();
 
-    SoundManager *getSoundManager() const;
-
     StateManager *getStateManager();
 
     ShaderManager *getShaderManager()const{return _shaderManager.get();}
 
 private:
-    unique_ptr<SoundManager> _soundManager;
     unique_ptr<StateManager> _stateManager;
     unique_ptr<ShaderManager> _shaderManager;
-    bool bPlay; // Continue to play game?
-    Difficulties::Mode _dmode;
+    bool _continueGame; // Continue to play game?
+    Difficulties::Mode _difficultyMode;
 
-
-    int prevTime;
-    std::unique_ptr<Sprite> hardModeIndicator;
+    std::unique_ptr<Sprite> _hardModeIndicator;
 
 
 };

@@ -2,19 +2,19 @@
 #define _LEVEL_RUNNER_INCLUDE
 
 #include <set>
-#include "SoundManager.h"
+#include "MusicFabric.hpp"
 #include "Lemming.h"
 #include "Level.h"
 #include "Door.h"
 #include "Trapdoor.h"
-#include "Sound.h"
-//#include "IMaskManager.h"
 #include "LevelIndex.h"
+#include "ParticleSystemManager.h"
 
 class LevelRunner {
 
 public:
-    LevelRunner(SoundManager *soundManager, ShaderManager * shaderManager, const LevelIndex& levelIndex);
+    LevelRunner(ShaderManager *shaderManager, ParticleSystemManager *particleSystemManager, const LevelIndex &levelIndex);
+
     ~LevelRunner();
 
 
@@ -26,11 +26,11 @@ public:
 
     bool finished() const;
 
-    int getNumLemmingsAlive();
+    int getNumLemmingsAlive() const;
 
-    int getPercentageSavedLemmings();
+    int getPercentageSavedLemmings()const;
 
-    int getPercentageTotalLemmings();
+    int getPercentageTotalLemmings()const;
 
     void stopSpawningLemmings();
 
@@ -40,7 +40,7 @@ public:
 
     string getLemmingJobNameIndex(int index);
 
-    int getCurrentTime();
+    int getCurrentTime() const;
 
     int getRemainingTime();
 
@@ -56,46 +56,21 @@ public:
 
     int getActualLevel() const;
 
-    LevelModes::Mode getActualMode()const;
+    LevelModes::Mode getActualMode() const;
 
     int getJobCount(int index);
 
     void decreaseJobCount(int index);
 
     void endMusic();
-    Level* getLevelAttributes()const{return _levelStartValues.get();}
+
+    Level *getLevelAttributes() const { return _levelStartValues.get(); }
 
 private:
+    /*
+     * functions
+     */
     void spawnLemmings();
-
-    std::unique_ptr<Level> _levelStartValues;
-
-
-    set<Lemming *> _lemmings;    //TODO why the fuck is this a set? Are they sorted?
-
-    int _deadLemmings;
-    int _savedLemmings;
-    int _goalLemmingNum;
-    int _releaseRate;
-    int _minReleaseRate;
-    int _availableLemmings;
-
-    LevelIndex _levelIndex;
-
-    int _goalTime;
-    float _currentTime;
-    int _lastTimeSpawnedLemming;
-
-    bool _spawningLemmings;
-    bool _finishedLevel;
-
-    bool _exploding;
-    SoundManager *_soundManager;
-    ShaderManager *_shaderManager;
-
-    unique_ptr<Sound> _music;
-    unique_ptr<Sound> _dooropenSound;
-
 
     void finishLevel();
 
@@ -105,6 +80,34 @@ private:
 
 
     void clearLemmings();
+
+    /*
+     * fields
+     */
+    std::unique_ptr<Level> _levelStartValues;
+
+
+    set<std::unique_ptr<Lemming>> _lemmings;
+
+    int _deadLemmings;
+    int _savedLemmings;
+    int _releaseRate;
+    int _availableLemmings;
+
+    LevelIndex _levelIndex;
+
+    float _currentTime;
+    int _lastTimeSpawnedLemming;
+
+    bool _spawningLemmings;
+    bool _finishedLevel;
+
+    bool _exploding;
+    ShaderManager *_shaderManager;
+    ParticleSystemManager* _particleSystemManager;
+    music_ptr_t _music;
+    sound_ptr_t _dooropenSound;
+    int _channel;
 };
 
 #endif // _LEVEL_RUNNER_INCLUDE

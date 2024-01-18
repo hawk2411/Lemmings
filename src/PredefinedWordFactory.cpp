@@ -1,6 +1,5 @@
 #include "PredefinedWordFactory.h"
 #include "Game.h"
-#include "Scene.h"
 #include "Sprite.h"
 #include "ShaderManager.h"
 

@@ -15,11 +15,11 @@ public:
     void setPosition(glm::vec2 position);
 
 private:
-    glm::vec2 position;
-    std::unique_ptr<Sprite> minutes;
-    std::unique_ptr<Sprite> firstDigitSeconds;
-    std::unique_ptr<Sprite> secondDigitSeconds;
-    std::unique_ptr<Sprite> hyphen;
+    glm::vec2 _position;
+    std::unique_ptr<Sprite> _minutes;
+    std::unique_ptr<Sprite> _firstDigitSeconds;
+    std::unique_ptr<Sprite> _secondDigitSeconds;
+    std::unique_ptr<Sprite> _hyphen;
 
 };
 

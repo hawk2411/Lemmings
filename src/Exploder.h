@@ -3,17 +3,17 @@
 
 
 #include "Job.h"
-
+#include "ParticleSystemManager.h"
 
 class Exploder : public Job {
 public:
-    Exploder(SoundManager *soundManager);
+    explicit Exploder(ParticleSystemManager* particleSystemManager);
 
-    void initAnims(ShaderProgram &shaderProgram);
+    void initAnims(ShaderProgram &shaderProgram) override;
 
-    void updateStateMachine(int deltaTime, Level *levelAttributes, IMaskManager *mask);
+    void updateStateMachine(int deltaTime, Level *levelAttributes, IMaskManager *mask) override;
 
-    void setWalkingRight(bool value);
+    void setWalkingRight(bool value) override;
 
     string getName() const override { return "BOMBER"; }
 
@@ -23,9 +23,8 @@ private:
         BURNING_DEATH_STATE
     };
 
-
-private:
-    ExploderState state;
+    ExploderState _state;
+    ParticleSystemManager* _particleSystemManager;
 
     void explode(IMaskManager *mask);
 };

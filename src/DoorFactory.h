@@ -8,7 +8,7 @@
 class DoorFactory {
 
 public:
-    static Door *createDoor(const string &type, ShaderManager *shaderManager);
+    static std::unique_ptr<Door> createDoor(const string &type, ShaderManager *shaderManager);
 };
 
 

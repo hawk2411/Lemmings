@@ -2,27 +2,27 @@
 #include "GreenNumFactory.h"
 
 void NumDisplayGreen::initAux(ShaderManager *shaderManager) {
-    leftNum = GreenNumFactory::createNum(shaderManager);
-    rightNum = GreenNumFactory::createNum(shaderManager);
+    _leftNum = GreenNumFactory::createNum(shaderManager);
+    _rightNum = GreenNumFactory::createNum(shaderManager);
 
 }
 
 void NumDisplayGreen::displayNumAux(int firstDigit, int secondDigit) {
     if (firstDigit != 0) {
-        leftNum->changeAnimation(firstDigit);
+        _leftNum->changeAnimation(firstDigit);
     } else {
-        leftNum->changeAnimation(10);
+        _leftNum->changeAnimation(10);
     }
 
-    rightNum->changeAnimation(secondDigit);
+    _rightNum->changeAnimation(secondDigit);
 
 }
 
 void NumDisplayGreen::setPosition(glm::vec2 position) {
-    this->position = position;
+    this->_position = position;
 
-    leftNum->setPosition(this->position + glm::vec2(4, 0));
-    rightNum->setPosition(this->position + glm::vec2(12, 0));
+    _leftNum->setPosition(this->_position + glm::vec2(4, 0));
+    _rightNum->setPosition(this->_position + glm::vec2(12, 0));
 
 }
 

@@ -1,10 +1,14 @@
 #ifndef _CREDITS_INCLUDE
 #define _CREDITS_INCLUDE
 
+#include <memory>
+#include <SDL_mixer.h>
+#include <functional>
+#include <sstream>
+
 #include "GameState.h"
 #include "Texture.h"
 #include "Sprite.h"
-#include "Sound.h"
 #include "Game.h"
 
 class Credits : public GameState {
@@ -19,7 +23,7 @@ public:
 
     void render() override;
 
-    void endMusic();
+    static void endMusic();
 
     void onKeyPressed(const SDL_KeyboardEvent &keyboardEvent) override;
 
@@ -27,14 +31,11 @@ public:
 
 private:
 
-    // Functions
-    void initTextures();
-
-    // Parametres
-    Texture creditsLevelTexture;
-    std::unique_ptr<Sprite> creditsLevelSprite;
-    unique_ptr<Sound> music;
+    // Parameters
+    Texture _creditsLevelTexture;
+    std::unique_ptr<Sprite> _creditsLevelSprite;
     ShaderManager *_shaderManager;
+    music_ptr_t _music;
 };
 
 

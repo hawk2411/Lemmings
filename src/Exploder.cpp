@@ -1,10 +1,6 @@
 #include "Game.h"
-#include "Scene.h"
 #include "Utils.h"
 #include "ParticleSystemManager.h"
-#include "LevelRunner.h"
-#include "EventCreator.h"
-
 #include "Exploder.h"
 
 enum ExploderAnims {
@@ -12,7 +8,9 @@ enum ExploderAnims {
     BURNING_DEATH
 };
 
-Exploder::Exploder(SoundManager *soundManager) : Job(Jobs::EXPLODER, soundManager) {
+Exploder::Exploder(ParticleSystemManager *particleSystemManager) :
+        Job(Jobs::EXPLODER),
+        _particleSystemManager(particleSystemManager), _state(EXPLODER_STATE) {
 
 }
 
@@ -37,29 +35,29 @@ void Exploder::initAnims(ShaderProgram &shaderProgram) {
     }
 
 
-    state = EXPLODER_STATE;
+    _state = EXPLODER_STATE;
     _jobSprite->changeAnimation(EXPLODER);
 
 }
 
 void Exploder::setWalkingRight(bool value) {
-    walkingRight = value;
+    _walkingRight = value;
 }
 
 void Exploder::updateStateMachine(int deltaTime, Level *levelAttributes, IMaskManager *mask) {
 
-    switch (state) {
+    switch (_state) {
         case EXPLODER_STATE:
             if (_jobSprite->isInLastFrame()) {
-                state = BURNING_DEATH_STATE;
+                _state = BURNING_DEATH_STATE;
                 _jobSprite->changeAnimation(BURNING_DEATH);
             }
             break;
         case BURNING_DEATH_STATE:
             if (_jobSprite->isInLastFrame()) {
-                explode(mask);
-                isFinished = true;
+                _isFinished = true;
                 _nextJob = Jobs::UNKNOWN;
+                explode(mask);
             }
 
             break;
@@ -73,20 +71,19 @@ void Exploder::explode(IMaskManager *mask) {
         for (int j = 0; j < 22; ++j) {
             int offset;
             if (j >= 15) {
-                offset = Utils::max(j - 17, 0);
+                offset = std::max<int>(j - 17, 0);
             } else {
                 offset = 15 - 2 * j;
             }
             if (i >= offset && i < 16 - offset) {
-                int x = posBase.x + i;
-                int y = posBase.y + j;
+                int x = static_cast<int>(posBase.x) + i;
+                int y = static_cast<int>(posBase.y) + j;
                 mask->eraseSpecialMask(x, y);
             }
         }
     }
     posBase += glm::ivec2(8, 15);
-    auto eventData = new glm::vec2(posBase);
-    EventCreator::sendSimpleUserEvent(CREATE_NEW_PARTICLE_SYSTEM, eventData);
+    _particleSystemManager->createNewParticleSystem(posBase);
 }
 
 

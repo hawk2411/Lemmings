@@ -7,13 +7,13 @@
 
 class Digger : public Job {
 public:
-    Digger(SoundManager *soundManager);
+    Digger()=default;
 
-    void initAnims(ShaderProgram &shaderProgram);
+    void initAnims(ShaderProgram &shaderProgram) override;
 
-    void updateStateMachine(int deltaTime, Level *levelAttributes, IMaskManager *mask);
+    void updateStateMachine(int deltaTime, Level *levelAttributes, IMaskManager *mask) override;
 
-    void setWalkingRight(bool value);
+    void setWalkingRight(bool value) override;
 
     string getName()  const override {return "DIGGER";}
 
@@ -23,15 +23,6 @@ private:
 
     bool canDig(IMaskManager *mask) const;
 
-private:
-    enum DiggerState {
-        DIGGING_STATE
-    };
-
-
-private:
-    DiggerState state;
-    bool firstTime = true;
 };
 
 

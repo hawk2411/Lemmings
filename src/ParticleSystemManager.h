@@ -7,9 +7,11 @@
 
 class ParticleSystemManager {
 public:
+    explicit ParticleSystemManager(ShaderProgram *shaderProgram);
+
     void init();
 
-    void createNewParticleSystem( ShaderProgram* shaderProgram, glm::vec2 position);
+    void createNewParticleSystem(glm::vec2 position);
 
     void update(int deltaTime);
 
@@ -18,7 +20,8 @@ public:
     bool finished();
 
 private:
-    vector<ParticleSystem *> particleSystems;
+    vector<std::unique_ptr<ParticleSystem>> _particleSystems;
+    ShaderProgram *_shaderProgram;
 };
 
 

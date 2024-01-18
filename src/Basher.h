@@ -7,7 +7,7 @@
 
 class Basher : public Job {
 public:
-    Basher(SoundManager *soundManager);
+    Basher();
 
     void initAnims(ShaderProgram &shaderProgram) override;
 
@@ -32,7 +32,7 @@ private:
 
 
 private:
-    BasherState state;
+    BasherState _state;
 };
 
 

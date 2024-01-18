@@ -1,24 +1,23 @@
 #include <iostream>
 #include "DoorFactory.h"
-#include "Game.h"
 #include "DoorStandard.h"
 #include "DoorEgypt.h"
 #include "DoorMaya.h"
 #include "DoorHell.h"
 
 
-Door *DoorFactory::createDoor(const string &type, ShaderManager *shaderManager) {
+std::unique_ptr<Door> DoorFactory::createDoor(const string &type, ShaderManager *shaderManager) {
     if (type == "standard") {
-        return new DoorStandard(shaderManager);
-    };
+        return std::make_unique<DoorStandard>(shaderManager);
+    }
     if (type == "egypt") {
-        return new DoorEgypt(shaderManager);
+        return std::make_unique<DoorEgypt>(shaderManager);
     }
     if (type == "maya") {
-        return new DoorMaya(shaderManager);
+        return std::make_unique<DoorMaya>(shaderManager);
     }
     if (type == "hell") {
-        return new DoorHell(shaderManager);
+        return std::make_unique<DoorHell>(shaderManager);
     }
     return nullptr;
 }

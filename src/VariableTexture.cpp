@@ -1,4 +1,4 @@
-#include <SOIL/SOIL.h>
+#include <SOIL/src/SOIL.h>
 #include "VariableTexture.h"
 
 
@@ -14,8 +14,7 @@ VariableTexture::VariableTexture() :
         _widthTex(0),
         _heightTex(0),
         _texId(0),
-        _format{}
-        {}
+        _format{} {}
 
 VariableTexture::~VariableTexture() {
     if (_image)
@@ -27,13 +26,13 @@ bool VariableTexture::loadFromFile(const string &filename, PixelFormat imageForm
     int channels = 0;
     _format = imageFormat;
     switch (_format) {
-        case TEXTURE_PIXEL_FORMAT_RGB:
+        case PixelFormat::TEXTURE_PIXEL_FORMAT_RGB:
             _image = SOIL_load_image(filename.c_str(), &_widthTex, &_heightTex, &channels, SOIL_LOAD_RGB);
             break;
-        case TEXTURE_PIXEL_FORMAT_RGBA:
+        case PixelFormat::TEXTURE_PIXEL_FORMAT_RGBA:
             _image = SOIL_load_image(filename.c_str(), &_widthTex, &_heightTex, &channels, SOIL_LOAD_RGBA);
             break;
-        case TEXTURE_PIXEL_FORMAT_L:
+        case PixelFormat::TEXTURE_PIXEL_FORMAT_L:
             _image = SOIL_load_image(filename.c_str(), &_widthTex, &_heightTex, &channels, SOIL_LOAD_L);
             break;
     }
@@ -42,13 +41,13 @@ bool VariableTexture::loadFromFile(const string &filename, PixelFormat imageForm
     glGenTextures(1, &_texId);
     glBindTexture(GL_TEXTURE_2D, _texId);
     switch (_format) {
-        case TEXTURE_PIXEL_FORMAT_RGB:
+        case PixelFormat::TEXTURE_PIXEL_FORMAT_RGB:
             glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, _widthTex, _heightTex, 0, GL_RGB, GL_UNSIGNED_BYTE, _image);
             break;
-        case TEXTURE_PIXEL_FORMAT_RGBA:
+        case PixelFormat::TEXTURE_PIXEL_FORMAT_RGBA:
             glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, _widthTex, _heightTex, 0, GL_RGBA, GL_UNSIGNED_BYTE, _image);
             break;
-        case TEXTURE_PIXEL_FORMAT_L:
+        case PixelFormat::TEXTURE_PIXEL_FORMAT_L:
             glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, _widthTex, _heightTex, 0, GL_RED, GL_UNSIGNED_BYTE, _image);
             break;
     }
@@ -105,19 +104,19 @@ void VariableTexture::setMagFilter(GLint value) {
 }
 
 void VariableTexture::use() const {
-    if(!_image)
+    if (!_image)
         return;
 
     glEnable(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, _texId);
     switch (_format) {
-        case TEXTURE_PIXEL_FORMAT_RGB:
+        case PixelFormat::TEXTURE_PIXEL_FORMAT_RGB:
             glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, _widthTex, _heightTex, 0, GL_RGB, GL_UNSIGNED_BYTE, _image);
             break;
-        case TEXTURE_PIXEL_FORMAT_RGBA:
+        case PixelFormat::TEXTURE_PIXEL_FORMAT_RGBA:
             glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, _widthTex, _heightTex, 0, GL_RGBA, GL_UNSIGNED_BYTE, _image);
             break;
-        case TEXTURE_PIXEL_FORMAT_L:
+        case PixelFormat::TEXTURE_PIXEL_FORMAT_L:
             glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, _widthTex, _heightTex, 0, GL_RED, GL_UNSIGNED_BYTE, _image);
             break;
     }
@@ -129,22 +128,24 @@ void VariableTexture::use() const {
 }
 
 unsigned char VariableTexture::pixel(unsigned int x, unsigned int y) const {
-    if (_format == TEXTURE_PIXEL_FORMAT_RGB)
-        return _image[3 * (y * _widthTex + x)];
-    else if (_format == TEXTURE_PIXEL_FORMAT_RGBA)
-        return _image[4 * (y * _widthTex + x)];
-    else
-        return _image[y * _widthTex + x];
+    switch (_format) {
+        case PixelFormat::TEXTURE_PIXEL_FORMAT_RGB :
+            return _image[3 * (y * _widthTex + x)];
+        case PixelFormat::TEXTURE_PIXEL_FORMAT_RGBA:
+            return _image[4 * (y * _widthTex + x)];
+        default:
+            return _image[y * _widthTex + x];
+    }
 }
 
 void VariableTexture::setPixel(unsigned int x, unsigned int y, unsigned char value) {
-    if (_format == TEXTURE_PIXEL_FORMAT_L) {
+    if (_format == PixelFormat::TEXTURE_PIXEL_FORMAT_L) {
         _image[y * _widthTex + x] = value;
     }
 }
 
 void VariableTexture::setPixel(unsigned int x, unsigned int y, const glm::ivec3 &value) {
-    if (_format == TEXTURE_PIXEL_FORMAT_RGB) {
+    if (_format == PixelFormat::TEXTURE_PIXEL_FORMAT_RGB) {
         _image[3 * (y * _widthTex + x)] = value.r;
         _image[3 * (y * _widthTex + x) + 1] = value.g;
         _image[3 * (y * _widthTex + x) + 2] = value.b;
@@ -152,7 +153,7 @@ void VariableTexture::setPixel(unsigned int x, unsigned int y, const glm::ivec3 
 }
 
 void VariableTexture::setPixel(unsigned int x, unsigned int y, const glm::ivec4 &value) {
-    if (_format == TEXTURE_PIXEL_FORMAT_RGBA) {
+    if (_format == PixelFormat::TEXTURE_PIXEL_FORMAT_RGBA) {
         _image[4 * (y * _widthTex + x)] = value.r;
         _image[4 * (y * _widthTex + x) + 1] = value.g;
         _image[4 * (y * _widthTex + x) + 2] = value.b;
@@ -161,7 +162,7 @@ void VariableTexture::setPixel(unsigned int x, unsigned int y, const glm::ivec4 
 }
 
 void VariableTexture::saveBMP(const string &filename) {
-    if (_format == TEXTURE_PIXEL_FORMAT_RGB)
+    if (_format == PixelFormat::TEXTURE_PIXEL_FORMAT_RGB)
         SOIL_save_image(filename.c_str(), SOIL_SAVE_TYPE_BMP, _widthTex, _heightTex, 3, _image);
     else
         SOIL_save_image(filename.c_str(), SOIL_SAVE_TYPE_BMP, _widthTex, _heightTex, 4, _image);

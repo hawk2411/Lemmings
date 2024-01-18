@@ -1,20 +1,19 @@
+#include "UserEvent.h"
 #include "Instructions.h"
-#include "Utils.h"
 #include "ShaderManager.h"
 #include "KeyFactory.h"
 #include "Game.h"
-#include "EventCreator.h"
 
 Instructions::Instructions(Game *game) : actualPage(0),
                                          _onlyLeft(false),
                                          _onlyRight(true), GameState(game),
-                                         _shaderManager(game->getShaderManager()) {
+                                         _shaderManager(game->getShaderManager()),
+                                         music_(createMusic("sounds/InstructionsSong.ogg"))
+                                         {
 
-    _music = make_unique<Sound>(game->getSoundManager(), "sounds/InstructionsSong.ogg",
-                                FMOD_LOOP_NORMAL | FMOD_CREATESTREAM);
     _leftKey = KeyFactory::createLeftKey(&_shaderManager->getShaderProgram());
     _rightKey = KeyFactory::createRightKey(&_shaderManager->getShaderProgram());
-    _instructionsLevelTexture.loadFromFile("images/menu/menuBackground.png", TEXTURE_PIXEL_FORMAT_RGBA);
+    _instructionsLevelTexture.loadFromFile("images/menu/menuBackground.png", PixelFormat::TEXTURE_PIXEL_FORMAT_RGBA);
     _instructionsLevelTexture.setMinFilter(GL_NEAREST);
     _instructionsLevelTexture.setMagFilter(GL_NEAREST);
     _instructionsWord = make_unique<Word>("INSTRUCTIONS", _shaderManager);
@@ -86,8 +85,8 @@ void Instructions::init() {
     _onlyRight = true;
     _onlyLeft = false;
     actualPage = 0;
-    _music->playSound();
-    _music->setVolume(1.f);
+    Mix_PlayMusic(music_.get(), -1);
+    Mix_VolumeMusic(MIX_MAX_VOLUME);
     _rightKey->setPosition(glm::vec2(230, 160));
     _leftKey->setPosition(glm::vec2(200, 160));
     _escapeKey->setPosition(glm::vec2(30, 160));
@@ -155,7 +154,7 @@ void Instructions::update(int deltaTime) {
 void Instructions::render() {
     _shaderManager->useShaderProgram();
     _instructionsLevelSprite->render();
-    for (int i = actualPage; i < Utils::min(actualPage + LINES_PAGE, _instructionPages.size()); ++i) {
+    for (int i = actualPage; i < std::min(static_cast<std::size_t>(actualPage + LINES_PAGE), _instructionPages.size()); ++i) {
         _instructionPages[i]->render();
     }
     if (!_onlyRight) {
@@ -190,7 +189,7 @@ void Instructions::passPageRight() {
 
 
 void Instructions::endMusic() {
-    _music->stopSound();
+    Mix_HaltMusic();
 }
 
 void Instructions::mouseMoved(int mouseX, int mouseY, bool bLeftButton, bool bRightButton) {
@@ -201,14 +200,14 @@ void Instructions::onKeyPressed(const SDL_KeyboardEvent &keyboardEvent) {
     switch (keyboardEvent.keysym.sym) {
         case SDLK_ESCAPE:
             endMusic();
-            EventCreator::sendSimpleUserEvent(CHANGE_TO_MENU, nullptr, nullptr);
+            UserEvent<CHANGE_TO_MENU>::sendEvent();
             break;
         case SDLK_RIGHT:
             passPageRight();
             break;
         case SDLK_LEFT:
             passPageLeft();
-            break;;
+            break;
     }
 }
 

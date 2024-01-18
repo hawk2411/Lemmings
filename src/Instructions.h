@@ -1,12 +1,12 @@
 #ifndef _INSTRUCTIONS_INCLUDE
 #define _INSTRUCTIONS_INCLUDE
 
+#include "MusicFabric.hpp"
 #include "ShaderManager.h"
 #include "GameState.h"
 #include "Texture.h"
 #include "Sprite.h"
 #include "Word.h"
-#include "Sound.h"
 
 class Instructions : public GameState {
 
@@ -24,7 +24,7 @@ public:
 
     void passPageRight();
 
-    void endMusic();
+    static void endMusic();
 
     void mouseMoved(int mouseX, int mouseY, bool bLeftButton, bool bRightButton) override;
 
@@ -49,7 +49,7 @@ private:
     bool _onlyLeft;
     bool _onlyRight;
 
-    unique_ptr<Sound> _music;
+    music_ptr_t music_;
 };
 
 

@@ -6,8 +6,8 @@ using namespace std;
 
 
 Shader::Shader() {
-    shaderId = 0;
-    compiled = false;
+    _shaderId = 0;
+    _compiled = false;
 }
 
 
@@ -18,20 +18,20 @@ void Shader::initFromSource(const ShaderType type, const string &source) {
 
     switch (type) {
         case VERTEX_SHADER:
-            shaderId = glCreateShader(GL_VERTEX_SHADER);
+            _shaderId = glCreateShader(GL_VERTEX_SHADER);
             break;
         case FRAGMENT_SHADER:
-            shaderId = glCreateShader(GL_FRAGMENT_SHADER);
+            _shaderId = glCreateShader(GL_FRAGMENT_SHADER);
             break;
     }
-    if (shaderId == 0)
+    if (_shaderId == 0)
         return;
-    glShaderSource(shaderId, 1, &sourcePtr, NULL);
-    glCompileShader(shaderId);
-    glGetShaderiv(shaderId, GL_COMPILE_STATUS, &status);
-    compiled = (status == GL_TRUE);
-    glGetShaderInfoLog(shaderId, 512, NULL, buffer);
-    errorLog.assign(buffer);
+    glShaderSource(_shaderId, 1, &sourcePtr, nullptr);
+    glCompileShader(_shaderId);
+    glGetShaderiv(_shaderId, GL_COMPILE_STATUS, &status);
+    _compiled = (status == GL_TRUE);
+    glGetShaderInfoLog(_shaderId, 512, nullptr, buffer);
+    _errorLog.assign(buffer);
 }
 
 bool Shader::initFromFile(const ShaderType type, const string &filename) {
@@ -45,21 +45,21 @@ bool Shader::initFromFile(const ShaderType type, const string &filename) {
 }
 
 void Shader::free() {
-    glDeleteShader(shaderId);
-    shaderId = 0;
-    compiled = false;
+    glDeleteShader(_shaderId);
+    _shaderId = 0;
+    _compiled = false;
 }
 
 GLuint Shader::getId() const {
-    return shaderId;
+    return _shaderId;
 }
 
 bool Shader::isCompiled() const {
-    return compiled;
+    return _compiled;
 }
 
 const string &Shader::log() const {
-    return errorLog;
+    return _errorLog;
 }
 
 bool Shader::loadShaderSource(const string &filename, string &shaderSource) {

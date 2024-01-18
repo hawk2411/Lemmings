@@ -1,4 +1,3 @@
-#include <GL/glew.h>
 #include "Cursor.h"
 #include "Game.h"
 #include "ShaderManager.h"
@@ -12,54 +11,53 @@ enum CursorStates {
 
 Cursor::Cursor(ShaderManager* shaderManager) {
 
-    cursorSprite = Sprite::createSprite(glm::ivec2(12, 12), glm::vec2(29. / 32, 29. / 128),
-                                        &shaderManager->getShaderProgram(),
-                                        &Game::spriteSheets().cursorSprites);
+    _cursorSprite = Sprite::createSprite(glm::ivec2(12, 12), glm::vec2(29. / 32, 29. / 128),
+                                         &shaderManager->getShaderProgram(),
+                                         &Game::spriteSheets().cursorSprites);
 
 }
 
 void Cursor::init() {
     SDL_WarpMouseGlobal(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2);
-    //glutWarpPointer(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2);
 
-    cursorSprite->setNumberAnimations(4);
+    _cursorSprite->setNumberAnimations(4);
 
-    cursorSprite->setAnimationSpeed(CROSS, 12);
-    cursorSprite->addKeyframe(CROSS, glm::vec2(0, 87. / 128));
+    _cursorSprite->setAnimationSpeed(CROSS, 12);
+    _cursorSprite->addKeyframe(CROSS, glm::vec2(0, 87. / 128));
 
-    cursorSprite->setAnimationSpeed(FOCUS, 12);
-    cursorSprite->addKeyframe(FOCUS, glm::vec2(0, 58. / 128));
+    _cursorSprite->setAnimationSpeed(FOCUS, 12);
+    _cursorSprite->addKeyframe(FOCUS, glm::vec2(0, 58. / 128));
 
-    cursorSprite->setAnimationSpeed(LEFT, 12);
-    cursorSprite->addKeyframe(LEFT, glm::vec2(0, 0));
+    _cursorSprite->setAnimationSpeed(LEFT, 12);
+    _cursorSprite->addKeyframe(LEFT, glm::vec2(0, 0));
 
-    cursorSprite->setAnimationSpeed(RIGHT, 12);
-    cursorSprite->addKeyframe(RIGHT, glm::vec2(0, 29. / 128));
+    _cursorSprite->setAnimationSpeed(RIGHT, 12);
+    _cursorSprite->addKeyframe(RIGHT, glm::vec2(0, 29. / 128));
 
-    cursorSprite->changeAnimation(CROSS);
+    _cursorSprite->changeAnimation(CROSS);
 }
 
 void Cursor::render() {
-    cursorSprite->render();
+    _cursorSprite->render();
 }
 
 void Cursor::setScrollLeftCursor() {
-    cursorSprite->changeAnimation(LEFT);
+    _cursorSprite->changeAnimation(LEFT);
 }
 
 void Cursor::setScrollRightCursor() {
-    cursorSprite->changeAnimation(RIGHT);
+    _cursorSprite->changeAnimation(RIGHT);
 }
 
 void Cursor::setFocusCursor() {
-    cursorSprite->changeAnimation(FOCUS);
+    _cursorSprite->changeAnimation(FOCUS);
 }
 
 void Cursor::setCrossCursor() {
-    cursorSprite->changeAnimation(CROSS);
+    _cursorSprite->changeAnimation(CROSS);
 }
 
 void Cursor::setPosition(glm::vec2 newPosition) {
-    cursorSprite->setPosition(newPosition);
+    _cursorSprite->setPosition(newPosition);
 }
 

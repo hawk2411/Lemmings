@@ -5,7 +5,7 @@
 #include "ShaderProgram.h"
 #include "GameState.h"
 #include "Sprite.h"
-#include "Sound.h"
+#include "MusicFabric.hpp"
 #include "Game.h"
 #include "LevelModes.h"
 #include "LevelIndex.h"
@@ -31,7 +31,7 @@ public:
 
     LevelModes::Mode getMode() const;
 
-    void endMusic();
+    static void endMusic();
 
 
     void mouseMoved(int mouseX, int mouseY, bool bLeftButton, bool bRightButton) override;
@@ -46,31 +46,31 @@ private:
 
     // Parametres
 
-    Texture menuTexture;
-    Texture menuLogoTexture;
-    Texture menuAboutTexture;
-    Texture menuHelpTexture;
-    Texture menuExitTexture;
-    Texture menuModeTexture;
-    Texture menuPlayingTexture;
+    Texture _menuTexture;
+    Texture _menuLogoTexture;
+    Texture _menuAboutTexture;
+    Texture _menuHelpTexture;
+    Texture _menuExitTexture;
+    Texture _menuModeTexture;
+    Texture _menuPlayingTexture;
 
-    std::unique_ptr<Sprite> menuBackground;
-    std::unique_ptr<Sprite> menuLogo;
-    std::unique_ptr<Sprite> menuAbout;
-    std::unique_ptr<Sprite> menuHelp;
-    std::unique_ptr<Sprite> menuExit;
-    std::unique_ptr<Sprite> menuMode;
-    std::unique_ptr<Sprite> menuPlaying;
+    std::unique_ptr<Sprite> _menuBackground;
+    std::unique_ptr<Sprite> _menuLogo;
+    std::unique_ptr<Sprite> _menuAbout;
+    std::unique_ptr<Sprite> _menuHelp;
+    std::unique_ptr<Sprite> _menuExit;
+    std::unique_ptr<Sprite> _menuMode;
+    std::unique_ptr<Sprite> _menuPlaying;
 
     LevelIndex _levelIndex;
 
-    glm::vec2 modePositions[3] = {
+    glm::vec2 _modePositions[3] = {
             glm::vec2(0, 0),
             glm::vec2(0, 0.25),
             glm::vec2(0, 0.5)
     };
 
-    unique_ptr<Sound> music;
+    music_ptr_t _music;
     ShaderManager *_shaderManager;
 };
 

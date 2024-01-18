@@ -5,9 +5,10 @@
 
 #include "UserInterface.h"
 
-UserInterface::UserInterface(ShaderManager *shaderManager): _shaderManager(shaderManager) {
+UserInterface::UserInterface(ShaderManager *shaderManager):
+            _shaderManager(shaderManager), _position(0,0), _selectedButton(0) {
 
-    _backgroundTexture.loadFromFile("images/UI/black_frame.png", TEXTURE_PIXEL_FORMAT_RGBA);
+    _backgroundTexture.loadFromFile("images/UI/black_frame.png", PixelFormat::TEXTURE_PIXEL_FORMAT_RGBA);
     _backgroundTexture.setMinFilter(GL_NEAREST);
     _backgroundTexture.setMagFilter(GL_NEAREST);
 
@@ -20,7 +21,7 @@ UserInterface::UserInterface(ShaderManager *shaderManager): _shaderManager(shade
     _inWord = PredefinedWordFactory::createInfoWord("IN", &_shaderManager->getShaderProgram());
 
     _timeWord = PredefinedWordFactory::createInfoWord("TIME", &_shaderManager->getShaderProgram());
-    _selectFrameTexture.loadFromFile("images/UI/white_frame.png", TEXTURE_PIXEL_FORMAT_RGBA);
+    _selectFrameTexture.loadFromFile("images/UI/white_frame.png", PixelFormat::TEXTURE_PIXEL_FORMAT_RGBA);
     _selectFrameTexture.setMinFilter(GL_NEAREST);
     _selectFrameTexture.setMagFilter(GL_NEAREST);
 
@@ -105,18 +106,13 @@ void UserInterface::setPosition(glm::vec2 position) {
 
 int UserInterface::getButtonIndexInPos(int posX, int posY, bool isPaused) const {
     for (int i = 0; i < NUM_BUTTONS; ++i) {
-        int leftPos = _position.x + 16 * i + 1;
-        int rightPos = _position.x + 16 * i + 17;
+        int leftPos = static_cast<int>(_position.x) + 16 * i + 1;
+        int rightPos = static_cast<int>(_position.x) + 16 * i + 17;
 
-        if (leftPos <= posX && posX < rightPos && posY >= _position.y + 13) {
-            if (i != Button::PAUSE_BUTTON && isPaused) {
-                return -1;
-            } else {
-                return i;
-            }
+        if (leftPos <= posX && posX < rightPos && posY >= static_cast<int>(_position.y) + 13) {
+            return (i != Button::PAUSE_BUTTON && isPaused) ? -1 : i;
         }
     }
-
     return -1;
 }
 
@@ -126,7 +122,7 @@ void UserInterface::changeSelectedButton(int selectedButton) {
     _selectFrame->setPosition(_position + glm::vec2(16 * selectedButton, 12));
 }
 
-void UserInterface::changeDisplayedJob(string lemmingJobName) {
+void UserInterface::changeDisplayedJob(const string& lemmingJobName) {
     UIAdapter::changeJobName(_jobName.get(), lemmingJobName);
 }
 

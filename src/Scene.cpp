@@ -5,16 +5,21 @@
 #include "Utils.h"
 #include "HardMaskManager.h"
 #include "EasyMaskManager.h"
-#include "EventCreator.h"
+#include "UserEvent.h"
 
 #include "Scene.h"
 #include "LevelIndex.h"
 
-Scene::Scene(Game *game, SoundManager *soundManager, const LevelIndex &levelIndex)
-        : GameState(game), _scroller(false), _shaderManager(_game->getShaderManager()), _ui(_game->getShaderManager()),
-          _cursor(_game->getShaderManager()) {
+Scene::Scene(Game *game, const LevelIndex &levelIndex)
+        : GameState(game),
+          _scroller(false),
+          _shaderManager(_game->getShaderManager()),
+          _ui(_game->getShaderManager()),
+          _cursor(_game->getShaderManager()),
+          _particleSystemManager(&_game->getShaderManager()->getShaderProgram()) {
 
-    _levelRunner = std::make_unique<LevelRunner>(soundManager, _game->getShaderManager(), levelIndex);
+    _levelRunner = std::make_unique<LevelRunner>(_game->getShaderManager(), &_particleSystemManager,
+                                                 levelIndex);
 
     _maskManagers.insert(std::make_pair(Difficulties::Mode::Easy, std::unique_ptr<IMaskManager>(
             new EasyMaskManager(_levelRunner->getLevelAttributes()))));
@@ -27,31 +32,31 @@ Scene::Scene(Game *game, SoundManager *soundManager, const LevelIndex &levelInde
 
 void Scene::init() {
     _cursor.init();
-
     _particleSystemManager.init();
 
     initMap();
     initUI();
 
-    paused = false;
-    speedUp = false;
+    _paused = false;
+    _speedUp = false;
 
 }
 
 void Scene::update(int deltaTime) {
-    update();
+    updateCursor();
     _maskManagers[_currentDifficultyMode].get()->update(deltaTime);
 
+    //_scroller.isScrolled is set by the updateCursor() function
     if (_scroller.isScrolled()) {
         initMap();
         _scroller.setScroll(false);
     }
 
-    if (paused) {
+    if (_paused) {
         return;
     }
 
-    if (speedUp) {
+    if (_speedUp) {
         deltaTime = 4 * deltaTime;
     }
 
@@ -60,12 +65,15 @@ void Scene::update(int deltaTime) {
     updateUI();
 
     if (_levelRunner->finished() && _particleSystemManager.finished()) {
-        auto *resultStatistic = new ResultStatistic{_levelRunner->getPercentageTotalLemmings(),
-                                                    _levelRunner->getPercentageSavedLemmings()};
-        auto *levelIndex = new LevelIndex{_levelRunner->getActualMode(), _levelRunner->getActualLevel()};
         _levelRunner->endMusic();
 
-        EventCreator::sendSimpleUserEvent(CHANGE_TO_RESULT, resultStatistic, levelIndex);
+        UserEvent<CHANGE_TO_RESULT, ResultStatistic, LevelIndex>::sendEvent(
+                new ResultStatistic {
+                    _levelRunner->getPercentageTotalLemmings(),
+                    _levelRunner->getPercentageSavedLemmings()},
+                    new LevelIndex{_levelRunner->getActualMode(),
+                                   _levelRunner->getActualLevel() }
+                    );
     }
 
 }
@@ -89,19 +97,19 @@ VariableTexture &Scene::getMaskedMap() {
 }
 
 void Scene::changePauseStatus() {
-    paused = !paused;
+    _paused = !_paused;
 }
 
 void Scene::changeSpeedUpStatus() {
-    speedUp = !speedUp;
+    _speedUp = !_speedUp;
 }
 
 bool Scene::isPaused() const {
-    return paused;
+    return _paused;
 }
 
 bool Scene::isSpeedUp() const {
-    return speedUp;
+    return _speedUp;
 }
 
 
@@ -133,31 +141,31 @@ void Scene::updateUI() {
     _ui.update(_levelRunner.get());
 }
 
-void Scene::update() {
+void Scene::updateCursor() {
     updateCursorPosition();
 
-    if (screenMovedArea == ScreenMovedArea::SCROLL_AREA_LEFT) {
+    if (_screenMovedArea == ScreenMovedArea::SCROLL_AREA_LEFT) {
         _scroller.scrollLeft(_levelRunner->getLevelAttributes()->cameraPos,
                              static_cast<int>(_levelRunner->getLevelAttributes()->levelSize.x));
         _cursor.setScrollLeftCursor();
         return;
     }
-    if (screenMovedArea == ScreenMovedArea::SCROLL_AREA_RIGHT) {
+    if (_screenMovedArea == ScreenMovedArea::SCROLL_AREA_RIGHT) {
         _scroller.scrollRight(_levelRunner->getLevelAttributes()->cameraPos,
                               static_cast<int>(_levelRunner->getLevelAttributes()->levelSize.x));
         _cursor.setScrollRightCursor();
         return;
     }
-    if (screenMovedArea == ScreenMovedArea::LEVEL) {
-        int lemmingIndex = _levelRunner->getLemmingIndexInPos(posX, posY);
+    if (_screenMovedArea == ScreenMovedArea::LEVEL) {
+        //game main place
+        int lemmingIndex = _levelRunner->getLemmingIndexInPos(_posX, _posY);
         _ui.changeDisplayedJob(_levelRunner->getLemmingJobNameIndex(lemmingIndex));
 
+        //is a lemming under the cursor
         if (lemmingIndex != -1) {
             _cursor.setFocusCursor();
-        } else {
-            _cursor.setCrossCursor();
+            return;
         }
-        return;
     }
     _cursor.setCrossCursor();
 
@@ -172,7 +180,7 @@ void Scene::eraseSpecialMask(int x, int y) {
 
 }
 
-char Scene::getPixel(int x, int y) {
+unsigned char Scene::getPixel(int x, int y) {
     return _maskManagers[_currentDifficultyMode]->getPixel(x, y);
 }
 
@@ -186,88 +194,67 @@ void Scene::applySpecialMask(int x, int y) {
 
 void Scene::buildStep(glm::vec2 position) {
     for (int i = 0; i < 5; ++i) {
-        Utils::changeTexelColor(_levelRunner->getLevelAttributes()->levelTexture.getId(), position.x + i,
-                                position.y, 120, 77, 0, 255);
-        applyMask(position.x + i, position.y);
+        Utils::changeTexelColor(_levelRunner->getLevelAttributes()->levelTexture.getId(),
+                                static_cast<GLint>(position.x) + i,
+                                static_cast<GLint>(position.y), 120, 77, 0, 255);
+        applyMask(static_cast<GLint>(position.x) + i, static_cast<GLint>(position.y));
     }
 }
 
 void Scene::onKeyPressed(const SDL_KeyboardEvent &keyboardEvent) {
     if (keyboardEvent.keysym.sym == SDLK_ESCAPE) {
+        _levelRunner->endMusic();
         _game->getStateManager()->changeMenu();
     }
 
 }
 
 void Scene::mouseMoved(int mouseX, int mouseY, bool bLeftButton, bool bRightButton) {
-    posX = mouseX;
-    posY = mouseY;
+    _posX = mouseX;
+    _posY = mouseY;
 
-    ScreenClickedArea screenClickedArea = getClickedScreenArea(mouseX, mouseY);
-    screenMovedArea = getMovedScreenArea(mouseX, mouseY);
-    if (screenMovedArea == SCROLL_AREA_LEFT) {
-        int a = 2;
-    }
+    _screenMovedArea = getMovedScreenArea(mouseX, mouseY);
 
-    switch (mouseState) {
+    //_mouseState allows selecting UI elements or lemming sprites directly after pressing the mouse button.
+    //If the user has not yet released the mouse button no selecting is possible
+    switch (_mouseState) {
 
         case LEFT_MOUSE_PRESSED:
             if (!bLeftButton) {
-                mouseState = MouseStates::NONE;
-
+                _mouseState = MouseStates::NONE;
             }
             break;
 
         case RIGHT_MOUSE_PRESSED:
 
             if (!bRightButton) {
-                mouseState = MouseStates::NONE;
+                _mouseState = MouseStates::NONE;
             }
             break;
 
         case MouseStates::NONE:
-
-            if (bLeftButton) {
-                mouseState = LEFT_MOUSE_PRESSED;
-
+            if(bLeftButton) {
+                _mouseState = LEFT_MOUSE_PRESSED;
+                ScreenClickedArea screenClickedArea = getClickedScreenArea(mouseX, mouseY);
                 if (screenClickedArea == ScreenClickedArea::UI) {
                     leftClickOnUI(mouseX, mouseY);
-                } else if (screenClickedArea == ScreenClickedArea::MAP) {
+                } else {
                     leftClickOnMap(mouseX, mouseY);
-                } else if (screenClickedArea == ScreenClickedArea::INFO) {
-
                 }
-
-            } else if (bRightButton) {
-                mouseState = RIGHT_MOUSE_PRESSED;
-
-                if (screenClickedArea == ScreenClickedArea::UI) {
-                } else if (screenClickedArea == ScreenClickedArea::MAP) {
-
-                }
-
-            } else {
-
+                break;
             }
-
+            if(bRightButton) {
+                _mouseState = RIGHT_MOUSE_PRESSED;
+            }
             break;
     }
 }
 
 Scene::ScreenClickedArea Scene::getClickedScreenArea(int mouseX, int mouseY) {
-    if (
-            0 <= mouseX
-            && mouseX < LEVEL_WIDTH
-            && 0 <= mouseY
-            && mouseY < LEVEL_HEIGHT
-            ) {
+    if (mouseX >= 0 && mouseX < LEVEL_WIDTH && mouseY >= 0 && mouseY < LEVEL_HEIGHT) {
         return ScreenClickedArea::MAP;
-    } else if (
-            0 <= mouseX
-            && mouseX < UI_WIDTH
-            && LEVEL_HEIGHT <= mouseY
-            && mouseY < LEVEL_HEIGHT + UI_HEIGHT
-            ) {
+    }
+    if (mouseX >= 0 && mouseX < UI_WIDTH && mouseY >= LEVEL_HEIGHT && mouseY < LEVEL_HEIGHT + UI_HEIGHT) {
         return ScreenClickedArea::UI;
     }
     throw std::runtime_error("Scene::getClickedScreenArea unknown behavior.");
@@ -275,15 +262,18 @@ Scene::ScreenClickedArea Scene::getClickedScreenArea(int mouseX, int mouseY) {
 
 
 Scene::ScreenMovedArea Scene::getMovedScreenArea(int mouseX, int mouseY) {
+
     if (0 <= mouseX && mouseX < SCROLL_WIDTH && mouseY < LEVEL_HEIGHT) {
         return ScreenMovedArea::SCROLL_AREA_LEFT;
-    } else if (LEVEL_WIDTH - SCROLL_WIDTH <= mouseX && mouseX < LEVEL_WIDTH && mouseY < LEVEL_HEIGHT) {
-        return ScreenMovedArea::SCROLL_AREA_RIGHT;
-    } else if (SCROLL_WIDTH <= mouseX && mouseX < LEVEL_WIDTH - SCROLL_WIDTH && mouseY < LEVEL_HEIGHT) {
-        return ScreenMovedArea::LEVEL;
-    } else {
-        return ScreenMovedArea::NONE_AREA;
     }
+    if (LEVEL_WIDTH - SCROLL_WIDTH <= mouseX && mouseX < LEVEL_WIDTH && mouseY < LEVEL_HEIGHT) {
+        return ScreenMovedArea::SCROLL_AREA_RIGHT;
+    }
+
+    return (SCROLL_WIDTH <= mouseX && mouseX < LEVEL_WIDTH - SCROLL_WIDTH && mouseY < LEVEL_HEIGHT)
+           ? ScreenMovedArea::LEVEL
+           : ScreenMovedArea::NONE_AREA;
+
 }
 
 
@@ -296,26 +286,29 @@ void Scene::leftClickOnUI(int posX, int posY) {
 
 void Scene::leftClickOnMap(int posX, int posY) {
 
-    if (_jobAssigner.hasJobToAssign()) {
+    if (!_jobAssigner.hasJobToAssign())
+        return;
 
-        int selectedLemmingIndex = _levelRunner->getLemmingIndexInPos(posX, posY);
-        //_jobAssigner.assignJobLemming(selectedLemmingIndex);
-        if (_levelRunner->assignJob(selectedLemmingIndex, _jobAssigner.getJobToAssign())) {
-            auto jobName = _jobAssigner.getLastOfferedJob();
-            int jobIndex = _jobAssigner.jobNameToIndex(jobName);
-            _levelRunner->decreaseJobCount(jobIndex);
-            if (_levelRunner->getJobCount(jobIndex) > 0) {
-                _jobAssigner.offerJob(jobName);
-            } else {
-                _jobAssigner.setLastOfferedJob(JobAssigner::NONE);
-            }
-            //_jobAssigner.assignJobLemming(selectedLemmingIndex);
-        }
+    int selectedLemmingIndex = _levelRunner->getLemmingIndexInPos(posX, posY);
+    if (selectedLemmingIndex < 0) {
+        return;
+    }
+    if (!_levelRunner->assignJob(selectedLemmingIndex, _jobAssigner.getJobToAssign())) {
+        return;
+    }
+
+    auto jobName = _jobAssigner.getLastOfferedJob();
+    int jobIndex = JobAssigner::jobNameToIndex(jobName);
+    _levelRunner->decreaseJobCount(jobIndex);
+    if (_levelRunner->getJobCount(jobIndex) > 0) {
+        _jobAssigner.offerJob(jobName);
+    } else {
+        _jobAssigner.setLastOfferedJob(JobAssigner::NONE);
     }
 }
 
 void Scene::updateCursorPosition() {
-    glm::vec2 cursorPosition = glm::vec2(posX, posY) - glm::vec2(6, 6);
+    glm::vec2 cursorPosition = glm::vec2(_posX, _posY) - glm::vec2(6, 6);
 
     if (cursorPosition.x < 0) {
         cursorPosition.x = 0;
@@ -334,11 +327,9 @@ void Scene::updateCursorPosition() {
 }
 
 void Scene::changeLevel(const LevelIndex &levelIndex) {
-    // TODO why is nothing happen here?
-    if (_levelRunner->getActualMode() != levelIndex.mode || _levelRunner->getActualLevel() != levelIndex.levelNo) {
-        _levelRunner->changeLevel(levelIndex);
-        _maskManagers[_currentDifficultyMode]->changeLevel(_levelRunner->getLevelAttributes());
-    }
+    _levelRunner->changeLevel(levelIndex);
+    _maskManagers[_currentDifficultyMode]->changeLevel(_levelRunner->getLevelAttributes());
+    init();
 }
 
 
@@ -347,12 +338,12 @@ void Scene::activateButton(int buttonIndex) {
 
     switch (buttonIndex) {
         case Button::MINUS_BUTTON:
-            if (_levelRunner->getLevelAttributes()->releaseRate) {
+            if (_levelRunner->getLevelAttributes()->_releaseRate) {
                 _levelRunner->decreaseReleaseRate();
             }
             break;
         case Button::PLUS_BUTTON:
-            if (_levelRunner->getLevelAttributes()->releaseRate) {
+            if (_levelRunner->getLevelAttributes()->_releaseRate) {
                 _levelRunner->increaseReleaseRate();
             }
             break;
@@ -418,5 +409,6 @@ void Scene::activateButton(int buttonIndex) {
 }
 
 int Scene::getSelectedButtonJobCount() {
-    return _levelRunner->getLevelAttributes()->lemmingsProJob[_ui.getSelectedButton() - 2];
+    return _levelRunner->getLevelAttributes()->_lemmingsProJob[_ui.getSelectedButton() - 2];
 }
+

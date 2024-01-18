@@ -4,8 +4,8 @@
 #define SEC_TO_REAPPEAR 10
 
 void HardMaskManager::init() {
-    int levelHeight = _level->levelSize.y;
-    int levelWidth = _level->levelSize.x;
+    int levelHeight = static_cast<int>(_level->levelSize.y);
+    int levelWidth = static_cast<int>(_level->levelSize.x);
     _timeWhenDisappear = std::vector<std::vector<int>>(levelWidth, std::vector<int>(levelHeight, -1));
     _timeToAppear = std::vector<std::vector<int>>(levelWidth, std::vector<int>(levelHeight, -1));
 
@@ -14,8 +14,8 @@ void HardMaskManager::init() {
 void HardMaskManager::update(int time) {
     int currentTime = time * 10;
 
-    int levelHeight = _level->levelSize.y;
-    int levelWidth = _level->levelSize.x;
+    int levelHeight = static_cast<int>(_level->levelSize.y);
+    int levelWidth = static_cast<int>(_level->levelSize.x);
 
     for (int i = 0; i < levelWidth; ++i) {
         for (int j = 0; j < levelHeight; ++j) {
@@ -47,18 +47,6 @@ void HardMaskManager::applyMask(int x, int y) {
 
 }
 
-void HardMaskManager::eraseSpecialMask(int x, int y) {
-    _level->maskedMap.setPixel(x, y, 0);
-
-}
-
-void HardMaskManager::applySpecialMask(int x, int y) {
-    _level->maskedMap.setPixel(x, y, 200);
-}
-
-char HardMaskManager::getPixel(int x, int y) {
-    return _level->maskedMap.pixel(x, y);
-}
 
 void HardMaskManager::regenerateMask(int x, int y) {
     applyMask(x, y);

@@ -3,10 +3,10 @@
 #include "GreenNumFactory.h"
 
 void PercentageDisplay::init(ShaderManager *shaderManager) {
-    firstNum = GreenNumFactory::createNum(shaderManager);
-    secondNum = GreenNumFactory::createNum(shaderManager);
-    thirdNum = GreenNumFactory::createNum(shaderManager);
-    percentage = GreenNumFactory::createSymbol('%', shaderManager);
+    _firstNum = GreenNumFactory::createNum(shaderManager);
+    _secondNum = GreenNumFactory::createNum(shaderManager);
+    _thirdNum = GreenNumFactory::createNum(shaderManager);
+    _percentage = GreenNumFactory::createSymbol('%', shaderManager);
     setPosition(glm::vec2(0, 0));
 
 }
@@ -17,36 +17,36 @@ void PercentageDisplay::displayPercentage(int num) {
     int thirdDigit = num % 10;
 
     if (firstDigit == 0) {
-        firstNum->changeAnimation(10);
+        _firstNum->changeAnimation(10);
 
         if (secondDigit == 0) {
-            secondNum->changeAnimation(10);
+            _secondNum->changeAnimation(10);
         } else {
-            secondNum->changeAnimation(secondDigit);
+            _secondNum->changeAnimation(secondDigit);
         }
     } else {
-        firstNum->changeAnimation(firstDigit);
-        secondNum->changeAnimation(secondDigit);
+        _firstNum->changeAnimation(firstDigit);
+        _secondNum->changeAnimation(secondDigit);
     }
 
-    thirdNum->changeAnimation(thirdDigit);
+    _thirdNum->changeAnimation(thirdDigit);
 
 }
 
 void PercentageDisplay::render() {
-    firstNum->render();
-    secondNum->render();
-    thirdNum->render();
-    percentage->render();
+    _firstNum->render();
+    _secondNum->render();
+    _thirdNum->render();
+    _percentage->render();
 
 }
 
 void PercentageDisplay::setPosition(glm::vec2 newPosition) {
-    position = newPosition;
-    firstNum->setPosition(this->position + glm::vec2(4, 0));
-    secondNum->setPosition(this->position + glm::vec2(12, 0));
-    thirdNum->setPosition(this->position + glm::vec2(20, 0));
-    percentage->setPosition(this->position + glm::vec2(28, 0));
+    _position = newPosition;
+    _firstNum->setPosition(this->_position + glm::vec2(4, 0));
+    _secondNum->setPosition(this->_position + glm::vec2(12, 0));
+    _thirdNum->setPosition(this->_position + glm::vec2(20, 0));
+    _percentage->setPosition(this->_position + glm::vec2(28, 0));
 }
 
 

@@ -1,11 +1,7 @@
 #include "Blocker.h"
 #include "Game.h"
 
-#define JUMP_ANGLE_STEP 4
-#define JUMP_HEIGHT 96
-#define FALL_STEP 4
-
-Blocker::Blocker(SoundManager *soundManager) : Job(Jobs::BLOCKER,soundManager), state(BlockerState::BLOCKING_STATE) {
+Blocker::Blocker() : Job(Jobs::BLOCKER), _state(BlockerState::BLOCKING_STATE) {
 
 }
 
@@ -20,18 +16,18 @@ void Blocker::initAnims(ShaderProgram &shaderProgram) {
     for (int i = 0; i < 16; i++)
         _jobSprite->addKeyframe(0, glm::vec2(float(i) / 16, 3.0f / 14));
 
-    state = BlockerState::BLOCKING_STATE;
+    _state = BlockerState::BLOCKING_STATE;
     _jobSprite->changeAnimation(0);
 
 }
 
 void Blocker::setWalkingRight(bool value) {
-    walkingRight = value;
+    _walkingRight = value;
 }
 
 void Blocker::updateStateMachine(int deltaTime, Level *levelAttributes, IMaskManager *mask) {
 
-    switch (state) {
+    switch (_state) {
         case BlockerState::BLOCKING_STATE:
 
             glm::ivec2 posBase = _jobSprite->getPosition();

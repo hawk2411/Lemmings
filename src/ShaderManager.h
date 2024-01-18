@@ -11,12 +11,6 @@ class ShaderManager {
 public:
     ShaderManager();
 
-//    static ShaderManager &getInstance() {
-//        static ShaderManager instance;
-//
-//        return instance;
-//    }
-
 
     ShaderProgram &getShaderProgram();
 
@@ -31,8 +25,8 @@ public:
 private:
 
     ShaderProgram _simpleTexProgram, _maskedTexProgram;
-    glm::mat4 _projection;
-    glm::mat4 _modelView;
+    glm::mat4 _projection{1.0};
+    glm::mat4 _modelView{1.0};
 };
 
 #endif //_SHADERMANAGER_INCLUDE

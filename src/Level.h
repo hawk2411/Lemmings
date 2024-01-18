@@ -3,6 +3,7 @@
 
 
 #include <string>
+#include <iostream>
 #include "Texture.h"
 #include "Sprite.h"
 #include "VariableTexture.h"
@@ -14,20 +15,15 @@
 struct Level {
 
     Level(ShaderManager *shaderManager, LevelModes::Mode difficulty, int levelNo);
+    ~Level(){std::cout << "Level destructor\n";}
+    int _numLemmings{};
+    int _goalLemmings{};
+    int _time{};
 
-//    static Level &currentLevel() {
-//        static Level currentLevel;
-//
-//        return currentLevel;
-//    }
-    int numLemmings{};
-    int goalLemmings{};
-    int time{};
-
-    int releaseRate{};
-    int minReleaseRate{};
+    int _releaseRate{};
+    int _minReleaseRate{};
     static const size_t COUNT_JOBS = 8;
-    int lemmingsProJob[COUNT_JOBS]{};
+    int _lemmingsProJob[COUNT_JOBS]{};
     std::unique_ptr<Door> _door;
     std::unique_ptr<Trapdoor> _trapdoor;
 

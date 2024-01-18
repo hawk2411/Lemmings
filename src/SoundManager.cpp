@@ -1,58 +1,21 @@
-#include <fmod_errors.h>
+#include <SDL_mixer.h>
 #include <sstream>
 #include "SoundManager.h"
 #include "LemmingsException.h"
 
-SoundManager::SoundManager() : _system(nullptr), _lowLevelSystem(nullptr) {
-    FMOD_RESULT result = FMOD::Studio::System::create(&_system); // Create the Studio System object.
-    if (result != FMOD_OK) {
-        throw LemmingsException(SoundManager::getFMODExceptionText(result));
+SoundManager::SoundManager() {
+
+    int audio_rate = 22050; Uint16 audio_format = AUDIO_S16SYS; int audio_channels = 2; int audio_buffers = 4096;
+    if(Mix_OpenAudio(audio_rate, audio_format, audio_channels, audio_buffers) != 0) {
+        std::stringstream  ss;
+        ss << "Unable to initialize audio: " << Mix_GetError() <<"\n";
+        throw LemmingsException(ss.str());
     }
-    // Initialize FMOD Studio, which will also initialize FMOD Low Level
-    result = _system->initialize(MAX_CHANNELS, FMOD_STUDIO_INIT_NORMAL, FMOD_INIT_NORMAL, nullptr);
-    if (result != FMOD_OK) {
-        _system->release();
-        _system = nullptr;
-        throw LemmingsException(SoundManager::getFMODExceptionText(result));
-    }
-    result = _system->getCoreSystem(&_lowLevelSystem);
-    if (result != FMOD_OK) {
-        _system->release();
-        _system = nullptr;
-        throw LemmingsException( SoundManager::getFMODExceptionText(result));
-    }
+
+
 }
 
 
 SoundManager::~SoundManager() {
-    if(_lowLevelSystem){
-        _lowLevelSystem->release();
-    }
-    if(_system) {
-        _system->unloadAll();
-        _system->release();
-    }
-}
-
-//FMOD::Sound *SoundManager::loadSound(const std::string &file, FMOD_MODE mode) const {
-//    FMOD::Sound *pSound;
-//    _lowLevelSystem->createSound(file.c_str(), mode, nullptr, &pSound);
-//    return pSound;
-//}
-//
-//FMOD::Channel *SoundManager::playSound(FMOD::Sound *sound) const {
-//    FMOD::Channel *channel;
-//    _lowLevelSystem->playSound(sound, nullptr, false, &channel);
-//    return channel;
-//}
-//
-//void SoundManager::update() {
-//    _system->update();
-//    _lowLevelSystem->update();
-//}
-
-std::string SoundManager::getFMODExceptionText(FMOD_RESULT result) {
-    std::stringstream ss;
-    ss << "FMOD error! "<<  result << " " << FMOD_ErrorString(result) << std::endl;
-    return ss.str();
+    Mix_CloseAudio();
 }

@@ -43,20 +43,20 @@ private:
 
     void renderButtons();
 
-    vector<ResultsButtonName> possibleButtons;
+    vector<ResultsButtonName> _possibleButtons;
 
-    Texture backgroundTexture;
-    std::unique_ptr<Sprite> background;
+    Texture _backgroundTexture;
+    std::unique_ptr<Sprite> _background;
 
-    PurplePercentageDisplay currentPercentageDisplay;
-    PurplePercentageDisplay goalPercentageDisplay;
+    PurplePercentageDisplay _currentPercentageDisplay;
+    PurplePercentageDisplay _goalPercentageDisplay;
 
-    std::unique_ptr<Sprite> continueButton;
-    std::unique_ptr<Sprite> retryButton;
-    std::unique_ptr<Sprite> menuButton;
+    std::unique_ptr<Sprite> _continueButton;
+    std::unique_ptr<Sprite> _retryButton;
+    std::unique_ptr<Sprite> _menuButton;
 
-    int selectedButton{};
-    bool passedLevel{};
+    size_t _selectedButton{};
+    bool _passedLevel{};
 
     LevelIndex _levelIndex;
     ShaderManager* _shaderManager;

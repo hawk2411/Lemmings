@@ -1,4 +1,3 @@
-#include "Game.h"
 #include "StateManager.h"
 #include "ParticleSystemManager.h"
 #include "Utils.h"
@@ -7,44 +6,39 @@
 #include "IMaskManager.h"
 #include "LevelIndex.h"
 
-LevelRunner::LevelRunner(SoundManager *soundManager, ShaderManager *shaderManager, const LevelIndex &levelIndex)
-        : _deadLemmings(0), _soundManager(soundManager), _shaderManager(shaderManager),
+LevelRunner::LevelRunner(ShaderManager *shaderManager,
+                         ParticleSystemManager *particleSystemManager, const LevelIndex &levelIndex)
+        : _deadLemmings(0), _shaderManager(shaderManager),
+          _particleSystemManager(particleSystemManager),
           _savedLemmings(0),
-          _goalLemmingNum(0),
           _releaseRate(0),
-          _minReleaseRate(0),
           _availableLemmings(0),
           _levelIndex(levelIndex),
-          _goalTime(0),
           _currentTime(0.0f),
           _lastTimeSpawnedLemming(0),
           _spawningLemmings(false),
           _finishedLevel(false),
-          _exploding(false) {
-
-    _dooropenSound = make_unique<Sound>(_soundManager, "sounds/lemmingsEffects/Letsgo.ogg", FMOD_DEFAULT | FMOD_UNIQUE);
-    changeLevel(_levelIndex);
-}
+          _exploding(false),
+          _music(nullptr, Mix_FreeMusic),
+          _dooropenSound(createSound("sounds/lemmingsEffects/Letsgo.ogg")),
+          _channel(-1) {}
 
 LevelRunner::~LevelRunner() = default;
 
 
 void LevelRunner::changeLevel(const LevelIndex &levelIndex) {
     _levelIndex = levelIndex;
-    _levelStartValues = std::make_unique<Level>(_shaderManager, levelIndex.mode, levelIndex.levelNo);
-    _currentTime = 0.0f;
+    _levelStartValues = std::make_unique<Level>(_shaderManager, _levelIndex.mode, _levelIndex.levelNo);
 
+    _currentTime = 0.0f;
 
     clearLemmings();
 
-    _releaseRate = _levelStartValues->releaseRate;
-    _minReleaseRate = _levelStartValues->minReleaseRate;
-
-    _goalTime = _levelStartValues->time;
+    _releaseRate = _levelStartValues->_releaseRate;
     _currentTime = 0.0f;
     _lastTimeSpawnedLemming = -3500;
 
-    _availableLemmings = _levelStartValues->numLemmings;
+    _availableLemmings = _levelStartValues->_numLemmings;
     _spawningLemmings = true;
 
     _deadLemmings = 0;
@@ -53,27 +47,27 @@ void LevelRunner::changeLevel(const LevelIndex &levelIndex) {
     _finishedLevel = false;
     _exploding = false;
 
-    string musicPath = "sounds/Lemming" + to_string(_levelIndex.levelNo) + ".ogg";
-    _music = make_unique<Sound>(_soundManager, musicPath, FMOD_LOOP_NORMAL | FMOD_CREATESTREAM);
-
-    _dooropenSound->playSound();
-    _dooropenSound->setVolume(1.0f);
+    const string musicPath = "sounds/Lemming" + to_string(_levelIndex.levelNo) + ".ogg";
+    _music = createMusic(musicPath);
+    _channel = Mix_PlayChannel(-1, _dooropenSound.get(), 0);
+    Mix_VolumeChunk(_dooropenSound.get(), MIX_MAX_VOLUME);
 }
 
 void LevelRunner::update(int deltaTime, IMaskManager *currentMask) {
     _currentTime += static_cast<float>(deltaTime);
 
-    if (static_cast<int>(_currentTime / 1000 ) >= _goalTime) {
+    if (static_cast<int>(_currentTime / 1000 ) >= _levelStartValues->_time) {
         finishLevel();
     }
 
     if (!_levelStartValues->_trapdoor->isOpened()) {
         _levelStartValues->_trapdoor->update(deltaTime);
-        if (_levelStartValues->_trapdoor->isOpened()) {
+        if (_levelStartValues->_trapdoor->isOpened() && _channel != -1) {
             _currentTime = 0;
-            _dooropenSound->stopSound();
-            _music->playSound();
-            _music->setVolume(1.f);
+            Mix_HaltChannel(_channel);
+            _channel = -1;
+            Mix_PlayMusic(_music.get(), -1);
+            Mix_VolumeMusic(MIX_MAX_VOLUME);
         }
         return;
     }
@@ -86,7 +80,7 @@ void LevelRunner::update(int deltaTime, IMaskManager *currentMask) {
     _levelStartValues->_door->update(deltaTime);
     _levelStartValues->_trapdoor->update(deltaTime);
 
-    if (_savedLemmings + _deadLemmings == _levelStartValues->numLemmings) {
+    if (_savedLemmings + _deadLemmings == _levelStartValues->_numLemmings) {
         finishLevel();
     }
 }
@@ -108,37 +102,38 @@ void LevelRunner::spawnLemmings() {
     if (elapsedTimeSinceLastLemming >= timeToNextLemming) {
         --_availableLemmings;
         _lastTimeSpawnedLemming = static_cast<int>(_currentTime);
-        auto *newLemming = new Lemming(_levelStartValues->_trapdoor->getEnterPosition(), _soundManager, _shaderManager);
+        auto newLemming = std::make_unique<Lemming>(_levelStartValues->_trapdoor->getEnterPosition(),
+                                                    _shaderManager, _particleSystemManager);
         newLemming->setWalkingRight(true);
-        _lemmings.insert(newLemming);
+        _lemmings.insert(std::move(newLemming));
 
     }
 
     _spawningLemmings = _availableLemmings != 0;
 }
 
-int LevelRunner::getNumLemmingsAlive() {
-    return _lemmings.size();
+int LevelRunner::getNumLemmingsAlive() const {
+    return static_cast<int>(_lemmings.size());
 }
 
-int LevelRunner::getPercentageSavedLemmings() {
-    return float(_savedLemmings) / _levelStartValues->numLemmings * 100;
+int LevelRunner::getPercentageSavedLemmings()const {
+    return _savedLemmings / _levelStartValues->_numLemmings * 100;
 }
 
-int LevelRunner::getPercentageTotalLemmings() {
-    return _levelStartValues->goalLemmings;
+int LevelRunner::getPercentageTotalLemmings()const {
+    return _levelStartValues->_goalLemmings;
 }
 
 void LevelRunner::stopSpawningLemmings() {
     _spawningLemmings = false;
 }
 
-int LevelRunner::getCurrentTime() {
-    return _currentTime / 1000;
+int LevelRunner::getCurrentTime() const {
+    return static_cast<int>(_currentTime / 1000.0);
 }
 
 int LevelRunner::getRemainingTime() {
-    return _goalTime - getCurrentTime();
+    return _levelStartValues->_time - getCurrentTime();
 }
 
 
@@ -159,10 +154,8 @@ void LevelRunner::apocalypse() {
     _spawningLemmings = false;
     _deadLemmings += _availableLemmings;
 
-    std::set<Lemming *>::iterator it;
-    for (it = _lemmings.begin(); it != _lemmings.end(); ++it) {
-        Lemming *currentLemming = *it;
-        currentLemming->writeDestiny(0);
+    for (auto &lemming : _lemmings) {
+        lemming->writeDestiny(0);
     }
 }
 
@@ -172,12 +165,12 @@ int LevelRunner::getReleaseRate() const {
 }
 
 int LevelRunner::getMinReleaseRate() const {
-    return _minReleaseRate;
+    return _levelStartValues->_minReleaseRate;
 }
 
 
 void LevelRunner::decreaseReleaseRate() {
-    _releaseRate = Utils::max(_minReleaseRate, _releaseRate - 5);
+    _releaseRate = Utils::max(_levelStartValues->_minReleaseRate, _releaseRate - 5);
 }
 
 void LevelRunner::increaseReleaseRate() {
@@ -187,10 +180,9 @@ void LevelRunner::increaseReleaseRate() {
 int LevelRunner::getLemmingIndexInPos(int posX, int posY) {
     int i = -1;
     std::set<Lemming *>::iterator it;
-    for (it = _lemmings.begin(); it != _lemmings.end(); ++it) {
+    for (const auto &lemming : _lemmings) {
         ++i;
-        Lemming *currentLemming = *it;
-        glm::vec2 lemmingPosition = currentLemming->getPosition();
+        glm::vec2 lemmingPosition = lemming->getPosition();
         glm::vec2 lemmingSize = glm::vec2(16);
         if (Utils::insideRectangle(glm::vec2(posX, posY) + _levelStartValues->cameraPos,
                                    lemmingPosition, lemmingSize)) {
@@ -206,16 +198,18 @@ string LevelRunner::getLemmingJobNameIndex(int index) {
         return "";
     auto it = _lemmings.begin();
     std::advance(it, index);
-    Lemming *currentLemming = *it;
-    return currentLemming->getJob()->getName();
+    return it->get()->getJob()->getName();
 }
 
 bool LevelRunner::assignJob(int lemmingIndex, Jobs jobToAssign) {
-    auto it = _lemmings.begin();
-    std::advance(it, lemmingIndex);
-    Lemming *currentLemming = *it;
+    auto currentLemming = _lemmings.begin();
+    std::advance(currentLemming, lemmingIndex);
+    if(currentLemming == _lemmings.end()) {
+        return false;
+    }
 
-    Jobs lemmingActualJob = currentLemming->getJob()->getCurrentJob();
+
+    Jobs lemmingActualJob = currentLemming->get()->getJob()->getCurrentJob();
     if (jobToAssign == lemmingActualJob) {
         return false;
     }
@@ -225,9 +219,9 @@ bool LevelRunner::assignJob(int lemmingIndex, Jobs jobToAssign) {
     }
 
     if (jobToAssign == Jobs::EXPLODER) {
-        currentLemming->writeDestiny(0);
+        currentLemming->get()->writeDestiny(0);
     } else {
-        currentLemming->changeJob(jobToAssign);
+        currentLemming->get()->changeJob(jobToAssign);
     }
     return true;
 }
@@ -240,12 +234,10 @@ void LevelRunner::updateLemmings(int deltaTime, IMaskManager *currentMask) {
     auto it = _lemmings.begin();
     while (it != _lemmings.end()) {
         auto current = it++;
-        Lemming *currentLemming = *current;
-        currentLemming->update(deltaTime, getLevelAttributes(), currentMask);
+        current->get()->update(deltaTime, getLevelAttributes(), currentMask);
 
-        bool saved = currentLemming->saved();
-        bool dead = currentLemming->dead();
-
+        bool saved = current->get()->saved();
+        bool dead = current->get()->dead();
         if (saved) {
             _lemmings.erase(current);
             ++_savedLemmings;
@@ -257,30 +249,30 @@ void LevelRunner::updateLemmings(int deltaTime, IMaskManager *currentMask) {
 }
 
 void LevelRunner::renderLemmings() {
-    std::set<Lemming *>::iterator it;
-    for (it = _lemmings.begin(); it != _lemmings.end(); ++it) {
-        Lemming *currentLemming = *it;
-        currentLemming->render(_levelStartValues->cameraPos);
+    for (auto &lemming: _lemmings) {
+        lemming->render(_levelStartValues->cameraPos);
     }
 }
 
 
 int LevelRunner::getJobCount(int index) {
-    return _levelStartValues->lemmingsProJob[index];
+    return _levelStartValues->_lemmingsProJob[index];
 }
 
 void LevelRunner::decreaseJobCount(int index) {
-    --_levelStartValues->lemmingsProJob[index];
+    --_levelStartValues->_lemmingsProJob[index];
 }
 
 
 void LevelRunner::endMusic() {
-    _music->stopSound();
+    if (_channel != -1) {
+        Mix_HaltChannel(_channel);
+        _channel = -1;
+    }
+    Mix_HaltMusic();
 }
 
 void LevelRunner::clearLemmings() {
-    for (auto *lemmming: _lemmings) {
-        delete lemmming;
-    }
     _lemmings.clear();
 }
+

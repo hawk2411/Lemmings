@@ -2,10 +2,10 @@
 #include "GreenNumFactory.h"
 
 void TimeDisplay::init(ShaderManager *shaderManager) {
-    minutes = GreenNumFactory::createNum(shaderManager);
-    hyphen = GreenNumFactory::createSymbol('-', shaderManager);
-    firstDigitSeconds = GreenNumFactory::createNum(shaderManager);
-    secondDigitSeconds = GreenNumFactory::createNum(shaderManager);
+    _minutes = GreenNumFactory::createNum(shaderManager);
+    _hyphen = GreenNumFactory::createSymbol('-', shaderManager);
+    _firstDigitSeconds = GreenNumFactory::createNum(shaderManager);
+    _secondDigitSeconds = GreenNumFactory::createNum(shaderManager);
     setPosition(glm::vec2(0, 0));
 
 }
@@ -15,24 +15,24 @@ void TimeDisplay::displayTime(int num) {
     int secondDigit = (num % 60) / 10;
     int thirdDigit = (num % 60) % 10;
 
-    minutes->changeAnimation(firstDigit);
-    firstDigitSeconds->changeAnimation(secondDigit);
-    secondDigitSeconds->changeAnimation(thirdDigit);
+    _minutes->changeAnimation(firstDigit);
+    _firstDigitSeconds->changeAnimation(secondDigit);
+    _secondDigitSeconds->changeAnimation(thirdDigit);
 }
 
 void TimeDisplay::render() {
-    minutes->render();
-    firstDigitSeconds->render();
-    secondDigitSeconds->render();
-    hyphen->render();
+    _minutes->render();
+    _firstDigitSeconds->render();
+    _secondDigitSeconds->render();
+    _hyphen->render();
 }
 
 void TimeDisplay::setPosition(glm::vec2 position) {
-    this->position = position;
-    minutes->setPosition(this->position + glm::vec2(4, 0));
-    hyphen->setPosition(this->position + glm::vec2(12, 0));
-    firstDigitSeconds->setPosition(this->position + glm::vec2(20, 0));
-    secondDigitSeconds->setPosition(this->position + glm::vec2(28, 0));
+    this->_position = position;
+    _minutes->setPosition(this->_position + glm::vec2(4, 0));
+    _hyphen->setPosition(this->_position + glm::vec2(12, 0));
+    _firstDigitSeconds->setPosition(this->_position + glm::vec2(20, 0));
+    _secondDigitSeconds->setPosition(this->_position + glm::vec2(28, 0));
 
 }
 

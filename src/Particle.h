@@ -14,13 +14,11 @@ public:
         PINK
     };
 
-    //Particle():_position(0,0), _speed(0,0) {};
-
     explicit Particle(ParticleColor color, ShaderProgram* shaderProgram);
 
     void setPosition(glm::vec2 position);
 
-    void update(int deltaTime);
+    void update();
 
     void render(glm::vec2 cameraPos);
 

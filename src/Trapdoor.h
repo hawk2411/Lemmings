@@ -8,6 +8,8 @@ class Trapdoor {
 
 public:
     explicit Trapdoor(ShaderManager* shaderManager);
+    virtual ~Trapdoor() = default;
+
     virtual void init() = 0;
 
     void update(int deltaTime);

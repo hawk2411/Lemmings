@@ -1,32 +1,11 @@
 #include "Job.h"
-#include "Scene.h"
 
-/*
-enum LemmingAnims
-{
-	WALKING_LEFT, WALKING_RIGHT,
-	FALLING_RIGHT, FALLING_LEFT,
-	FLOATER_OPENING_RIGHT, FLOATER_OPENING_LEFT, FLOATER_FALLING_RIGHT, FLOATER_FALLING_LEFT,
-	BLOCKER,
-	CLIMBER_CLIMBLING_RIGHT, CLIMBER_CLIMBLING_LEFT, CLIMBER_LEDGING_RIGHT, CLIMBER_LEDGING_LEFT,
-	BUILDER_RIGHT, BUILDER_LEFT,
-	BASHER_RIGHT, BASHER_LEFT,
-	DIGGER,
-	MINER_RIGHT, MINER_LEFT,
-	EXPLODER,
-	FALLING_DEATH,
-	DROWNING_DEATH,
-	BURNING_DEATH,
-	ESCAPING
-};
-*/
+Job::Job() : _isFinished(false), _currentJob(Jobs::UNKNOWN), _nextJob(Jobs::UNKNOWN), _walkingRight(true) {}
 
-Job::Job(Jobs currentJob, SoundManager* soundManager ): isFinished(false), _currentJob(currentJob), _nextJob(Jobs::UNKNOWN), walkingRight(true), _soundManager(soundManager){
+Job::Job(Jobs currentJob) : _isFinished(false), _currentJob(currentJob), _nextJob(Jobs::UNKNOWN), _walkingRight(true) {
 }
 
-Job::~Job() {
-
-}
+Job::~Job() = default;
 
 int Job::collisionFloor(int maxFall, const VariableTexture &maskedMap) const {
     bool bContact = false;
@@ -58,10 +37,10 @@ bool Job::collision(const VariableTexture &maskedMap) const {
 
 
 bool Job::finished() const {
-    return isFinished;
+    return _isFinished;
 }
 
-Jobs Job::getNextJob()const {
+Jobs Job::getNextJob() const {
     return _nextJob;
 }
 
@@ -71,25 +50,9 @@ Sprite *Job::sprite() {
 }
 
 void Job::setWalkingRight(bool value) {
-    walkingRight = value;
+    _walkingRight = value;
 }
 
 bool Job::isWalkingRight() const {
-    return walkingRight;
+    return _walkingRight;
 }
-
-/*
-
-
-
-	// DROWNING_DEATH
-	sprite->setAnimationSpeed(DROWNING_DEATH, 12);
-	for (int i = 0; i<16; i++)
-		sprite->addKeyframe(DROWNING_DEATH, glm::vec2(float(i) / 16, 12.0f / 14));
-
-	// BURNING_DEATH
-	sprite->setAnimationSpeed(BURNING_DEATH, 12);
-	for (int i = 0; i<16; i++)
-		sprite->addKeyframe(BURNING_DEATH, glm::vec2(float(i) / 16, 13.0f / 14));
-
-		*/

@@ -1,4 +1,3 @@
-#include <GL/glew.h>
 #include "common_defs.h"
 #include "Game.h"
 #include "GameState.h"
@@ -10,9 +9,7 @@ GameState::GameState(Game *game) :
         _game(game) {
 }
 
-GameState::~GameState() {
-
-}
+GameState::~GameState() = default;
 
 void GameState::onMouseMove(const SDL_MouseMotionEvent &motionEvent) {
 
@@ -37,7 +34,7 @@ void GameState::onMouseButtonDown(const SDL_MouseButtonEvent &buttonEvent) {
                        buttonEvent.state & SDL_BUTTON(SDL_BUTTON_RIGHT));
             break;
         case SDL_BUTTON_RIGHT:
-            mouseMoved(mouseX, mouseY, (buttonEvent.state & SDL_BUTTON(SDL_BUTTON_LEFT)),
+            mouseMoved(mouseX, mouseY, (buttonEvent.state & SDL_BUTTON(SDL_BUTTON_RIGHT)),
                        buttonEvent.state & SDL_BUTTON(SDL_BUTTON_RIGHT));
             break;
     }

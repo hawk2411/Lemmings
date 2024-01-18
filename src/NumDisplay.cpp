@@ -16,11 +16,11 @@ void NumDisplay::displayNum(int num) {
 }
 
 void NumDisplay::render() {
-    if (leftNum) {
-        leftNum->render();
+    if (_leftNum) {
+        _leftNum->render();
     }
 
-    if (rightNum) {
-        rightNum->render();
+    if (_rightNum) {
+        _rightNum->render();
     }
 }

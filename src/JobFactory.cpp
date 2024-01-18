@@ -12,77 +12,77 @@
 #include "Climber.h"
 #include "Builder.h"
 
-Job *JobFactory::createWalkerJob(SoundManager *soundManager) {
-    return new Walker(soundManager);
+
+std::unique_ptr<Job> JobFactory::createWalkerJob() {
+    return std::make_unique<Walker>();
 }
 
-Job *JobFactory::createDiggerJob(SoundManager *soundManager) {
-    return new Digger(soundManager);
+std::unique_ptr<Job> JobFactory::createDiggerJob() {
+    return std::make_unique<Digger>();
 }
 
-Job *JobFactory::createEscaperJob(SoundManager *soundManager) {
-    return new Escaper(soundManager);
+std::unique_ptr<Job> JobFactory::createEscaperJob() {
+    return std::make_unique<Escaper>();
     }
 
-Job *JobFactory::createExploderJob(SoundManager *soundManager) {
-    return new Exploder(soundManager);
+std::unique_ptr<Job> JobFactory::createExploderJob(ParticleSystemManager* particleSystemManager) {
+    return std::make_unique<Exploder>(particleSystemManager);
     }
 
-Job *JobFactory::createMinerJob(SoundManager *soundManager) {
-    return new Miner(soundManager);
+std::unique_ptr<Job> JobFactory::createMinerJob() {
+    return std::make_unique<Miner>();
     }
 
-Job *JobFactory::createFloaterJob(SoundManager *soundManager) {
-    return new Floater(soundManager);
+std::unique_ptr<Job> JobFactory::createFloaterJob() {
+    return std::make_unique<Floater>();
 }
 
-Job *JobFactory::createBasherJob(SoundManager *soundManager) {
-    return new Basher(soundManager);
+std::unique_ptr<Job> JobFactory::createBasherJob() {
+    return std::make_unique<Basher>();
 }
 
-Job *JobFactory::createBlockerJob(SoundManager *soundManager) {
-    return new Blocker(soundManager);
+std::unique_ptr<Job> JobFactory::createBlockerJob() {
+    return std::make_unique<Blocker>();
 }
 
-Job *JobFactory::createFallerJob(SoundManager *soundManager) {
-    return new Faller(soundManager);
+std::unique_ptr<Job> JobFactory::createFallerJob() {
+    return std::make_unique<Faller>();
 }
 
-Job *JobFactory::createClimberJob(SoundManager *soundManager) {
-    return new Climber(soundManager);
+std::unique_ptr<Job> JobFactory::createClimberJob() {
+    return std::make_unique<Climber>();
 }
 
-Job *JobFactory::createBuilderJob(SoundManager *soundManager) {
-    return new Builder(soundManager);
+std::unique_ptr<Job> JobFactory::createBuilderJob() {
+    return std::make_unique<Builder>();
 }
 
-Job *JobFactory::createJob(Jobs jobToCreate, SoundManager *soundManager) {
+std::unique_ptr<Job> JobFactory::createJob(Jobs jobToCreate, ParticleSystemManager* particleSystemManager) {
     switch(jobToCreate)
     {
         case Jobs::WALKER:
-            return createWalkerJob(soundManager);
+            return createWalkerJob();
         case Jobs::DIGGER:
-            return createDiggerJob(soundManager);
+            return createDiggerJob();
         case Jobs::ESCAPER:
-            return createEscaperJob(soundManager);
+            return createEscaperJob();
         case Jobs::EXPLODER:
-            return createExploderJob(soundManager);
+            return createExploderJob(particleSystemManager);
         case Jobs::MINER:
-            return createMinerJob(soundManager);
+            return createMinerJob();
         case Jobs::FLOATER:
-            return createFloaterJob(soundManager);
+            return createFloaterJob();
         case Jobs::BASHER:
-            return createBasherJob(soundManager);
+            return createBasherJob();
         case Jobs::BLOCKER:
-            return createBlockerJob(soundManager);
+            return createBlockerJob();
         case Jobs::FALLER:
-            return createFallerJob(soundManager);
+            return createFallerJob();
         case Jobs::CLIMBER:
-            return createClimberJob(soundManager);
+            return createClimberJob();
         case Jobs::BUILDER:
-            return createBuilderJob(soundManager);
+            return createBuilderJob();
         default:
             return nullptr;
     }
-    return nullptr;
 }

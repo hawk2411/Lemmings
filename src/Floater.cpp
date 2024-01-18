@@ -1,6 +1,5 @@
 #include "Floater.h"
 #include "Game.h"
-#include "Scene.h"
 
 
 enum FloaterAnims {
@@ -9,7 +8,7 @@ enum FloaterAnims {
     FLOATER_OPENING_RIGHT, FLOATER_OPENING_LEFT, FLOATER_FALLING_RIGHT, FLOATER_FALLING_LEFT
 };
 
-Floater::Floater(SoundManager *soundManager) : Job(Jobs::FLOATER, soundManager) {
+Floater::Floater() : Job(Jobs::FLOATER), state(WALKING_RIGHT_STATE) {
 
 }
 
@@ -72,11 +71,11 @@ void Floater::updateStateMachine(int deltaTime, Level *levelAttributes, IMaskMan
 
             if (collision(levelAttributes->maskedMap)) {
                 _jobSprite->decPosition(glm::vec2(-1, -1));
-                walkingRight = true;
+                _walkingRight = true;
                 _jobSprite->changeAnimation(WALKING_RIGHT);
                 state = WALKING_RIGHT_STATE;
             } else {
-                fall = collisionFloor(3, levelAttributes->maskedMap);
+                fall = collisionFloor(DEFAULT_MAX_FALL, levelAttributes->maskedMap);
                 if (fall > 0) {
                     _jobSprite->incPosition(glm::vec2(0, 1));
                 }
@@ -90,7 +89,7 @@ void Floater::updateStateMachine(int deltaTime, Level *levelAttributes, IMaskMan
                 } else {
                     if (_jobSprite->getPosition() ==
                         levelAttributes->_door->getEscapePosition()) {
-                        isFinished = true;
+                        _isFinished = true;
                         _nextJob = Jobs::ESCAPER;
                     }
                 }
@@ -102,17 +101,17 @@ void Floater::updateStateMachine(int deltaTime, Level *levelAttributes, IMaskMan
 
             if (collision(levelAttributes->maskedMap)) {
                 _jobSprite->decPosition(glm::vec2(1, -1));
-                walkingRight = false;
+                _walkingRight = false;
                 _jobSprite->changeAnimation(WALKING_LEFT);
                 state = WALKING_LEFT_STATE;
             } else {
-                fall = collisionFloor(3, levelAttributes->maskedMap);
-                if (fall < 3) {
+                fall = collisionFloor(DEFAULT_MAX_FALL, levelAttributes->maskedMap);
+                if (fall < DEFAULT_MAX_FALL) {
                     _jobSprite->incPosition(glm::vec2(0, fall));
 
                     if (_jobSprite->getPosition() ==
                         levelAttributes->_door->getEscapePosition()) {
-                        isFinished = true;
+                        _isFinished = true;
                         _nextJob = Jobs::ESCAPER;
                     }
                 } else {
@@ -128,7 +127,7 @@ void Floater::updateStateMachine(int deltaTime, Level *levelAttributes, IMaskMan
                 _jobSprite->changeAnimation(FLOATER_OPENING_LEFT);
                 state = FLOATER_OPENING_LEFT_STATE;
             } else {
-                fall = collisionFloor(2, levelAttributes->maskedMap);
+                fall = collisionFloor(DEFAULT_MAX_FALL-1, levelAttributes->maskedMap);
                 if (fall > 0) {
                     _jobSprite->incPosition(glm::vec2(0, fall));
                 }
@@ -139,7 +138,7 @@ void Floater::updateStateMachine(int deltaTime, Level *levelAttributes, IMaskMan
                 _jobSprite->changeAnimation(FLOATER_OPENING_RIGHT);
                 state = FLOATER_OPENING_RIGHT_STATE;
             } else {
-                fall = collisionFloor(2, levelAttributes->maskedMap);
+                fall = collisionFloor(DEFAULT_MAX_FALL-1, levelAttributes->maskedMap);
                 if (fall > 0) {
                     _jobSprite->incPosition(glm::vec2(0, fall));
                 }
@@ -161,7 +160,7 @@ void Floater::updateStateMachine(int deltaTime, Level *levelAttributes, IMaskMan
             break;
 
         case FLOTATING_LEFT_STATE:
-            fall = collisionFloor(2, levelAttributes->maskedMap);
+            fall = collisionFloor(DEFAULT_MAX_FALL-1, levelAttributes->maskedMap);
             if (fall > 0)
                 _jobSprite->incPosition(glm::vec2(0, fall));
             else {
@@ -171,7 +170,7 @@ void Floater::updateStateMachine(int deltaTime, Level *levelAttributes, IMaskMan
             break;
 
         case FLOTATING_RIGHT_STATE:
-            fall = collisionFloor(2, levelAttributes->maskedMap);
+            fall = collisionFloor(DEFAULT_MAX_FALL-1, levelAttributes->maskedMap);
             if (fall > 0)
                 _jobSprite->incPosition(glm::vec2(0, fall));
             else {
@@ -199,15 +198,14 @@ void Floater::updateStateMachine(int deltaTime, Level *levelAttributes, IMaskMan
 
 
 void Floater::setWalkingRight(bool value) {
-    walkingRight = value;
-    if (walkingRight) {
+    _walkingRight = value;
+    if (_walkingRight) {
         _jobSprite->changeAnimation(WALKING_RIGHT);
         state = WALKING_RIGHT_STATE;
     } else {
         _jobSprite->changeAnimation(WALKING_LEFT);
         state = WALKING_LEFT_STATE;
     }
-    return;
 }
 
 

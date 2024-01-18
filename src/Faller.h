@@ -1,13 +1,12 @@
 #ifndef _FALLER_INCLUDE
 #define _FALLER_INCLUDE
 
-
+#include <SDL_mixer.h>
 #include "Job.h"
-#include "Sound.h"
 
 class Faller : public Job {
 public:
-    Faller(SoundManager *soundManager);
+    Faller();
     ~Faller() override;
     void initAnims(ShaderProgram &shaderProgram) override;
 
@@ -28,7 +27,7 @@ private:
     FallerState state;
     int currentDistance = 0;
     bool dead = false;
-    unique_ptr<Sound> deathEffect;
+    std::unique_ptr<Mix_Chunk, decltype(Mix_FreeChunk)*> deathEffect_;
 };
 
 

@@ -1,15 +1,13 @@
+#include "UserEvent.h"
 #include "Menu.h"
 #include "InfoLevel.h"
 #include "Scene.h"
 #include "Results.h"
 #include "Credits.h"
 #include "Instructions.h"
-//#include "LevelRunner.h"
-#include "EventCreator.h"
 #include "Game.h"
 
 #include "StateManager.h"
-#include "InfoLevel.h"
 #include "LevelIndex.h"
 
 StateManager::StateManager(Game *game, ShaderManager *shaderManager) : _currentState(States::Type::Menu),
@@ -18,7 +16,6 @@ StateManager::StateManager(Game *game, ShaderManager *shaderManager) : _currentS
     LevelIndex levelIndex{LevelModes::Mode::FUN_MODE, 1};
     _gameStates.insert(std::make_pair(States::Type::Menu, unique_ptr<GameState>(new Menu(game, levelIndex))));
     _gameStates.insert(std::make_pair(States::Type::Scene, unique_ptr<GameState>(new Scene(game,
-                                                                                           game->getSoundManager(),
                                                                                            levelIndex))));
     _gameStates.insert(std::make_pair(States::Type::SceneInfo,
                                       unique_ptr<GameState>(new InfoLevel(game, levelIndex))));
@@ -51,6 +48,9 @@ void StateManager::changeScene(const LevelIndex &lvlIndex) {
 
 //
 void StateManager::changeResults(ResultStatistic statistic, LevelIndex levelIndex) {
+    if (_currentState == States::Type::Result) {
+        return;
+    }
     _currentState = States::Type::Result;
     auto *results = dynamic_cast<Results *>(_gameStates[_currentState].get());
     results->setPercentages(statistic.goalPercentage, statistic.currentPercentage);
@@ -104,26 +104,26 @@ void StateManager::onUserEvent(const SDL_UserEvent &event) {
             changeInstructions();
             break;
         case CHANGE_TO_INFO: {
-            auto *levelIndex = static_cast<LevelIndex *>(event.data1);
+            UserEvent<CHANGE_TO_INFO, LevelIndex> changeToInfoEvent(event.data1);
 
-            changeInfo(levelIndex->mode, levelIndex->levelNo);
-            delete levelIndex;
+            changeInfo(changeToInfoEvent.getData1()->mode, changeToInfoEvent.getData1()->levelNo);
         }
             break;
         case CHANGE_TO_SCENE: {
-            auto *levelIndex = static_cast<LevelIndex *>(event.data1);
+            UserEvent<CHANGE_TO_SCENE, LevelIndex> changeToSceneEvent(event.data1);
 
-            changeScene(*levelIndex);
-            delete levelIndex;
+            changeScene(*changeToSceneEvent.getData1());
             break;
         }
         case CHANGE_TO_RESULT: {
-            auto *statistic = static_cast<ResultStatistic *>(event.data1);
-            auto *levelIndex = static_cast<LevelIndex *>(event.data2);
-
-            changeResults(*statistic, *levelIndex);
-            delete statistic;
-            delete levelIndex;
+            UserEvent<CHANGE_TO_RESULT, ResultStatistic, LevelIndex> ev(event.data1, event.data2);
+            changeResults(*ev.getData1(), *ev.getData2());
+            break;
+        }
+        case UPDATE_EVENT : {
+            UserEvent<UPDATE_EVENT, Uint32> ev(event.data1);
+            update(ev.getDelay());
+            break;
         }
     }
 }

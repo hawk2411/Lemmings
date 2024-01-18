@@ -1,41 +1,36 @@
-#include <fmod_studio.h>
+#include "common_defs.h"
 #include "Escaper.h"
 #include "Game.h"
-#include "Scene.h"
-#include "SoundManager.h"
 
 
-enum EscaperAnims {
-    ESCAPING
+enum EscaperAnims : std::size_t {
+    ESCAPING = 0
 };
 
-Escaper::Escaper(SoundManager *soundManager) : Job(Jobs::ESCAPER, soundManager) {
-    escapeEfect = make_unique<Sound>(soundManager, "sounds/lemmingsEffects/YIPPEE.WAV",
-                                                                FMOD_DEFAULT | FMOD_CREATESTREAM | FMOD_UNIQUE);
+Escaper::Escaper() : Job(Jobs::ESCAPER), escapeEffect_(createSound("sounds/lemmingsEffects/YIPPEE.WAV")), state(ESCAPING_STATE) {
 
 }
 
 void Escaper::initAnims(ShaderProgram &shaderProgram) {
-    _jobSprite = Sprite::createSprite(glm::ivec2(16, 16), glm::vec2(1.f / 16, 1.f / 14), &shaderProgram,
+    _jobSprite = Sprite::createSprite(glm::ivec2(16, 16), glm::vec2(1.f / LEMMINGS_PNG_COLUMNS, 1.f / LEMMINGS_PNG_ROWS), &shaderProgram,
                                       &Game::spriteSheets().lemmingAnimations,
                                       &Game::spriteSheets().rotatedLemmingAnimations);
     _jobSprite->setNumberAnimations(1);
 
     // ESCAPING
-    _jobSprite->setAnimationSpeed(ESCAPING, 12);
+    _jobSprite->setAnimationSpeed(EscaperAnims::ESCAPING, 12);
     for (int i = 0; i < 7; i++)
-        _jobSprite->addKeyframe(ESCAPING, glm::vec2(float(i + 1) / 16, 1.0f / 14));
+        _jobSprite->addKeyframe(EscaperAnims::ESCAPING, glm::vec2(float(i + 1) / LEMMINGS_PNG_COLUMNS, 1.0f / LEMMINGS_PNG_ROWS));
 
     state = ESCAPING_STATE;
-    _jobSprite->changeAnimation(ESCAPING);
+    _jobSprite->changeAnimation(EscaperAnims::ESCAPING);
 
-
-    escapeEfect->playSound();
-    escapeEfect->setVolume(0.8f);
+    Mix_PlayChannel(-1, escapeEffect_.get(), 0);
+    Mix_VolumeChunk(escapeEffect_.get(), MIX_MAX_VOLUME);
 }
 
 void Escaper::setWalkingRight(bool value) {
-    walkingRight = value;
+    _walkingRight = value;
 }
 
 void Escaper::updateStateMachine(int deltaTime, Level *levelAttributes, IMaskManager *mask) {
@@ -44,7 +39,7 @@ void Escaper::updateStateMachine(int deltaTime, Level *levelAttributes, IMaskMan
         case ESCAPING_STATE:
 
             if (_jobSprite->isInLastFrame()) {
-                isFinished = true;
+                _isFinished = true;
                 _nextJob = Jobs::UNKNOWN;
 
             }

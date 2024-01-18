@@ -7,6 +7,8 @@ class IMaskManager {
 public:
     explicit IMaskManager(Level *level) : _level(level) {}
 
+    virtual ~IMaskManager() = default;
+
     virtual void init() = 0;
 
     virtual void update(int time) = 0;
@@ -19,12 +21,15 @@ public:
 
     virtual void applySpecialMask(int x, int y) = 0;
 
-    virtual char getPixel(int x, int y) = 0;
+    virtual unsigned char getPixel(int x, int y)const { return _level->maskedMap.pixel(x, y);}
+
+    virtual bool isPositionABorder(int x, int y)const { return _level->maskedMap.pixel(x, y) == IMaskManager::MASK_COLOR_WHITE;}
 
     virtual void changeLevel(Level *level) {_level = level;};
 
 protected:
     Level *_level;
+    static const unsigned char MASK_COLOR_WHITE = 255;
 };
 
 

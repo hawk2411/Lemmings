@@ -40,15 +40,15 @@ public:
 
     void setNumberAnimations(int nAnimations);
 
-    void setAnimationSpeed(int animId, int keyframesPerSec);
+    void setAnimationSpeed(size_t animId, int keyframesPerSec);
 
-    void addKeyframe(int animId, const glm::vec2 &frame, bool isRotated = false);
+    void addKeyframe(size_t animId, const glm::vec2 &displacement, bool isRotated = false);
 
-    void changeAnimation(int animId);
+    void changeAnimation(size_t animId);
 
-    int animation() const;
+    std::size_t animation() const;
 
-    int getAnimationCurrentFrame() const;
+    std::size_t getAnimationCurrentFrame() const;
 
     bool isInLastFrame() const;
 
@@ -76,17 +76,17 @@ public:
 private:
     const Texture *const _spriteSheet;
     const Texture *const _rotatedSpriteSheet;
-    ShaderProgram *shaderProgram;
-    GLuint vao;
-    GLuint vbo;
-    GLint posLocation, texCoordLocation;
+    ShaderProgram *_shaderProgram;
+    GLuint _vao;
+    GLuint _vbo;
+    GLint _posLocation, _texCoordLocation;
     glm::vec2 _pos;
-    int currentAnimation, currentKeyframe;
-    float timeAnimation;
-    glm::vec2 texCoordDispl;
-    vector<AnimKeyframes> animations;
+    std::size_t _currentAnimation, _currentKeyframe;
+    float _timeAnimation;
+    glm::vec2 _texCoordDispl;
+    vector<AnimKeyframes> _animations;
     vector<bool> _rotated;
-    bool iterated;
+    bool _iterated;
 
 };
 

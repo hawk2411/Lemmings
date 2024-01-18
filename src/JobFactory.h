@@ -1,37 +1,37 @@
 #ifndef _JOBFACTORY_INCLUDE
 #define _JOBFACTORY_INCLUDE
 
+#include "ParticleSystemManager.h"
 #include "Job.h"
-#include "SoundManager.h"
 
 class JobFactory {
 private:
-    static Job *createWalkerJob(SoundManager *soundManager);
+    static std::unique_ptr<Job> createWalkerJob();
 
-    static Job *createDiggerJob(SoundManager *soundManager);
+    static std::unique_ptr<Job> createDiggerJob();
 
-    static Job *createEscaperJob(SoundManager *soundManager);
+    static std::unique_ptr<Job> createEscaperJob();
 
-    static Job *createExploderJob(SoundManager *soundManager);
+    static std::unique_ptr<Job> createExploderJob(ParticleSystemManager* particleSystemManager);
 
-    static Job *createMinerJob(SoundManager *soundManager);
+    static std::unique_ptr<Job> createMinerJob();
 
-    static Job *createFloaterJob(SoundManager *soundManager);
+    static std::unique_ptr<Job> createFloaterJob();
 
-    static Job *createBasherJob(SoundManager *soundManager);
+    static std::unique_ptr<Job> createBasherJob();
 
-    static Job *createBlockerJob(SoundManager *soundManager);
+    static std::unique_ptr<Job> createBlockerJob();
 
-    static Job *createFallerJob(SoundManager *soundManager);
+    static std::unique_ptr<Job> createFallerJob();
 
-    static Job *createClimberJob(SoundManager *soundManager);
+    static std::unique_ptr<Job> createClimberJob();
 
-    static Job *createBuilderJob(SoundManager *soundManager);
+    static std::unique_ptr<Job> createBuilderJob();
 
 
 public:
 
-    static Job *createJob(Jobs jobToCreate, SoundManager *soundManager);
+    static std::unique_ptr<Job> createJob(Jobs jobToCreate, ParticleSystemManager* particleSystemManager);
 };
 
 

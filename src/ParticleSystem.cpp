@@ -1,44 +1,39 @@
 #include "ParticleSystem.h"
 #include "ParticleFactory.h"
-#include <ctime>
-#include <random>
 
-ParticleSystem::ParticleSystem( ShaderProgram* shaderProgram) {
-    alive = true;
+ParticleSystem::ParticleSystem(ShaderProgram *shaderProgram) {
+    _alive = true;
 
-    numParticles = rand() % 16 + 10;
-    particles.resize(numParticles);
-
+    int numParticles = std::rand() % 16 + 10;
     for (int i = 0; i < numParticles; ++i) {
-        particles[i] = ParticleFactory::createParticle(shaderProgram);
+        _particles.push_back(std::unique_ptr<Particle>(ParticleFactory::createParticle(shaderProgram)));
     }
 }
 
 void ParticleSystem::setPosition(glm::vec2 position) {
-    for (int i = 0; i < numParticles; ++i) {
-        particles[i]->setPosition(position);
+    for (auto &particle : _particles) {
+        particle->setPosition(position);
     }
 }
 
 
 void ParticleSystem::update(int deltaTime) {
-    currentTime += deltaTime;
-    if (currentTime / 1000 > 2) {
-        alive = false;
-    } else {
-        for (int i = 0; i < numParticles; ++i) {
-            particles[i]->update(deltaTime);
-        }
+    _currentTime += static_cast<float>(deltaTime);
+    if (_currentTime / 1000 > 2) {
+        _alive = false;
+        return;
     }
-
+    for (auto &particle : _particles) {
+        particle->update();
+    }
 }
 
 void ParticleSystem::render(glm::vec2 cameraPos) {
-    for (int i = 0; i < numParticles; ++i) {
-        particles[i]->render(cameraPos);
+    for (auto &particle : _particles) {
+        particle->render(cameraPos);
     }
 }
 
 bool ParticleSystem::notFinished() const {
-    return alive;
+    return _alive;
 }

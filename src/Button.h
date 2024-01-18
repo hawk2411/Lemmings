@@ -39,9 +39,9 @@ public:
 
 
 private:
-    glm::vec2 position;
-    std::unique_ptr<Sprite> buttonSprite;
-    NumDisplayButton numDisplay;
+    glm::vec2 _position;
+    std::unique_ptr<Sprite> _buttonSprite;
+    NumDisplayButton _numDisplay;
 
 };
 

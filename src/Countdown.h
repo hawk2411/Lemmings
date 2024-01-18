@@ -9,7 +9,7 @@ class Countdown {
 
 public:
 
-    Countdown(ShaderManager *shaderManager);
+    explicit Countdown(ShaderManager *shaderManager);
 
     void render(const glm::vec2 &cameraPos);
 
@@ -27,11 +27,12 @@ public:
 
 private:
     std::unique_ptr<Sprite> _countNum;
-    ShaderManager* _shaderManager;
+    ShaderManager *_shaderManager;
     int _goalTime;
     bool _over;
     bool _isStarted;
-
+    float _currentTime = 0.0f;
+    const int MAX_SEC = 5;
 };
 
 #endif // _COUNTDOWN_INCLUDE

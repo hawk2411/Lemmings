@@ -3,18 +3,18 @@
 
 
 #include "Job.h"
-#include "Sound.h"
+#include "MusicFabric.hpp"
 
 
 class Escaper : public Job {
 public:
-    Escaper(SoundManager *soundManager);
+    Escaper();
 
-    void initAnims(ShaderProgram &shaderProgram);
+    void initAnims(ShaderProgram &shaderProgram) override;
 
-    void updateStateMachine(int deltaTime, Level *levelAttributes, IMaskManager *mask);
+    void updateStateMachine(int deltaTime, Level *levelAttributes, IMaskManager *mask) override;
 
-    void setWalkingRight(bool value);
+    void setWalkingRight(bool value) override;
 
     string getName() const override {return "ESCAPER";}
 
@@ -26,7 +26,7 @@ private:
 
 private:
     EscaperState state;
-    unique_ptr<Sound> escapeEfect;
+    sound_ptr_t escapeEffect_;
 };
 
 

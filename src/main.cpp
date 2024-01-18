@@ -1,24 +1,21 @@
 #define GLEW_STATIC
 
 #include <GL/glew.h>
-
 #define SDL_MAIN_HANDLED
 #include <SDL2/SDL.h>
-
+#include <SDL_mixer.h>
 #include <iostream>
-#include <cstdint>
 #include <ctime>
-#include <random>
-
 #include "TimerEventService.h"
 #include "Game.h"
-
+#include "UserEvent.h"
 
 //Remove console (only works in Visual Studio)
-#pragma comment(linker, "/subsystem:\"windows\" /entry:\"mainCRTStartup\"")
+//#pragma comment(linker, "/subsystem:\"windows\" /entry:\"mainCRTStartup\"")
+
 
 int main(int argc, char **argv) {
-    srand(time(0));
+    srand(time(nullptr));
 
     SDL_Init(SDL_INIT_EVERYTHING);
 
@@ -40,48 +37,57 @@ int main(int argc, char **argv) {
         return -1;
     }
 
-    bool close = false;
-    //StopWatch stopWatch;
-
-    Game game;
-    game.init();
-    //SDL_SetWindowGrab(window, SDL_TRUE);
-    TimerEventService timerService;
-    int event_type = UPDATE_EVENT;
-    timerService.startEvents(event_type);
-
-    SDL_Event event;
-    while (!close) {
-        while (SDL_PollEvent(&event)) {
-            switch (event.type) {
-                case SDL_QUIT:
-                    game.changeBplay();
-                    close = true;
-                    break;
-                case SDL_KEYDOWN:
-                //case SDL_KEYUP:
-                    game.onKeyPressed(event.key);
-                    break;
-                case SDL_MOUSEMOTION:
-                    game.onMousMove(event.motion);
-                    break;
-                case SDL_MOUSEBUTTONDOWN:
-                    game.onMouseButtonDown(event.button);
-                    break;
-                case SDL_MOUSEBUTTONUP:
-                    game.onMouseButtonUp(event.button);
-                    break;
-                case SDL_USEREVENT:
-                    game.onUserEvent(event.user);
-                    break;
-            }
-
-        }
-        game.render();
-        SDL_GL_SwapWindow(window);
-
+    int audio_rate = 22050; Uint16 audio_format = AUDIO_S16SYS; int audio_channels = 2; int audio_buffers = 4096;
+    if(Mix_OpenAudio(audio_rate, audio_format, audio_channels, audio_buffers) != 0) {
+        std::cerr << "Unable to initialize audio: " << Mix_GetError() <<"\n";
+        return -1;
     }
 
+    bool close = false;
+    //StopWatch stopWatch;
+    Game game;
+
+    //SDL_SetWindowGrab(window, SDL_TRUE);
+    {
+        TimerEventService timerService(TimerEventService::DELAY);
+
+        SDL_Event event;
+        while (!close) {
+            while (SDL_PollEvent(&event)) {
+                switch (event.type) {
+                    case SDL_QUIT:
+                        game.changeBplay();
+                        close = true;
+                        break;
+                    case SDL_KEYDOWN:
+                        //case SDL_KEYUP:
+                        game.onKeyPressed(event.key);
+                        break;
+                    case SDL_MOUSEMOTION:
+                        game.onMousMove(event.motion);
+                        break;
+                    case SDL_MOUSEBUTTONDOWN:
+                        game.onMouseButtonDown(event.button);
+                        break;
+                    case SDL_MOUSEBUTTONUP:
+                        game.onMouseButtonUp(event.button);
+                        break;
+                    case SDL_USEREVENT:
+                        game.onUserEvent(event.user);
+                        break;
+                }
+
+            }
+            game.render();
+            SDL_GL_SwapWindow(window);
+
+        }
+
+    }
+    //here TimerEvents stops
+    Mix_CloseAudio();
+    SDL_GL_DeleteContext(glContext);
+    SDL_Quit();
     return 0;
 }
 

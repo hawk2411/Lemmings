@@ -1,15 +1,7 @@
 #include "Digger.h"
 #include "Game.h"
-#include "Scene.h"
 
 
-#define JUMP_ANGLE_STEP 4
-#define JUMP_HEIGHT 96
-#define FALL_STEP 4
-
-Digger::Digger(SoundManager *soundManager) : Job(Jobs::DIGGER, soundManager) {
-
-}
 
 
 void Digger::initAnims(ShaderProgram &shaderProgram) {
@@ -24,44 +16,39 @@ void Digger::initAnims(ShaderProgram &shaderProgram) {
         _jobSprite->addKeyframe(0, glm::vec2(float(i) / 16, 8.0f / 14));
 
 
-    state = DIGGING_STATE;
     _jobSprite->changeAnimation(0);
 }
 
 void Digger::setWalkingRight(bool value) {
-    walkingRight = value;
+    _walkingRight = value;
 }
 
 void Digger::updateStateMachine(int deltaTime, Level *levelAttributes, IMaskManager *mask) {
 
-    switch (state) {
+    if (!canDig(mask)) {
+        _isFinished = true;
 
-        case DIGGING_STATE:
-            if (!canDig(mask)) {
-                isFinished = true;
-
-                int fall = collisionFloor(3, levelAttributes->maskedMap);
-                if (fall >= 3) {
-                    _nextJob = Jobs::FALLER;;
-                } else {
-                    _nextJob = Jobs::WALKER;
-                }
-            } else if (_jobSprite->isInFirstFrame() || _jobSprite->getAnimationCurrentFrame() == 4) {
-                dig(mask);
-            }
-
+        int fall = collisionFloor(DEFAULT_MAX_FALL, levelAttributes->maskedMap);
+        if (fall >= DEFAULT_MAX_FALL) {
+            _nextJob = Jobs::FALLER;
+        } else {
+            _nextJob = Jobs::WALKER;
+        }
+    } else if (_jobSprite->isInFirstFrame() || _jobSprite->getAnimationCurrentFrame() == 4) {
+        dig(mask);
     }
+
 }
 
 bool Digger::canDig(IMaskManager *mask) const {
     glm::ivec2 posBase = _jobSprite->getPosition();
 
-    posBase +=  glm::ivec2(4, 14);
+    posBase += glm::ivec2(4, 14);
     for (int j = 0; j < 3; ++j) {
         for (int i = 0; i < 9; ++i) {
             int x = posBase.x + i;
             int y = posBase.y + j;
-            if (mask->getPixel(x, y) == -1) {
+            if (mask->isPositionABorder(x, y)) {
                 return true;
             }
         }

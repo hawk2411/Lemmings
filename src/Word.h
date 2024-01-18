@@ -17,14 +17,9 @@ public:
 
     void setPosition(glm::vec2 position);
 
-
 private:
-    glm::vec2 position;
-    vector<std::unique_ptr<Sprite>> letters;
-
-    int length;
-    int wordLength;
-
+    vector<std::unique_ptr<Sprite>> _letters;
+    int _wordLength;
 };
 
 

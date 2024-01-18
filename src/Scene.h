@@ -22,15 +22,15 @@
 // It is responsible for updating and render them.
 
 struct ResultStatistic {
-    int goalPercentage;
-    int currentPercentage;
+    int goalPercentage = 0;
+    int currentPercentage = 0;
 };
 
 class Scene : public GameState {
 
 public:
 
-    Scene(Game *game, SoundManager *soundManager, const LevelIndex& levelIndex);
+    Scene(Game *game, const LevelIndex& levelIndex);
 
     void mouseMoved(int mouseX, int mouseY, bool bLeftButton, bool bRightButton) override;
 
@@ -58,15 +58,14 @@ public:
 
     bool isSpeedUp() const;
 
-    char getPixel(int x, int y);
+    unsigned char getPixel(int x, int y);
 
 
     VariableTexture &getMaskedMap();
 
     enum ScreenClickedArea {
         MAP,
-        UI,
-        INFO
+        UI
     };
 
     enum ScreenMovedArea {
@@ -83,18 +82,14 @@ public:
         RIGHT_MOUSE_PRESSED
     };
 
-
-
-    void update();
-
     void onKeyPressed(const SDL_KeyboardEvent &keyboardEvent) override;
 
     void changeLevel(const LevelIndex &levelIndex);
 
 private:
-    ScreenClickedArea getClickedScreenArea(int mouseX, int mouseY);
+    static ScreenClickedArea getClickedScreenArea(int mouseX, int mouseY);
 
-    ScreenMovedArea getMovedScreenArea(int mouseX, int mouseY);
+    static ScreenMovedArea getMovedScreenArea(int mouseX, int mouseY);
 
     void leftClickOnUI(int posX, int posY);
 
@@ -106,26 +101,28 @@ private:
 
     void initUI();
 
+    void updateCursor();
+
     void updateUI();
 
     void activateButton(int buttonIndex);
 
     inline int getSelectedButtonJobCount();
-    /*
-     * private fields
-     */
-    bool paused = false;
-    bool speedUp = false;
+
+    //region private fields
+private:
+    bool _paused = false;
+    bool _speedUp = false;
 
     std::unique_ptr<MaskedTexturedQuad> _map;
 
     std::map<Difficulties::Mode, std::unique_ptr<IMaskManager>> _maskManagers;
     Difficulties::Mode _currentDifficultyMode;
 
-    int posX=0, posY=0;
+    int _posX=0, _posY=0;
 
-    MouseStates mouseState = MouseStates::NONE;
-    ScreenMovedArea screenMovedArea = NONE_AREA;
+    MouseStates _mouseState = MouseStates::NONE;
+    ScreenMovedArea _screenMovedArea = NONE_AREA;
 
     std::unique_ptr<LevelRunner> _levelRunner;
     Cursor _cursor;
@@ -134,6 +131,7 @@ private:
     ParticleSystemManager _particleSystemManager;
     Scroller _scroller;
     ShaderManager* _shaderManager;
+    //endregion
 };
 
 #endif // _SCENE_INCLUDE
